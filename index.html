@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>ZECE — Hybrid365</title>
-<meta name="theme-color" content="#09090B">
+<meta name="theme-color" content="#050506">
 <link rel="icon" type="image/svg+xml" href="icon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="manifest" href="manifest.webmanifest">
@@ -17,12 +17,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 /* =====================================================================
-   ZECE v5 — antrenament hibrid: forță + alergare.
-   Teme de culoare prin variabile; alergarea rămâne albastră, recuperarea verde.
+   ZECE v6 — antrenament hibrid: forță + alergare.
+   Negru adânc, linii fine, lumină de studio; teme de culoare prin variabile (Onix = monocrom).
+   Alergarea rămâne albastră, recuperarea verde.
    ===================================================================== */
 :root{
-  --bg:#09090B; --s1:#131316; --s2:#19191D; --s3:#232329;
-  --ln:rgba(255,255,255,.07); --ln2:rgba(255,255,255,.13);
+  --bg:#050506; --s1:#0E0E10; --s2:#151517; --s3:#202023;
+  --ln:rgba(255,255,255,.065); --ln2:rgba(255,255,255,.12);
   --tx:#F4F4F5; --mu:#A1A1AA; --mu2:#6E6E78;
   --ac:#FF4D2E; --ac2:#FF8A3D; --hi:#FF5C3D; --lo:#E5391D; --on:#FFFFFF;
   --a08:color-mix(in srgb,var(--ac) 8%,transparent); --a14:color-mix(in srgb,var(--ac) 14%,transparent);
@@ -30,7 +31,7 @@
   --acg:color-mix(in srgb,var(--ac) 55%,transparent); --a80:color-mix(in srgb,var(--ac) 80%,transparent);
   --act:color-mix(in srgb,var(--ac) 62%,#fff);
   --run:#4DA3FF; --rung:rgba(77,163,255,.5); --ok:#3DDC97; --warn:#FFB020;
-  --r2:16px;
+  --r2:18px;
   --e1:cubic-bezier(.2,.9,.25,1); --sp:cubic-bezier(.3,1.5,.4,1);
   --fd:'Barlow Condensed','Arial Narrow',system-ui,sans-serif;
   --fb:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
@@ -577,25 +578,33 @@ body.has-pill .view{padding-bottom:calc(170px + env(safe-area-inset-bottom))}
 .float{position:fixed;z-index:201;pointer-events:none;font:800 20px var(--fd);color:var(--ac);text-shadow:0 0 14px var(--acg);animation:floatUp .9s var(--e1) forwards;transform:translate(-50%,-50%)}
 @keyframes floatUp{to{opacity:0;transform:translate(-50%,-160%) scale(1.2)}}
 /* ---------- animația de deschidere ----------
-   particule care se strâng în spirală → logo-ul se desenează → undă de șoc → literele intră în focus
-   → ecranul se strânge ca un iris pe logo-ul din antet. --k scalează cronologia (1 = completă, 0,42 = scurtă). */
-.intro{position:fixed;inset:0;z-index:300;display:grid;place-items:center;cursor:pointer;overflow:hidden;--k:1;
-  background:radial-gradient(70% 55% at 50% 44%,color-mix(in srgb,var(--ac) 14%,#060607) 0%,#050506 68%)}
+   poza se aprinde din întuneric cu un zoom lent → o rază de lumină trece peste ea → praf fin în lumină
+   → logo-ul se desenează → literele urcă din umbră → ecranul se strânge ca un iris pe logo-ul din antet.
+   --k scalează cronologia (1 = completă, 0,42 = scurtă). */
+.intro{position:fixed;inset:0;z-index:300;display:grid;align-items:end;justify-items:center;cursor:pointer;overflow:hidden;--k:1;background:#050506}
 .intro.short{--k:.42}
-#introCv{position:absolute;inset:0;width:100%;height:100%;z-index:0}
-.in-flash{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:0;background:radial-gradient(circle at 50% 42%,rgba(255,255,255,.55),transparent 55%);
-  animation:inFlash .7s ease calc(var(--k) * 1.02s) both}
-@keyframes inFlash{0%{opacity:0}14%{opacity:1}100%{opacity:0}}
-.in-c{position:relative;z-index:2;text-align:center}
+.in-ph{position:absolute;inset:0;z-index:0;background:var(--cover,none) 50% 18%/cover no-repeat;opacity:0;transform:scale(1.16);transform-origin:50% 30%;
+  animation:inPh calc(var(--k) * 3.4s) cubic-bezier(.16,.7,.2,1) forwards}
+@keyframes inPh{0%{opacity:0;transform:scale(1.16)}40%{opacity:1}100%{opacity:1;transform:scale(1.03)}}
+.in-ph::after{content:'';position:absolute;inset:0;
+  background:radial-gradient(120% 70% at 50% 30%,transparent 35%,rgba(5,5,6,.7) 100%),linear-gradient(180deg,rgba(5,5,6,.55) 0,transparent 20%,transparent 44%,rgba(5,5,6,.86) 72%,#050506 92%)}
+.in-light{position:absolute;inset:-30% -60%;z-index:1;pointer-events:none;mix-blend-mode:overlay;opacity:0;
+  background:linear-gradient(104deg,transparent 42%,rgba(255,255,255,.6) 50%,transparent 58%);transform:translateX(-45%);
+  animation:inLight calc(var(--k) * 1.9s) cubic-bezier(.45,0,.25,1) calc(var(--k) * .45s) forwards}
+@keyframes inLight{0%{opacity:0;transform:translateX(-45%)}20%{opacity:1}100%{opacity:0;transform:translateX(45%)}}
+#introCv{position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none}
+.in-flash{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:0;background:radial-gradient(60% 40% at 50% 74%,rgba(255,255,255,.2),transparent 70%);
+  animation:inFlash .9s ease calc(var(--k) * 1.05s) both}
+@keyframes inFlash{0%{opacity:0}18%{opacity:1}100%{opacity:0}}
+.in-c{position:relative;z-index:4;text-align:center;padding:0 16px calc(92px + env(safe-area-inset-bottom))}
 .in-lw{position:relative;display:inline-block}
-.in-ring{position:absolute;left:50%;top:50%;width:150px;height:150px;margin:-75px 0 0 -75px;border-radius:50%;border:3px solid var(--ac);opacity:0;pointer-events:none;
-  box-shadow:0 0 30px var(--acg),inset 0 0 30px var(--acg);animation:inRing 1.1s cubic-bezier(.2,.8,.2,1) calc(var(--k) * 1.02s) forwards}
-.in-ring.r2{border-color:#fff;border-width:2px;box-shadow:0 0 24px rgba(255,255,255,.6);animation-delay:calc(var(--k) * 1.14s)}
-@keyframes inRing{0%{opacity:.95;transform:scale(.55)}100%{opacity:0;transform:scale(7.5)}}
-.in-logo{position:relative;width:136px;height:136px;overflow:visible;transform-origin:50% 50%;
-  animation:inPop .75s var(--sp) calc(var(--k) * .25s) both,inGlow 1.2s ease calc(var(--k) * 1s) both}
-@keyframes inPop{from{opacity:0;transform:scale(.5) rotate(-10deg)}to{opacity:1;transform:none}}
-@keyframes inGlow{0%{filter:drop-shadow(0 0 0 transparent)}35%{filter:drop-shadow(0 0 42px var(--a80)) brightness(1.35)}100%{filter:drop-shadow(0 0 20px var(--acg))}}
+.in-ring{position:absolute;left:50%;top:50%;width:90px;height:90px;margin:-45px 0 0 -45px;border-radius:50%;border:1px solid rgba(255,255,255,.8);opacity:0;pointer-events:none;
+  animation:inRing 1.3s cubic-bezier(.2,.8,.2,1) calc(var(--k) * 1.02s) forwards}
+@keyframes inRing{0%{opacity:.9;transform:scale(.6)}100%{opacity:0;transform:scale(6)}}
+.in-logo{position:relative;width:64px;height:64px;overflow:visible;transform-origin:50% 50%;
+  animation:inPop .8s var(--e1) calc(var(--k) * .3s) both,inGlow 1.4s ease calc(var(--k) * 1s) both}
+@keyframes inPop{from{opacity:0;transform:translateY(10px) scale(.86)}to{opacity:1;transform:none}}
+@keyframes inGlow{0%{filter:drop-shadow(0 0 0 transparent)}35%{filter:drop-shadow(0 0 26px rgba(255,255,255,.55)) brightness(1.25)}100%{filter:drop-shadow(0 0 10px rgba(255,255,255,.16))}}
 .in-logo .s{fill-opacity:0;stroke-width:.9;stroke-dasharray:1;stroke-dashoffset:1;stroke-linejoin:round;
   animation:inDraw .75s cubic-bezier(.6,0,.2,1) calc(var(--k) * .32s) forwards,inFill .4s ease calc(var(--k) * 1s) forwards}
 .in-logo .s:nth-child(2){animation-delay:calc(var(--k) * .42s),calc(var(--k) * 1s)}
@@ -606,21 +615,22 @@ body.has-pill .view{padding-bottom:calc(170px + env(safe-area-inset-bottom))}
 .in-logo .s:nth-child(7){animation-delay:calc(var(--k) * .74s),calc(var(--k) * 1.1s)}
 @keyframes inDraw{to{stroke-dashoffset:0}}
 @keyframes inFill{to{fill-opacity:1}}
-.in-word{display:flex;justify-content:center;font:800 66px/1 var(--fd);letter-spacing:.2em;padding-left:.2em;margin-top:24px}
-.in-word span{display:inline-block;opacity:0;filter:blur(14px);transform:translateY(48px) scale(1.5);
-  background:linear-gradient(180deg,#fff 30%,var(--ac2));-webkit-background-clip:text;background-clip:text;color:transparent;
-  animation:inLet .65s cubic-bezier(.2,.9,.25,1) both}
-.in-word span:nth-child(1){animation-delay:calc(var(--k) * 1.12s)}.in-word span:nth-child(2){animation-delay:calc(var(--k) * 1.19s)}
-.in-word span:nth-child(3){animation-delay:calc(var(--k) * 1.26s)}.in-word span:nth-child(4){animation-delay:calc(var(--k) * 1.33s)}
-@keyframes inLet{to{opacity:1;filter:blur(0);transform:none}}
-.in-bar{height:3px;width:0;margin:16px auto 0;border-radius:3px;background:linear-gradient(90deg,transparent,var(--ac),#fff,var(--ac),transparent);box-shadow:0 0 18px var(--acg);
-  animation:inBar .55s var(--e1) calc(var(--k) * 1.45s) forwards}
-@keyframes inBar{to{width:190px}}
-.in-sub{font:600 12.5px var(--fb);letter-spacing:.32em;text-transform:uppercase;color:rgba(255,255,255,.78);margin-top:14px;opacity:0;padding-left:.32em;
-  animation:inSub .55s var(--e1) calc(var(--k) * 1.6s) forwards}
-@keyframes inSub{from{opacity:0;letter-spacing:.9em}to{opacity:1;letter-spacing:.32em}}
-.in-skip{position:absolute;bottom:calc(26px + env(safe-area-inset-bottom));left:0;right:0;z-index:2;text-align:center;font:600 11px var(--fb);letter-spacing:.18em;
-  text-transform:uppercase;color:rgba(255,255,255,.35);opacity:0;animation:fade .4s ease 1.6s forwards}
+.in-word{display:flex;justify-content:center;font:600 60px/1.1 var(--fd);letter-spacing:.42em;padding-left:.42em;margin-top:20px}
+.in-word span{display:inline-block;opacity:0;clip-path:inset(-20% 0 100% 0);transform:translateY(100%);
+  background:linear-gradient(180deg,#fff 25%,#B4B4BC);-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:inLet .9s cubic-bezier(.2,.9,.25,1) both}
+.in-word span:nth-child(1){animation-delay:calc(var(--k) * 1.1s)}.in-word span:nth-child(2){animation-delay:calc(var(--k) * 1.18s)}
+.in-word span:nth-child(3){animation-delay:calc(var(--k) * 1.26s)}.in-word span:nth-child(4){animation-delay:calc(var(--k) * 1.34s)}
+@keyframes inLet{30%{opacity:1}to{opacity:1;clip-path:inset(-20% 0 -20% 0);transform:none}}
+.in-bar{height:1px;width:0;margin:16px auto 0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.85),transparent);
+  animation:inBar .8s var(--e1) calc(var(--k) * 1.45s) forwards}
+@keyframes inBar{to{width:min(240px,64vw)}}
+.in-sub{font:500 11.5px var(--fb);letter-spacing:.38em;text-transform:uppercase;color:rgba(255,255,255,.72);margin-top:14px;opacity:0;padding-left:.38em;white-space:nowrap;
+  animation:inSub .8s var(--e1) calc(var(--k) * 1.6s) forwards}
+@keyframes inSub{from{opacity:0;letter-spacing:.8em}to{opacity:1;letter-spacing:.38em}}
+.in-skip{position:absolute;bottom:calc(30px + env(safe-area-inset-bottom));left:0;right:0;z-index:4;text-align:center;font:500 10.5px var(--fb);letter-spacing:.3em;
+  text-transform:uppercase;color:rgba(255,255,255,.32);opacity:0;animation:inSkip .5s ease 1.6s forwards}
+@keyframes inSkip{to{opacity:1}}
 .top .logo.wait{opacity:0}
 .top .logo.land{animation:logoLand .5s var(--sp)}
 @keyframes logoLand{0%{transform:scale(1.25);filter:drop-shadow(0 0 22px var(--a80))}100%{transform:none}}
@@ -877,6 +887,60 @@ body.fx-min .recap-cta{animation:none}
 .rc-body .body-svg{width:min(44%,170px)}
 html.rm .rc-bars i.cur b{animation:none;width:100%}
 
+/* ---------- v6 · negru elegant ----------
+   lumină de studio de sus în loc de pete colorate, carduri negre cu linii fine, strălucire discretă,
+   coperta foto pe „Azi", o sclipire care trece peste butonul principal. Onix = tema monocromă (accent alb). */
+#amb{inset:-10vmax;background:radial-gradient(70vmax 44vmax at 50% -8%,rgba(255,255,255,.065),transparent 62%),radial-gradient(46vmax 34vmax at 88% 108%,var(--a08),transparent 70%);
+  animation:amb 16s ease-in-out infinite alternate}
+body.fx-max #amb{background:radial-gradient(70vmax 44vmax at 50% -8%,rgba(255,255,255,.09),transparent 62%),radial-gradient(46vmax 34vmax at 88% 108%,var(--a14),transparent 70%);animation-duration:10s}
+#grain{opacity:.07}
+.top{background:rgba(5,5,6,.68);transition:background .35s ease}
+.top::after{background:linear-gradient(90deg,transparent,rgba(255,255,255,.13) 50%,transparent);transition:opacity .35s}
+body.ontop .top{background:linear-gradient(180deg,rgba(5,5,6,.6),rgba(5,5,6,0));backdrop-filter:none;-webkit-backdrop-filter:none}
+body.ontop .top::after{opacity:0}
+.brand{font-weight:700;letter-spacing:.2em}
+.brand small{font:500 9.5px/1.2 var(--fb);letter-spacing:.3em;text-transform:uppercase;color:var(--mu2);margin-top:4px}
+.card{background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,0) 40%),var(--s1);box-shadow:inset 0 1px 0 rgba(255,255,255,.045),0 24px 48px -30px #000}
+.eyebrow{font-size:11px;letter-spacing:.16em}
+.h1{font-weight:700;letter-spacing:.015em}
+.hello .h1{background:linear-gradient(180deg,#fff 30%,#A9A9B1);-webkit-background-clip:text;background-clip:text}
+.hero{border-color:var(--ln2);background:radial-gradient(130% 120% at 100% 0,var(--a14),transparent 55%),linear-gradient(180deg,#151517,#0B0B0D);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 34px 60px -36px #000}
+.hero::after{background:linear-gradient(90deg,transparent,rgba(255,255,255,.05),transparent);animation-duration:6s}
+.hero .h1{font-size:40px}
+/* coperta: poza intră sub antet (transparent cât timp ești sus), cu parallax ușor la derulare */
+.cover{position:relative;isolation:isolate;overflow:hidden;display:flex;align-items:flex-end;
+  margin:calc(-68px - env(safe-area-inset-top)) -16px 0;min-height:calc(370px + env(safe-area-inset-top));padding:0 20px 10px}
+.cv-ph{position:absolute;inset:0;z-index:0;background:var(--cover) 50% 8%/cover no-repeat;transform:translate3d(0,var(--py,0px),0) scale(1.05);transform-origin:50% 0;will-change:transform}
+#view.anim .cv-ph{animation:cvIn 1.8s cubic-bezier(.16,.7,.2,1) backwards}
+@keyframes cvIn{from{opacity:0;transform:scale(1.16)}}
+.cv-fd{position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(5,5,6,.5) 0,rgba(5,5,6,0) 26%,rgba(5,5,6,0) 46%,rgba(5,5,6,.72) 76%,var(--bg) 100%),linear-gradient(90deg,rgba(5,5,6,.5),rgba(5,5,6,0) 70%)}
+.cover::after{content:'';position:absolute;inset:-20% -50%;z-index:0;pointer-events:none;mix-blend-mode:overlay;opacity:0;
+  background:linear-gradient(104deg,transparent 42%,rgba(255,255,255,.45) 50%,transparent 58%)}
+#view.anim .cover::after{animation:inLight 2.2s cubic-bezier(.45,0,.25,1) .35s}
+.cv-t{position:relative;z-index:1}
+.cover .eyebrow{color:rgba(255,255,255,.7)}
+.cover .h1{font-size:48px;font-weight:600;letter-spacing:.02em;margin-top:6px;filter:drop-shadow(0 4px 18px rgba(0,0,0,.7))}
+#view.anim .cover .h1{animation:cvT 1.1s var(--e1) .25s both}
+@keyframes cvT{from{opacity:0;letter-spacing:.12em;transform:translateY(8px)}}
+.btn.pri{box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 14px 34px -16px var(--acg)}
+.btn.glow{animation:none}
+.btn.glow::after{content:'';position:absolute;top:-10%;bottom:-10%;left:0;width:45%;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);transform:translateX(-130%) skewX(-20deg);animation:shine 4.2s var(--e1) 1.4s infinite}
+@keyframes shine{0%{transform:translateX(-130%) skewX(-20deg)}38%,100%{transform:translateX(330%) skewX(-20deg)}}
+body.fx-min .btn.glow::after{display:none}
+.sw.on::after{background:var(--on)}
+.nav{background:rgba(5,5,6,.86);border-top-color:rgba(255,255,255,.06)}
+.nb{font-size:10.5px;letter-spacing:.04em}
+.nav-ind::before{left:34%;right:34%;height:2px}
+#view.anim > *{animation-duration:.42s}
+@keyframes vIn{from{opacity:0;transform:translateY(14px)}}
+html.th-onix{--a08:rgba(255,255,255,.035);--a14:rgba(255,255,255,.07);--a25:rgba(255,255,255,.08);--a40:rgba(255,255,255,.16);--acg:rgba(255,255,255,.14);--a80:rgba(255,255,255,.42)}
+.th-onix .recap-cta{background:linear-gradient(120deg,rgba(255,255,255,.08),rgba(255,255,255,.015) 55%,rgba(255,255,255,.06)),var(--s1);background-size:200% 200%}
+.th-onix .recap-cta .cc-ic{background:linear-gradient(135deg,var(--ac),var(--ac2))}
+@media(max-width:380px){.cover .h1{font-size:40px}.hero .h1{font-size:34px}.in-word{font-size:50px}}
+
 @media(max-width:380px){.h1{font-size:32px}.big{font-size:36px}.fx-n{font-size:34px}.kpis{grid-template-columns:1fr 1fr}.lvl small{display:none}.qa-b{font-size:10.5px}}
 /* mișcare redusă: după setarea sistemului („Automat") sau aleasă explicit în Setări */
 html.rm *,html.rm *::before,html.rm *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
@@ -888,8 +952,9 @@ html.rm .burst,html.rm .flash,html.rm #pt{display:none}
 <div id="amb" aria-hidden="true"></div><div id="grain" aria-hidden="true"></div>
 
 <div class="intro" id="intro" aria-hidden="true">
+  <div class="in-ph"></div><div class="in-light"></div>
   <canvas id="introCv"></canvas><div class="in-flash"></div>
-  <div class="in-c"><div class="in-lw"><span class="in-ring"></span><span class="in-ring r2"></span>
+  <div class="in-c"><div class="in-lw"><span class="in-ring"></span>
     <svg class="in-logo" id="inLogo" viewBox="0 0 48 48">
       <rect class="s" pathLength="1" x="1" y="1" width="46" height="46" rx="12" fill="#17171B" stroke="currentColor" style="color:var(--ac)"/>
       <rect class="s" pathLength="1" x="13.2" y="12.4" width="5.8" height="19" fill="#F4F4F5" stroke="#F4F4F5"/>
@@ -1013,9 +1078,9 @@ const K={lifts:'zece:lifts',weights:'zece:weights',runs:'zece:runs',wlog:'zece:w
   water:'zece3:water',body:'zece3:body',theme:'zece3:theme',fx:'zece3:fx',onb:'zece3:onb',seenAch:'zece3:seenAch',seenLvl:'zece3:lvl',
   journal:'zece3:journal',tech:'zece3:tech',voice:'zece3:voice',recapSeen:'zece3:recap',
   mplan:'zece3:mplan',shop:'zece3:shop',mf:'zece3:mf',intro:'zece3:intro',motion:'zece3:motion',motionAsked:'zece3:motionAsked',
-  ptests:'zece3:ptests',tmlog:'zece3:tmlog',adj:'zece3:adj',strava:'zece3:strava',ext:'zece3:ext',stq:'zece3:stq'};
+  ptests:'zece3:ptests',tmlog:'zece3:tmlog',adj:'zece3:adj',strava:'zece3:strava',ext:'zece3:ext',stq:'zece3:stq',look:'zece3:look'};
 const S={tab:'azi',lifts:{},weights:{},runs:[],wlog:{},cyc:{},runPlan:{},prof:{},mlog:{},hist:[],sess:null,sound:true,
-  aiKey:'',aiChat:null,aiEffort:'medium',aiUsed:0,water:{},body:{},theme:'jar',fx:'normal',onb:false,seenAch:null,seenLvl:null,
+  aiKey:'',aiChat:null,aiEffort:'medium',aiUsed:0,water:{},body:{},theme:'onix',fx:'normal',onb:false,seenAch:null,seenLvl:null,
   journal:{},tech:{},voice:true,recapSeen:0,photos:undefined,mSel:null,phPose:'fata',
   mplan:{},shop:{},mf:{port:false,cold:false},intro:'full',nTab:'azi',planDay:0,shopDays:7,motion:'auto',motionAsked:false,
   ptests:[],tmlog:[],twAttr:'str',twRange:90,ciOpen:null,adj:{},strava:{},ext:[],stq:[],mWin:7,shotN:1,shotF:'all',shotOpen:null,
@@ -1027,6 +1092,7 @@ const prof=()=>Object.assign({sex:'m',age:30,h:180,startW:90,goalW:80,act:1.55,d
    3 · TEME ȘI EFECTE
    ===================================================================== */
 const THEMES={
+  onix:{n:'Onix',ac:'#F4F4F5',ac2:'#A1A1AA',hi:'#F4F4F5',lo:'#C9C9CE',on:'#0A0A0B'},
   jar:{n:'Jar',ac:'#FF4D2E',ac2:'#FF8A3D',hi:'#FF5C3D',lo:'#E5391D',on:'#FFFFFF'},
   neon:{n:'Neon',ac:'#A3E635',ac2:'#D9F99D',hi:'#B5F24A',lo:'#7CC21A',on:'#0B0F05'},
   violet:{n:'Violet',ac:'#8B5CF6',ac2:'#C084FC',hi:'#9B6DFF',lo:'#7337E8',on:'#FFFFFF'},
@@ -1034,9 +1100,13 @@ const THEMES={
   roz:{n:'Roz',ac:'#FF2D78',ac2:'#FF7AB0',hi:'#FF4A8C',lo:'#DB1260',on:'#FFFFFF'},
   gheata:{n:'Gheață',ac:'#22D3EE',ac2:'#A5F3FC',hi:'#3ADCF2',lo:'#0EA5C6',on:'#04161A'}
 };
-const TH=()=>THEMES[S.theme]||THEMES.jar;
-function applyTheme(){ const t=TH(), r=document.documentElement.style;
-  r.setProperty('--ac',t.ac); r.setProperty('--ac2',t.ac2); r.setProperty('--hi',t.hi); r.setProperty('--lo',t.lo); r.setProperty('--on',t.on); }
+const TH=()=>THEMES[S.theme]||THEMES.onix;
+function applyTheme(){ const t=TH(), h=document.documentElement, r=h.style;
+  r.setProperty('--ac',t.ac); r.setProperty('--ac2',t.ac2); r.setProperty('--hi',t.hi); r.setProperty('--lo',t.lo); r.setProperty('--on',t.on);
+  Object.keys(THEMES).forEach(k=>h.classList.toggle('th-'+k,THEMES[k]===t)); }
+/* poza de copertă (ecranul de pornire și „Azi"): build.ps1 o pune aici ca data:, versiunea online o ia din cover.jpg */
+const COVER='cover.jpg';
+if(COVER) document.documentElement.style.setProperty('--cover',`url("${COVER}")`);
 /* „Automat" urmează setarea sistemului (Windows: Efecte de animație; iPhone: Reducere mișcare) */
 const MQ_RM=matchMedia('(prefers-reduced-motion: reduce)');
 const motionOff=()=>S.motion==='off'||(S.motion!=='on'&&MQ_RM.matches);
@@ -1355,6 +1425,8 @@ async function addWater(ml,date){ const k=date||todayKey(), w=Object.assign({},S
 function bList(){ const b=S.body||{}; return Object.keys(b).sort().map(d=>Object.assign({d},b[d])); }
 const MEAS=[['waist','Talie'],['chest','Piept'],['arm','Braț'],['thigh','Coapsă']];
 const hexA=(h,a)=>{ const n=parseInt(h.slice(1),16); return `rgba(${n>>16},${n>>8&255},${n&255},${a})`; };
+/* halou colorat în spatele textului alb: o culoare deschisă (Onix e alb) primește mult mai puțină opacitate, ca textul să rămână lizibil */
+const glowA=(h,a)=>{ const n=parseInt(h.slice(1),16), l=(.2126*(n>>16)+.7152*(n>>8&255)+.0722*(n&255))/255; return hexA(h,l>.6?a*.3:a); };
 /* jurnalul zilei: somn, pași, notițe */
 const jOf=k=>((S.journal||{})[k])||{};
 async function jSet(k,o){ const j=Object.assign({},S.journal), d=Object.assign({},j[k]||{},o);
@@ -2084,7 +2156,9 @@ function viewAzi(){
   const km7=sumKm(runsIn(dayShift(tk,-6),tk)), n7=runsIn(dayShift(tk,-6),tk).length;
   const prs=prEvents().slice(0,3), [rk,rp]=ringsNut(tk,64);
   return `
-  <div class="hello"><div class="eyebrow">${esc(dstr)}</div><div class="h1">${hello}.</div></div>
+  ${COVER?`<div class="hello cover"><div class="cv-ph" aria-hidden="true"></div><div class="cv-fd" aria-hidden="true"></div>
+    <div class="cv-t"><div class="eyebrow">${esc(dstr)}</div><div class="h1">${hello}.</div></div></div>`
+    :`<div class="hello"><div class="eyebrow">${esc(dstr)}</div><div class="h1">${hello}.</div></div>`}
   ${readyCard()}
   ${adaptCard()}
   ${hero}
@@ -3613,7 +3687,7 @@ async function rcOpen(off){ RC.d=recapData(off); RC.sl=recapSlides(RC.d); RC.i=0
 function rcRender(){
   const r=$('#rcRoot'); if(!RC.open){ r.innerHTML=''; updLock(); return; }
   const s=RC.sl[RC.i];
-  r.innerHTML=`<div class="rc" data-a="rcTap" style="--rc1:${hexA(s.c1,.6)};--rc2:${hexA(s.c2,.5)}"><div class="rc-bg"></div>
+  r.innerHTML=`<div class="rc" data-a="rcTap" style="--rc1:${glowA(s.c1,.6)};--rc2:${glowA(s.c2,.5)}"><div class="rc-bg"></div>
     <div class="rc-bars">${RC.sl.map((x,i)=>`<i class="${i<RC.i?'done':i===RC.i?'cur':''}" style="--d:${x.d||6}s"><b></b></i>`).join('')}</div>
     <button class="ib rc-x" data-a="rcClose" aria-label="Închide">${ic('x')}</button>
     <div class="rc-s">${s.h}</div></div>`;
@@ -3630,7 +3704,7 @@ async function shareImg(o){
   try{ await document.fonts.load('800 100px "Barlow Condensed"'); await document.fonts.load('600 30px Inter'); }catch(e){}
   const W=1080,H=1350,c=document.createElement('canvas'); c.width=W; c.height=H; const g=c.getContext('2d'), t=TH();
   g.fillStyle='#09090B'; g.fillRect(0,0,W,H);
-  let gr=g.createRadialGradient(180,160,0,180,160,950); gr.addColorStop(0,hexA(t.ac,.55)); gr.addColorStop(1,'rgba(9,9,11,0)'); g.fillStyle=gr; g.fillRect(0,0,W,H);
+  let gr=g.createRadialGradient(180,160,0,180,160,950); gr.addColorStop(0,glowA(t.ac,.55)); gr.addColorStop(1,'rgba(9,9,11,0)'); g.fillStyle=gr; g.fillRect(0,0,W,H);
   gr=g.createRadialGradient(980,1250,0,980,1250,760); gr.addColorStop(0,'rgba(77,163,255,.28)'); gr.addColorStop(1,'rgba(9,9,11,0)'); g.fillStyle=gr; g.fillRect(0,0,W,H);
   g.fillStyle='#fff'; g.font='800 70px '+fd; g.fillText('ZECE',80,140); g.fillStyle=t.ac; g.fillRect(80,160,130,8);
   g.fillStyle='rgba(255,255,255,.72)'; g.font='600 34px '+fb; g.fillText(String(o.k).toUpperCase(),80,280);
@@ -3668,10 +3742,16 @@ function render(){
   if(changed){ const oi=NAV.findIndex(n=>n[0]===lastTab), ni=NAV.findIndex(n=>n[0]===S.tab);
     v.dataset.dir=oi<0||ni<0?'':ni>oi?'r':'l'; v.classList.remove('anim'); void v.offsetWidth; v.classList.add('anim'); lastTab=S.tab; countUp(v); }
   else v.classList.remove('anim');
-  renderNav(); renderTop(); renderPill(); renderFocus();
+  renderNav(); renderTop(); renderPill(); renderFocus(); coverScroll();
   const ta=$('#aiIn'); if(ta) autosize(ta);
   checkProgress();
 }
+/* coperta de pe „Azi": antetul e transparent cât timp ești sus, iar poza urcă mai încet decât pagina */
+let cvRaf=0;
+function coverScroll(){ cvRaf=0; const ph=S.tab==='azi'?$('.cv-ph'):null, y=Math.max(0,scrollY);
+  document.body.classList.toggle('ontop',!!ph&&y<24);
+  if(ph) ph.style.setProperty('--py',motionOff()?'0px':(Math.min(y,500)*.35).toFixed(1)+'px'); }
+addEventListener('scroll',()=>{ if(!cvRaf) cvRaf=requestAnimationFrame(coverScroll); },{passive:true});
 function renderTop(){
   const st=stats(), lv=levelOf(st.xp), l=$('#lvl');
   l.innerHTML=`${ring(lv.frac,{s:32,sw:3,inner:`<text x="16" y="20.5" text-anchor="middle" class="lvl-t">${lv.L}</text>`})}<span><b>Nivel ${lv.L}</b><small>${st.streak?st.streak+' săpt. la rând':esc(lv.title)}</small></span>`;
@@ -4268,7 +4348,10 @@ async function loadAll(){
   S.sess=o.sess&&o.sess.start&&o.sess.sets?Object.assign({rir:{},tmMin:{},tasks:{},runs:{},prs:[],best:{},kg:{},rp:{}},o.sess):null;
   S.sound=o.sound!==false; S.aiKey=typeof o.aiKey==='string'?o.aiKey:''; S.aiUsed=+o.aiUsed||0;
   S.aiEffort=['low','medium','high'].indexOf(o.aiEffort)>=0?o.aiEffort:'medium';
-  S.theme=THEMES[o.theme]?o.theme:'jar'; S.fx=['min','normal','max'].indexOf(o.fx)>=0?o.fx:'normal'; S.onb=!!o.onb;
+  S.theme=THEMES[o.theme]?o.theme:'onix';
+  /* designul v6 pornește o singură dată pe tema Onix; după aceea tema aleasă în Setări rămâne */
+  if((+o.look||0)<6){ S.theme='onix'; await store.set(K.theme,'onix'); await store.set(K.look,6); }
+  S.fx=['min','normal','max'].indexOf(o.fx)>=0?o.fx:'normal'; S.onb=!!o.onb;
   S.seenAch=Array.isArray(o.seenAch)?o.seenAch:null; S.seenLvl=typeof o.seenLvl==='number'?o.seenLvl:null;
   /* conversațiile din v3 au alt set de unelte și alt prompt: le închidem, altfel istoricul nu mai corespunde */
   if(o.aiChat&&Array.isArray(o.aiChat.msgs)&&o.aiChat.msgs.length&&o.aiChat.ver!==4){ S.aiChat=null; AI.note='Conversația veche a fost închisă după actualizarea aplicației. Începe una nouă.'; await store.set(K.aiChat,null); }
@@ -4277,31 +4360,28 @@ async function loadAll(){
 }
 /* ---------- animația de deschidere ---------- */
 const INTRO={on:false,leaving:false,done:null,mode:'full'};
+/* praf fin în lumina de studio: puncte care plutesc încet în sus și sclipesc (mai vii pe mijloc), apoi se sting la ieșire */
 function introParticles(mode){
   const cv=$('#introCv'); if(!cv||!cv.getContext) return;
-  const ctx=cv.getContext('2d'), dpr=Math.min(2,devicePixelRatio||1); cv.width=innerWidth*dpr; cv.height=innerHeight*dpr;
-  const lg=$('#inLogo').getBoundingClientRect(), cx=(lg.left+lg.width/2)*dpr, cy=(lg.top+lg.height/2)*dpr;
-  const cols=[TH().ac,TH().ac2,'#ffffff'], full=mode==='full', N=full?180:90, R=Math.hypot(cv.width,cv.height)*.55;
-  const ps=Array.from({length:N},(_,i)=>({a:Math.random()*6.283,r0:R*(.45+Math.random()*.7),d:Math.random()*.3,spin:(Math.random()<.5?-1:1)*(1.4+Math.random()*1.8),
-    c:cols[i%3],s:(.7+Math.random()*1.8)*dpr,v:(70+Math.random()*260)*dpr,ba:Math.random()*6.283}));
-  const TC=full?1:0, TB=full?1.02:.43, t0=performance.now();
-  const drawAt=t=>{
-    ctx.globalCompositeOperation='source-over'; ctx.fillStyle='rgba(5,5,6,.26)'; ctx.fillRect(0,0,cv.width,cv.height);
-    ctx.globalCompositeOperation='lighter';
-    ps.forEach(p=>{ let x,y,al;
-      if(t<TB){ if(!full) return; const k=clamp((t-p.d)/(TC-p.d),0,1), e=Math.pow(k,1.7), r=p.r0*(1-e)+4*dpr, a=p.a+p.spin*e;
-        x=cx+Math.cos(a)*r; y=cy+Math.sin(a)*r; al=.15+.85*e; }
-      else { const k=t-TB, dist=p.v*(1-Math.exp(-k*3.2)); x=cx+Math.cos(p.ba)*dist; y=cy+Math.sin(p.ba)*dist; al=Math.max(0,1-k/1.1); }
-      if(al<=0) return; ctx.globalAlpha=al; ctx.fillStyle=p.c; ctx.beginPath(); ctx.arc(x,y,p.s,0,6.283); ctx.fill(); });
-  };
-  INTRO.drawAt=drawAt;
-  const frame=now=>{ if(!INTRO.on) return; const t=(now-t0)/1000; drawAt(t); if(t<TB+1.3) requestAnimationFrame(frame); };
+  const ctx=cv.getContext('2d'), dpr=Math.min(2,devicePixelRatio||1), W=cv.width=innerWidth*dpr, H=cv.height=innerHeight*dpr;
+  const cols=['#ffffff','#ffffff',TH().ac], N=mode==='full'?90:50;
+  const ps=Array.from({length:N},(_,i)=>({x:Math.random()*W,y:Math.random()*H,r:(.4+Math.random()*1.3)*dpr,vx:(Math.random()-.5)*14*dpr,vy:-(6+Math.random()*24)*dpr,
+    a:.25+Math.random()*.6,tw:Math.random()*6.283,c:cols[i%3],d:Math.random()*.8}));
+  const t0=performance.now(); let last=t0;
+  const frame=now=>{ if(!INTRO.on) return; const t=(now-t0)/1000, dt=Math.min(.05,(now-last)/1000); last=now;
+    const out=INTRO.leaving?clamp(1-(now-INTRO.leftAt)/350,0,1):1;
+    ctx.clearRect(0,0,W,H); ctx.globalCompositeOperation='lighter';
+    ps.forEach(p=>{ p.x+=p.vx*dt; p.y+=p.vy*dt; p.tw+=dt*2.2; if(p.y<-10){ p.y=H+10; p.x=Math.random()*W; }
+      const cone=1-Math.min(1,Math.abs(p.x/W-.5)*1.6), al=p.a*clamp((t-p.d)/1.2,0,1)*out*(.55+.45*Math.sin(p.tw))*(.35+.65*cone);
+      if(al<.01) return; ctx.globalAlpha=al; ctx.fillStyle=p.c; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,6.283); ctx.fill(); });
+    requestAnimationFrame(frame); };
   requestAnimationFrame(frame);
 }
 function introStart(){
   const intro=$('#intro'); let mode='full';
   try{ const m=JSON.parse(localStorage.getItem(K.intro)||'"full"'); if(['full','short','off'].indexOf(m)>=0) mode=m; }catch(e){}
-  try{ const t=JSON.parse(localStorage.getItem(K.theme)||'null'); if(THEMES[t]){ S.theme=t; applyTheme(); } }catch(e){}
+  try{ const lk=+JSON.parse(localStorage.getItem(K.look)||'0')||0, t=lk>=6?JSON.parse(localStorage.getItem(K.theme)||'null'):'onix'; if(THEMES[t]) S.theme=t; }catch(e){}
+  applyTheme();
   try{ const m=JSON.parse(localStorage.getItem(K.motion)||'"auto"'); if(['auto','on','off'].indexOf(m)>=0) S.motion=m; }catch(e){}
   applyMotion();
   INTRO.mode=mode;
@@ -4311,11 +4391,11 @@ function introStart(){
   INTRO.on=true; introParticles(mode);
   setTimeout(()=>buzz(25),(mode==='full'?1020:430));
   intro.addEventListener('click',introExit);
-  setTimeout(introExit,mode==='full'?2450:1250);
+  setTimeout(introExit,mode==='full'?3500:1500);
 }
-/* ieșirea: logo-ul zboară în antet, iar ecranul se strânge ca un iris în jurul lui */
+/* ieșirea: logo-ul zboară în antet, poza se apropie, iar ecranul se strânge ca un iris în jurul logo-ului */
 function introExit(){
-  if(INTRO.leaving) return; INTRO.leaving=true;
+  if(INTRO.leaving) return; INTRO.leaving=true; INTRO.leftAt=performance.now();
   const intro=$('#intro'), il=$('#inLogo'), hl=$('.top .logo');
   const finish=()=>{ INTRO.on=false; if(intro.isConnected) intro.remove(); hl.classList.remove('wait'); hl.classList.add('land'); setTimeout(()=>hl.classList.remove('land'),520);
     const v=$('#view'); v.classList.remove('anim'); void v.offsetWidth; v.classList.add('anim'); countUp(v); INTRO.resolve(); };
@@ -4324,6 +4404,7 @@ function introExit(){
     const dx=cx-(r1.left+r1.width/2), dy=cy-(r1.top+r1.height/2), sc=r2.width/r1.width;
     il.animate([{transform:'translate(0,0) scale(1)',opacity:1},{transform:`translate(${dx}px,${dy}px) scale(${sc})`,opacity:1}],{duration:560,easing:'cubic-bezier(.6,0,.2,1)',fill:'forwards'});
     intro.querySelectorAll('.in-word,.in-bar,.in-sub,.in-skip,.in-ring').forEach(el=>el.animate([{opacity:1},{opacity:0,transform:'translateY(14px)'}],{duration:240,fill:'forwards'}));
+    const ph=intro.querySelector('.in-ph'); if(ph) ph.animate([{transform:'scale(1.03)'},{transform:'scale(1.12)'}],{duration:700,easing:'cubic-bezier(.6,0,.2,1)',fill:'forwards'});
     const a=intro.animate([{clipPath:`circle(${Math.hypot(innerWidth,innerHeight)}px at ${cx}px ${cy}px)`},{clipPath:`circle(${r2.width/2}px at ${cx}px ${cy}px)`}],
       {duration:640,delay:60,easing:'cubic-bezier(.7,0,.25,1)',fill:'forwards'});
     a.onfinish=finish; setTimeout(()=>{ if(intro.isConnected) finish(); },1100);
