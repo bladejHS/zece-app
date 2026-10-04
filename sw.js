@@ -2,7 +2,7 @@
    Fișierele aplicației: întâi rețeaua (ca să vină actualizările), iar fără semnal din cache.
    Fonturile și SDK-ul antrenorului AI: din cache, actualizate în fundal.
    Cererile către API-ul Anthropic nu trec niciodată prin cache. */
-const V='zece-76ab2551f1';
+const V='zece-d461d914ad';
 const SHELL=['./','index.html','manifest.webmanifest','icon.svg','apple-touch-icon.png','icon-192.png','icon-512.png','cover.jpg'];
 self.addEventListener('install',e=>{ e.waitUntil(caches.open(V).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting())); });
 self.addEventListener('activate',e=>{ e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==V).map(k=>caches.delete(k)))).then(()=>self.clients.claim())); });
