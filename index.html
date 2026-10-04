@@ -17,7 +17,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 /* =====================================================================
-   ZECE v6 — antrenament hibrid: forță + alergare.
+   ZECE v7 — antrenament hibrid: forță + alergare.
    Negru adânc, linii fine, lumină de studio; teme de culoare prin variabile (Onix = monocrom).
    Alergarea rămâne albastră, recuperarea verde.
    ===================================================================== */
@@ -1026,6 +1026,69 @@ body.fx-min .btn.glow::after{display:none}
 html.th-onix{--a08:rgba(255,255,255,.035);--a14:rgba(255,255,255,.07);--a25:rgba(255,255,255,.08);--a40:rgba(255,255,255,.16);--acg:rgba(255,255,255,.14);--a80:rgba(255,255,255,.42)}
 .th-onix .recap-cta{background:linear-gradient(120deg,rgba(255,255,255,.08),rgba(255,255,255,.015) 55%,rgba(255,255,255,.06)),var(--s1);background-size:200% 200%}
 .th-onix .recap-cta .cc-ic{background:linear-gradient(135deg,var(--ac),var(--ac2))}
+/* ---------- v7 · design ----------
+   bara de jos plutește ca o capsulă de sticlă, cardurile au o lumină care urmărește cursorul (pe PC),
+   secțiunile de mai jos apar lin la derulare, cardul antrenamentului are cifra zilei, discretă, în fundal. */
+.view{padding-bottom:calc(128px + env(safe-area-inset-bottom))}
+.nav{left:50%;right:auto;bottom:calc(10px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(calc(100% - 24px),520px);padding-bottom:0;border-radius:26px;
+  border:1px solid rgba(255,255,255,.09);background:rgba(13,13,16,.84);backdrop-filter:blur(26px) saturate(1.8);-webkit-backdrop-filter:blur(26px) saturate(1.8);
+  box-shadow:0 26px 54px -18px rgba(0,0,0,.95),inset 0 1px 0 rgba(255,255,255,.08)}
+.nav-in{padding:5px}
+.nb{padding:9px 0 8px;border-radius:20px}
+.nb.on .i{filter:none;transform:translateY(-1px)}
+.nav-ind{top:5px;left:5px;width:calc((100% - 10px) / 5);height:calc(100% - 10px)}
+.nav-ind::before{top:auto;bottom:4px;left:50%;right:auto;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--ac);box-shadow:0 0 10px var(--acg)}
+.nav-ind::after{inset:0;border-radius:20px;background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.035));box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 6px 18px -8px rgba(0,0,0,.8)}
+.nb .badge{top:7px}
+.pill{bottom:calc(88px + env(safe-area-inset-bottom))}
+.composer{bottom:calc(90px + env(safe-area-inset-bottom))}
+body.has-pill .view{padding-bottom:calc(184px + env(safe-area-inset-bottom))}
+.card{isolation:isolate}
+@media(hover:hover) and (pointer:fine){
+  .card:not(.rdw):not(.shot-hero):not(.hero)::before{content:'';position:absolute;inset:0;z-index:-1;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .35s ease;
+    background:radial-gradient(380px circle at var(--mx,50%) var(--my,0%),rgba(255,255,255,.055),transparent 55%)}
+  .card:hover::before{opacity:1}
+  .card:hover{border-color:var(--ln2)}
+}
+#view > .rv{opacity:0;transform:translateY(22px);animation:none!important}
+#view > .rv.in{opacity:1;transform:none;transition:opacity .7s var(--e1),transform .7s var(--e1)}
+.hero-wm{position:absolute;right:-6px;bottom:-34px;z-index:-1;font:800 190px/1 var(--fd);letter-spacing:-.02em;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.075);pointer-events:none;user-select:none}
+#view.anim .hero-wm{animation:wmIn 1.4s var(--e1) .2s both}
+@keyframes wmIn{from{opacity:0;transform:translateY(24px)}}
+.hero .peek li span{font-weight:500}
+/* ghidul exercițiilor și notițe */
+.exnote{appearance:none;display:flex;align-items:flex-start;gap:8px;width:100%;margin-top:10px;padding:9px 12px;border-radius:12px;border:1px dashed var(--ln2);background:rgba(255,255,255,.025);
+  color:var(--tx);font-size:13.5px;text-align:left;cursor:pointer;line-height:1.45}
+.exnote .i{width:15px;height:15px;color:var(--mu);margin-top:2px}
+.ex-nt{display:flex;gap:6px;align-items:flex-start}.ex-nt .i{width:13px;height:13px;margin-top:2px}
+.moves{margin:14px 0 0;padding:12px 14px;border:1px solid var(--ln);border-radius:14px;background:rgba(255,255,255,.02)}
+.moves .mv{padding:10px 0 2px;border-top:1px solid var(--ln)}.moves .mv:first-of-type{border-top:0;margin-top:6px}
+.moves .mv b{font-size:14px}.moves .mv p{margin:3px 0 0;font-size:13px}
+a.btn{text-decoration:none;color:inherit}
+/* calculatorul de alimente */
+.fd-list{display:grid;gap:2px;margin-top:10px}
+.fd-r{appearance:none;display:flex;align-items:center;gap:10px;width:100%;padding:10px 4px;border:0;border-top:1px solid var(--ln);background:none;color:inherit;text-align:left;cursor:pointer}
+.fd-r:first-child{border-top:0}
+.fd-r b{display:block;font-size:14px;font-weight:600}
+.fd-r .xs{display:block;margin-top:2px}
+.fd-r > .i{color:var(--mu2);width:18px;height:18px}
+.fd-r.on b{color:var(--ac)}
+@media(hover:hover){.fd-r:hover > .i{color:var(--tx)}}
+.fd-sel{margin-top:12px}
+.fd-cta .cc-ic{background:linear-gradient(135deg,var(--ac),var(--ac2))}
+.tl-spl span.on{border-color:var(--a80);background:var(--a14)}
+/* talie / înălțime */
+.whtr{margin-top:12px;padding:12px;border-radius:14px;background:var(--bg);border:1px solid var(--ln)}
+.whtr .big.sm{font-size:28px;margin-top:2px}
+.wh-bar{position:relative;height:8px;border-radius:5px;margin-top:10px;background:linear-gradient(90deg,rgba(255,176,32,.35),rgba(61,220,151,.35) 12.5%,rgba(61,220,151,.35) 37.5%,rgba(255,176,32,.45) 37.5%,rgba(255,176,32,.45) 62.5%,rgba(255,92,92,.5) 62.5%)}
+.wh-bar i{display:none}
+.wh-bar span{position:absolute;top:-5px;width:4px;height:18px;border-radius:2px;background:#fff;box-shadow:0 0 10px #fff;transform:translateX(-50%)}
+.wh-l{position:relative;height:14px;font-size:10.5px;color:var(--mu2);margin-top:5px}
+.wh-l span{position:absolute;transform:translateX(-50%)}
+.wh-l span:nth-child(1){left:0;transform:none}.wh-l span:nth-child(2){left:37.5%}.wh-l span:nth-child(3){left:62.5%}.wh-l span:nth-child(4){right:0;left:auto;transform:none}
+/* raportul ciclului */
+.cyc-d .good{color:var(--ok)}.cyc-d .bad{color:var(--warn)}
+.list-row .v.cyc-d{min-width:58px;text-align:right}
 @media(max-width:380px){.cover .h1{font-size:40px}.hero .h1{font-size:34px}.in-word{font-size:50px}}
 
 @media(max-width:380px){.h1{font-size:32px}.big{font-size:36px}.fx-n{font-size:34px}.kpis{grid-template-columns:1fr 1fr}.qa-b{font-size:10.5px}}
@@ -1077,6 +1140,12 @@ html.rm .burst,html.rm .flash,html.rm #pt{display:none}
 
 <script>
 "use strict";
+/* jurnalul de erori (Setări → Datele tale): ultimele 30, doar pe acest dispozitiv */
+const ERRK='zece3:errlog';
+function errLog(m,src){ try{ const a=JSON.parse(localStorage.getItem(ERRK)||'[]'); a.push({t:new Date().toISOString(),m:String(m||'eroare').slice(0,300),s:String(src||'').slice(0,80)}); localStorage.setItem(ERRK,JSON.stringify(a.slice(-30))); }catch(e){} }
+addEventListener('error',e=>errLog(e.message,((e.filename||'').split('/').pop()||'')+(e.lineno?':'+e.lineno:'')));
+addEventListener('unhandledrejection',e=>errLog('promisiune respinsă: '+((e.reason&&e.reason.message)||e.reason),''));
+const errList=()=>{ try{ const a=JSON.parse(localStorage.getItem(ERRK)||'[]'); return Array.isArray(a)?a:[]; }catch(e){ return []; } };
 /* =====================================================================
    1 · UTILITARE
    ===================================================================== */
@@ -1173,14 +1242,14 @@ const K={lifts:'zece:lifts',weights:'zece:weights',runs:'zece:runs',wlog:'zece:w
   water:'zece3:water',body:'zece3:body',theme:'zece3:theme',fx:'zece3:fx',onb:'zece3:onb',seenAch:'zece3:seenAch',seenLvl:'zece3:lvl',
   journal:'zece3:journal',tech:'zece3:tech',voice:'zece3:voice',recapSeen:'zece3:recap',
   mplan:'zece3:mplan',shop:'zece3:shop',mf:'zece3:mf',intro:'zece3:intro',motion:'zece3:motion',motionAsked:'zece3:motionAsked',
-  ptests:'zece3:ptests',tmlog:'zece3:tmlog',adj:'zece3:adj',strava:'zece3:strava',ext:'zece3:ext',stq:'zece3:stq',look:'zece3:look',goals:'zece3:goals',supp:'zece3:supp',bk:'zece3:bk'};
+  ptests:'zece3:ptests',tmlog:'zece3:tmlog',adj:'zece3:adj',strava:'zece3:strava',ext:'zece3:ext',stq:'zece3:stq',look:'zece3:look',goals:'zece3:goals',supp:'zece3:supp',bk:'zece3:bk',exNote:'zece3:exnote',foods:'zece3:foods',shoes:'zece3:shoes',sync:'zece3:sync'};
 const S={tab:'azi',lifts:{},weights:{},runs:[],wlog:{},cyc:{},runPlan:{},prof:{},mlog:{},hist:[],sess:null,sound:true,
   aiKey:'',aiChat:null,aiEffort:'medium',aiUsed:0,water:{},body:{},theme:'onix',fx:'normal',onb:false,seenAch:null,seenLvl:null,
   journal:{},tech:{},voice:true,recapSeen:0,photos:undefined,mSel:null,phPose:'fata',
   mplan:{},shop:{},mf:{port:false,cold:false},intro:'full',nTab:'azi',planDay:0,shopDays:7,motion:'auto',motionAsked:false,
   ptests:[],tmlog:[],twAttr:'str',twRange:90,ciOpen:null,adj:{},strava:{},ext:[],stq:[],mWin:7,shotN:1,shotF:'all',shotOpen:null,
-  rest:null,fxOpen:false,fxDir:'',summary:null,planW:null,openDay:-1,progTab:'twin',prEx:null,wRange:90,runKind:'ez'};
-async function save(p,v){ S[p]=v; STC=null; ACTC=null; TWC=null; TGC=null; ADC=null; await store.set(K[p],v); }
+  exNote:{},rest:null,fxOpen:false,fxDir:'',summary:null,planW:null,openDay:-1,progTab:'twin',prEx:null,wRange:90,runKind:'ez'};
+async function save(p,v){ S[p]=v; STC=null; ACTC=null; TWC=null; TGC=null; ADC=null; await store.set(K[p],v); syncMark(p); }
 const prof=()=>Object.assign({sex:'m',age:30,h:180,startW:90,goalW:80,act:1.55,def:600},S.prof||{});
 
 /* =====================================================================
@@ -2202,9 +2271,10 @@ function viewAzi(){
     hero=`<div class="card hero"><div class="eyebrow">${ic('star')} Ciclul ${cyc()} · complet</div>
       <div class="h1">Ai terminat cele 4 săptămâni</div>
       <p class="mu">Ciclul următor reia același plan. Dacă vrei alergări mai lungi, ajustează progresia în Setări.</p>
+      ${cycList().length?`<button class="btn wide" style="margin-top:14px" data-a="cycOpen">${ic('star')} Vezi raportul ciclului</button>`:''}
       <button class="btn pri xl wide glow" data-a="newCycle">${ic('refresh')} Începe ciclul ${cyc()+1}</button></div>`;
   } else { const day=dayFor(nx.w,nx.d), dn=doneCount(nx.w,nx.d), tot=day.ex.length;
-    hero=`<div class="card hero">
+    hero=`<div class="card hero"><span class="hero-wm" aria-hidden="true">${pad(nx.d+1)}</span>
       <div class="hero-top"><div class="sp">
         <div class="eyebrow">Următorul · ${DAYN[nx.d]} · săpt. ${nx.w+1}/${WEEKS}</div>
         <div class="h1">${esc(day.t)}</div>
@@ -2263,7 +2333,7 @@ function viewPlan(){
       <div class="day-b"><div>
         ${day.ex.map(e=>{ const on=isDone(w,d,e.x); return `<div class="ex ${on?'done':''}">
           <button class="tick ${on?'on':''}" data-a="tick" data-w="${w}" data-d="${d}" data-x="${e.x}" aria-label="${on?'Debifează':'Bifează'} ${esc(e.n)}">${ic('check')}</button>
-          <div class="sp"><div class="ex-n">${esc(e.n)}</div><div class="ex-p">${esc(e.p)}</div>${lastLine(e)}</div>
+          <div class="sp"><div class="ex-n">${esc(e.n)}</div><div class="ex-p">${esc(e.p)}</div>${lastLine(e)}${exNote(e.n)?`<div class="ex-l ex-nt">${ic('edit')} ${esc(exNote(e.n))}</div>`:''}</div>
           ${e.kind==='lift'?`<button class="xb" data-a="tech" data-k="${esc(e.n)}" aria-label="Tehnică pentru ${esc(e.n)}">${ic('info')}</button>`:''}</div>`; }).join('')}
         <details class="notes"><summary>${ic('info')} ${esc(day.notes.wk)}</summary>
           ${day.notes.d.map(([t,x])=>`<p><b>${esc(t)}.</b> ${esc(x)}</p>`).join('')}</details>
@@ -2274,13 +2344,55 @@ function viewPlan(){
     <div class="h2" style="margin-top:6px">Planul de 4 săptămâni</div>
     <div class="sm mu">3 alergări · 3 upper · 1 lower · 1 conditioning · 1 zi de recuperare</div>
     <div class="bar"><i style="width:${(full/(WEEKS*7)*100).toFixed(1)}%"></i></div>
-    <div class="cyc-bar"><span>${full} din ${WEEKS*7} zile complete</span><span>${nx?'următorul: S'+(nx.w+1)+' · '+DAYN[nx.d]:'ciclu complet'}</span></div></div>
+    <div class="cyc-bar"><span>${full} din ${WEEKS*7} zile complete</span><span>${nx?'următorul: S'+(nx.w+1)+' · '+DAYN[nx.d]:'ciclu complet'}</span></div>
+    ${cycList().length?`<button class="btn ghost sm wide" style="margin-top:12px" data-a="cycOpen">${ic('star')} Raportul ciclului</button>`:''}</div>
   <div class="seg" role="tablist">${Array.from({length:WEEKS},(_,a)=>`<button class="${a===w?'on':''}" data-a="planW" data-i="${a}" role="tab" aria-selected="${a===w}">S${a+1}${weekFull(a)?` <span class="ok">${ic('check')}</span>`:''}</button>`).join('')}</div>
   ${days}
   <div class="card"><div class="row"><div class="sp"><div class="h3">Ciclu nou</div><div class="sm mu">Reia planul de la săptămâna 1. Istoricul rămâne.</div></div>
     <button class="btn ghost sm" data-a="newCycle" data-confirm="Sigur? Apasă iar">${ic('refresh')} Ciclul ${cyc()+1}</button></div></div>`;
 }
 
+/* ---------- raportul ciclului: ce s-a schimbat între începutul și finalul celor 4 săptămâni ---------- */
+const cycList=()=>[...new Set((S.hist||[]).map(h=>h.cyc).filter(c=>c>0))].sort((a,b)=>b-a);
+function cycData(c){
+  const hs=(S.hist||[]).filter(h=>h.cyc===c); if(!hs.length) return null;
+  const tk=todayKey(), from=hs.map(h=>h.date).sort()[0], last=hs.map(h=>h.date).sort().pop(), to=c===cyc()?tk:last, inR=d=>d>=from&&d<=to, span=daysBetween(from,to)+1;
+  let full=0; for(let w=0;w<WEEKS;w++) for(let d=0;d<7;d++) if(fullIn(c,w,d)) full++;
+  const runs=(S.runs||[]).filter(r=>inR(r.date)), km=sumKm(runs), prs=prEvents().filter(p=>inR(p.d));
+  let sets=0, vol=0; Object.values(S.lifts||{}).forEach(h=>h.forEach(e=>{ if(inR(e.d)) e.s.forEach(([w,r])=>{ sets++; vol+=w*r; }); }));
+  const wl=wList(), avgW=(a,b)=>{ const x=wl.filter(p=>p.d>=a&&p.d<=b); return x.length?avgOf(x.map(p=>p.w)):null; };
+  const w0=avgW(dayShift(from,-3),dayShift(from,6)), w1=avgW(dayShift(to,-6),to);
+  const bl=bList().filter(x=>+x.waist>0), b0=bl.filter(x=>x.d<=dayShift(from,7)).pop()||bl.find(x=>inR(x.d)), b1=bl.filter(x=>x.d<=to).pop();
+  const lifts=Object.keys(S.lifts||{}).map(n=>{ const h=liftHist(n), inC=h.filter(e=>inR(e.d)); if(!inC.length) return null;
+    const be=a=>Math.max(0,...a.map(e=>Math.max(0,...e.s.map(([w,r])=>e1rm(w,r))))), before=h.filter(e=>e.d<from), ref=before.length?be(before.slice(-3)):be([inC[0]]), now=be(inC);
+    return ref>0&&now>0?{n,ref,now,ch:(now-ref)/ref*100}:null; }).filter(Boolean).sort((a,b)=>b.ch-a.ch);
+  const thr=runs.filter(r=>r.kind==='thr'&&paceOf(r)), th0=thr.length>1?paceOf(thr[0]):null, th1=thr.length>1?paceOf(thr[thr.length-1]):null;
+  const rd=[], sl=[]; for(let i=0;i<span;i++){ const d=dayShift(from,i), r=recoveryAt(d), s=+jOf(d).sleep; if(r) rd.push(r.v); if(s>0) sl.push(s); }
+  return {c,from,to,span,hs,full,runs,km,prs,sets,vol,w0,w1,b0,b1,lifts,th0,th1,rd:rd.length?avgOf(rd):null,sl:sl.length?avgOf(sl):null,
+    mins:hs.reduce((a,h)=>a+(+h.dur||0),0)/60,done:c<cyc()||!nextDay()};
+}
+function cycHTML(){
+  const L=cycList(), c=SH.c!=null?SH.c:L[0], d=cycData(c);
+  const chips=L.length>1?`<div class="chips" style="margin-top:12px">${L.map(x=>`<button class="chip ${x===c?'on':''}" data-a="cycPick" data-i="${x}">Ciclul ${x}</button>`).join('')}</div>`:'';
+  if(!d) return `<div class="eyebrow">${ic('star')} Raportul ciclului</div><div class="h2" style="margin-top:6px">Încă nu am date</div><div class="note">Raportul apare după primul antrenament terminat în modul ghidat (butonul „Începe antrenamentul”).</div>`;
+  const dl=(a,b,dec,inv)=>a!=null&&b!=null?`<span class="${(b-a)*(inv?-1:1)>0?'good':(b-a)===0?'':'bad'}">${b-a>0?'+':''}${num(b-a,dec)}</span>`:'—';
+  return `<div class="eyebrow">${ic('star')} Raportul ciclului ${d.c}${d.done?'':' · în desfășurare'}</div><div class="h2" style="margin-top:6px">${fmtDay(d.from)} – ${fmtDay(d.to)}</div>${chips}
+    <div class="kpis"><div class="kpi"><div class="k">Zile complete</div><div class="v">${d.full}<small>/ 28</small></div></div><div class="kpi"><div class="k">Antrenamente</div><div class="v">${d.hs.length}</div></div>
+      <div class="kpi"><div class="k">Ore</div><div class="v">${num(d.mins/60,1)}</div></div><div class="kpi"><div class="k">Serii</div><div class="v">${d.sets}</div></div>
+      <div class="kpi"><div class="k">Volum</div><div class="v">${num(d.vol/1000,1)}<small>t</small></div></div><div class="kpi"><div class="k">Alergare</div><div class="v">${num(d.km,1)}<small>km</small></div></div></div>
+    <div class="dsec"><h4>Corp</h4>
+      <div class="list-row"><span class="sp">Greutate (media pe 7 zile)</span><span class="xs mu">${d.w0!=null?num(d.w0,1):'—'} → ${d.w1!=null?num(d.w1,1):'—'} kg</span><span class="v cyc-d">${dl(d.w0,d.w1,1,true)}</span></div>
+      <div class="list-row"><span class="sp">Talie</span><span class="xs mu">${d.b0?num(d.b0.waist):'—'} → ${d.b1?num(d.b1.waist):'—'} cm</span><span class="v cyc-d">${d.b0&&d.b1&&d.b0.d!==d.b1.d?dl(+d.b0.waist,+d.b1.waist,1,true):'—'}</span></div></div>
+    ${d.lifts.length?`<div class="dsec"><h4>Forță · 1RM estimat</h4>${d.lifts.slice(0,8).map(x=>`<div class="list-row"><span class="sp">${esc(x.n)}</span><span class="xs mu">${x.ref} → ${x.now} kg</span><span class="v cyc-d"><span class="${x.ch>0.5?'good':x.ch<-0.5?'bad':''}">${x.ch>0?'+':''}${num(x.ch,1)}%</span></span></div>`).join('')}</div>`:''}
+    <div class="dsec"><h4>Alergare și recuperare</h4>
+      <div class="list-row"><span class="sp">Alergări</span><span class="v">${d.runs.length} · ${num(d.km/Math.max(1,d.span/7),1)} km/săpt.</span></div>
+      ${d.th0?`<div class="list-row"><span class="sp">Ritm la prag</span><span class="xs mu">${mmss(d.th0)} → ${mmss(d.th1)} /km</span><span class="v cyc-d">${d.th1<d.th0?'<span class="good">mai rapid</span>':d.th1>d.th0?'<span class="bad">mai lent</span>':'—'}</span></div>`:''}
+      <div class="list-row"><span class="sp">Recuperare medie</span><span class="v">${d.rd!=null?Math.round(d.rd)+' / 100':'—'}</span></div>
+      <div class="list-row"><span class="sp">Somn mediu</span><span class="v">${d.sl!=null?num(d.sl,1)+' h':'—'}</span></div></div>
+    ${d.prs.length?`<div class="dsec"><h4>Recorduri · ${d.prs.length}</h4>${d.prs.slice(0,6).map(p=>`<div class="pr-row"><span class="tag pr">PR</span><b>${esc(p.n)}</b><span class="v">${p.prev}→${p.b}</span></div>`).join('')}</div>`:''}
+    <div class="note">Forța se compară cu ultimele sesiuni dinaintea ciclului (sau cu prima din ciclu). Greutatea: media primelor zile față de media ultimei săptămâni.</div>
+    <div class="inrow" style="flex-wrap:wrap"><button class="btn ghost" style="flex:1" data-a="cycShare" data-i="${d.c}">${ic('upload')} Imagine</button>${S.aiKey?`<button class="btn ghost" style="flex:1" data-a="cycAsk" data-i="${d.c}">${ic('coach')} Ce zice antrenorul?</button>`:''}<button class="btn" style="flex:1" data-a="shClose">Închide</button></div>`;
+}
 /* ---------- Readiness pe ecranul Azi + check-in de dimineață ---------- */
 const attrName=id=>id==='cons'?'Consecvență':(ATTR.find(a=>a[0]===id)||[0,id])[1];
 const facRow=([v,t])=>`<div class="fac"><span class="d ${v>0?'pos':v<0?'neg':'zero'}">${v>0?'+':''}${v}</span><span class="sp">${esc(t)}</span></div>`;
@@ -2390,7 +2502,7 @@ function viewProg(){
   const tabs=[['twin','Profil','user'],['s','Forță','dumbbell'],['r','Alergare','run'],['b','Corp','ruler'],['t','Teste','medal']];
   if(S.progTab==='w') S.progTab='b';
   /* Corp = greutatea, compoziția corporală, măsurătorile și pozele, într-un singur loc */
-  const body=S.progTab==='s'?progStrength():S.progTab==='r'?progRuns():S.progTab==='b'?progWeight()+bodyComp()+progBody():S.progTab==='t'?progTests():progTwin();
+  const body=S.progTab==='s'?progStrength():S.progTab==='r'?progRuns():S.progTab==='b'?progWeight()+bodyComp()+stepsCard()+progBody():S.progTab==='t'?progTests():progTwin();
   return `
   <div class="seg scr" style="margin-top:6px">${tabs.map(t=>`<button class="${S.progTab===t[0]?'on':''}" data-a="progTab" data-k="${t[0]}">${ic(t[2])} ${t[1]}</button>`).join('')}</div>
   ${body}`;
@@ -2491,6 +2603,7 @@ function progRuns(){
     ${rp?`<div class="card"><div class="eyebrow">${ic('flame')} Predicție de cursă</div>
       <div class="kpis" style="grid-template-columns:1fr 1fr">${rp.list.map(x=>`<div class="kpi"><div class="k">${x.l}</div><div class="v">${fmtClock(x.s)}</div></div>`).join('')}</div>
       <div class="note">Din cea mai rapidă alergare recentă: ${num(rp.b.km,2)} km în ${num(rp.b.min)} min (${relDay(rp.b.date)}), cu formula Riegel. Alergările ușoare dau predicții prea lente; un 5 km la efort maxim face estimarea precisă.</div></div>`:''}`; })()}
+  ${shoesCard()}
   <div class="card" id="runForm"><div class="eyebrow">${ic('plus')} Notează o alergare</div>
     <div class="chips" style="margin-top:12px">${['ez','thr','lng'].map(k=>`<button class="chip ${S.runKind===k?'on':''}" data-a="runKind" data-k="${k}">${RUNK[k]}</button>`).join('')}</div>
     <div class="form"><div class="fld"><label for="rKm">Distanță (km)</label><input class="inp" id="rKm" type="number" step="0.01" inputmode="decimal" placeholder="5.0"></div>
@@ -2509,6 +2622,7 @@ function progBody(){
   <div class="card"><div class="eyebrow">${ic('ruler')} Măsurători (cm)</div>
     <div class="meas">${MEAS.map(([k,l])=>{ const v=+last[k]||null, f=a.find(x=>+x[k]>0), dv=v&&f&&f.d!==last.d?v-(+f[k]):null;
       return `<div class="kpi"><div class="k">${l}</div><div class="v">${v?num(v):'—'}</div>${dv!=null?`<div class="xs ${dv<=0?'delta good':'delta bad'}" style="margin-top:2px">${dv>0?'+':''}${num(dv)}</div>`:''}</div>`; }).join('')}</div>
+    ${whtrHTML(waist)}
     ${waist.length>=2?lineChart({pts:waist.map(x=>({x:x.d,y:+x.waist})),label:'talie',hex:'#3DDC97'}):`<div class="empty sm">Graficul taliei apare după a doua măsurătoare.</div>`}
     <div class="form">${MEAS.map(([k,l])=>`<div class="fld"><label for="m_${k}">${l} (cm)</label><input class="inp" id="m_${k}" type="number" step="0.5" inputmode="decimal" placeholder="${last[k]?num(last[k]):''}"></div>`).join('')}</div>
     <button class="btn pri wide" style="margin-top:12px" data-a="measAdd">${ic('check')} Salvează măsurătorile</button>
@@ -2642,6 +2756,7 @@ function bodyComp(){
       <div class="kpi"><div class="k">Grăsime</div><div class="v">${num(b.bf,1)}<small>%</small></div></div>
       <div class="kpi"><div class="k">Masă grasă</div><div class="v">${num(b.fat,1)}<small>kg</small></div></div>
       <div class="kpi"><div class="k">Masă slabă</div><div class="v">${num(b.lean,1)}<small>kg</small></div></div></div>
+    ${ffmiHTML(b.lean,P)}
     ${pts.length>=2?`<div class="bc-d"><div><b class="${dF<=0?'good':'bad'}">${dF>0?'+':''}${num(dF,1)} kg</b><span>grăsime</span></div><div><b class="${dL>=-0.3?'good':'bad'}">${dL>0?'+':''}${num(dL,1)} kg</b><span>masă slabă</span></div><div><b>${dW>0?'+':''}${num(dW,1)} kg</b><span>total, din ${fmtDay(a.d)}</span></div></div>
       ${dF<-0.3&&dL>=0?`<div class="note" style="margin-top:8px">Ai pierdut <b>${num(-dF,1)} kg</b> de grăsime și ai păstrat masa slabă${dL>0.3?` (chiar <b>+${num(dL,1)} kg</b>)`:''}. Exact ce vrei la slăbit.</div>`
         :dW<-0.5?`<div class="note" style="margin-top:8px">Din <b>${num(-dW,1)} kg</b> slăbiți, cam <b>${num(clamp(-dF/-dW,0,1)*100,0)}%</b> au fost grăsime.${dL<-1?' Masa slabă scade: ține proteina sus și greutățile grele pe bară.':''}</div>`:''}
@@ -2649,6 +2764,51 @@ function bodyComp(){
     <div class="note">Formula US Navy, din talie, gât${P.sex==='f'?', șold':''} și înălțime. Eroarea tipică e de 3–4 puncte, deci urmărește tendința, nu cifra exactă. Nu e o măsurătoare medicală.</div></div>`;
 }
 
+/* raportul talie/înălțime (Ashwell): prezice riscul cardiometabolic mai bine decât IMC-ul; ținta e sub 0,5 */
+function whtrHTML(waist){
+  const P=prof(), last=waist[waist.length-1]; if(!last||!(+P.h>0)) return '';
+  const r=+last.waist/+P.h, pos=clamp((r-.35)/(.75-.35),0,1), cat=r<.4?['sub 0,4','need']:r<.5?['sănătos','rest']:r<.6?['risc crescut','need']:['risc ridicat','bad'];
+  const tgt=Math.floor(+P.h*.5), first=waist[0], dr=first&&first.d!==last.d?(+last.waist-+first.waist)/+P.h:null;
+  return `<div class="whtr"><div class="row"><div class="sp"><div class="xs mu">Talie / înălțime</div><div class="big sm">${num(r,2)}</div></div><span class="tag ${cat[1]}">${cat[0]}</span></div>
+    <div class="wh-bar"><i style="left:${(clamp((.4-.35)/.4,0,1)*100).toFixed(1)}%;width:${(.1/.4*100).toFixed(1)}%"></i><span style="left:${(pos*100).toFixed(1)}%"></span></div>
+    <div class="wh-l"><span>0,35</span><span>0,5</span><span>0,6</span><span>0,75</span></div>
+    <div class="xs mu" style="margin-top:6px">${r>=.5?`Ținta de sub 0,5 înseamnă o talie sub <b style="color:var(--tx)">${tgt} cm</b> la înălțimea ta (acum ${num(+last.waist)} cm)${dr!=null&&dr<0?`; ai coborât deja cu ${num(-dr,2)} de la prima măsurătoare`:''}.`:'Ești sub 0,5: zona asociată cu cel mai mic risc.'} Reper: „talia sub jumătate din înălțime” (Ashwell, 2012).</div></div>`;
+}
+/* FFMI: masa slabă raportată la înălțime; varianta normalizată corectează pentru înălțime (Kouri, 1995) */
+function ffmiHTML(lean,P){
+  const h=+P.h/100; if(!(h>1.2&&lean>20)) return '';
+  const f=lean/(h*h), n=f+6.1*(1.8-h), lv=n<18?'sub medie':n<20?'medie':n<22?'peste medie':n<23?'foarte bun':n<25?'excelent':'rar fără substanțe';
+  return `<div class="bc-d" style="grid-template-columns:1fr 1fr;margin-top:8px"><div><b>${num(f,1)}</b><span>FFMI</span></div><div><b>${num(n,1)}</b><span>FFMI normalizat · ${lv}</span></div></div>`;
+}
+/* pașii: cea mai mare parte din mișcarea de zi cu zi (NEAT), care scade adesea fără să-ți dai seama în deficit */
+function stepsCard(){
+  const tk=todayKey(), T=+prof().stepsT||8000, days=[]; for(let i=13;i>=0;i--){ const k=dayShift(tk,-i); days.push({k,v:+jOf(k).steps||0}); }
+  const has=days.filter(d=>d.v>0), l7=days.slice(-7).filter(d=>d.v>0), a7=l7.length?avgOf(l7.map(d=>d.v)):null, hit=l7.filter(d=>d.v>=T).length, today=+jOf(tk).steps||0;
+  return `<div class="card"><div class="row"><div class="eyebrow sp">${ic('run')} Pași zilnici</div>${a7!=null?`<span class="tag ${a7>=T?'rest':''}">${hit}/${l7.length} zile la țintă</span>`:''}</div>
+    <div class="row" style="margin-top:8px;align-items:flex-end"><div class="big">${a7!=null?Math.round(a7).toLocaleString('ro-RO'):'—'}<small>pași / zi · 7 zile</small></div></div>
+    ${has.length>=2?barChart(days.map(d=>({lbl:DAYS[(parseKey(d.k).getDay()+6)%7].charAt(0),v:Math.round(d.v/100)/10,hi:d.v>=T})),{line:T/1000,lineLbl:'țintă '+num(T/1000,0)+'k',dec:1,hex:TH().ac,label:'mii de pași pe zi'}):''}
+    <div class="inrow"><input class="inp" id="jSteps" type="number" inputmode="numeric" placeholder="${today?'Azi: '+today+' pași':'Pașii de azi, din telefon sau ceas'}"><button class="btn pri" data-a="jStepsSave">${ic('check')} Salvează</button></div>
+    <div class="chips" style="margin-top:10px"><span class="xs mu" style="align-self:center">Ținta:</span>${[6000,8000,10000,12000].map(v=>`<button class="chip ${T===v?'on':''}" data-a="stepsT" data-i="${v}">${num(v/1000,0)} mii</button>`).join('')}</div>
+    <div class="note">În deficit caloric corpul se mișcă mai puțin fără să-ți dai seama, iar asta poate anula o parte din deficit. O țintă de pași ține mișcarea sus. 8–10 mii de pași pe zi sunt asociați cu cel mai mic risc de mortalitate la adulții sub 60 de ani (Paluch și colab., 2022).</div></div>`;
+}
+/* pantofii de alergare: fiecare alergare merge la pantoful folosit în perioada aceea (cel mai recent început înainte de dată) */
+const shoeOf=d=>(S.shoes||[]).filter(s=>s.since<=d&&(!s.ret||s.ret>d)).sort((a,b)=>a.since<b.since?1:-1)[0]||null;
+const shoeKm=s=>(+s.km0||0)+(S.runs||[]).reduce((a,r)=>{ const o=shoeOf(r.date); return a+(o&&o.id===s.id?(+r.km||0):0); },0);
+function shoesCard(){
+  const sh=(S.shoes||[]).slice().sort((a,b)=>(a.ret?1:0)-(b.ret?1:0)||(a.since<b.since?1:-1));
+  const rows=sh.map(s=>{ const km=shoeKm(s), mx=+s.max||700, f=km/mx, st=s.ret?['retras','']:f>=1?['de schimbat','bad']:f>=.85?['aproape de schimbat','need']:['în formă','rest'];
+    return `<div class="gl-r"><div class="row" style="align-items:flex-start"><div class="sp"><b>${esc(s.n)}</b><div class="xs mu">${num(km,0)} din ${mx} km · din ${fmtDay(s.since)}${s.ret?' până la '+fmtDay(s.ret):''}</div></div>
+      <span class="tag ${st[1]}">${st[0]}</span>${s.ret?'':`<button class="xb" data-a="shoeRet" data-k="${esc(s.id)}" data-confirm="Retrag?" aria-label="Retrage">${ic('check')}</button>`}<button class="xb" data-a="shoeDel" data-k="${esc(s.id)}" data-confirm="?" aria-label="Șterge">${ic('trash')}</button></div>
+      <div class="bar" style="height:6px"><i style="width:${(clamp(f,0,1)*100).toFixed(1)}%;${f>=1?'background:var(--warn)':''}"></i></div></div>`; }).join('');
+  return `<div class="card"><div class="row"><div class="eyebrow sp">${ic('run')} Pantofi de alergare</div><button class="btn ghost sm" data-a="shoeForm">${ic('plus')} Adaugă</button></div>
+    ${S.shoeForm?`<div class="form"><div class="fld full"><label for="shN">Model</label><input class="inp" id="shN" placeholder="ex: Pegasus 41"></div>
+      <div class="fld"><label for="shS">Folosiți din</label><input class="inp" id="shS" type="date" value="${todayKey()}" max="${todayKey()}"></div>
+      <div class="fld"><label for="shK">Km deja făcuți</label><input class="inp" id="shK" type="number" inputmode="decimal" placeholder="0"></div>
+      <div class="fld full"><label for="shM">Schimbi la (km)</label><input class="inp" id="shM" type="number" inputmode="numeric" value="700"></div></div>
+      <div class="inrow"><button class="btn ghost" data-a="shoeForm">Renunță</button><button class="btn pri" style="flex:1" data-a="shoeAdd">${ic('check')} Salvează</button></div>`:''}
+    ${rows||(S.shoeForm?'':`<div class="empty sm">Adaugă pantofii cu care alergi: ZECE adună singur kilometrii din alergări și îți spune când e timpul să-i schimbi.</div>`)}
+    ${rows?`<div class="note">Spuma din talpă își pierde amortizarea în timp; reperul uzual e 500–800 km, după greutate, suprafață și model. La ${num(curW(),0)} kg, spre capătul de jos al intervalului. Fiecare alergare intră la pantoful folosit atunci.</div>`:''}</div>`;
+}
 /* încărcarea pe 12 săptămâni: suma încărcării zilnice pe săptămână și raportul față de media ultimelor 4 */
 function weekLoads(n){
   const m0=mondayOf(todayKey()), out=[];
@@ -2949,6 +3109,8 @@ function nutriToday(){
   ${suppCard()}
   ${scan||`<label class="card link row" style="display:flex">${'<div class="cc-ic">'+ic('camera')+'</div>'}<div class="sp"><div class="h3">Scanează o masă</div>
     <div class="sm mu">Faci o poză, iar AI-ul estimează caloriile și proteina.</div></div>${ic('right')}<input type="file" accept="image/*" capture="environment" data-scan="1" style="position:absolute;inset:0;opacity:0;cursor:pointer" aria-label="Scanează o masă"></label>`}
+  <button class="card link row fd-cta" data-a="foodOpen" style="display:flex;width:100%;text-align:left;color:inherit"><div class="cc-ic">${ic('bowl')}</div><div class="sp"><div class="h3">Caută un aliment</div>
+    <div class="sm mu">${FOODS.length} alimente la gram, cod de bare${(S.foods||[]).length?' și '+S.foods.length+' ale tale':''}</div></div>${ic('right')}</button>
   <div class="card"><div class="eyebrow">${ic('plus')} Adaugă manual</div>
     ${top.length?`<div class="scrollx" style="margin-top:12px">${top.map(f=>`<button class="chip" data-a="mealAgain" data-k="${esc(f.n)}">${ic('plus')} ${esc(f.n)}</button>`).join('')}</div>`:''}
     <div class="form"><div class="fld full"><label for="mN">Ce ai mâncat</label><input class="inp" id="mN" placeholder="ex: omletă cu 4 ouă"></div>
@@ -3144,9 +3306,16 @@ function viewSet(){
       <label class="btn file-l">${ic('upload')} Importă<input type="file" id="impFile" accept="application/json,.json"></label></div>
     <div class="set-row" style="margin-top:12px"><span class="sp"><b>Ciclul ${cyc()}</b><div class="sm mu">${cycleDaysDone()} din ${WEEKS*7} zile bifate</div></span>
       <button class="btn ghost sm danger" data-a="resetCycle" data-confirm="Sigur? Apasă iar">Șterge bifele</button></div></div>
-  <div class="xs mu2" style="text-align:center;margin-top:18px">ZECE v6 · planul Hybrid365</div>`;
+  ${syncCard()}
+  ${errCard()}
+  <div class="xs mu2" style="text-align:center;margin-top:18px">ZECE v7 · planul Hybrid365</div>`;
 }
 
+function errCard(){ const a=errList().slice().reverse();
+  return `<div class="card"><details class="notes" style="border:0;padding:0"><summary>${ic('alert')} Jurnal de erori · ${a.length?a.length+' '+(a.length===1?'înregistrare':'înregistrări'):'gol'}</summary>
+    ${a.length?`<div style="margin-top:8px">${a.slice(0,12).map(e=>`<div class="list-row" style="align-items:flex-start"><span class="sp"><b class="xs">${esc(e.m)}</b><div class="xs mu2">${esc(e.t.replace('T',' ').slice(0,16))}${e.s?' · '+esc(e.s):''}</div></span></div>`).join('')}</div>
+      <div class="inrow"><button class="btn ghost sm" data-a="errCopy">${ic('copy')} Copiază</button><button class="btn ghost sm danger" data-a="errClear" data-confirm="Sigur?">${ic('trash')} Golește</button></div>`
+      :`<p>Nicio eroare înregistrată. Dacă ceva nu merge, aici apar detaliile pe care mi le poți trimite.</p>`}</details></div>`; }
 /* =====================================================================
    10 · SESIUNEA GHIDATĂ
    ===================================================================== */
@@ -3209,6 +3378,8 @@ function fxLift(e,x){
   return `
     <div class="eyebrow">${e.sets} serii × ${e.lo}${e.hi!==e.lo?'–'+e.hi:''} repetări · pauză ${e.rest}s</div>
     <div class="fx-n">${esc(e.n)}</div>${e.adj?`<div class="adjb">${ic('coach')} Ajustat azi: ${esc(e.adj.join(' · '))}</div>`:''}<button class="chip" data-a="tech" data-k="${esc(e.n)}">${ic('info')} Cum se execută?</button>
+    ${exNote(e.n)?`<button class="exnote" data-a="tech" data-k="${esc(e.n)}">${ic('edit')}<span>${esc(exNote(e.n))}</span></button>`:''}
+    ${!sets.length&&x===dayFor(s.w,s.d).ex.findIndex(q=>q.kind==='lift')&&!Object.keys(s.sets).length?`<button class="btn ghost sm wide" style="margin-top:10px" data-a="tmPick" data-k="wup">${ic('flame')} Încălzire generală · 5 min</button>`:''}
     ${s.ready&&s.ready.score<45?`<div class="easy">${ic('alert')} Zi grea (${s.ready.score}) — fără creșteri azi</div>`:''}
     ${sg.last?`<div class="last">Data trecută (${relDay(sg.d)}): <b>${esc(sg.last)}</b></div>`:''}
     <div class="sugg ${sg.kind}">${ic(sg.kind==='up'?'trophy':'bolt')}<span>${sg.txt}</span></div>
@@ -3253,9 +3424,18 @@ function fxTask(e,x){
   return `
     <div class="eyebrow">${ic(day.cat==='rest'?'leaf':'bolt')} ${day.cat==='rest'?'Recuperare':'Bloc'}</div>
     <div class="fx-n">${esc(e.n)}</div><div class="fx-p" style="font-size:16px;line-height:1.6">${esc(e.p)}</div>
+    ${movesHTML(e)}
     ${on?`<div class="done-box">${ic('check')} Făcut.</div>`:''}
     ${pre&&!on?`<button class="btn blue wide xl" style="margin-top:16px" data-a="tmFor" data-x="${x}">${ic('clock')} Pornește cronometrul</button>`:''}
     <button class="btn pri xl wide ${on?'':'glow'} fx-cta" data-a="${on?(isLast?'fxFinish':'fxNext'):'exDone'}">${on?(isLast?'Termină antrenamentul':'Următorul '+ic('right')):ic('check')+' Gata'}</button>`;
+}
+/* reperele de execuție pentru blocurile din plan care nu au serii: conditioning, finisher, încălzirea cu drills */
+function movesHTML(e){
+  const pick=ns=>MOVES.filter(m=>ns.indexOf(m[0])>=0);
+  const list=/^Conditioning/.test(e.n)?pick(['Wall Balls','Burpee Broad Jumps','Kettlebell Swings','Push Ups','Ski / Row 250 m']):/^Power finisher/.test(e.n)?pick(['Med Ball Chest Throws','Plyo Push Ups'])
+    :e.n==='Warm up'&&/drills/.test(e.p)?DRILLS.map(([n,h])=>[n,[h]]):null;
+  if(!list) return '';
+  return `<details class="notes moves"><summary>${ic('info')} Cum se execută mișcările</summary>${list.map(([n,cs])=>`<div class="mv"><b>${esc(n)}</b>${cs.map(c=>`<p>${esc(c)}</p>`).join('')}</div>`).join('')}</details>`;
 }
 let fxWasOpen=false;
 function renderFocus(){
@@ -3393,7 +3573,13 @@ const TM={open:false,st:null,choose:null,list:false};
 const P_EMOM=()=>({title:'EMOM 10 min',kind:'emom',ph:[{k:'prep',d:10,l:'Pregătește-te',s:'Minutul 1: 6 Med Ball Chest Throws'}].concat(Array.from({length:10},(_,i)=>({k:'work',d:60,l:'Minutul '+(i+1)+'/10',s:i%2===0?'6 Med Ball Chest Throws':'8 Plyo Push Ups'})))});
 const P_AMRAP=()=>({title:'AMRAP 10 min',kind:'amrap',amrap:true,ph:[{k:'prep',d:10,l:'Pregătește-te',s:'Numără rundele cu butonul mare'},{k:'work',d:600,l:'AMRAP',s:'10 Wall Balls · 10 Burpee Broad Jumps · 10 KB Swings · 10 Push Ups'}]});
 const P_ENGINE=()=>{ const ph=[{k:'prep',d:10,l:'Pregătește-te',s:'Runda 1: 250 m Ski sau Row'}]; for(let i=1;i<=8;i++){ ph.push({k:'manual',l:'Runda '+i+'/8',s:'250 m Ski sau Row — apasă când termini'}); if(i<8) ph.push({k:'rest',d:45,l:'Pauză',s:'Urmează runda '+(i+1)}); } return {title:'Engine Builder 8 runde',kind:'engine',ph}; };
-const P_STRETCH=()=>{ const ph=[{k:'prep',d:5,l:'Pregătește-te',s:'Prima întindere'}]; for(let i=1;i<=10;i++){ ph.push({k:'work',d:45,l:'Întinderea '+i+'/10',s:'Respiră lent, fără să forțezi'}); if(i<10) ph.push({k:'rest',d:15,l:'Schimbă',s:'Următoarea întindere'}); } return {title:'Stretching 45s × 10',kind:'stretch',ph}; };
+const P_STRETCH=()=>{ const ph=[{k:'prep',d:5,l:'Pregătește-te',s:'Prima: '+STRETCHES[0][0]}]; STRETCHES.forEach(([n,how],i)=>{ ph.push({k:'work',d:45,l:n,s:how+' · '+(i+1)+'/10',half:/la semnal/.test(how)}); if(i<9) ph.push({k:'rest',d:15,l:'Schimbă',s:'Urmează: '+STRETCHES[i+1][0]}); }); return {title:'Stretching 45s × 10',kind:'stretch',ph}; };
+const P_MOBILITY=()=>{ const ph=[{k:'prep',d:5,l:'Pregătește-te',s:'Prima: '+MOBILITY[0][0]}]; MOBILITY.forEach(([n,d,how,h],i)=>{ ph.push({k:'work',d,l:n,s:how,half:!!h}); if(i<MOBILITY.length-1) ph.push({k:'rest',d:10,l:'Schimbă',s:'Urmează: '+MOBILITY[i+1][0]}); }); return {title:'Mobility flow · 12 min',kind:'mobility',ph}; };
+const P_WARMUP=()=>{ const ph=[{k:'prep',d:5,l:'Pregătește-te',s:'Încălzire generală înainte de greutăți'}]; WARMUP.forEach(([n,d,how])=>ph.push({k:'work',d,l:n,s:how})); return {title:'Încălzire pentru forță · 5 min',kind:'warmup',ph}; };
+const P_WARMRUN=()=>{ const ph=[{k:'prep',d:5,l:'Pornește',s:'Alergare ușoară'},{k:'work',d:600,l:'Alergare ușoară',s:'Zona 1–2, relaxat',half:true}];
+  DRILLS.slice(0,4).forEach(([n,how])=>{ ph.push({k:'work',d:30,l:n,s:how}); ph.push({k:'rest',d:30,l:'Mers înapoi',s:'Revino la pas'}); });
+  for(let i=1;i<=4;i++){ ph.push({k:'work',d:20,l:'Accelerare '+i+'/4',s:'Până la ~90% din viteză, relaxat'}); if(i<4) ph.push({k:'rest',d:40,l:'Pas',s:'Respiră, urmează accelerarea '+(i+1)}); }
+  return {title:'Încălzire · alergare + drills',kind:'warmrun',ph}; };
 const P_BREATH=()=>{ const ph=[]; for(let i=1;i<=19;i++) [['Inspiră','pe nas, lent'],['Ține','aerul'],['Expiră','pe gură, complet'],['Ține','plămânii goi']].forEach(([l,s])=>ph.push({k:'breath',d:4,l,s:s+' · ciclul '+i+'/19'})); return {title:'Respirație 4-4-4-4',kind:'breath',ph}; };
 const P_FREE=()=>({title:'Cronometru liber',kind:'free',ph:[{k:'manual',l:'Cronometru',s:'Apasă Gata când termini'}]});
 function P_THR(w,rOv){ const p=runPlan(), r=rOv||p.thr.r[w]||4, m=p.thr.m, rs=p.thr.rest, ph=[{k:'prep',d:10,l:'Pregătește-te',s:'Prima repriză la ritm de prag'}];
@@ -3405,6 +3591,8 @@ function tmPresetFor(e,day,w){
   if(/^Power finisher/.test(e.n)) return P_EMOM();
   if(/^Conditioning/.test(e.n)) return {choose:true,title:'Conditioning'};
   if(e.n==='Stretching') return P_STRETCH();
+  if(e.n==='Mobility flow') return P_MOBILITY();
+  if(e.n==='Warm up'&&/drills/.test(e.p)) return P_WARMRUN();
   if(/^Deep breathing/.test(e.n)) return P_BREATH();
   if(/Foam roll/.test(e.n)) return {title:e.n,ph:[{k:'work',d:300,l:e.n,s:'Insistă pe zonele tensionate'}]};
   const m=/(\d+)(?:–(\d+))?\s*min/.exec(e.p); if(m){ const mins=Math.round((+m[1]+ +(m[2]||m[1]))/2); return {title:e.n,ph:[{k:'prep',d:5,l:'Pregătește-te',s:''},{k:'work',d:mins*60,l:e.n,s:e.p}]}; }
@@ -3414,7 +3602,8 @@ const TM_LIST=()=>{ const nx=nextDay(), w=nx?nx.w:0; return [
   ['thr','run','Threshold · săptămâna '+(w+1),'Reprizele de prag din planul tău',()=>P_THR(w)],
   ['emom','bolt','EMOM 10 min','Power finisher de vineri',P_EMOM],['amrap','flame','AMRAP 10 min','Conditioning B de miercuri',P_AMRAP],
   ['engine','refresh','Engine Builder','Conditioning A: 8 runde × 250 m',P_ENGINE],['stretch','leaf','Stretching 45/15','10 întinderi',P_STRETCH],
-  ['breath','sun','Respirație 4-4-4-4','5 minute de calm',P_BREATH],['free','clock','Cronometru liber','Pornește, apasă Gata când termini',P_FREE]]; };
+  ['wup','flame','Încălzire pentru forță','5 minute înainte de greutăți',P_WARMUP],['warmrun','run','Încălzire de alergare','10 min ușor + drills + accelerări',P_WARMRUN],
+  ['mob','leaf','Mobility flow','11 mișcări ghidate, 12 minute',P_MOBILITY],['breath','sun','Respirație 4-4-4-4','5 minute de calm',P_BREATH],['free','clock','Cronometru liber','Pornește, apasă Gata când termini',P_FREE]]; };
 function tmOpen(pr,from){
   TM.open=true; TM.list=false; TM.choose=null;
   if(pr.choose){ TM.choose={from}; tmRender(); return; }
@@ -3516,7 +3705,9 @@ function tmRender(){
    ===================================================================== */
 const TOOLS=[['rm','calc','Calculator 1RM','Greutăți de lucru pe repetări și RIR'],['pace','run','Ritm și cursă','Ritm, despărțiri pe km, predicție'],
   ['plates','dumbbell','Discuri și încălzire','Ce pui pe bară și seriile de încălzire'],['sweat','drop','Rata de transpirație','Cât să bei la alergările lungi'],
-  ['caf','cup','Cafeină','Doza și ora potrivite înainte de antrenament'],['tm','clock','Cronometru de intervale','EMOM, AMRAP, prag, respirație'],['zones','heart','Zone de puls și ritm','Din vârstă, puls de repaus și prag']];
+  ['caf','cup','Cafeină','Doza și ora potrivite înainte de antrenament'],['tm','clock','Cronometru de intervale','EMOM, AMRAP, prag, încălzire, mobilitate'],['zones','heart','Zone de puls și ritm','Din vârstă, puls de repaus și prag'],
+  ['vdot','target','Ritmuri de antrenament','VDOT: easy, maraton, prag, intervale, repetări'],['tread','run','Banda de alergare','km/h în ritm pe km și înclinația potrivită'],
+  ['sleep','moon','Somn','Ora de culcare, cafeina și seara dinainte'],['food','bowl','Calculator alimente','Calorii și proteină la gram, cod de bare'],['units','refresh','Convertor','kg ↔ lb · km ↔ mile']];
 const TL={};
 const tlN=k=>{ const v=parseFloat(String(TL[k]==null?'':TL[k]).replace(',','.')); return isFinite(v)?v:null; };
 const tlIn=(id,label,o={})=>`<div class="fld ${o.full?'full':''}"><label for="tl_${id}">${label}</label><input class="inp" id="tl_${id}" data-tl="${id}" ${o.text?'inputmode="text"':`type="number" step="${o.step||'any'}" inputmode="decimal"`} value="${esc(TL[id]==null?'':String(TL[id]))}" placeholder="${esc(o.ph||'')}"></div>`;
@@ -3528,6 +3719,9 @@ function toolDefaults(k){
   if(k==='pace'&&TL.pd==null){ TL.pd='5'; TL.pm=TL.pm||'t'; }
   if(k==='plates'&&TL.pb==null) TL.pb='20';
   if(k==='rm'&&TL.rr==null){ TL.rir='0'; }
+  if(k==='vdot'&&TL.vd==null){ const rp=racePred(), b=rp&&rp.b; TL.vd=b?num(b.km,2):'5'; TL.vt=b?fmtClock(b.min*60):''; }
+  if(k==='tread'&&TL.ts==null){ TL.ts='10'; TL.ti='1'; }
+  if(k==='sleep'&&TL.sw==null){ TL.sw=prof().wake||'07:00'; TL.sh=String(prof().sleepT||8); }
 }
 function toolHTML(){
   const k=SH.k||'menu';
@@ -3551,6 +3745,14 @@ function toolIn(k){
   if(k==='sweat') return `<div class="form">${tlIn('sb','Greutate înainte (kg)',{step:'0.1'})}${tlIn('sa','Greutate după (kg)',{step:'0.1',ph:'cântărit după, uscat'})}
       ${tlIn('sd','Ai băut în timpul efortului (ml)',{step:'50'})}${tlIn('sm','Durata (min)',{step:'5'})}</div>
       <div class="xs mu" style="margin-top:8px">Cântărește-te fără haine înainte și imediat după o alergare de cel puțin 45–60 de minute, după ce te ștergi de transpirație.</div>`;
+  if(k==='vdot') return `<div class="chips" style="margin-top:14px">${RACE_D.concat([[3,'3 km']]).sort((a,b)=>a[0]-b[0]).map(([D,l])=>`<button class="chip ${Math.abs((tlN('vd')||0)-D)<.01?'on':''}" data-a="tlSet" data-k="vd" data-s="${D}">${l}</button>`).join('')}</div>
+      <div class="form">${tlIn('vd','Distanța (km)',{step:'0.1'})}${tlIn('vt','Timpul (min:sec sau h:min:sec)',{text:1,ph:'ex: 26:30'})}</div>
+      <div class="xs mu" style="margin-top:8px">Folosește o cursă sau un test la efort maxim din ultimele 4–6 săptămâni. Am completat cea mai rapidă alergare recentă, dacă există.</div>`;
+  if(k==='tread') return `<div class="form">${tlIn('ts','Viteza benzii (km/h)',{step:'0.1'})}
+      <div class="fld"><label>Înclinație</label><div class="seg" style="margin-top:0">${['0','1','2'].map(v=>`<button class="${String(TL.ti||'1')===v?'on':''}" data-a="tlSet" data-k="ti" data-s="${v}">${v}%</button>`).join('')}</div></div></div>`;
+  if(k==='sleep') return `<div class="form"><div class="fld"><label for="tl_sw">Ora de trezire</label><input class="inp" id="tl_sw" data-tl="sw" type="time" value="${esc(TL.sw||'')}"></div>
+      <div class="fld"><label>Câte ore vrei să dormi</label><div class="seg" style="margin-top:0">${['7.5','8','8.5','9'].map(v=>`<button class="${String(TL.sh||'8')===v?'on':''}" data-a="tlSet" data-k="sh" data-s="${v}">${v.replace('.',',')}</button>`).join('')}</div></div></div>`;
+  if(k==='units') return `<div class="form">${tlIn('ukg','Kilograme',{step:'0.5',ph:'ex: 100'})}${tlIn('ulb','Livre (lb)',{step:'0.5',ph:'ex: 45'})}${tlIn('ukm','Kilometri',{step:'0.1',ph:'ex: 10'})}${tlIn('umi','Mile',{step:'0.1',ph:'ex: 3.1'})}</div>`;
   if(k==='caf') return `<div class="form">${tlIn('cw','Greutatea ta (kg)',{step:'1'})}
       <div class="fld"><label for="tl_ct">Ora antrenamentului</label><input class="inp" id="tl_ct" data-tl="ct" type="time" value="${esc(TL.ct||'')}"></div>
       <div class="fld full"><label for="tl_cb">Ora de culcare</label><input class="inp" id="tl_cb" data-tl="cb" type="time" value="${esc(TL.cb||'')}"></div></div>`;
@@ -3592,6 +3794,44 @@ function toolOut(k){
         <li>După efort: <b>~1,5 L pentru fiecare kg pierdut</b>, împreună cu o masă sărată.</li>
         ${pct>2?'<li><b>Ai pierdut peste 2% din greutate</b>: de aici performanța scade vizibil. Bea mai mult în timpul efortului.</li>':''}</ul></div>
       <div class="xs mu2" style="margin-top:8px">Rata se schimbă cu temperatura și intensitatea: refă calculul vara și iarna. Recomandări după ghidurile ACSM.</div>`); }
+  if(k==='vdot'){ const D=tlN('vd'), sec=parseTime(TL.vt);
+    if(!(D>=1.5&&D<=50&&sec>0)) return box(`<div class="sm mu">Scrie distanța și timpul unei curse sau al unui test la efort maxim. Îți calculez VDOT-ul și ritmurile pentru fiecare tip de antrenament.</div>`);
+    const vd=vdotOf(D,sec); if(!(vd>=20&&vd<=90)) return box(`<div class="sm mu">Rezultatul iese în afara tabelelor (VDOT ${num(vd,1)}). Verifică distanța și timpul.</div>`);
+    const P=f=>fmtClock(paceAtV(vd,f)*60), M=raceAtV(vd,42.195)/42.195, rows=[['E','Easy și long run',P(.70)+'–'+P(.62),'conversațional, zona 2: aici e grosul kilometrilor'],
+      ['M','Ritm de maraton',fmtClock(M),'efort controlat, susținut'],['T','Prag',P(.88),'„confortabil de greu”: reprizele de marți'],['I','Intervale (VO2max)',P(.975),'reprize de 3–5 min, pauză aproape egală'],['R','Repetări',P(1.04),'scurte și rapide, cu pauză completă']];
+    const thr=paceAtV(vd,.88);
+    return box(`<div class="row" style="align-items:flex-end"><div><div class="xs mu">VDOT</div><div class="big">${num(vd,1)}</div></div><span class="sp"></span><div class="xs mu" style="text-align:right">${num(D,2)} km în ${fmtClock(sec)}<br>${fmtClock(sec/D)} /km</div></div>
+      <div class="zones">${rows.map(([b,l,v,h])=>`<div class="zn ${b==='T'?'hl':''}"><b>${b}</b><span>${l}<span class="xs mu" style="display:block">${h}</span></span><span class="v">${v}</span></div>`).join('')}</div>
+      <div class="dsec"><h4>Curse echivalente</h4>${RACE_D.map(([x,l])=>{ const s=raceAtV(vd,x); return `<div class="list-row"><span class="sp">${l}</span><span class="xs mu">${fmtClock(s/x)} /km</span><span class="v">${fmtClock(s)}</span></div>`; }).join('')}</div>
+      <button class="btn ghost sm wide" style="margin-top:10px" data-a="vdotThr" data-i="${Math.round(thr*600)}">${ic('check')} Folosește ${mmss(thr)} /km ca ritm de prag în ZECE</button>
+      <div class="xs mu2" style="margin-top:8px">Formulele Daniels–Gilbert din „Daniels' Running Formula”. Ritmurile sunt pe teren plat, pe vreme răcoroasă; pe căldură sau deal, mergi după efort și puls. Ritmul de prag setat aici schimbă zonele de ritm, nu planul.</div>`); }
+  if(k==='tread'){ const v=tlN('ts'), inc=+TL.ti||0;
+    if(!(v>=3&&v<=30)) return box(`<div class="sm mu">Scrie viteza benzii în km/h.</div>`);
+    const pace=60/v, tab=[6,7,8,9,10,11,12,13,14,15,16];
+    return box(`<div class="kpis"><div class="kpi"><div class="k">Ritm</div><div class="v">${mmss(pace)}<small>/km</small></div></div><div class="kpi"><div class="k">Pe milă</div><div class="v">${mmss(pace*1.609344)}</div></div>
+        <div class="kpi"><div class="k">mph</div><div class="v">${num(v/1.609344,1)}</div></div></div>
+      <div class="ag"><ul><li>Pe bandă nu există rezistența aerului: <b>1% înclinație</b> face efortul asemănător cu alergarea afară, la ritmuri de antrenament.${inc===0?' La 0% efortul e ceva mai mic decât afară.':inc===2?' La 2% e ceva mai greu decât afară, pe plat.':''}</li>
+        <li>Pentru zona 2, mergi după puls, nu după viteză: pe bandă e mai cald și pulsul urcă mai repede.</li></ul></div>
+      <div class="dsec"><h4>Viteze uzuale</h4><div class="tl-spl">${tab.map(s=>`<span class="${Math.abs(s-v)<.05?'on':''}"><b>${s} km/h</b>${mmss(60/s)} /km</span>`).join('')}</div></div>
+      <div class="xs mu2" style="margin-top:8px">Reperul de 1%: Jones și Doust (1996), pe alergători antrenați.</div>`); }
+  if(k==='sleep'){ const w=hm(TL.sw), h=parseFloat(TL.sh)||8;
+    if(w==null) return box(`<div class="sm mu">Alege ora la care te trezești.</div>`);
+    const bed=w-h*60-15, tk=todayKey(); let sl=[],sh7=0; for(let i=0;i<7;i++){ const v=+jOf(dayShift(tk,-i)).sleep; if(v>0){ sl.push(v); if(v<7) sh7++; } }
+    const avg=sl.length?avgOf(sl):null, debt=avg!=null?Math.max(0,(h-avg)*sl.length):null;
+    return box(`<div class="kpis"><div class="kpi"><div class="k">În pat la</div><div class="v">${fmHM(bed)}</div></div><div class="kpi"><div class="k">Ultima cafeină</div><div class="v">${fmHM(bed-8*60)}</div></div>
+        <div class="kpi"><div class="k">Fără ecrane de la</div><div class="v">${fmHM(bed-60)}</div></div></div>
+      <div class="ag"><ul><li>Am pus 15 minute pentru adormit: ca să dormi <b>${num(h,1)} ore</b> și să te trezești la ${fmHM(w)}, intră în pat la <b>${fmHM(bed)}</b>.</li>
+        <li>Ultima masă mare cu 2–3 ore înainte (până la <b>${fmHM(bed-150)}</b>); o gustare mică, cu proteină, e în regulă.</li>
+        <li>Efortul intens se termină cu cel puțin o oră înainte de culcare.</li>
+        <li>Cameră răcoroasă (17–19 °C), întunecată și liniștită. Aceeași oră de trezire și în weekend contează mai mult decât orice supliment.</li></ul></div>
+      ${avg!=null?`<div class="note">Ultimele ${sl.length} nopți notate: media <b>${num(avg,1)} h</b>${sh7?', '+sh7+' sub 7 ore':''}${debt>.5?` · cam <b>${num(debt,1)} h</b> sub ținta ta`:''}.</div>`:`<div class="note">Notează somnul la check-in și îți arăt aici media și cât ești sub țintă.</div>`}
+      <div class="xs mu2" style="margin-top:8px">Sportivii au nevoie de 7–9 ore, iar prelungirea somnului a îmbunătățit performanța în studii (Mah și colab., 2011). Repere după ghidurile de igienă a somnului.</div>`); }
+  if(k==='units'){ const kg=tlN('ukg'), lb=tlN('ulb'), km=tlN('ukm'), mi=tlN('umi'), r=[];
+    if(kg>0) r.push(`<div class="list-row"><span class="sp">${num(kg,2)} kg</span><span class="v">${num(kg*2.20462,1)} lb</span></div>`);
+    if(lb>0) r.push(`<div class="list-row"><span class="sp">${num(lb,2)} lb</span><span class="v">${num(lb*.453592,2)} kg</span></div>`);
+    if(km>0) r.push(`<div class="list-row"><span class="sp">${num(km,2)} km</span><span class="v">${num(km/1.609344,2)} mile</span></div>`);
+    if(mi>0) r.push(`<div class="list-row"><span class="sp">${num(mi,2)} mile</span><span class="v">${num(mi*1.609344,2)} km</span></div>`);
+    return box(r.length?r.join('')+`<div class="xs mu2" style="margin-top:8px">Ganterele și discurile în lb: 45 lb ≈ 20,4 kg · 25 lb ≈ 11,3 kg · 10 lb ≈ 4,5 kg.</div>`:`<div class="sm mu">Scrie o valoare în oricare câmp.</div>`); }
   if(k==='caf'){ const w=tlN('cw'), ct=TL.ct, cb=TL.cb;
     if(!(w>0)) return box(`<div class="sm mu">Scrie greutatea și ora antrenamentului.</div>`);
     const lo=Math.round(w*3/10)*10, hi=Math.round(w*6/10)*10, start=Math.min(lo,200);
@@ -3607,6 +3847,120 @@ function toolOut(k){
       <div class="xs mu2" style="margin-top:8px">După poziția ISSN despre cafeină. Dacă ai probleme cu inima sau tensiunea, întreabă întâi medicul.</div>`); }
   return '';
 }
+/* ---------- calculatorul de alimente: valori medii la 100 g (USDA FoodData Central și etichete uzuale), crud dacă nu scrie altfel ----------
+   [nume, kcal, proteină, carbohidrați, grăsimi, categorie, porție (g), porția în cuvinte] */
+const FOODS=[
+ ['Piept de pui crud',120,22.5,0,2.6,'p',150,'o bucată'],['Piept de pui gătit',165,31,0,3.6,'p',120,'o porție'],['Pulpă de pui fără piele, gătită',209,26,0,10.9,'p',120,'o porție'],
+ ['Piept de curcan gătit',147,30,0,2.1,'p',120,'o porție'],['Piept de curcan feliat (șuncă)',104,17,3.5,2.5,'p',50,'3–4 felii'],['Vită slabă 5% crudă',137,21.4,0,5,'p',150,'o porție'],
+ ['Vită slabă 5% gătită',164,26,0,6.4,'p',120,'o porție'],['Carne tocată de vită 15%, crudă',215,18.6,0,15,'p',150,'o porție'],['Mușchi de porc crud',120,21,0,3.5,'p',150,'o porție'],
+ ['Somon crud',208,20.4,0,13.4,'p',150,'un file'],['Ton în apă, scurs',116,25.5,0,0.8,'p',120,'o conservă scursă'],['File de cod crud',82,17.8,0,0.7,'p',150,'un file'],
+ ['Creveți cruzi',85,20.1,0,0.5,'p',150,'o porție'],['Ou întreg',143,12.6,0.7,9.5,'p',50,'un ou'],['Albuș de ou',52,10.9,0.7,0.2,'p',33,'un albuș'],
+ ['Tofu ferm',144,17.3,2.8,8.7,'p',100,'o porție'],['Pudră proteică (whey)',390,78,7,5.5,'p',30,'o măsură'],
+ ['Iaurt grecesc 2%',73,10,3.9,1.9,'l',150,'un pahar'],['Iaurt grecesc 5%',95,9,3.5,5,'l',150,'un pahar'],['Skyr',63,11,4,0.2,'l',150,'un pahar'],
+ ['Brânză cottage 2%',81,10.5,4.8,2.3,'l',150,'o porție'],['Lapte 1,5%',47,3.4,4.9,1.5,'l',250,'o cană'],['Lapte 3,5%',64,3.3,4.7,3.5,'l',250,'o cană'],
+ ['Kefir 2%',50,3.3,4.2,2,'l',250,'o cană'],['Telemea / feta',264,14.2,4.1,21.3,'l',50,'o felie'],['Cașcaval',356,25,2,28,'l',30,'o felie groasă'],['Mozzarella',254,22,2.2,17,'l',125,'o bilă'],
+ ['Orez alb crud',365,7.1,80,0.7,'c',75,'o porție crudă'],['Orez alb fiert',130,2.7,28.2,0.3,'c',200,'o porție'],['Orez brun fiert',123,2.7,25.6,1,'c',200,'o porție'],
+ ['Paste crude',371,13,74.7,1.5,'c',85,'o porție crudă'],['Paste fierte',158,5.8,30.9,0.9,'c',200,'o porție'],['Fulgi de ovăz',379,13.2,67.7,6.5,'c',50,'o porție'],
+ ['Cartofi cruzi',77,2,17.5,0.1,'c',250,'o porție'],['Cartofi fierți',87,1.9,20.1,0.1,'c',250,'o porție'],['Cartof dulce copt',90,2,20.7,0.2,'c',200,'un cartof'],
+ ['Pâine albă',266,8.9,49,3.3,'c',30,'o felie'],['Pâine integrală',252,12.4,42.7,3.5,'c',35,'o felie'],['Lipie de grâu (tortilla)',306,8,51,7.5,'c',60,'o lipie'],
+ ['Mămăligă',75,1.7,16,0.4,'c',250,'o porție'],['Mălai (făină de porumb)',362,8.1,76.9,3.6,'c',60,'o porție'],['Quinoa fiartă',120,4.4,21.3,1.9,'c',185,'o porție'],
+ ['Couscous fiert',112,3.8,23.2,0.2,'c',160,'o porție'],['Bulgur fiert',83,3.1,18.6,0.2,'c',180,'o porție'],['Linte fiartă',116,9,20.1,0.4,'c',200,'o porție'],
+ ['Năut fiert',164,8.9,27.4,2.6,'c',160,'o porție'],['Fasole boabe fiartă',127,8.7,22.8,0.5,'c',180,'o porție'],['Fulgi de porumb (cereale)',357,7.5,84,0.4,'c',40,'un bol'],
+ ['Rondele de orez',387,8.2,81.5,2.8,'c',9,'o rondea'],['Miere',304,0.3,82.4,0,'c',21,'o lingură'],['Gem',278,0.4,69,0.1,'c',20,'o lingură'],['Zahăr',387,0,100,0,'c',5,'o linguriță'],
+ ['Banană',89,1.1,22.8,0.3,'f',120,'o banană'],['Măr',52,0.3,13.8,0.2,'f',180,'un măr'],['Portocală',47,0.9,11.8,0.1,'f',150,'o portocală'],['Afine',57,0.7,14.5,0.3,'f',100,'un pumn mare'],
+ ['Căpșuni',32,0.7,7.7,0.3,'f',150,'un bol'],['Struguri',69,0.7,18.1,0.2,'f',150,'un ciorchine mic'],['Kiwi',61,1.1,14.7,0.5,'f',75,'un kiwi'],['Pară',57,0.4,15.2,0.1,'f',180,'o pară'],
+ ['Curmale',282,2.5,75,0.4,'f',24,'3 curmale'],['Stafide',299,3.1,79,0.5,'f',30,'un pumn'],['Pepene roșu',30,0.6,7.6,0.2,'f',300,'o felie'],
+ ['Broccoli',34,2.8,6.6,0.4,'v',150,'o porție'],['Roșii',18,0.9,3.9,0.2,'v',120,'o roșie'],['Castraveți',15,0.7,3.6,0.1,'v',150,'un castravete'],['Ardei gras roșu',26,1,6,0.3,'v',150,'un ardei'],
+ ['Morcovi',41,0.9,9.6,0.2,'v',80,'un morcov'],['Spanac',23,2.9,3.6,0.4,'v',100,'o porție'],['Salată verde',15,1.4,2.9,0.2,'v',80,'un bol'],['Varză',25,1.3,5.8,0.1,'v',150,'o porție'],
+ ['Ciuperci',22,3.1,3.3,0.3,'v',100,'o porție'],['Dovlecel',17,1.2,3.1,0.3,'v',200,'un dovlecel'],['Ceapă',40,1.1,9.3,0.1,'v',100,'o ceapă'],['Fasole verde',31,1.8,7,0.2,'v',150,'o porție'],
+ ['Conopidă',25,1.9,5,0.3,'v',150,'o porție'],['Mazăre',81,5.4,14.5,0.4,'v',100,'o porție'],
+ ['Ulei de măsline',884,0,0,100,'g',10,'o lingură'],['Unt',717,0.9,0.1,81,'g',10,'o porție'],['Unt de arahide',588,25,20,50,'g',16,'o lingură'],['Migdale',579,21.2,21.6,49.9,'g',30,'un pumn'],
+ ['Nuci',654,15.2,13.7,65.2,'g',30,'un pumn'],['Arahide',567,25.8,16.1,49.2,'g',30,'un pumn'],['Caju',553,18.2,30.2,43.9,'g',30,'un pumn'],['Semințe de dovleac',559,30.2,10.7,49,'g',30,'un pumn'],
+ ['Semințe de floarea-soarelui',584,20.8,20,51.5,'g',30,'un pumn'],['Semințe de chia',486,16.5,42.1,30.7,'g',15,'o lingură'],['Avocado',160,2,8.5,14.7,'g',100,'jumătate'],
+ ['Ciocolată neagră 70–85%',598,7.8,45.9,42.6,'g',20,'2 pătrățele'],['Măsline',115,0.8,6.3,10.7,'g',30,'8–10 măsline'],
+ ['Hummus',166,7.9,14.3,9.6,'a',60,'2 linguri'],['Maioneză',680,1,0.6,75,'a',15,'o lingură'],['Ketchup',101,1,27,0.1,'a',15,'o lingură'],['Pizza (margherita)',266,11.4,33.3,9.7,'a',300,'o pizza mică'],
+ ['Suc de portocale',45,0.7,10.4,0.2,'a',250,'un pahar'],['Bere 5%',43,0.5,3.6,0,'a',500,'o halbă'],['Vin roșu',85,0.1,2.6,0,'a',150,'un pahar'],['Cola',42,0,10.6,0,'a',330,'o doză'],
+ ['Băutură izotonică',26,0,6.4,0,'a',500,'o sticlă'],
+ ['Sardine în ulei, scurse',208,24.6,0,11.5,'p',90,'o conservă scursă'],['Pastramă de curcan',110,20,2,2.5,'p',50,'3–4 felii'],['Piept de pui la cuptor, cu piele',197,29.8,0,7.8,'p',150,'o porție'],
+ ['Lapte de soia neîndulcit',33,3.3,0.6,1.8,'l',250,'o cană'],['Smântână 12%',133,2.7,4,12,'l',30,'o lingură mare'],['Ou fiert',155,12.6,1.1,10.6,'p',50,'un ou']];
+const FCATS={p:'Carne, pește, ouă',l:'Lactate',c:'Carbohidrați',f:'Fructe',v:'Legume',g:'Grăsimi și semințe',a:'Altele',m:'Alimentele mele'};
+const FD={q:'',cat:'',sel:null,g:'',bc:'',busy:false,err:null,add:false};
+const fnorm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+const foodAll=()=>(S.foods||[]).map(f=>[f.n,f.k,f.p,f.c,f.g,'m',f.por||100,f.por?'o porție':'100 g',f.brand||'']).concat(FOODS);
+function foodList(){
+  const q=fnorm(FD.q).trim(), ws=q.split(/\s+/).filter(Boolean), cat=FD.cat;
+  return foodAll().filter(f=>(!cat||f[5]===cat)&&ws.every(w=>fnorm(f[0]+' '+(f[8]||'')).indexOf(w)>=0)).slice(0,q||cat?40:12);
+}
+function foodListHTML(){
+  const L=foodList();
+  if(!L.length) return `<div class="empty sm">Nimic găsit${FD.q?' pentru „'+esc(FD.q)+'”':''}. Încearcă alt cuvânt sau adaugă alimentul tău, de pe etichetă.</div>`;
+  return L.map(f=>`<button class="fd-r ${FD.sel&&FD.sel.n===f[0]?'on':''}" data-a="fdPick" data-k="${esc(f[0])}"><span class="sp"><b>${esc(f[0])}</b><span class="xs mu">${f[8]?esc(f[8])+' · ':''}${num(f[1],0)} kcal · P ${num(f[2],1)} · C ${num(f[3],1)} · G ${num(f[4],1)} la 100 g</span></span>${ic('plus')}</button>`).join('');
+}
+function foodOutHTML(){
+  const f=FD.sel; if(!f) return '';
+  const g=parseFloat(String(FD.g).replace(',','.')), ok=g>0&&g<=3000, x=v=>ok?v*g/100:0;
+  return `<div class="tl-o fd-sel"><div class="row"><div class="sp"><b>${esc(f.n)}</b><div class="xs mu">${f.src==='off'?'Open Food Facts'+(f.brand?' · '+esc(f.brand):''):f.mine?'alimentul tău':'valori medii'} · la 100 g: ${num(f.k,0)} kcal, P ${num(f.p,1)} g</div></div><button class="xb" data-a="fdClear" aria-label="Alt aliment">${ic('x')}</button></div>
+    <div class="chips" style="margin-top:10px">${[[100,'100 g']].concat(f.por&&f.por!==100?[[f.por,f.pl||'o porție']]:[]).concat(f.por?[[f.por*2,'2 porții']]:[]).map(([v,l])=>`<button class="chip ${+FD.g===v?'on':''}" data-a="fdG" data-i="${v}">${esc(l)}${l.indexOf(' g')<0?' · '+num(v,0)+' g':''}</button>`).join('')}</div>
+    <div class="form"><div class="fld full"><label for="fdG">Cantitatea (grame)</label><input class="inp" id="fdG" data-fd="g" type="number" step="1" inputmode="decimal" value="${esc(FD.g)}" placeholder="ex: 150"></div></div>
+    <div id="fdOut">${foodMacros(f,x,ok)}</div>
+    <button class="btn pri wide" style="margin-top:12px" data-a="fdAdd" ${ok?'':'disabled'}>${ic('check')} Adaugă în jurnalul de azi</button></div>`;
+}
+const foodMacros=(f,x,ok)=>`<div class="kpis" style="grid-template-columns:repeat(4,1fr)"><div class="kpi"><div class="k">kcal</div><div class="v">${ok?Math.round(x(f.k)):'—'}</div></div>
+  <div class="kpi"><div class="k">Proteină</div><div class="v">${ok?num(x(f.p),1):'—'}<small>g</small></div></div><div class="kpi"><div class="k">Carbo</div><div class="v">${ok?num(x(f.c),1):'—'}<small>g</small></div></div>
+  <div class="kpi"><div class="k">Grăsimi</div><div class="v">${ok?num(x(f.g),1):'—'}<small>g</small></div></div></div>`;
+function foodHTML(){
+  const bd='BarcodeDetector' in window;
+  return `<div class="eyebrow">${ic('bowl')} Calculator alimente</div><div class="h2" style="margin-top:6px">Ce ai mâncat?</div>
+    <div class="fld" style="margin-top:12px"><input class="inp" id="fdQ" data-fd="q" value="${esc(FD.q)}" placeholder="Caută: pui, orez, ovăz, iaurt…" aria-label="Caută un aliment" autocomplete="off"></div>
+    <div class="scrollx" style="margin-top:10px">${[['','Toate']].concat(Object.entries(FCATS).filter(([k])=>k!=='m'||(S.foods||[]).length)).map(([k,l])=>`<button class="chip ${FD.cat===k?'on':''}" data-a="fdCat" data-k="${k}">${l}</button>`).join('')}</div>
+    <div id="fdSel">${foodOutHTML()}</div>
+    <div class="fd-list" id="fdList">${foodListHTML()}</div>
+    <div class="dsec"><h4>Produs ambalat · cod de bare</h4>
+      <div class="inrow" style="margin-top:6px"><input class="inp" id="fdBc" data-fd="bc" inputmode="numeric" value="${esc(FD.bc)}" placeholder="cifrele de sub codul de bare" aria-label="Cod de bare">
+        <button class="btn" data-a="fdBc" ${FD.busy?'disabled':''}>${FD.busy?'Caut…':'Caută'}</button></div>
+      ${bd?`<label class="btn ghost sm wide file-l" style="margin-top:8px">${ic('camera')} Fotografiază codul de bare<input type="file" accept="image/*" capture="environment" data-bcimg="1"></label>`:''}
+      ${FD.err?`<div class="err">${ic('alert')}<span>${esc(FD.err)}</span></div>`:''}
+      <div class="xs mu2" style="margin-top:6px">Datele vin din Open Food Facts, o bază deschisă cu produse din magazine. Verifică eticheta: are prioritate.</div></div>
+    <details class="notes sp-more"${FD.add?' open':''}><summary>${ic('plus')} Adaugă un aliment al tău (de pe etichetă)</summary>
+      <div class="form"><div class="fld full"><label for="faN">Nume</label><input class="inp" id="faN" placeholder="ex: Baton proteic X"></div>
+        <div class="fld"><label for="faK">kcal / 100 g</label><input class="inp" id="faK" type="number" inputmode="decimal"></div><div class="fld"><label for="faP">Proteină / 100 g</label><input class="inp" id="faP" type="number" inputmode="decimal"></div>
+        <div class="fld"><label for="faC">Carbo / 100 g</label><input class="inp" id="faC" type="number" inputmode="decimal"></div><div class="fld"><label for="faG">Grăsimi / 100 g</label><input class="inp" id="faG" type="number" inputmode="decimal"></div>
+        <div class="fld full"><label for="faPor">Porția (g, opțional)</label><input class="inp" id="faPor" type="number" inputmode="decimal" placeholder="ex: 60"></div></div>
+      <button class="btn wide" style="margin-top:10px" data-a="fdMine">${ic('check')} Salvează în alimentele mele</button></details>
+    <div class="note">Valori medii la 100 g, pentru alimente crude dacă nu scrie „fiert” sau „gătit”. Cântărește crud când poți: e cel mai precis.</div>`;
+}
+function foodPaint(){ const l=$('#fdList'); if(l) l.innerHTML=foodListHTML(); }
+function foodSel(f){ FD.sel=f; FD.g=String(f.por&&f.por!==100?f.por:100); FD.err=null; const s=$('#fdSel'); if(s){ s.innerHTML=foodOutHTML(); const sh=$('#shRoot .sheet'); if(sh) sh.scrollTo({top:0,behavior:'smooth'}); } foodPaint(); }
+async function foodBarcode(code){
+  code=String(code||'').replace(/\D/g,''); if(code.length<8||code.length>14){ FD.err='Codul de bare are 8–14 cifre.'; shRender(); return; }
+  FD.bc=code; FD.busy=true; FD.err=null; shRender();
+  try{ const r=await fetch('https://world.openfoodfacts.org/api/v2/product/'+code+'.json?fields=product_name,product_name_ro,brands,nutriments,serving_quantity');
+    if(!r.ok&&r.status!==404) throw new Error('http');
+    const d=await r.json(), p=d&&d.product, nu=p&&p.nutriments||{};
+    let k=+nu['energy-kcal_100g']; if(!(k>0)&&+nu.energy_100g>0) k=nu.energy_100g/4.184;
+    if(!p||d.status===0) FD.err='Produsul nu e în Open Food Facts. Adaugă-l mai jos, de pe etichetă.';
+    else if(!(k>=0)||nu.proteins_100g==null) FD.err='Produsul există, dar fără valori nutriționale complete. Adaugă-l de pe etichetă.';
+    else { const f={n:String(p.product_name_ro||p.product_name||'Produs '+code).trim().slice(0,70),brand:String(p.brands||'').split(',')[0].trim().slice(0,40),k:Math.round(k),p:+(+nu.proteins_100g||0).toFixed(1),
+        c:+(+nu.carbohydrates_100g||0).toFixed(1),g:+(+nu.fat_100g||0).toFixed(1),por:+p.serving_quantity>0&&+p.serving_quantity<2000?Math.round(+p.serving_quantity):null,pl:'o porție',src:'off',code};
+      const mine=(S.foods||[]).filter(x=>x.code!==code&&x.n!==f.n); await save('foods',[{n:f.n,brand:f.brand,k:f.k,p:f.p,c:f.c,g:f.g,por:f.por,code}].concat(mine).slice(0,60));
+      FD.busy=false; FD.bc=''; shRender(); foodSel(f); return; }
+  }catch(e){ FD.err='Nu ajung la Open Food Facts. Verifică internetul și mai încearcă.'; }
+  FD.busy=false; shRender();
+}
+async function foodBarcodeImg(file){
+  try{ const bmp=await createImageBitmap(file), det=new BarcodeDetector({formats:['ean_13','ean_8','upc_a','upc_e']}), r=await det.detect(bmp);
+    if(r&&r.length) await foodBarcode(r[0].rawValue); else { FD.err='Nu am găsit un cod de bare în poză. Apropie telefonul și asigură lumină bună, sau scrie cifrele.'; shRender(); } }
+  catch(e){ FD.err='Nu am putut citi poza. Scrie cifrele de sub codul de bare.'; shRender(); }
+}
+/* ---------- VDOT (Daniels și Gilbert): capacitatea aerobă din timpul de cursă și ritmurile de antrenament ---------- */
+const vo2At=v=>-4.6+0.182258*v+0.000104*v*v;
+const pctMax=t=>0.8+0.1894393*Math.exp(-0.012778*t)+0.2989558*Math.exp(-0.1932605*t);
+const vdotOf=(D,sec)=>{ const t=sec/60; return vo2At(D*1000/t)/pctMax(t); };
+const velAt=vo2=>(-0.182258+Math.sqrt(0.182258*0.182258+4*0.000104*(vo2+4.6)))/(2*0.000104);
+const paceAtV=(vd,f)=>1000/velAt(vd*f);
+function raceAtV(vd,D){ let a=D*1.5,b=D*20; for(let i=0;i<60;i++){ const m=(a+b)/2; if(vdotOf(D,m*60)>vd) a=m; else b=m; } return (a+b)/2*60; }
+/* somnul: ora de culcare din ora de trezire și ținta de ore */
+const hm=s=>{ const m=/^(\d{1,2}):(\d{2})$/.exec(s||''); return m?+m[1]*60+ +m[2]:null; }, fmHM=v=>{ v=((Math.round(v)%1440)+1440)%1440; return pad(Math.floor(v/60))+':'+pad(v%60); };
 /* discurile pe o parte, ca text (pentru încălzire) */
 function platesSide(kg,bar){ let side=(kg-bar)/2; const out=[]; PLATES.forEach(([p])=>{ while(side>=p-1e-9){ out.push(p); side-=p; } }); return out.length?out.map(p=>num(p,2)).join(' + '):'—'; }
 
@@ -3955,10 +4309,11 @@ function onbRender(){
   document.body.classList.add('lock');
   const P=prof(), ws=wStats(), dots=`<div class="onb-dots">${[0,1,2,3].map(i=>`<i class="${i===OB.step?'on':''}"></i>`).join('')}</div>`;
   let body='';
-  if(OB.step===0) body=`<div class="onb-big">10</div><div class="h1" style="text-align:center">ZECE v6</div><p class="mu" style="text-align:center">Planul tău Hybrid365, acum cu mult mai multe.</p>
+  if(OB.step===0) body=`<div class="onb-big">10</div><div class="h1" style="text-align:center">ZECE v7</div><p class="mu" style="text-align:center">Planul tău Hybrid365, acum cu mult mai multe.</p>
     <div class="feat"><div>${ic('play')} Antrenament ghidat: serii, pauze cu sunet, discuri pe bară, încălzire</div><div>${ic('clock')} Cronometru de intervale pentru prag, EMOM, AMRAP</div>
       <div>${ic('camera')} Nutriție: poză la masă, iar AI-ul estimează caloriile</div><div>${ic('coach')} Antrenor AI care îți vede datele și le poate nota</div>
-      <div>${ic('target')} Obiective cu dată estimată, încărcare, recuperare și compoziție corporală</div></div>`;
+      <div>${ic('target')} Obiective cu dată estimată, încărcare, recuperare și compoziție corporală</div>
+      <div>${ic('info')} Ghid de execuție pentru fiecare exercițiu, încălzire și mobilitate ghidate</div><div>${ic('refresh')} Aceleași date pe PC și pe telefon, criptate</div></div>`;
   else if(OB.step===1) body=`<div class="eyebrow">Pasul 1 din 3</div><div class="h1">Despre tine</div><p class="mu">Folosim datele ca să-ți calculăm țintele. Le poți schimba oricând.</p>
     <div class="chips" style="margin-top:14px">${[['m','Bărbat'],['f','Femeie']].map(s=>`<button class="chip ${OB.sex===s[0]?'on':''}" data-a="obSex" data-k="${s[0]}">${s[1]}</button>`).join('')}</div>
     <div class="form"><div class="fld"><label for="obAge">Vârstă</label><input class="inp" id="obAge" type="number" inputmode="numeric" value="${P.age}"></div>
@@ -4033,6 +4388,100 @@ function dayHTML(k){
       <div class="fld full"><label for="jdN">Notițe</label><textarea class="inp" id="jdN" rows="2" placeholder="cum te-ai simțit, dureri, stres…">${esc(j.note||'')}</textarea></div></div>
       <button class="btn pri wide" style="margin-top:12px" data-a="jSave" data-k="${k}">${ic('check')} Salvează jurnalul</button></div>`:''}`;
 }
+/* ---------- ghidul de exerciții: tehnica fiecărui exercițiu din plan, fără internet și fără cheie API ----------
+   m = mușchi, c = execuție, x = greșeli frecvente, s = siguranță. Indicațiile urmează standardele uzuale de antrenament de forță. */
+const GUIDE={
+ 'Bench Press':{m:['Piept','Triceps','Umeri (față)'],c:['Culcă-te cu ochii sub bară, tălpile ferm pe podea, ușor trase spre bancă.','Strânge omoplații spre spate și în jos și păstrează un arc ușor în zona lombară; fesierii rămân pe bancă.','Priza puțin mai lată decât umerii, încheieturile drepte, deasupra coatelor.','Coboară controlat până atingi pieptul la nivelul sternului, cu coatele la 45–70° față de trunchi.','Împinge bara în sus și ușor spre față, apăsând podeaua cu picioarele.'],
+  x:['Coatele deschise la 90° față de trunchi: suprasolicită umerii.','Bara sare din piept sau fesierii se ridică de pe bancă.','Încheieturile îndoite spre spate sub bară.'],s:'La seriile grele folosește un partener sau opritoarele de siguranță. Prinde bara cu degetul mare în jurul ei, nu în priză falsă.'},
+ 'Pull Up / Lat Pulldown':{m:['Dorsal mare','Spate (mijloc)','Biceps'],c:['Priza puțin mai lată decât umerii; pornește cu brațele complet întinse.','Începe coborând umerii departe de urechi, apoi trage coatele în jos spre coaste.','Pieptul urcă spre bară (la aparat, bara coboară spre partea de sus a pieptului).','Coboară controlat 2–3 secunde, până la brațe aproape întinse.','Trunchiul stabil, fără legănat; la aparat, o înclinare ușoară spre spate.'],
+  x:['Jumătăți de repetare: brațele nu se întind jos.','Tragi din mâini în loc de coate, iar umerii urcă spre urechi.','Balans sau smucituri ca să treci de bară.'],s:'Dacă te doare umărul la priza largă, îngustează priza sau folosește priza neutră.'},
+ 'Weighted Pull Up':{m:['Dorsal mare','Spate (mijloc)','Biceps'],c:['Centura cu greutatea atârnă la șolduri; abdomenul strâns, picioarele încrucișate.','Pornește din atârnare completă, cu brațele întinse.','Coboară umerii înainte să tragi, apoi trage coatele spre coaste.','Bărbia trece peste bară, pieptul urcă spre ea.','Coboară controlat 2–3 secunde până la brațe întinse.'],
+  x:['Greutate prea mare, din care ies doar jumătăți de repetare.','Legănat din picioare ca să urci.','Coborâre scăpată, fără control.'],s:'Crește greutatea în pași mici (1,25–2,5 kg). La durere în umăr sau cot, revino la greutatea corpului.'},
+ 'Incline Dumbbell Press':{m:['Piept (sus)','Umeri (față)','Triceps'],c:['Banca la 30–45°; omoplații strânși, tălpile ferme pe podea.','Ganterele pornesc deasupra pieptului de sus, cu încheieturile drepte.','Coboară până simți întinderea în piept, coatele la 45–60° față de trunchi.','Împinge în sus și ușor spre interior, fără să lovești ganterele.','Controlează coborârea timp de 2 secunde.'],
+  x:['Banca înclinată peste 45°: efortul trece pe umeri.','Coatele deschise complet lateral.','Arc exagerat al spatelui, care transformă mișcarea în împins orizontal.'],s:'Ca să lași ganterele jos, adu-le la piept și ridică genunchii; nu le arunca lateral cu brațele întinse.'},
+ 'Flat Dumbbell Press':{m:['Piept','Triceps','Umeri (față)'],c:['Așază-te cu ganterele pe coapse, apoi culcă-te și adu-le deasupra pieptului cu ajutorul genunchilor.','Omoplații strânși și coborâți, tălpile ferme pe podea.','Coboară ganterele lateral de piept, coatele la 45–60° față de trunchi.','Coboară până simți o întindere bună în piept, fără durere în umăr.','Împinge în sus, ușor spre interior, până la brațe întinse.'],
+  x:['Coatele la 90°, în linie cu umerii.','Amplitudine scurtă: ganterele se opresc mult deasupra pieptului.','Încheieturile îndoite spre spate.'],s:'Pune ganterele jos aducându-le la piept, cu genunchii ridicați, nu lăsându-le să cadă lateral.'},
+ 'Close Grip Bench Press':{m:['Triceps','Piept','Umeri (față)'],c:['Priza la lățimea umerilor, nu mai îngustă.','Omoplații strânși, ca la Bench Press.','Coatele aproape de trunchi, la 30–45°.','Coboară bara pe partea de jos a pieptului.','Împinge până la brațe întinse, simțind tricepsul.'],
+  x:['Priză prea îngustă: încheieturile suferă.','Coatele se deschid lateral.','Bara sare din piept.'],s:'Opritoare de siguranță sau partener la seriile grele.'},
+ 'Chest Supported Row':{m:['Spate (mijloc)','Dorsal mare','Umeri (spate)','Biceps'],c:['Pieptul lipit de suport pe toată mișcarea, gâtul neutru.','Pornește cu brațele întinse și umerii lăsați ușor în față.','Trage coatele spre spate și spre șolduri, strângând omoplații.','Ține o secundă sus, apoi coboară controlat.','Mâinile relaxate: tragi din coate, nu din încheieturi.'],
+  x:['Pieptul se ridică de pe suport ca să ajuți cu trunchiul.','Umerii urcă spre urechi la finalul tracțiunii.','Amplitudine scurtă: brațele nu se întind jos.'],s:'Folosește chingi dacă priza cedează înaintea spatelui.'},
+ 'Seated Overhead Press':{m:['Umeri (față și lateral)','Triceps'],c:['Spătarul vertical sau aproape vertical, spatele lipit de el.','Abdomenul strâns, fără arc lombar exagerat.','Pornești de la nivelul bărbiei, cu antebrațele verticale.','Împinge în sus până la brațe întinse deasupra capului.','Coboară controlat până la nivelul bărbiei.'],
+  x:['Arc lombar mare ca să împingi mai mult.','Coatele trase mult în spate.','Amplitudine scurtă jos.'],s:'Dacă te ciupește umărul sus, folosește gantere cu priză neutră.'},
+ 'Push Press':{m:['Umeri','Triceps','Picioare (impuls)'],c:['Bara pe umerii din față, priza puțin mai lată decât umerii, coatele ușor în față.','Dip scurt: îndoaie genunchii 10–15 cm, trunchiul rămâne vertical.','Întinde exploziv picioarele și împinge imediat bara deasupra capului.','Capul trece „prin fereastră” sub bară; bara ajunge deasupra mijlocului tălpii.','Blochează brațele sus, apoi coboară bara pe umeri cu genunchii ușor îndoiți, ca să amortizezi.'],
+  x:['Dip prea adânc sau cu trunchiul aplecat în față.','Pauză între dip și împins: pierzi impulsul.','Bara pleacă în față, departe de corp.'],s:'Lasă spațiu liber în jur. Dacă nu mai poți, coboară bara în față, pe umeri sau pe suport, niciodată în spate.'},
+ 'Lateral Raise':{m:['Umeri (lateral)'],c:['Stai drept, genunchii ușor îndoiți, trunchiul ușor înclinat în față.','Ridică brațele lateral, cu coatele ușor îndoite, până la nivelul umerilor.','Gândește-te că împingi mâinile spre pereții laterali, nu în sus.','Degetul mic la același nivel sau ușor sub degetul mare.','Coboară lent, în 2–3 secunde.'],
+  x:['Umerii urcă spre urechi și preia trapezul.','Balans din trunchi.','Greutate prea mare, cu mișcare scurtă.'],s:'Dacă te ciupește umărul sus, ridică brațele puțin mai în față, în planul omoplatului.'},
+ 'Dumbbell Lateral Raise':{m:['Umeri (lateral)'],c:['Ganterele lângă coapse, genunchii ușor îndoiți, trunchiul ușor înclinat în față.','Ridică lateral, cu coatele ușor îndoite, până la nivelul umerilor.','Coatele conduc mișcarea; mâinile nu trec peste coate.','Ține o clipă sus, fără să ridici umerii.','Coboară lent, în 2–3 secunde.'],
+  x:['Ridici umerii spre urechi.','Arunci ganterele cu balans din trunchi.','Greutate prea mare: ultimele repetări ies scurte.'],s:'Greutăți mici, repetări curate. Ridică puțin în față dacă simți ciupire în umăr.'},
+ 'Cable Face Pull':{m:['Umeri (spate)','Spate (sus)','Rotatorii umărului'],c:['Scripetele la nivelul frunții, cu frânghie.','Priza cu degetele mari spre tine.','Trage frânghia spre față, desfăcând capetele lângă urechi.','Coatele rămân sus, la nivelul umerilor.','La final rotește pumnii spre tavan și ține o secundă.'],
+  x:['Greutate prea mare: tragi cu trunchiul spre spate.','Coatele cad jos și exercițiul devine un ramat.','Smucituri în loc de mișcare controlată.'],s:'E un exercițiu pentru sănătatea umerilor: greutate moderată, control și strângere la final.'},
+ 'Tricep Pushdown':{m:['Triceps'],c:['Coatele lipite de corp și fixe pe toată mișcarea.','Trunchiul ușor înclinat în față, umerii jos.','Împinge până la brațe complet întinse și strânge tricepsul o secundă.','Revino controlat până la aproximativ 90° la cot.','Încheieturile drepte.'],
+  x:['Coatele pleacă în față la urcare.','Te apleci peste cablu și împingi cu greutatea corpului.','Amplitudine scurtă.'],s:'Dacă te doare cotul, folosește frânghia sau o priză neutră și mai puțină greutate.'},
+ 'Tricep Rope Pushdown':{m:['Triceps'],c:['Coatele lipite de corp, fixe.','Prinde frânghia cu degetele mari în sus.','Împinge în jos până la brațe întinse.','La final desfă capetele frânghiei lateral și strânge tricepsul.','Revino controlat până la aproximativ 90° la cot.'],
+  x:['Coatele se mișcă înainte și înapoi.','Trunchiul se apleacă mult ca să ajute.','Revenire scăpată, fără control.'],s:'Fără smucituri la final; controlul contează mai mult decât greutatea.'},
+ 'Tricep Overhead Extension':{m:['Triceps (capul lung)'],c:['Coatele sus, aproape de cap, orientate înainte.','Coboară greutatea în spatele capului până simți întinderea în triceps.','Întinde brațele fără să miști coatele.','Abdomenul strâns, fără arc lombar.','Coboară controlat, în 2 secunde.'],
+  x:['Coatele se depărtează mult lateral.','Arc lombar ca să împingi greutatea.','Amplitudine scurtă: nu cobori destul.'],s:'Dacă te doare cotul, treci pe cablu și redu greutatea.'},
+ 'Bicep Curl':{m:['Biceps','Antebraț'],c:['Coatele lângă corp și fixe.','Urcă greutatea fără balans din trunchi.','Strânge sus o secundă, fără să duci coatele în față.','Coboară lent până la brațe aproape întinse.','Încheieturile drepte.'],
+  x:['Te lași pe spate ca să urci greutatea.','Coatele pleacă mult în față.','Coborâre scăpată.'],s:'La durere în partea din față a cotului sau a umărului, redu greutatea și volumul.'},
+ 'Alternating Dumbbell Curl':{m:['Biceps','Antebraț'],c:['Ganterele lângă coapse, palmele spre corp.','Urcă o ganteră, rotind palma în sus pe drum.','Cotul rămâne lângă corp.','Strânge sus o secundă, apoi coboară lent.','Alternează brațele fără să legeni trunchiul.'],
+  x:['Balans din trunchi.','Cotul pleacă în față și umărul preia.','Rotația palmei lipsește.'],s:'Greutăți controlabile: bicepsul răspunde la tensiune, nu la smucituri.'},
+ 'Barbell Curl':{m:['Biceps','Antebraț'],c:['Priza la lățimea umerilor, palmele în sus.','Coatele lângă corp, umerii jos.','Urcă bara fără să te lași pe spate.','Strânge sus o secundă.','Coboară lent până la brațe aproape întinse.'],
+  x:['Balans din șolduri și spate.','Coatele pleacă în față.','Amplitudine scurtă jos.'],s:'Dacă te dor încheieturile, folosește o bară EZ.'},
+ 'Hack Squat':{m:['Cvadriceps','Fesieri','Adductori'],c:['Spatele și bazinul lipite de spătar.','Picioarele la lățimea umerilor, pe mijlocul platformei.','Genunchii merg în direcția vârfurilor.','Coboară controlat cât bazinul rămâne lipit de spătar, ideal până la coapsele paralele sau mai jos.','Împinge prin toată talpa, fără să blochezi brusc genunchii sus.'],
+  x:['Călcâiele se ridică de pe platformă.','Genunchii cad spre interior la urcare.','Bazinul se dezlipește jos și spatele se rotunjește.'],s:'Folosește opritoarele de siguranță ale aparatului; deblochează-le doar când ești poziționat.'},
+ 'Leg Press':{m:['Cvadriceps','Fesieri'],c:['Spatele și bazinul lipite de spătar.','Picioarele la lățimea umerilor, pe mijlocul platformei.','Coboară controlat până la aproximativ 90° la genunchi sau cât bazinul nu se ridică.','Genunchii pe direcția vârfurilor.','Împinge prin toată talpa, fără să blochezi genunchii sus.'],
+  x:['Bazinul se ridică jos și lombarul se rotunjește.','Genunchii blocați complet sus.','Amplitudine foarte mică cu greutate mare.'],s:'Nu bloca genunchii sus și eliberează opritoarele doar când ești gata.'},
+ 'Romanian Deadlift':{m:['Femurali','Fesieri','Lombar'],c:['Pornește în picioare cu bara, genunchii ușor îndoiți și fixați.','Împinge șoldurile în spate, ca și cum ai închide o ușă cu fundul.','Bara alunecă pe coapse, aproape de picioare.','Coboară până simți o întindere puternică în femurali (de obicei puțin sub genunchi), cu spatele drept.','Urcă împingând șoldurile înainte și strângând fesierii.'],
+  x:['Spatele se rotunjește la coborâre.','Genunchii se îndoaie mult și devine o îndreptare clasică.','Bara se depărtează de picioare.'],s:'Coboară doar cât spatele rămâne neutru. Chingile ajută dacă priza cedează înaintea femuralilor.'},
+ 'Walking Lunge':{m:['Cvadriceps','Fesieri','Adductori'],c:['Pas lung înainte, trunchiul drept.','Coboară până genunchiul din spate aproape atinge podeaua.','Genunchiul din față în linie cu vârful piciorului.','Împinge prin călcâiul piciorului din față ca să treci la pasul următor.','Ganterele pe lângă corp, umerii jos.'],
+  x:['Pas prea scurt, cu genunchiul mult peste vârf.','Genunchiul din față cade spre interior.','Trunchiul se apleacă mult în față.'],s:'Începe mai ușor până îți găsești echilibrul și asigură-te că ai spațiu liber în față.'},
+ 'Hip Thrust':{m:['Fesieri','Femurali'],c:['Partea de sus a spatelui pe bancă, chiar sub omoplați; bara pe pliul șoldului, cu pernă.','Tălpile la lățimea șoldurilor; sus, gambele sunt verticale.','Bărbia spre piept, privirea înainte.','Împinge prin călcâie până trunchiul ajunge paralel cu podeaua.','Strânge fesierii 1–2 secunde sus, fără să arcuiești lombarul.'],
+  x:['Arcuiești spatele în loc să întinzi șoldul.','Picioarele prea departe: lucrează mai mult femuralii.','Amplitudine scurtă jos.'],s:'Folosește o pernă pentru bară și urcă greutatea treptat.'},
+ 'Hamstring Curl':{m:['Femurali','Gambe'],c:['Genunchii aliniați cu axa de rotație a aparatului.','Tamponul stă deasupra călcâielor.','Bazinul lipit de bancă (sau coapsele fixate, la varianta șezut).','Îndoaie genunchii complet și strânge o secundă.','Revino lent, în 2–3 secunde.'],
+  x:['Bazinul se ridică ca să ajute.','Smucituri la începutul mișcării.','Amplitudine scurtă la întindere.'],s:'Fără smucituri: femuralii se accidentează cel mai des la viteză necontrolată.'},
+ 'Calf Raise':{m:['Gambe'],c:['Vârful piciorului pe treaptă, călcâiele în aer.','Coboară călcâiele lent, cât mai jos, și ține întinderea 1–2 secunde.','Urcă pe vârfuri cât de sus poți și ține o secundă.','Genunchii drepți, dar nu blocați.','Ritm lent, fără sărituri.'],
+  x:['Săltări rapide fără control.','Amplitudine scurtă.','Genunchii se îndoaie ca să ajute.'],s:'Tendonul lui Ahile se adaptează încet: crește volumul treptat, mai ales în săptămânile cu multă alergare.'}
+};
+/* mișcările din conditioning și din finisher: câte 3 repere */
+const MOVES=[
+ ['Wall Balls',['Mingea la piept, coatele sub ea.','Genuflexiune completă, apoi aruncă mingea la țintă din impulsul picioarelor.','Prinde mingea și intră direct în următoarea genuflexiune.']],
+ ['Burpee Broad Jumps',['Burpee complet: pieptul atinge podeaua.','Sari în lungime cu ambele picioare, aterizează moale, cu genunchii îndoiți.','Ritm constant, nu sprint la primele runde.']],
+ ['Kettlebell Swings',['Mișcarea vine din șolduri, nu din brațe: împinge șoldurile înainte.','Spatele drept, kettlebell-ul trece pe sub fund.','Sus, corpul e drept, cu fesierii strânși.']],
+ ['Push Ups',['Corpul într-o linie dreaptă de la cap la călcâie.','Coatele la aproximativ 45° față de trunchi.','Pieptul coboară aproape de podea la fiecare repetare.']],
+ ['Ski / Row 250 m',['Vâslit: picioare, apoi trunchi, apoi brațe; la revenire, invers.','Ski: brațele trag în jos, trunchiul se apleacă, șoldurile se închid.','Ține un ritm pe care îl poți repeta în toate cele 8 runde.']],
+ ['Med Ball Chest Throws',['Stai cu fața la perete, mingea la piept.','Aruncă exploziv, întinzând brațele complet.','Prinde și repetă imediat: viteza contează, nu greutatea.']],
+ ['Plyo Push Ups',['Coboară controlat, apoi împinge exploziv cât să se desprindă palmele.','Aterizează moale, cu coatele ușor îndoite.','Variantă mai ușoară: cu genunchii pe podea sau cu mâinile pe bancă.']]];
+const DRILLS=[['A-skip','Genunchiul urcă la nivelul șoldului, piciorul aterizează sub corp pe vârf; brațele lucrează opus.'],
+ ['B-skip','Ca la A-skip, dar întinzi piciorul înainte și îl „tragi” sub corp, ca o gheară.'],
+ ['Genunchii sus','Pași rapizi pe loc sau în deplasare, genunchii la nivelul șoldului, trunchiul drept.'],
+ ['Călcâie la fese','Pași scurți și rapizi, călcâiul atinge fesierul, coapsa rămâne verticală.'],
+ ['Accelerări','20 de secunde: pornești ușor și ajungi la ~90% din viteză, relaxat; revii la pas.']];
+const STRETCHES=[['Fandare joasă · stânga','Genunchiul drept jos, piciorul stâng în față; împinge bazinul înainte, cu fesierul drept strâns.'],
+ ['Fandare joasă · dreapta','Genunchiul stâng jos, piciorul drept în față; împinge bazinul înainte.'],
+ ['Porumbelul · stânga','Piciorul stâng îndoit în fața ta, cel drept întins în spate; lasă trunchiul încet înainte.'],
+ ['Porumbelul · dreapta','Piciorul drept îndoit în față, cel stâng întins în spate.'],
+ ['Femurali','Așezat, un picior întins: apleacă-te din șold, cu spatele drept. Schimbă piciorul la semnal.'],
+ ['Cvadriceps','În picioare sau culcat pe o parte: prinde glezna, genunchii apropiați. Schimbă la semnal.'],
+ ['Gambe la perete','Mâinile pe perete, piciorul din spate întins, călcâiul jos. Schimbă la semnal.'],
+ ['Piept în cadrul ușii','Antebrațele pe tocul ușii, la nivelul umerilor; pas înainte până simți întinderea.'],
+ ['Poziția copilului','În genunchi, brațele întinse mult înainte, șoldurile spre călcâie: se întinde dorsalul.'],
+ ['Rotație toracică','Culcat pe o parte, genunchii la 90°: deschide brațul de sus spre podeaua din spate.']];
+const MOBILITY=[['Pisică–cămilă',60,'În patru labe: rotunjește și arcuiește spatele, lent, după respirație.'],
+ ['Fandare cu rotație · stânga',60,'Piciorul stâng în față, mâna dreaptă pe podea; rotește trunchiul și ridică brațul stâng spre tavan.'],
+ ['Fandare cu rotație · dreapta',60,'Piciorul drept în față, mâna stângă pe podea; ridică brațul drept spre tavan.'],
+ ['Șolduri 90/90',60,'Așezat, ambii genunchi la 90°: rotește genunchii dintr-o parte în alta, controlat.'],
+ ['Genuflexiune adâncă',60,'Stai jos în genuflexiune, coatele împing genunchii în afară, pieptul sus.'],
+ ['Glezne la perete',60,'Genunchiul împinge spre perete peste vârful piciorului, călcâiul rămâne jos. Schimbă la semnal.',1],
+ ['Rotații toracice în patru labe',60,'Mâna la ceafă: rotește cotul spre tavan și înapoi. Schimbă la semnal.',1],
+ ['Treceri cu banda sau bățul',60,'Brațele întinse, priză largă: treci banda peste cap și în spate, fără să îndoi coatele.'],
+ ['Pod pentru fesieri',60,'Culcat pe spate: ridică șoldurile și strânge fesierii 2 secunde sus.'],
+ ['Atârnat la bară',30,'Atârnă relaxat, cu brațele întinse; lasă umerii să se întindă.'],
+ ['Respirație pe burtă',90,'Culcat, mâna pe abdomen: inspiră 4 secunde pe nas, expiră 6 secunde.']];
+const WARMUP=[['Cardio ușor',120,'Bicicletă, ski, vâslit sau mers alert: pulsul urcă puțin, te încălzești.'],['Cercuri cu brațele',30,'Mici, apoi mari, înainte și înapoi.'],
+ ['Desfaceri cu banda',30,'Brațele întinse în față: depărtează banda spre piept, cu omoplații strânși.'],['Genuflexiuni fără greutate',30,'Lent, cât mai jos, cu pieptul sus.'],
+ ['Fandări cu rotație',30,'Alternează picioarele și rotește trunchiul spre piciorul din față.'],['Pisică–cămilă',30,'Mobilizează coloana înainte de greutăți.'],['Flotări ușoare',30,'8–10 repetări controlate, la podea sau cu mâinile pe bancă.']];
+const exNote=n=>((S.exNote||{})[n])||'';
+const ytLink=n=>'https://www.youtube.com/results?search_query='+encodeURIComponent(n+' exercise technique');
 const TECH_SCHEMA={type:'object',additionalProperties:false,required:['muscles','cues','mistakes','safety'],properties:{
   muscles:{type:'array',items:{type:'string'}},cues:{type:'array',items:{type:'string'}},mistakes:{type:'array',items:{type:'string'}},safety:{type:'string'}}};
 const techPrompt=n=>'Exercițiul de forță: "'+n+'"'+(n==='Hack Squat'?' (la aparatul de hack squat, în locul genuflexiunilor cu bara)':'')+
@@ -4055,6 +4504,25 @@ async function techLoad(n,force){
   STC=null;
 }
 function techHTML(){
+  const n=SH.n, g=GUIDE[n];
+  if(!g) return techAiHTML();
+  const t=S.tech[n], cue=(c,i)=>`<div class="cue"><b>${i+1}</b><span>${esc(c)}</span></div>`, bad=c=>`<div class="cue"><span class="xi">${ic('x')}</span><span>${esc(c)}</span></div>`;
+  return `<div class="eyebrow">${ic('info')} Ghidul exercițiului</div><div class="h2" style="margin-top:6px">${esc(n)}</div>
+    <div class="chips" style="margin-top:12px">${g.m.map(m=>`<span class="tag lift">${esc(m)}</span>`).join('')}</div>
+    <div class="dsec"><h4>Execuție</h4>${g.c.map(cue).join('')}</div>
+    <div class="dsec"><h4>Greșeli frecvente</h4>${g.x.map(bad).join('')}</div>
+    <div class="easy" style="margin-top:12px">${ic('alert')} ${esc(g.s)}</div>
+    <a class="btn ghost wide" style="margin-top:14px" href="${ytLink(n)}" target="_blank" rel="noopener">${ic('play')} Vezi execuția pe YouTube</a>
+    <div class="dsec"><h4>Notița ta</h4><textarea class="inp" id="exNote" rows="2" maxlength="200" placeholder="ex: scaunul pe 4, picioarele sus pe platformă, priza pe inelul 2">${esc(exNote(n))}</textarea>
+      <button class="btn sm" style="margin-top:8px" data-a="exNoteSave" data-k="${esc(n)}">${ic('check')} Salvează notița</button>
+      <div class="xs mu2" style="margin-top:6px">Apare în antrenament, sub numele exercițiului: setările aparatului, priza, ce să nu uiți.</div></div>
+    ${t&&!SH.busy?`<div class="dsec"><h4>De la antrenorul AI</h4>${t.cues.map(cue).join('')}${t.mistakes.map(bad).join('')}</div>`
+      :SH.busy?`<div class="msg ai" style="margin-top:14px">${typingDots} Pregătesc indicațiile…</div>`
+      :SH.err==='nokey'?`<div class="note">Detaliile suplimentare vin de la antrenorul AI și au nevoie de cheia API (Setări → Antrenor AI).</div>`
+      :SH.err?`<div class="err">${ic('alert')}<span>${esc(SH.err)}</span></div>`:''}
+    <div class="inrow">${S.aiKey&&!SH.busy?`<button class="btn ghost sm" data-a="techRe" data-k="${esc(n)}">${ic('coach')} ${t?'Alte indicații AI':'Mai multe de la AI'}</button>`:''}<button class="btn" style="flex:1" data-a="shClose">Închide</button></div>`;
+}
+function techAiHTML(){
   const n=SH.n, t=S.tech[n];
   return `<div class="eyebrow">${ic('info')} Tehnică · AI</div><div class="h2" style="margin-top:6px">${esc(n)}</div>
     ${t&&!SH.busy?`<div class="chips" style="margin-top:12px">${t.muscles.map(m=>`<span class="tag lift">${esc(m)}</span>`).join('')}</div>
@@ -4097,7 +4565,7 @@ function mealsHTML(){
 function shRender(){
   const r=$('#shRoot'); if(!SH){ r.innerHTML=''; updLock(); return; }
   const inner=SH.kind==='day'?dayHTML(SH.k):SH.kind==='tech'?techHTML():SH.kind==='meals'?mealsHTML():SH.kind==='motion'?motionHTML():SH.kind==='hr'?hrHTML()
-    :SH.kind==='ci'?readyCard():SH.kind==='goal'?goalForm():SH.kind==='tool'?toolHTML():cmpHTML();
+    :SH.kind==='ci'?readyCard():SH.kind==='goal'?goalForm():SH.kind==='tool'?toolHTML():SH.kind==='food'?foodHTML():SH.kind==='cyc'?cycHTML():cmpHTML();
   /* aceeași foaie deja deschisă: înlocuiesc doar conținutul, fără să reiau animația de intrare și fără să pierd derularea */
   const sh=r.querySelector('.sheet');
   if(sh&&r.dataset.k===SH.kind){ sh.innerHTML=`<div class="grab"></div>${inner}`; return; }
@@ -4209,12 +4677,21 @@ function render(){
   const v=$('#view'), changed=S.tab!==lastTab;
   v.innerHTML=VIEWS[S.tab]();
   if(changed){ const oi=NAV.findIndex(n=>n[0]===lastTab), ni=NAV.findIndex(n=>n[0]===S.tab);
-    v.dataset.dir=oi<0||ni<0?'':ni>oi?'r':'l'; v.classList.remove('anim'); void v.offsetWidth; v.classList.add('anim'); lastTab=S.tab; countUp(v); }
+    v.dataset.dir=oi<0||ni<0?'':ni>oi?'r':'l'; v.classList.remove('anim'); void v.offsetWidth; v.classList.add('anim'); lastTab=S.tab; countUp(v); reveal(v); }
   else v.classList.remove('anim');
   renderNav(); renderTop(); renderPill(); renderFocus(); coverScroll();
   if(SH&&SH.kind==='ci') shRender();
   const ta=$('#aiIn'); if(ta) autosize(ta);
 }
+/* secțiunile de sub ecran apar lin când ajungi la ele (doar la schimbarea filei, nu la fiecare actualizare) */
+let RVO=null;
+function reveal(v){ if(RVO){ RVO.disconnect(); RVO=null; } if(motionOff()||!('IntersectionObserver' in window)) return;
+  RVO=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); RVO&&RVO.unobserve(e.target); } }),{rootMargin:'0px 0px -6% 0px'});
+  const obs=RVO; requestAnimationFrame(()=>{ if(RVO!==obs) return; [...v.children].forEach(el=>{ if(el.getBoundingClientRect().top>innerHeight*.98){ el.classList.add('rv'); obs.observe(el); } }); }); }
+/* lumina care urmărește cursorul pe carduri (doar cu mouse) */
+let spRaf=0, spEv=null;
+document.addEventListener('pointermove',e=>{ if(e.pointerType!=='mouse') return; spEv=e; if(spRaf) return; spRaf=requestAnimationFrame(()=>{ spRaf=0; const c=spEv.target.closest&&spEv.target.closest('.card'); if(!c) return;
+  const r=c.getBoundingClientRect(); c.style.setProperty('--mx',(spEv.clientX-r.left).toFixed(0)+'px'); c.style.setProperty('--my',(spEv.clientY-r.top).toFixed(0)+'px'); }); },{passive:true});
 /* coperta de pe „Azi": antetul e transparent cât timp ești sus, iar poza urcă mai încet decât pagina */
 let cvRaf=0;
 function coverScroll(){ cvRaf=0; const ph=S.tab==='azi'?$('.cv-ph'):null, y=Math.max(0,scrollY);
@@ -4573,9 +5050,36 @@ document.addEventListener('click',async ev=>{
       if(d.length) log[tk]=d; else delete log[tk]; await save('supp',Object.assign({},S.supp,{log})); render(); return; }
     case 'toolGo':
       if(k==='tm'){ SH=null; shRender(); TM.open=true; TM.list=true; TM.choose=null; TM.st=null; tmRender(); return; }
+      if(k==='food'){ FD.err=null; SH={kind:'food'}; shRender(); return; }
       if(k==='zones'){ SH=null; shRender(); S.tab='prog'; S.progTab='r'; render(); requestAnimationFrame(()=>{ const c=$('#zonesCard'); if(c) c.scrollIntoView({behavior:'smooth',block:'start'}); }); return; }
       toolDefaults(k); SH={kind:'tool',k}; shRender(); { const sh=$('#shRoot .sheet'); if(sh) sh.scrollTop=0; } return;
     case 'tlSet': TL[k]=el.dataset.s!=null?el.dataset.s:String(I); if(SH&&SH.kind==='tool') shRender(); return;
+    case 'cycOpen': SH={kind:'cyc'}; shRender(); return;
+    case 'syConnect': await syConnect(); return;
+    case 'syNow': await syncNow(true); return;
+    case 'syAuto': await syPatch({auto:syCfg().auto===false}); syPaint(); return;
+    case 'syOff': await store.set(K.sync,{dev:syCfg().dev}); S.sync={dev:syCfg().dev}; SY.msg=''; SY.err=''; render(); toast('Sincronizare oprită','Datele de pe acest dispozitiv rămân. Copia criptată din cloud rămâne pe GitHub.','info'); return;
+    case 'errCopy': try{ await navigator.clipboard.writeText(errList().map(e=>e.t+' '+e.m+(e.s?' ('+e.s+')':'')).join('\n')||'gol'); toast('Copiat','Jurnalul de erori e în clipboard.','info'); }catch(e){ toast('Nu pot copia aici','','info'); } return;
+    case 'errClear': try{ localStorage.removeItem(ERRK); }catch(e){} render(); return;
+    case 'cycPick': if(SH&&SH.kind==='cyc'){ SH.c=I; shRender(); } return;
+    case 'cycShare': { const d=cycData(I); if(!d) return; await shareImg({k:'Ciclul '+d.c+' · '+fmtDay(d.from)+' – '+fmtDay(d.to),t:'4 săptămâni',stats:[[d.full+'/28','zile complete'],[d.sets,'serii'],[num(d.km,1),'km'],[d.prs.length,'recorduri']],
+      lines:d.lifts.slice(0,3).map(x=>x.n+': '+(x.ch>0?'+':'')+num(x.ch,1)+'%')}); return; }
+    case 'cycAsk': { const d=cycData(I); if(!d) return; SH=null; shRender();
+      aiSend('Am terminat ciclul '+d.c+' ('+fmtDay(d.from)+' – '+fmtDay(d.to)+'): '+d.full+'/28 zile complete, '+d.hs.length+' antrenamente, '+d.sets+' serii, '+num(d.km,1)+' km, '+d.prs.length+' recorduri'+(d.w0!=null&&d.w1!=null?', greutatea '+num(d.w0,1)+' → '+num(d.w1,1)+' kg':'')+'. Forța: '+(d.lifts.slice(0,6).map(x=>x.n+' '+(x.ch>0?'+':'')+num(x.ch,1)+'%').join(', ')||'fără date')+'. Ce a mers, ce nu și ce ajustez în ciclul următor, fără să schimb exercițiile sau zilele?'); return; }
+    case 'vdotThr': { const v=I/600; if(!(v>2&&v<12)) return; await save('prof',Object.assign({},S.prof||{},{thrPace:Math.round(v*1000)/1000})); toast('Ritm de prag setat',mmss(v)+' /km · zonele de ritm s-au actualizat','info'); return; }
+    case 'foodOpen': FD.err=null; SH={kind:'food'}; shRender(); return;
+    case 'fdCat': FD.cat=k; shRender(); return;
+    case 'fdPick': { const f=foodAll().find(x=>x[0]===k); if(!f) return; foodSel({n:f[0],k:f[1],p:f[2],c:f[3],g:f[4],por:f[5]==='m'?(f[6]!==100?f[6]:null):f[6],pl:f[7],mine:f[5]==='m',brand:f[8]||''}); return; }
+    case 'fdClear': FD.sel=null; shRender(); return;
+    case 'fdG': FD.g=String(I); { const s=$('#fdSel'); if(s) s.innerHTML=foodOutHTML(); } return;
+    case 'fdBc': await foodBarcode((($('#fdBc')||{}).value||FD.bc)); return;
+    case 'fdAdd': { const f=FD.sel, g=parseFloat(String(FD.g).replace(',','.')); if(!f||!(g>0&&g<=3000)){ shake('#fdG'); return; }
+      const m={n:(f.n+' · '+num(g,0)+' g').slice(0,80),k:Math.round(f.k*g/100),p:Math.round(f.p*g/100),c:Math.round(f.c*g/100),g:Math.round(f.g*g/100)};
+      await addMeal(m); FD.sel=null; FD.q=''; SH=null; shRender(); render(); toast('Adăugat în jurnal',m.n+' · '+m.k+' kcal · '+m.p+' g proteină','info'); return; }
+    case 'fdMine': { const n=(($('#faN')||{}).value||'').trim(), g=id=>parseFloat((($('#'+id)||{}).value||'').replace(',','.')), kc=g('faK'), pr=g('faP');
+      if(!n){ shake('#faN'); return; } if(!(kc>=0&&kc<=950)){ shake('#faK'); return; } if(!(pr>=0&&pr<=100)){ shake('#faP'); return; }
+      const f={n:n.slice(0,70),k:Math.round(kc),p:+pr.toFixed(1),c:+((g('faC')||0)).toFixed(1),g:+((g('faG')||0)).toFixed(1),por:g('faPor')>0?Math.round(g('faPor')):null};
+      await save('foods',[f].concat((S.foods||[]).filter(x=>x.n!==f.n)).slice(0,60)); FD.add=false; FD.cat='m'; shRender(); foodSel(Object.assign({mine:true,pl:'o porție'},f)); toast('Aliment salvat',f.n,'info'); return; }
     case 'tlLift': { const L=liftStats(k), bs=L&&L.bestSet; if(bs&&bs.s){ TL.rw=num(bs.s[0]); TL.rr=String(bs.s[1]); TL.rir=String(bs.s[2]!=null?bs.s[2]:0); } if(SH&&SH.kind==='tool') shRender(); return; }
     case 'goBody': S.tab='prog'; S.progTab='b'; render(); window.scrollTo({top:0}); return;
     case 'twAttr': S.twAttr=k; render(); return;
@@ -4727,8 +5231,16 @@ document.addEventListener('click',async ev=>{
       await jSet(k,{sleep:sl>0&&sl<=16?sl:null,steps:stp>0&&stp<100000?stp:null,note:nt||null}); toast('Jurnal salvat',fmtDay(k),'info'); render(); shRender(); if(CAL.open) calRender(); return; }
     case 'jSleep': await jSet(tk,{sleep:I}); buzz(10); render(); return;
     case 'jStepsSave': { const v=parseInt(($('#jSteps')||{}).value,10); if(!(v>0&&v<100000)){ shake('#jSteps'); return; } await jSet(tk,{steps:v}); render(); toast('Pași salvați',v+' pași','info'); return; }
+    case 'stepsT': await save('prof',Object.assign({},S.prof||{},{stepsT:I})); render(); return;
+    case 'shoeForm': S.shoeForm=!S.shoeForm; render(); return;
+    case 'shoeAdd': { const n=(($('#shN')||{}).value||'').trim(), sd=($('#shS')||{}).value||tk, k0=parseFloat(($('#shK')||{}).value)||0, mx=parseInt(($('#shM')||{}).value,10)||700;
+      if(!n){ shake('#shN'); return; } if(!(mx>=100&&mx<=3000)){ shake('#shM'); return; }
+      await save('shoes',(S.shoes||[]).concat([{id:'s'+Date.now().toString(36),n:n.slice(0,40),since:validDate(sd)?sd:tk,km0:clamp(k0,0,5000),max:mx}])); S.shoeForm=false; render(); toast('Pantofi adăugați',n,'info'); return; }
+    case 'shoeRet': await save('shoes',(S.shoes||[]).map(s=>s.id===k?Object.assign({},s,{ret:tk}):s)); render(); return;
+    case 'shoeDel': await save('shoes',(S.shoes||[]).filter(s=>s.id!==k)); render(); return;
     case 'muscle': S.mSel=k; render(); return;
-    case 'tech': await techLoad(k,false); return;
+    case 'tech': if(GUIDE[k]){ SH={kind:'tech',n:k,busy:false,err:null}; shRender(); return; } await techLoad(k,false); return;
+    case 'exNoteSave': { const v=(($('#exNote')||{}).value||'').trim().slice(0,200), o=Object.assign({},S.exNote); if(v) o[k]=v; else delete o[k]; await save('exNote',o); toast(v?'Notiță salvată':'Notiță ștearsă',k,'info'); if(S.sess) renderFocus(); return; }
     case 'techRe': await techLoad(k,true); return;
     case 'phPose': S.phPose=k; render(); return;
     case 'phOpen': { const p=(S.photos||[]).find(x=>x.id===k); if(!p) return; const first=(S.photos||[]).find(x=>x.pose===p.pose)||p; SH={kind:'cmp',a:first.id,b:p.id}; shRender(); return; }
@@ -4752,6 +5264,8 @@ document.addEventListener('click',async ev=>{
 document.addEventListener('input',ev=>{
   const t=ev.target, s=S.sess;
   if(t.dataset&&t.dataset.tl!=null){ TL[t.dataset.tl]=t.value; const o=$('#tlOut'); if(o&&SH&&SH.kind==='tool') o.innerHTML=toolOut(SH.k); }
+  else if(t.dataset&&t.dataset.fd){ FD[t.dataset.fd]=t.value; if(t.dataset.fd==='q') foodPaint(); else if(t.dataset.fd==='g'&&FD.sel){ const g=parseFloat(String(t.value).replace(',','.')), ok=g>0&&g<=3000, o=$('#fdOut'), b=$('[data-a="fdAdd"]');
+      if(o) o.innerHTML=foodMacros(FD.sel,v=>ok?v*g/100:0,ok); if(b) b.disabled=!ok; document.querySelectorAll('#fdSel [data-a="fdG"]').forEach(c=>c.classList.toggle('on',+c.dataset.i===g)); } }
   else if(t.id==='aiIn'){ AI.draft=t.value; autosize(t); }
   else if(s&&t.id==='inKg'){ const v=parseFloat(t.value); s.kg[s.cur]=isFinite(v)?v:''; updAux(); }
   else if(s&&t.id==='inRp'){ const v=parseInt(t.value,10); s.rp[s.cur]=isFinite(v)?v:''; }
@@ -4764,6 +5278,8 @@ document.addEventListener('keydown',ev=>{
   if(t.id==='aiIn'&&ev.key==='Enter'&&!ev.shiftKey&&!ev.isComposing&&matchMedia('(pointer:fine)').matches){ ev.preventDefault(); aiSend(t.value); }
   else if(t.id==='wIn'&&ev.key==='Enter'){ ev.preventDefault(); $('[data-a="wAdd"]').click(); }
   else if(t.id==='aiKeyIn'&&ev.key==='Enter'){ ev.preventDefault(); $('[data-a="aiKeySave"]').click(); }
+  else if(t.id==='fdBc'&&ev.key==='Enter'){ ev.preventDefault(); foodBarcode(t.value); }
+  else if(t.id==='fdQ'&&ev.key==='Enter'){ ev.preventDefault(); const b=$('#fdList [data-a="fdPick"]'); if(b) b.click(); }
   else if(ev.key==='Escape'){ if(RC.open){ RC.open=false; rcRender(); } else if(SH){ SH=null; shRender(); } else if(CAL.open){ CAL.open=false; calRender(); } else if(RD){ RD=null; rdRender(); } else if(TM.open&&!(TM.st&&TM.st.started&&!TM.st.done)){ TM.open=false; tmRender(); } else if(S.fxOpen&&!S.summary){ S.fxOpen=false; render(); } }
 });
 document.addEventListener('change',async ev=>{
@@ -4782,6 +5298,7 @@ document.addEventListener('change',async ev=>{
     catch(e){ toast('Nu am putut salva poza',e&&e.message==='limit'?'Ai atins limita de '+PH_MAX+' poze. Șterge una ca să adaugi alta.':e&&/quota/i.test(e.name+e.message)?'Spațiul browserului e plin. Șterge câteva poze.':'Încearcă altă imagine.','info'); }
     t.value=''; render(); return; }
   if(t.dataset.cmp&&SH&&SH.kind==='cmp'){ SH[t.dataset.cmp]=t.value; shRender(); return; }
+  if(t.dataset.bcimg&&t.files&&t.files[0]){ await foodBarcodeImg(t.files[0]); t.value=''; return; }
   if(t.dataset.csv&&t.files&&t.files[0]){ try{ const rows=parseCSV(await t.files[0].text()); let n=0;
       for(const r of rows){ const o={}; if(r.sleep>0&&r.sleep<=16) o.sleep=Math.round(r.sleep*10)/10; if(r.steps>0) o.steps=Math.round(r.steps); if(r.rhr>=30&&r.rhr<=120) o.rhr=Math.round(r.rhr); if(r.hrv>=5&&r.hrv<=300) o.hrv=Math.round(r.hrv);
         if(Object.keys(o).length){ const j=Object.assign({},S.journal); j[r.d]=Object.assign({},j[r.d]||{},o); S.journal=j; n++; } }
@@ -4804,7 +5321,7 @@ document.addEventListener('touchend',e=>{
 
 /* copie de siguranță — cheia API nu intră în export */
 const EXPORT_KEYS=['zece:lifts','zece:weights','zece:runs','zece:wlog','zece:cyc','zece:runPlan','zece:nutri','zece:mlog','zece3:hist','zece3:aiChat','zece3:aiEffort','zece3:sound',
-  'zece3:water','zece3:body','zece3:theme','zece3:fx','zece3:aiUsed','zece3:seenAch','zece3:lvl','zece3:journal','zece3:tech','zece3:voice','zece3:recap','zece3:mplan','zece3:shop','zece3:mf','zece3:intro','zece3:motion','zece3:ptests','zece3:tmlog','zece3:adj','zece3:onb','zece3:motionAsked','zece3:ext','zece3:goals','zece3:supp','zece:tests','zece:shoes','zece:body','zece:gtg','zece:workouts','zece:counts','zece:curBlock'];
+  'zece3:water','zece3:body','zece3:theme','zece3:fx','zece3:aiUsed','zece3:seenAch','zece3:lvl','zece3:journal','zece3:tech','zece3:voice','zece3:recap','zece3:mplan','zece3:shop','zece3:mf','zece3:intro','zece3:motion','zece3:ptests','zece3:tmlog','zece3:adj','zece3:onb','zece3:motionAsked','zece3:ext','zece3:goals','zece3:supp','zece3:exnote','zece3:foods','zece3:shoes','zece:tests','zece:shoes','zece:body','zece:gtg','zece:workouts','zece:counts','zece:curBlock'];
 async function doExport(withPh){
   const data={app:'ZECE',v:4,at:new Date().toISOString(),keys:{}};
   for(const k of EXPORT_KEYS){ const v=await store.get(k); if(v!=null) data.keys[k]=v; }
@@ -4824,20 +5341,136 @@ async function phImport(ps){ let n=0;
 async function doImport(file){
   try{ const data=JSON.parse(await file.text()); if(!data||!data.keys||typeof data.keys!=='object') throw new Error('format');
     let n=0; for(const k of Object.keys(data.keys)){ if(EXPORT_KEYS.indexOf(k)>=0){ await store.set(k,data.keys[k]); n++; } }
-    await loadAll(); applyTheme(); applyFx();
+    await loadAll(); applyTheme(); applyFx(); syncMark('lifts');
     const np=Array.isArray(data.photos)?await phImport(data.photos):0;
     render(); toast('Copie importată',n+' seturi de date restaurate'+(np?' · '+np+' poze':'')+'.','info');
   }catch(e){ toast('Import eșuat','Fișierul nu pare o copie ZECE.','info'); }
 }
 
 /* =====================================================================
+   15b · SINCRONIZARE — aceleași date pe PC și pe telefon.
+   Datele se criptează pe dispozitiv (AES-256-GCM, cheie PBKDF2 din parola ta) și stau într-un gist secret pe GitHub.
+   Pe server ajunge doar text criptat. Cine a modificat ultimul trimite; dacă ambele s-au schimbat, le unesc.
+   ===================================================================== */
+const SY={busy:false,msg:'',err:'',timer:0,applying:false,gen:0,lastAuto:0};
+const SY_FILE='zece-sync.json', SY_DESC='ZECE · sincronizare (criptat)', GH='https://api.github.com';
+const SYNC_KEYS=EXPORT_KEYS.filter(k=>['zece3:aiChat','zece3:theme','zece3:fx','zece3:intro','zece3:motion','zece3:motionAsked','zece3:sound','zece3:voice','zece3:onb'].indexOf(k)<0);
+const syCfg=()=>S.sync||{};
+const syOn=()=>{ const c=syCfg(); return !!(c.tok&&c.gist&&c.pass); };
+const syOk=()=>!!(window.crypto&&crypto.subtle&&window.fetch);
+async function syPatch(o){ S.sync=Object.assign({},S.sync,o); await store.set(K.sync,S.sync); }
+function syncMark(p){ const k=K[p]; if(!k||SY.applying||SYNC_KEYS.indexOf(k)<0||!syOn()) return; SY.gen++;
+  if(!syCfg().dirty){ S.sync=Object.assign({},S.sync,{dirty:true}); store.set(K.sync,S.sync); }
+  clearTimeout(SY.timer); if(syCfg().auto!==false) SY.timer=setTimeout(()=>syncNow(false),15000); }
+const b64e=buf=>{ const a=new Uint8Array(buf); let s=''; for(let i=0;i<a.length;i+=0x8000) s+=String.fromCharCode.apply(null,a.subarray(i,i+0x8000)); return btoa(s); };
+const b64d=s=>{ const b=atob(s), a=new Uint8Array(b.length); for(let i=0;i<b.length;i++) a[i]=b.charCodeAt(i); return a; };
+async function syZip(bytes,on){ if(!window.CompressionStream) return null; const cs=on?new CompressionStream('gzip'):new DecompressionStream('gzip');
+  return new Uint8Array(await new Response(new Blob([bytes]).stream().pipeThrough(cs)).arrayBuffer()); }
+async function syKey(pass,salt){ const base=await crypto.subtle.importKey('raw',new TextEncoder().encode(pass),'PBKDF2',false,['deriveKey']);
+  return crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:150000,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['encrypt','decrypt']); }
+async function syEnc(obj,pass){ let raw=new TextEncoder().encode(JSON.stringify(obj)), z=0; try{ const c=await syZip(raw,true); if(c){ raw=c; z=1; } }catch(e){}
+  const salt=crypto.getRandomValues(new Uint8Array(16)), iv=crypto.getRandomValues(new Uint8Array(12)), key=await syKey(pass,salt);
+  return {z,salt:b64e(salt),iv:b64e(iv),data:b64e(await crypto.subtle.encrypt({name:'AES-GCM',iv},key,raw))}; }
+async function syDec(f,pass){ const key=await syKey(pass,b64d(f.salt)); let pt=new Uint8Array(await crypto.subtle.decrypt({name:'AES-GCM',iv:b64d(f.iv)},key,b64d(f.data)));
+  if(f.z){ const u=await syZip(pt,false); if(!u) throw new Error('nozip'); pt=u; } return JSON.parse(new TextDecoder().decode(pt)); }
+async function gh(path,opt){ opt=opt||{}; const r=await fetch(GH+path,{method:opt.method||'GET',cache:'no-store',body:opt.body,
+    headers:Object.assign({'Accept':'application/vnd.github+json','Authorization':'Bearer '+(opt.tok||syCfg().tok)},opt.body?{'Content-Type':'application/json'}:{})});
+  if(r.status===401) throw new Error('auth'); if(r.status===403) throw new Error('scope'); if(r.status===404) throw new Error('404'); if(!r.ok) throw new Error('http '+r.status); return r.json(); }
+async function syRemote(id){ const g=await gh('/gists/'+(id||syCfg().gist)), f=g.files&&g.files[SY_FILE]; if(!f) return null;
+  let txt=f.content; if(f.truncated||txt==null){ const r=await fetch(f.raw_url,{cache:'no-store'}); txt=await r.text(); } const o=JSON.parse(txt); return o&&o.app==='ZECE'&&o.data?o:null; }
+async function syLocal(){ const o={}; for(const k of SYNC_KEYS){ const v=await store.get(k); if(v!=null) o[k]=v; } return o; }
+async function syApply(o){ SY.applying=true; try{ for(const k of SYNC_KEYS){ if(o[k]!==undefined) await store.set(k,o[k]); } const keep=S.sync; await loadAll(); S.sync=keep; } finally { SY.applying=false; } }
+const syHas=o=>['zece:weights','zece:lifts','zece:runs','zece:mlog','zece3:hist'].some(k=>{ const v=o[k]; return v&&(Array.isArray(v)?v.length:Object.keys(v).length); });
+/* unirea a două versiuni: nimic nu se pierde; la aceeași înregistrare modificată pe ambele, rămâne cea de pe dispozitivul acesta */
+function syMerge(L,R){ const out={}; new Set([...Object.keys(L),...Object.keys(R)]).forEach(k=>{ const a=L[k], b=R[k]; out[k]=a===undefined?b:b===undefined?a:syMergeKey(k,a,b); }); return out; }
+const SY_ID={'zece3:goals':x=>x.id,'zece3:ext':x=>'s'+x.sid,'zece3:shoes':x=>x.id,'zece3:foods':x=>x.n,'zece3:hist':x=>x.date+'|'+x.w+'|'+x.d+'|'+x.dur,
+  'zece:runs':x=>x.sid?'s'+x.sid:x.date+'|'+x.km+'|'+x.min,'zece3:ptests':x=>x.date+'|'+x.type+'|'+x.value};
+function syMergeKey(k,a,b){
+  if(k==='zece:lifts'&&a&&b&&typeof a==='object'){ const o=Object.assign({},b,a); Object.keys(o).forEach(n=>{ const m={}; (b[n]||[]).forEach(e=>m[e.d]=e);
+      (a[n]||[]).forEach(e=>{ const x=m[e.d]; m[e.d]=!x||(e.s||[]).length>=(x.s||[]).length?e:x; }); o[n]=Object.values(m).sort((x,y)=>x.d<y.d?-1:x.d>y.d?1:0).slice(-80); }); return o; }
+  if(k==='zece:cyc') return {h:Math.max(+(a&&a.h)||1,+(b&&b.h)||1)};
+  if(k==='zece3:aiUsed'||k==='zece3:recap') return Math.max(+a||0,+b||0);
+  if(Array.isArray(a)&&Array.isArray(b)){ const id=SY_ID[k]||(x=>JSON.stringify(x)), seen=new Set(), out=[];
+    a.concat(b).forEach(x=>{ const i=id(x); if(seen.has(i)) return; seen.add(i); out.push(x); });
+    if(/^(zece:runs|zece3:hist|zece3:ptests|zece3:tmlog)$/.test(k)) out.sort((x,y)=>(x.date||'')<(y.date||'')?-1:(x.date||'')>(y.date||'')?1:0); return out; }
+  if(a&&b&&typeof a==='object'&&typeof b==='object'&&!Array.isArray(a)&&!Array.isArray(b)){ const o=Object.assign({},b); Object.keys(a).forEach(x=>{ o[x]=b[x]===undefined?a[x]:syMergeKey(k+'/',a[x],b[x]); }); return o; }
+  return a;
+}
+const syDevName=()=>matchMedia('(pointer:coarse)').matches?'Telefon':'PC';
+async function syPush(obj,gen){ const c=syCfg(), at=new Date().toISOString(), enc=await syEnc(obj,c.pass);
+  const file=Object.assign({app:'ZECE',v:1,at,dev:c.dev,name:c.name||syDevName()},enc);
+  await gh('/gists/'+c.gist,{method:'PATCH',body:JSON.stringify({files:{[SY_FILE]:{content:JSON.stringify(file)}}})});
+  await syPatch({base:at,last:Date.now(),dirty:gen!=null&&gen!==SY.gen}); }
+function syErrText(e){ const m=String(e&&e.message||e);
+  return m==='auth'?'Tokenul GitHub nu e valid sau a expirat. Creează altul, cu permisiunea „gist”.':m==='scope'?'Tokenul nu are voie să lucreze cu gist-uri. Creează-l cu permisiunea „gist”.'
+    :m==='404'?'Nu găsesc copia din cloud (gist-ul a fost șters?). Deconectează și conectează din nou.':e&&e.name==='OperationError'?'Parola de criptare nu se potrivește cu cea folosită pe celălalt dispozitiv.'
+    :e instanceof TypeError?'Nu ajung la GitHub. Verifică internetul.':'Sincronizarea a eșuat: '+m; }
+function syncNow(manual){ if(SY.busy) return SY.p||Promise.resolve(); SY.p=syRun(manual); return SY.p; }
+async function syRun(manual){
+  if(!syOn()||!syOk()) return; if(!manual&&navigator.onLine===false) return;
+  SY.busy=true; SY.err=''; if(manual) SY.msg=''; syPaint(); const gen=SY.gen;
+  try{ const c=syCfg(), R=await syRemote();
+    if(R&&R.at!==c.base){ const rd=await syDec(R,c.pass);
+      if(!c.dirty){ await syApply(rd); await syPatch({base:R.at,last:Date.now(),dirty:false}); SY.msg='Am adus datele de pe '+(R.name||'celălalt dispozitiv')+'.'; SY.busy=false; render(); }
+      else { const M=syMerge(await syLocal(),rd); await syApply(M); await syPush(M,gen); SY.msg='Am unit datele de pe ambele dispozitive.'; SY.busy=false; render(); } }
+    else if(!R||c.dirty){ await syPush(await syLocal(),gen); SY.msg='Datele sunt salvate și în cloud.'; }
+    else { await syPatch({last:Date.now()}); SY.msg='Totul e la zi.'; }
+  }catch(e){ SY.err=syErrText(e); errLog('sincronizare: '+(e&&e.message||e),'sync'); }
+  SY.busy=false; syPaint();
+}
+/* prima conectare: găsesc copia existentă (de pe celălalt dispozitiv) sau o creez */
+async function syConnect(){
+  const tok=(($('#syTok')||{}).value||'').trim(), pass=(($('#syPass')||{}).value||''), name=(($('#syName')||{}).value||'').trim()||syDevName();
+  if(tok.length<20){ shake('#syTok'); return; } if(pass.length<8){ shake('#syPass'); SY.err='Parola de criptare are cel puțin 8 caractere.'; syPaint(); return; }
+  SY.busy=true; SY.err=''; SY.msg=''; syPaint();
+  try{ const list=await gh('/gists?per_page=100',{tok}), g=(Array.isArray(list)?list:[]).find(x=>x.files&&x.files[SY_FILE]&&x.description===SY_DESC);
+    const dev=syCfg().dev||('d'+Math.random().toString(36).slice(2,10));
+    if(g){ const prev=S.sync; S.sync={tok,pass,gist:g.id,dev,name,auto:true}; let R;
+      try{ R=await syRemote(g.id); }catch(e){ S.sync=prev; throw e; }
+      let rd=null; if(R){ try{ rd=await syDec(R,pass); }catch(e){ S.sync=prev; throw e; } }
+      await syPatch({tok,pass,gist:g.id,dev,name,auto:true,base:null,dirty:false});
+      const L=await syLocal();
+      if(rd&&syHas(L)){ const M=syMerge(L,rd); await syApply(M); await syPush(M); SY.msg='Conectat. Am unit datele de aici cu cele din cloud.'; }
+      else if(rd){ await syApply(rd); await syPatch({base:R.at,last:Date.now()}); SY.msg='Conectat. Am adus datele de pe '+(R.name||'celălalt dispozitiv')+'.'; }
+      else { await syPush(L); SY.msg='Conectat. Datele de aici sunt acum și în cloud.'; } }
+    else { const enc=await syEnc(await syLocal(),pass), at=new Date().toISOString();
+      const ng=await gh('/gists',{tok,method:'POST',body:JSON.stringify({description:SY_DESC,public:false,files:{[SY_FILE]:{content:JSON.stringify(Object.assign({app:'ZECE',v:1,at,dev,name},enc))}}})});
+      await syPatch({tok,pass,gist:ng.id,dev,name,auto:true,base:at,last:Date.now(),dirty:false}); SY.msg='Gata: am creat copia criptată în cloud. Conectează și celălalt dispozitiv cu același token și aceeași parolă.'; }
+  }catch(e){ SY.err=syErrText(e); }
+  SY.busy=false; render(); syPaint();
+}
+function syAuto(){ if(!syOn()||syCfg().auto===false||Date.now()-SY.lastAuto<60000) return; SY.lastAuto=Date.now(); syncNow(false); }
+function syPaint(){ const el=$('#sySet'); if(el) el.outerHTML=syncCard(); }
+function syncCard(){
+  const c=syCfg(), on=syOn();
+  const msg=(SY.err?`<div class="err">${ic('alert')}<span>${esc(SY.err)}</span></div>`:'')+(SY.msg&&!SY.err?`<div class="easy" style="margin-top:10px">${ic('check')} ${esc(SY.msg)}</div>`:'');
+  if(!syOk()) return `<div class="card" id="sySet"><div class="eyebrow">${ic('refresh')} Sincronizare între dispozitive</div><div class="note">Browserul acesta nu permite criptarea datelor pe această pagină (are nevoie de https sau de Chrome/Edge). Folosește versiunea online a aplicației.</div></div>`;
+  if(on) return `<div class="card" id="sySet"><div class="row"><div class="eyebrow sp">${ic('refresh')} Sincronizare între dispozitive</div><span class="tag ${SY.err?'need':'rest'}">${SY.busy?'sincronizez…':SY.err?'eroare':'activă'}</span></div>
+    <div class="sm" style="margin-top:8px">Dispozitivul acesta: <b>${esc(c.name||syDevName())}</b> · ultima sincronizare ${c.last?esc(stAgo(c.last/1000)):'—'}${c.dirty?' · <span class="mu">modificări de trimis</span>':''}</div>${msg}
+    <div class="inrow"><button class="btn pri" style="flex:1" data-a="syNow" ${SY.busy?'disabled':''}>${ic('refresh')} ${SY.busy?'Sincronizez…':'Sincronizează acum'}</button></div>
+    <div class="set-row" style="margin-top:8px"><span class="sp"><b>Automat</b><div class="sm mu">La deschidere și la 15 secunde după fiecare modificare</div></span><button class="sw ${c.auto!==false?'on':''}" data-a="syAuto" role="switch" aria-checked="${c.auto!==false}" aria-label="Sincronizare automată"></button></div>
+    <div class="note">Criptat pe dispozitiv cu parola ta (AES-256) înainte să plece spre GitHub. Pozele și conversația cu antrenorul rămân pe fiecare dispozitiv.</div>
+    <button class="btn ghost sm danger" style="margin-top:8px" data-a="syOff" data-confirm="Sigur? Apasă iar">Deconectează acest dispozitiv</button></div>`;
+  return `<div class="card" id="sySet"><div class="eyebrow">${ic('refresh')} Sincronizare între dispozitive</div>
+    <div class="sm" style="margin-top:8px">Aceleași date pe PC și pe iPhone: ce notezi pe unul apare și pe celălalt.</div>
+    <div class="dsec"><h4>Cum o pornești (o singură dată)</h4>
+      <div class="cue"><b>1</b><span>Creează un token GitHub cu permisiunea <b>gist</b> (butonul de mai jos deschide pagina gata completată). Copiază-l.</span></div>
+      <div class="cue"><b>2</b><span>Lipește-l aici și alege o <b>parolă de criptare</b>. Pe celălalt dispozitiv folosești același token și aceeași parolă.</span></div></div>
+    <a class="btn ghost wide" href="https://github.com/settings/tokens/new?scopes=gist&description=ZECE%20sync" target="_blank" rel="noopener">${ic('key')} Creează tokenul pe GitHub</a>
+    <div class="form"><div class="fld full"><label for="syTok">Token GitHub</label><input class="inp" id="syTok" type="password" autocomplete="off" placeholder="ghp_… sau github_pat_…"></div>
+      <div class="fld"><label for="syPass">Parolă de criptare</label><input class="inp" id="syPass" type="password" autocomplete="new-password" placeholder="minim 8 caractere"></div>
+      <div class="fld"><label for="syName">Numele dispozitivului</label><input class="inp" id="syName" value="${esc(syDevName())}"></div></div>${msg}
+    <button class="btn pri wide" style="margin-top:12px" data-a="syConnect" ${SY.busy?'disabled':''}>${ic('refresh')} ${SY.busy?'Mă conectez…':'Conectează'}</button>
+    <div class="note">Datele se criptează pe dispozitiv cu parola ta înainte să plece. Pe GitHub ajunge doar text criptat, într-un gist secret: fără parolă nu-l poate citi nimeni, nici GitHub. Dacă uiți parola, copia din cloud nu mai poate fi deschisă, dar datele de pe dispozitive rămân. Tokenul și parola stau doar pe acest dispozitiv.</div></div>`;
+}
+/* =====================================================================
    16 · PORNIRE
    ===================================================================== */
 async function loadAll(){
   const keys=Object.keys(K), vals=await Promise.all(keys.map(k=>store.get(K[k]))), o=Object.fromEntries(keys.map((k,i)=>[k,vals[i]]));
   const obj=v=>v&&typeof v==='object'&&!Array.isArray(v)?v:{};
-  ['lifts','weights','wlog','cyc','runPlan','prof','mlog','water','body','journal','tech','mplan','shop','adj','strava'].forEach(k=>{ S[k]=obj(o[k]); });
-  S.ext=Array.isArray(o.ext)?o.ext:[]; S.stq=Array.isArray(o.stq)?o.stq:[]; S.goals=Array.isArray(o.goals)?o.goals:[]; S.supp=Object.assign({on:{},log:{}},obj(o.supp)); S.bk=obj(o.bk);
+  ['lifts','weights','wlog','cyc','runPlan','prof','mlog','water','body','journal','tech','mplan','shop','adj','strava','exNote'].forEach(k=>{ S[k]=obj(o[k]); });
+  S.ext=Array.isArray(o.ext)?o.ext:[]; S.stq=Array.isArray(o.stq)?o.stq:[]; S.goals=Array.isArray(o.goals)?o.goals:[]; S.foods=Array.isArray(o.foods)?o.foods:[]; S.shoes=Array.isArray(o.shoes)?o.shoes:[]; S.sync=obj(o.sync); S.supp=Object.assign({on:{},log:{}},obj(o.supp)); S.bk=obj(o.bk);
   S.mf=Object.assign({port:false,cold:false},obj(o.mf)); S.intro=['full','short','off'].indexOf(o.intro)>=0?o.intro:'full';
   S.motion=['auto','on','off'].indexOf(o.motion)>=0?o.motion:'auto'; S.motionAsked=!!o.motionAsked;
   S.voice=o.voice!==false; S.recapSeen=+o.recapSeen||0;
@@ -4922,8 +5555,9 @@ function introExit(){
   phLoad().then(()=>{ if(S.tab==='prog') render(); });
   if(S.sess) keepAlive(true);
   await INTRO.done;
-  stAuto();
-  document.addEventListener('visibilitychange',()=>{ if(!document.hidden) stAuto(); });
+  stAuto(); syAuto();
+  document.addEventListener('visibilitychange',()=>{ if(!document.hidden){ stAuto(); syAuto(); } else if(syOn()&&syCfg().dirty&&!SY.busy){ clearTimeout(SY.timer); syncNow(false); } });
+  addEventListener('online',()=>{ if(syOn()&&syCfg().dirty) syncNow(false); });
   if(!S.onb) setTimeout(onbOpen,200);
   else if(MQ_RM.matches&&S.motion==='auto'&&!S.motionAsked) setTimeout(()=>{ if(!SH&&!OB){ SH={kind:'motion'}; shRender(); } },600);
 })();
