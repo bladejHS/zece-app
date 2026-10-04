@@ -1448,23 +1448,6 @@ html.rm .rc-bars i.cur b{animation:none;width:100%}
 .nt b{display:block;font-size:14px}.nt .xs{display:block}
 
 /* ---------- baza de exerciții ---------- */
-.ex-sr{position:relative}
-.ex-sr .inp{padding-left:40px;font-size:16px}
-.ex-si{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--mu2);pointer-events:none}
-.ex-si .i{width:18px;height:18px}
-.ex-fl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
-.ex-fl .chips{flex:1;min-width:260px}
-.ex-eq{width:auto;min-width:150px;padding:8px 30px 8px 10px;font-size:13.5px}
-.exr{display:flex;align-items:center;gap:6px;padding:4px 0;border-top:1px solid var(--ln)}
-.exr:first-child{border-top:0}
-.exr-b{appearance:none;border:0;background:none;color:inherit;text-align:left;cursor:pointer;padding:8px 4px;min-width:0}
-.exr-b b{display:block;font-size:14px}
-.exr-b .xs{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.xb.fav{color:var(--warn)}
-.xb.fav .i{fill:currentColor}
-.lvl{display:inline-flex;gap:2px;flex:none;margin-right:4px}
-.lvl i{width:4px;height:12px;border-radius:2px;background:var(--s3)}
-.lvl.l1 i:nth-child(1),.lvl.l2 i:nth-child(-n+2),.lvl.l3 i{background:var(--mu)}
 .ex-mus{display:flex;gap:14px;align-items:center}
 .ex-mus .body-svg{width:92px}
 
@@ -5756,7 +5739,7 @@ document.addEventListener('click',async ev=>{
   const s=S.sess;
   switch(a){
     case 'tab': { if(SH){ SH=null; shRender(); } if(CAL.open){ CAL.open=false; calRender(); }
-      /* data-s = sub-pagina (Performanță: ov, s, r, k1…; Antrenament: plan, mine, ex, hist; Setări: secțiunea); data-f = cardul la care derulez */
+      /* data-s = sub-pagina (Performanță: ov, s, r, k1…; Antrenament: plan, hist; Setări: secțiunea); data-f = cardul la care derulez */
       const sub=el.dataset.s, foc=el.dataset.f||(k==='set'&&sub?sub:null);
       if(sub&&k==='prog') S.progTab=sub; if(sub&&k==='plan') S.trTab=sub;
       if(S.tab!==k||sub){ S.tab=k; render(); window.scrollTo({top:0}); } else if(k==='coach') scrollEnd(true); else window.scrollTo({top:0,behavior:'smooth'});
@@ -6034,7 +6017,6 @@ document.addEventListener('input',ev=>{
   else if(t.id==='aiIn'){ AI.draft=t.value; autosize(t); }
   else if(s&&t.id==='inKg'){ const v=parseFloat(t.value); s.kg[sessKey(s)]=isFinite(v)?v:''; updAux(); }
   else if(s&&t.id==='inRp'){ const v=parseInt(t.value,10); s.rp[sessKey(s)]=isFinite(v)?v:''; }
-  else if(t.id==='exQ'){ S.exQ=t.value; const l=$('#exList'); if(l) l.innerHTML=exListHTML(exSearch(t.value,S.exF||{})); }
   else if(ONIN[t.id]) ONIN[t.id](t);
   else if(t.id==='inKm'||t.id==='inMin'){ if(s&&t.id==='inMin'){ const v=parseFloat(t.value); s.tmMin[s.cur]=isFinite(v)?v:''; } updPace(); }
   else if(t.id==='scHint') SC.hint=t.value;
@@ -6066,7 +6048,6 @@ document.addEventListener('change',async ev=>{
     t.value=''; render(); return; }
   if(t.dataset.cmp&&SH&&SH.kind==='cmp'){ SH[t.dataset.cmp]=t.value; shRender(); return; }
   if(t.dataset.bc){ S['bc'+t.dataset.bc]=t.value; render(); return; }
-  if(t.id==='exEq'||t.id==='exLvl'){ S.exF=Object.assign({},S.exF,t.id==='exEq'?{eq:t.value}:{lvl:+t.value||0}); render(); return; }
   if(ONCH[t.id]){ await ONCH[t.id](t); return; }
   if(t.dataset.bcimg&&t.files&&t.files[0]){ await foodBarcodeImg(t.files[0]); t.value=''; return; }
   if(t.dataset.csv&&t.files&&t.files[0]){ try{ const rows=parseCSV(await t.files[0].text()); let n=0;
@@ -6612,10 +6593,12 @@ function wRun(){
     <div class="kpis c2"><div class="kpi"><div class="k">7 zile</div><div class="v">${num(o.km,1)}<small>km</small></div><div class="s">${o.runs} ${o.runs===1?'ieșire':'ieșiri'}</div></div>
       <div class="kpi link" data-a="runOpen" data-i="${(S.runs||[]).indexOf(last)}"><div class="k">Ultima · ${relDay(last.date)}</div><div class="v">${num(last.km,1)}<small>km</small></div><div class="s">${fmtPace(paceOf(last))}${last.hr?' · '+last.hr+' bpm':''}</div></div></div></div>`;
 }
+/* „Notează greutatea": deschide Corp și pune cursorul în câmpul de greutate */
+ACT.wFocus=()=>{ S.tab='prog'; S.progTab='b'; render(); window.scrollTo({top:0}); requestAnimationFrame(()=>{ const i=$('#wIn'); if(i){ i.scrollIntoView({block:'center'}); i.focus(); } }); };
 function wQuick(){
   return `<div class="qa qa6">
     <button class="qa-b" data-a="tmList">${ic('clock')}<span>Cronometru</span></button>
-    <button class="qa-b" data-a="tab" data-k="plan" data-s="ex">${ic('list')}<span>Exerciții</span></button>
+    <button class="qa-b" data-a="wFocus">${ic('scale')}<span>Notează greutatea</span></button>
     <button class="qa-b" data-a="tab" data-k="prog" data-s="r" data-f="runForm">${ic('run')}<span>Notează alergare</span></button>
     <label class="qa-b">${ic('camera')}<span>Scanează masa</span><input type="file" accept="image/*" capture="environment" data-scan="1" aria-label="Scanează o masă"></label>
     <button class="qa-b" data-a="water" data-i="250">${ic('drop')}<span>+250 ml apă</span></button>
@@ -7321,7 +7304,7 @@ const EXDB_RAW=[
 ];
 
 /* =====================================================================
-   v8 · BAZA DE EXERCIȚII — catalog, căutare, filtre, favorite, recente, exerciții proprii,
+   v8 · BAZA DE EXERCIȚII — catalogul (pentru căutarea Ctrl+K și harta mușchilor) și
    fișa unui exercițiu (execuție + statisticile tale).
    ===================================================================== */
 const MUSC_RO={piept:'Piept',spate:'Spate',umeri:'Umeri',biceps:'Biceps',triceps:'Triceps',cvadriceps:'Cvadriceps',femurali:'Femurali',fesieri:'Fesieri',gambe:'Gambe',abdomen:'Abdomen',oblici:'Oblici',trapez:'Trapez','corp întreg':'Corp întreg'};
@@ -7349,28 +7332,6 @@ function exSearch(q,f){
   if(t.length) L=L.filter(e=>{ const hay=fold([e.n,e.ro,e.g,e.pm,MUSC_RO[e.pm],e.eq].concat(Object.keys(e.mm).map(k=>MUSC_RO[k]||k)).join(' ')); return t.every(w=>hay.indexOf(w)>=0); });
   return L;
 }
-/* pagina Exerciții (în Antrenament) */
-function exBrowser(){
-  const f=S.exF||{}, q=S.exQ||'', L=exSearch(q,f), n=Object.keys(exDb()).length;
-  return `<div class="card wide"><div class="ex-sr"><span class="ex-si">${ic('search')}</span><input class="inp" id="exQ" placeholder="Caută: bench, genuflexiuni, umeri, gantere…" value="${esc(q)}" autocomplete="off" aria-label="Caută exerciții"></div>
-      <div class="scrollx" style="margin-top:10px">${[['all','Toate']].concat(EX_GROUPS.map(g=>[g,g])).map(([k,l])=>`<button class="chip ${(f.g||'all')===k?'on':''}" data-a="exG" data-k="${esc(k)}">${l}</button>`).join('')}</div>
-      <div class="ex-fl"><div class="chips">${[['','Toate'],['fav','Favorite'],['recent','Recente'],['mine','Proprii']].map(([k,l])=>`<button class="chip ${(f.only||'')===k?'on':''}" data-a="exOnly" data-k="${k}">${k==='fav'?ic('star'):k==='recent'?ic('history'):k==='mine'?ic('user'):''} ${l}</button>`).join('')}</div>
-        <select class="inp ex-eq" id="exEq" aria-label="Echipament"><option value="">Orice echipament</option>${EX_EQ.map(e=>`<option ${f.eq===e?'selected':''}>${e}</option>`).join('')}</select>
-        <select class="inp ex-eq" id="exLvl" aria-label="Dificultate"><option value="">Orice nivel</option>${[1,2,3].map(l=>`<option value="${l}" ${f.lvl===l?'selected':''}>${EX_LVL[l]}</option>`).join('')}</select></div></div>
-    <div class="card"><div class="card-h"><div class="eyebrow">${ic('list')} ${L.length} din ${n} exerciții</div><button class="btn ghost xs" data-a="exNew">${ic('plus')} Exercițiu propriu</button></div>
-      <div id="exList">${exListHTML(L)}</div></div>`;
-}
-function exListHTML(L){
-  return L.length?L.slice(0,S.exAll?999:60).map(e=>{ const last=exLast(e.n);
-    return `<div class="exr" data-ctx="ex:${esc(e.n)}"><button class="xb nh ${exFav(e.n)?'fav':''}" data-a="exFavT" data-k="${esc(e.n)}" aria-label="Favorit">${ic('star')}</button>
-      <button class="sp exr-b" data-a="exOpen" data-k="${esc(e.n)}"><b>${esc(e.n)}</b><span class="xs mu">${esc([e.ro,e.g,e.eq].filter(Boolean).join(' · '))}${last?' · ultima dată '+relDay(last):''}</span></button>
-      ${e.plan?'<span class="tag">plan</span>':e.custom?'<span class="tag">propriu</span>':''}${e.lvl?`<span class="lvl l${e.lvl}" title="${EX_LVL[e.lvl]}"><i></i><i></i><i></i></span>`:''}</div>`; }).join('')+(L.length>60&&!S.exAll?`<button class="btn ghost sm wide" style="margin-top:8px" data-a="exAll">Toate cele ${L.length}</button>`:'')
-    :`<div class="empty sm">${ic('search')}<div>Niciun exercițiu nu se potrivește. Poți adăuga unul propriu.</div><button class="btn sm" data-a="exNew">${ic('plus')} Exercițiu propriu</button></div>`;
-}
-ACT.exG=(el,{k})=>{ S.exF=Object.assign({},S.exF,{g:k}); render(); };
-ACT.exOnly=(el,{k})=>{ S.exF=Object.assign({},S.exF,{only:k}); render(); };
-ACT.exAll=()=>{ S.exAll=true; render(); };
-ACT.exFavT=async(el,{k})=>{ const f=(S.exFav||[]).slice(), i=f.indexOf(k); if(i>=0) f.splice(i,1); else f.push(k); await save('exFav',f); el.classList.toggle('fav',i<0); buzz(8); if(SH&&SH.kind==='ex') shRender(); };
 /* fișa exercițiului: execuția, mușchii și statisticile tale */
 function exHTML(){
   const n=SH.n, e=exInfo(n), L=liftHist(n).length?liftStats(n):null, rms=L?repMaxes(n):[], pts=liftHist(n).map(x=>({x:x.d,y:Math.max(0,...x.s.map(([w,r])=>e1rm(w,r)))})).filter(p=>p.y>0);
@@ -7380,8 +7341,7 @@ function exHTML(){
   return `<button class="ib sh-x" data-a="shClose" aria-label="Închide">${ic('x')}</button>
     <div class="eyebrow">${ic('dumbbell')} ${esc([e.g,e.eq,e.lvl?EX_LVL[e.lvl]:''].filter(Boolean).join(' · ')||'Exercițiu')}</div>
     <div class="h2" style="margin-top:6px">${esc(n)}</div>${e.ro?`<div class="sm mu">${esc(e.ro)}</div>`:''}
-    <div class="inrow" style="flex-wrap:wrap"><button class="btn sm ${exFav(n)?'pri':''}" data-a="exFavT" data-k="${esc(n)}">${ic('star')} ${exFav(n)?'Favorit':'Adaugă la favorite'}</button>
-      <a class="btn ghost sm" href="${ytLink(n)}" target="_blank" rel="noopener">${ic('play2')} Video</a></div>
+    <div class="inrow" style="flex-wrap:wrap"><a class="btn ghost sm" href="${ytLink(n)}" target="_blank" rel="noopener">${ic('play2')} Video</a></div>
     ${mus.length?`<div class="dsec"><h4>Mușchi</h4><div class="ex-mus"><div class="body-wrap" style="margin:0">${front?bodySVG('f',m,null,true):''}${back?bodySVG('b',m,null,true):''}</div>
       <div class="sp"><div><b>Principal:</b> ${esc(MUSC_RO[e.pm]||e.pm||'—')}</div><div class="mu sm" style="margin-top:4px">${Object.keys(e.mm).filter(k=>e.mm[k]<1).map(k=>MUSC_RO[k]||k).join(', ')?'Secundari: '+Object.keys(e.mm).filter(k=>e.mm[k]<1).map(k=>MUSC_RO[k]||k).join(', '):''}</div></div></div></div>`
       :e.pm?`<div class="dsec"><h4>Mușchi</h4><div><b>Principal:</b> ${esc(MUSC_RO[e.pm]||e.pm)}</div></div>`:''}
@@ -7403,32 +7363,17 @@ function exHTML(){
     ${e.custom?`<button class="btn ghost sm danger" style="margin-top:12px" data-a="exDelC" data-k="${esc(n)}" data-confirm="Șterg? Apasă iar">${ic('trash')} Șterge exercițiul propriu</button>`:''}`;
 }
 ACT.exOpen=(el,{k})=>{ SH={kind:'ex',n:k,wide:1}; shRender(); const sh=$('#shRoot .sheet'); if(sh) sh.scrollTop=0; };
-function exNewHTML(){
-  return `<button class="ib sh-x" data-a="shClose" aria-label="Închide">${ic('x')}</button><div class="eyebrow">${ic('plus')} Exercițiu propriu</div><div class="h2" style="margin-top:6px">Adaugă un exercițiu</div>
-    <div class="form"><div class="fld full"><label for="xN">Nume</label><input class="inp" id="xN" placeholder="ex: Pendlay Row" value="${esc(SH.q||'')}"></div>
-      <div class="fld"><label for="xG">Grupă</label><select class="inp" id="xG">${EX_GROUPS.map(g=>`<option>${g}</option>`).join('')}</select></div>
-      <div class="fld"><label for="xP">Mușchi principal</label><select class="inp" id="xP">${Object.keys(MUSC_RO).map(k=>`<option value="${k}">${MUSC_RO[k]}</option>`).join('')}</select></div>
-      <div class="fld"><label for="xE">Echipament</label><select class="inp" id="xE">${EX_EQ.map(e=>`<option>${e}</option>`).join('')}</select></div>
-      <div class="fld"><label for="xL">Dificultate</label><select class="inp" id="xL">${[1,2,3].map(l=>`<option value="${l}">${EX_LVL[l]}</option>`).join('')}</select></div>
-      <div class="fld full"><label for="xC">Cum se execută (opțional)</label><textarea class="inp" id="xC" rows="3" placeholder="Pe scurt, pentru tine"></textarea></div></div>
-    <button class="btn pri wide" style="margin-top:14px" data-a="exSaveC">${ic('check')} Salvează</button>`;
-}
-ACT.exNew=()=>{ SH={kind:'exNew',q:S.exQ||''}; shRender(); };
-ACT.exSaveC=async()=>{ const n=String(($('#xN')||{}).value||'').trim().slice(0,60); if(n.length<2){ shake('#xN'); return; }
-  if(exDb()[n]){ toast('Există deja','„'+n+'" e în catalog.','info'); SH={kind:'ex',n,wide:1}; shRender(); return; }
-  const e={n,g:$('#xG').value,pm:$('#xP').value,eq:$('#xE').value,lvl:+$('#xL').value,c:String($('#xC').value||'').trim().slice(0,400)};
-  await save('exCustom',(S.exCustom||[]).concat([e])); SH={kind:'ex',n,wide:1}; shRender(); render(); toast('Exercițiu adăugat',n,'info'); };
 ACT.exDelC=async(el,{k})=>{ const old=(S.exCustom||[]).find(e=>e.n===k); await save('exCustom',(S.exCustom||[]).filter(e=>e.n!==k)); SH=null; shRender(); render();
   toast('Exercițiu șters',k+(liftHist(k).length?' · seriile notate rămân':''),'info',{l:'Anulează',f:async()=>{ await save('exCustom',(S.exCustom||[]).concat([old])); render(); }}); };
-SHEETS.ex=()=>exHTML(); SHEETS.exNew=()=>exNewHTML();
+SHEETS.ex=()=>exHTML();
 
 /* =====================================================================
-   v8 · ANTRENAMENT — Plan Hybrid365 (neschimbat) · Exerciții · Istoric.
+   v8 · ANTRENAMENT — Plan Hybrid365 (neschimbat) · Istoric.
    ===================================================================== */
-const TR_TABS=[['plan','Plan','plan'],['ex','Exerciții','list'],['hist','Istoric','history']];
+const TR_TABS=[['plan','Plan','plan'],['hist','Istoric','history']];
 function viewTrain(){
   const T=TR_TABS.some(t=>t[0]===S.trTab)?S.trTab:'plan';
-  const body=T==='ex'?exBrowser():T==='hist'?trainHist():viewPlan();
+  const body=T==='hist'?trainHist():viewPlan();
   return `<div class="seg scr" style="margin-top:6px">${TR_TABS.map(t=>`<button class="${T===t[0]?'on':''}" data-a="trTab" data-k="${t[0]}">${ic(t[2])} ${t[1]}</button>`).join('')}</div>${body}`;
 }
 ACT.trTab=(el,{k})=>{ S.trTab=k; render(); window.scrollTo({top:0}); };
@@ -7479,7 +7424,7 @@ function palCmds(){
     ['Pacer 1 km','pacer pista 1km ritm tinta','stopwatch',()=>{ if(k1Goal()) ACT.k1Pace(); else go('prog','k1')(); }]
   ].filter(Boolean).map(([t,k,icn,f])=>({g:'Comenzi',t,k,icn,f}));
   TOOLS.forEach(([id,icn,t,d])=>C.push({g:'Unelte',t,k:'calculator unealta '+d,icn,f:()=>{ if(id==='tm') return TM.open=true,TM.list=true,TM.choose=null,TM.st=null,tmRender(); if(id==='food'){ FD.err=null; SH={kind:'food'}; return shRender(); } toolDefaults(id); SH={kind:'tool',k:id}; shRender(); },s:d}));
-  [['azi','Acasă','home'],['plan','Antrenament · Plan Hybrid365','plan','plan'],['plan','Baza de exerciții','list','ex'],['plan','Istoric antrenamente','history','hist'],
+  [['azi','Acasă','home'],['plan','Antrenament · Plan Hybrid365','plan','plan'],['plan','Istoric antrenamente','history','hist'],
    ['prog','Performanță · Prezentare','grid','ov'],['prog','Forță','dumbbell','s'],['prog','Running Lab · Alergare','run','r'],['prog','1 KM Lab','stopwatch','k1'],['prog','Corp','ruler','b'],
    ['prog','Recuperare','moon','rec'],['prog','Recorduri și realizări','trophy','pr'],['prog','Profilul atletului','user','twin'],['prog','Teste fizice','medal','t'],
    ['nutri','Nutriție','flame'],['coach','Antrenor AI','coach'],['act','Activitate · cronologie','history'],['tools','Unelte','tool'],['set','Setări','gear']]
@@ -7582,7 +7527,7 @@ document.addEventListener('keydown',e=>{
   if(S.fxOpen&&S.sess&&!SH&&!TM.open){ if(k==='ArrowRight'){ const b=$('[data-a="fxNext"]'); if(b) b.click(); } else if(k==='ArrowLeft'){ const b=$('[data-a="fxPrev"]'); if(b&&!b.disabled) b.click(); } }
 });
 const SHORTCUTS=[['Ctrl + K sau /','Căutare și comenzi'],['Alt + 1…5','Acasă, Antrenament, Performanță, Nutriție, Antrenor'],['Alt + A','Activitate'],['Alt + U','Unelte'],['Alt + S','Setări'],
-  ['Alt + L','Temă luminoasă / întunecată'],['Enter (în kg sau repetări)','Notează seria'],['← →','Exercițiul anterior / următor, în antrenament'],['Esc','Închide foaia sau paleta'],['Clic dreapta / apăsare lungă','Meniul unei alergări, al unui exercițiu sau antrenament']];
+  ['Alt + L','Temă luminoasă / întunecată'],['Enter (în kg sau repetări)','Notează seria'],['← →','Exercițiul anterior / următor, în antrenament'],['Esc','Închide foaia sau paleta'],['Clic dreapta / apăsare lungă','Meniul unei alergări sau al unui antrenament']];
 
 /* ---------- meniuri contextuale: clic dreapta pe desktop, apăsare lungă pe telefon ---------- */
 const CTX={
@@ -7590,7 +7535,6 @@ const CTX={
     return [['Deschide','right',()=>ACT.runOpen(null,{I:i})],last?['Compară cu cea mai recentă','swap',()=>{ SH={kind:'rcmp',a:i,b:last.j,wide:1}; shRender(); }]:null,
       ['Șterge alergarea','trash',async()=>{ const old=r; if(r.sid) await stPatch({del:(stCfg().del||[]).concat([String(r.sid)]).slice(-500)}); await save('runs',(S.runs||[]).filter((_,j)=>j!==i)); render();
         toast('Alergare ștearsă',num(old.km,2)+' km · '+fmtDay(old.date),null,{l:'Anulează',f:async()=>{ const L=(S.runs||[]).slice(); L.splice(i,0,old); await save('runs',L); render(); }}); },'bad']].filter(Boolean); },
-  ex:n=>[['Deschide fișa','right',()=>ACT.exOpen(null,{k:n})],[exFav(n)?'Scoate de la favorite':'Adaugă la favorite','star',()=>ACT.exFavT({classList:{toggle(){}}},{k:n}).then(render)]],
   hist:i=>[['Deschide','right',()=>{ SH={kind:'hist',i}; shRender(); }]]
 };
 function ctxOpen(spec,x,y){ const ci=spec.indexOf(':'), k=spec.slice(0,ci), v=spec.slice(ci+1), items=CTX[k]?CTX[k](k==='ex'?v:+v):[]; if(!items.length) return;
