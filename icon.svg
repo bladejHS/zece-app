@@ -1,19 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
-    <defs>
-      <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#17171C"/><stop offset="1" stop-color="#060607"/></linearGradient>
-      <radialGradient id="warm" cx="512" cy="700" r="640" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FF4D2E" stop-opacity=".42"/><stop offset=".55" stop-color="#FF4D2E" stop-opacity=".10"/><stop offset="1" stop-color="#FF4D2E" stop-opacity="0"/></radialGradient>
-      <radialGradient id="sheen" cx="250" cy="120" r="520" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity=".09"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
-      <linearGradient id="arc" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFB15C"/><stop offset=".5" stop-color="#FF6A35"/><stop offset="1" stop-color="#FF3B1F"/></linearGradient>
-      <linearGradient id="num" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#FFE1D6"/></linearGradient>
-      <linearGradient id="bar" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FF8A3D"/><stop offset="1" stop-color="#FF3B1F"/></linearGradient>
-      <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="22"/></filter>
-      <filter id="glow2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="9"/></filter>
-    </defs>
-    <rect width="1024" height="1024" fill="url(#bg)"/><rect width="1024" height="1024" fill="url(#warm)"/><rect width="1024" height="1024" fill="url(#sheen)"/>
-    <circle cx="512" cy="512" r="368" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="40"/>
-    <g filter="url(#glow)" opacity=".85"><circle cx="512" cy="512" r="368" fill="none" stroke="url(#arc)" stroke-width="40" stroke-linecap="round" stroke-dasharray="1803.5 2312.2" transform="rotate(-90 512 512)"/></g>
-    <circle cx="512" cy="512" r="368" fill="none" stroke="url(#arc)" stroke-width="40" stroke-linecap="round" stroke-dasharray="1803.5 2312.2" transform="rotate(-90 512 512)"/>
-    <circle cx="150.5" cy="443.0" r="14" fill="#fff" opacity=".95"/>
-    <g filter="url(#glow2)" opacity=".55"><g transform="translate(157.22 146.62) scale(14.6)" ><path d="M13.2 12.4H19V26.8H23.4V31.4H8.6V26.8H13.2V18.6L10.2 21.4L8.9 16.6Z" fill="#FF6A35"/><path d="M33 12.4H33.4A6.6 6.6 0 0 1 40 19V24.799999999999997A6.6 6.6 0 0 1 33.4 31.4H33A6.6 6.6 0 0 1 26.4 24.799999999999997V19A6.6 6.6 0 0 1 33 12.4ZM33.1 16.4H33.3A2.6 2.6 0 0 1 35.9 19V24.799999999999997A2.6 2.6 0 0 1 33.3 27.4H33.1A2.6 2.6 0 0 1 30.5 24.799999999999997V19A2.6 2.6 0 0 1 33.1 16.4Z" fill="#FF6A35" fill-rule="evenodd"/><path d="M13.2 35.4H34.8V38.2H13.2Z" fill="#FF4D2E"/></g></g>
-    <g transform="translate(157.22 146.62) scale(14.6)" ><path d="M13.2 12.4H19V26.8H23.4V31.4H8.6V26.8H13.2V18.6L10.2 21.4L8.9 16.6Z" fill="url(#num)"/><path d="M33 12.4H33.4A6.6 6.6 0 0 1 40 19V24.799999999999997A6.6 6.6 0 0 1 33.4 31.4H33A6.6 6.6 0 0 1 26.4 24.799999999999997V19A6.6 6.6 0 0 1 33 12.4ZM33.1 16.4H33.3A2.6 2.6 0 0 1 35.9 19V24.799999999999997A2.6 2.6 0 0 1 33.3 27.4H33.1A2.6 2.6 0 0 1 30.5 24.799999999999997V19A2.6 2.6 0 0 1 33.1 16.4Z" fill="url(#num)" fill-rule="evenodd"/><path d="M13.2 35.4H34.8V38.2H13.2Z" fill="url(#bar)"/></g>
-  </svg>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1A1A1E"/><stop offset=".5" stop-color="#0B0B0D"/><stop offset="1" stop-color="#030304"/></linearGradient>
+    <radialGradient id="spot" cx="512" cy="-60" r="820" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity=".2"/><stop offset=".42" stop-color="#fff" stop-opacity=".05"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <radialGradient id="vig" cx="512" cy="560" r="720" gradientUnits="userSpaceOnUse"><stop offset=".6" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".55"/></radialGradient>
+    <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".55" stop-color="#E6E6EA"/><stop offset="1" stop-color="#A2A2AA"/></linearGradient>
+    <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".55" stop-color="#C9C9CF"/><stop offset="1" stop-color="#77777F"/></linearGradient>
+    <filter id="g1" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="26"/></filter>
+    <filter id="g2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="8"/></filter>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#bg)"/><rect width="1024" height="1024" fill="url(#spot)"/><rect width="1024" height="1024" fill="url(#vig)"/>
+  <circle cx="512" cy="512" r="366" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="16"/>
+  <g filter="url(#g2)" opacity=".5"><circle cx="512" cy="512" r="366" fill="none" stroke="#FFFFFF" stroke-width="16" stroke-linecap="round" stroke-dasharray="1793.7 2299.6" transform="rotate(-90 512 512)"/></g>
+  <circle cx="512" cy="512" r="366" fill="none" stroke="url(#ring)" stroke-width="16" stroke-linecap="round" stroke-dasharray="1793.7 2299.6" transform="rotate(-90 512 512)"/>
+  <circle cx="152.5" cy="443.4" r="22" fill="#fff" opacity=".35" filter="url(#g2)"/><circle cx="152.5" cy="443.4" r="11" fill="#fff"/>
+  <g filter="url(#g1)" opacity=".28"><g transform="translate(166.94 158.74) scale(14.2)" ><path d="M13.2 12.4H19V26.8H23.4V31.4H8.6V26.8H13.2V18.6L10.2 21.4L8.9 16.6Z" fill="#FFFFFF"/><path d="M33 12.4H33.4A6.6 6.6 0 0 1 40 19V24.799999999999997A6.6 6.6 0 0 1 33.4 31.4H33A6.6 6.6 0 0 1 26.4 24.799999999999997V19A6.6 6.6 0 0 1 33 12.4ZM33.1 16.4H33.3A2.6 2.6 0 0 1 35.9 19V24.799999999999997A2.6 2.6 0 0 1 33.3 27.4H33.1A2.6 2.6 0 0 1 30.5 24.799999999999997V19A2.6 2.6 0 0 1 33.1 16.4Z" fill="#FFFFFF" fill-rule="evenodd"/><path d="M13.2 35.4H34.8V38.2H13.2Z" fill="#FFFFFF"/></g></g>
+  <g transform="translate(166.94 158.74) scale(14.2)" ><path d="M13.2 12.4H19V26.8H23.4V31.4H8.6V26.8H13.2V18.6L10.2 21.4L8.9 16.6Z" fill="url(#metal)"/><path d="M33 12.4H33.4A6.6 6.6 0 0 1 40 19V24.799999999999997A6.6 6.6 0 0 1 33.4 31.4H33A6.6 6.6 0 0 1 26.4 24.799999999999997V19A6.6 6.6 0 0 1 33 12.4ZM33.1 16.4H33.3A2.6 2.6 0 0 1 35.9 19V24.799999999999997A2.6 2.6 0 0 1 33.3 27.4H33.1A2.6 2.6 0 0 1 30.5 24.799999999999997V19A2.6 2.6 0 0 1 33.1 16.4Z" fill="url(#metal)" fill-rule="evenodd"/><path d="M13.2 35.4H34.8V38.2H13.2Z" fill="#F4F4F5"/></g>
+</svg>
