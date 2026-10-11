@@ -1734,6 +1734,20 @@ html.th-otel .btn.blue{background:linear-gradient(180deg,#52D8C8,#1FA597);color:
 html.th-otel .bar.run > i,html.th-otel .dist-r .b.run i,html.th-otel .spl-r .b i{background:linear-gradient(90deg,#1FA597,#7FE3D6)}
 html.th-otel .tm.rest{--tc:rgba(60,203,187,.22)}
 
+/* ---------- modul bandă: viteza mare sub cronometru, pulsul față de țintă ---------- */
+.tm-spd{display:flex;align-items:baseline;justify-content:center;gap:8px;margin-top:10px;font-variant-numeric:tabular-nums}
+.tm-spd b{font:800 54px/1 var(--fd);color:var(--act);letter-spacing:.01em}
+.tm.rest .tm-spd b{color:var(--run)}
+.tm-spd small{font:700 15px var(--fb);color:var(--mu)}
+.tm-spd span{font-size:13px;color:var(--mu);margin-left:6px}
+.tm-hrz{width:max-content;max-width:100%;margin:8px auto 0;padding:6px 12px;border-radius:999px;font:600 13px var(--fb);color:var(--mu);background:rgba(var(--w),.05);border:1px solid var(--ln)}
+.tm-hrz.ok{color:var(--ok-t);background:var(--ok-bg);border-color:transparent}
+.tm-hrz.hi{color:var(--bad-t);background:var(--bad-bg);border-color:transparent}
+.tm-hrz.lo{color:var(--warn-t);background:var(--warn-bg);border-color:transparent}
+.tm-spl{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:4px 0 10px}
+.tm-spl span{padding:6px 10px;border-radius:10px;background:rgba(var(--w),.05);border:1px solid var(--ln);font-size:12.5px;color:var(--mu)}
+.tm-spl b{color:var(--tx);font-size:14px}
+
 /* =====================================================================
    Mișcare · intrarea în ecran, apariția la derulare, grafice care se desenează.
    Mișcare redusă: după setarea sistemului („Automat") sau aleasă explicit în Setări.
@@ -1972,7 +1986,7 @@ const K={lifts:'zece:lifts',weights:'zece:weights',runs:'zece:runs',wlog:'zece:w
   journal:'zece3:journal',tech:'zece3:tech',voice:'zece3:voice',recapSeen:'zece3:recap',
   mplan:'zece3:mplan',shop:'zece3:shop',mf:'zece3:mf',intro:'zece3:intro',motion:'zece3:motion',motionAsked:'zece3:motionAsked',
   ptests:'zece3:ptests',tmlog:'zece3:tmlog',adj:'zece3:adj',strava:'zece3:strava',ext:'zece3:ext',stq:'zece3:stq',look:'zece3:look',goals:'zece3:goals',supp:'zece3:supp',bk:'zece3:bk',exNote:'zece3:exnote',foods:'zece3:foods',shoes:'zece3:shoes',sync:'zece3:sync',mode:'zece3:mode',
-  dash:'zece3:dash',bg:'zece3:bg',ach:'zece3:ach',notif:'zece3:notif',notifCfg:'zece3:notifCfg',exFav:'zece3:exfav',exCustom:'zece3:excustom'};
+  dash:'zece3:dash',bg:'zece3:bg',planV:'zece3:planv',ach:'zece3:ach',notif:'zece3:notif',notifCfg:'zece3:notifCfg',exFav:'zece3:exfav',exCustom:'zece3:excustom'};
 const S={tab:'azi',lifts:{},weights:{},runs:[],wlog:{},cyc:{},runPlan:{},prof:{},mlog:{},hist:[],sess:null,sound:true,
   aiKey:'',aiChat:null,aiEffort:'medium',aiUsed:0,water:{},body:{},theme:'otel',bg:'anthr',mode:'dark',fx:'normal',onb:false,seenAch:null,seenLvl:null,
   journal:{},tech:{},voice:true,recapSeen:0,photos:undefined,mSel:null,phPose:'fata',
@@ -2052,7 +2066,7 @@ const DAYN=['Luni','Marți','Miercuri','Joi','Vineri','Sâmbătă','Duminică'];
 const DAYS=['Lu','Ma','Mi','Jo','Vi','Sâ','Du'];
 const WEEKS=4;
 const PLAN=[
- {t:'Easy run + Upper',cat:'mix',min:90,run:'ez1',lift:[['cal',60]],ex:[
+ {t:'Easy run + Upper',cat:'mix',min:90,run:'ez1',lift:[['cal',70]],ex:[
   ['Easy run Z2','30 min · ritm conversațional, zona 2'],
   ['Bench Press','4×6–8 · pauză 90s'],
   ['Pull Up / Lat Pulldown','4×6–10 · pauză 90s'],
@@ -2060,12 +2074,14 @@ const PLAN=[
   ['Chest Supported Row','3×8–10 · pauză 90s'],
   ['Lateral Raise','3×12–15 · pauză 60s'],
   ['Tricep Pushdown','3×10–12 · pauză 60s'],
-  ['Bicep Curl','3×10–12 · pauză 60s']]},
+  ['Bicep Curl','3×10–12 · pauză 60s'],
+  ['Hanging Leg Raise','3×8–12 · pauză 60s — genunchii la piept, apoi picioarele întinse'],
+  ['Plank','3 × 45–60 s · pauză 45s']]},
  {t:'Threshold run',cat:'run',min:50,run:'thr',lift:[],ex:[
   ['Warm up','10–15 min alergare ușoară + drills'],
   ['Threshold','4 × 6:00 @ ritm de prag · pauză 90s jog ușor'],
   ['Cool down','10 min alergare ușoară']]},
- {t:'Upper + Conditioning',cat:'lift',min:80,lift:[['cal',65],['hard',15]],ex:[
+ {t:'Upper + Conditioning',cat:'lift',min:90,lift:[['cal',75],['hard',15]],ex:[
   ['Weighted Pull Up','4×5–8 · pauză 90s'],
   ['Flat Dumbbell Press','4×6–8 · pauză 90s'],
   ['Chest Supported Row','4×8–10 · pauză 90s'],
@@ -2074,7 +2090,9 @@ const PLAN=[
   ['Dumbbell Lateral Raise','3×12–15 · pauză 60s'],
   ['Tricep Rope Pushdown','3×10–12 · pauză 60s'],
   ['Alternating Dumbbell Curl','3×10–12 · pauză 60s'],
-  ['Conditioning — opțiunea A sau B','A · Engine Builder: 8 runde pentru timp — 250 m Ski/Row, pauză 45s. B · Hybrid Circuit, 10 min AMRAP: 10 Wall Balls, 10 Burpee Broad Jumps, 10 Kettlebell Swings, 10 Push Ups. Apoi 2–3 min pauză']]},
+  ['Conditioning — opțiunea A sau B','A · Engine Builder: 8 runde pentru timp — 250 m Ski/Row, pauză 45s. B · Hybrid Circuit, 10 min AMRAP: 10 Wall Balls, 10 Burpee Broad Jumps, 10 Kettlebell Swings, 10 Push Ups. Apoi 2–3 min pauză'],
+  ['Dragon Flag','4×3–6 · pauză 90s — negative lente (cobori în 4–5 s) până reușești repetări complete'],
+  ['Pallof Press','3×10–12 pe parte · pauză 45s']]},
  {t:'Easy run + Lower',cat:'mix',min:90,run:'ez2',lift:[['cal',60]],ex:[
   ['Easy run Z2','30 min · ușor — e flush, nu antrenament'],
   ['Hack Squat','4×4–6 · pauză 90s — în loc de Back Squat'],
@@ -2084,7 +2102,7 @@ const PLAN=[
   ['Leg Press','3×10–12 · pauză 60s'],
   ['Hamstring Curl','3×10–12 · pauză 60s'],
   ['Calf Raise','3×12–15 · pauză 60s']]},
- {t:'Upper Strength + Power',cat:'lift',min:75,lift:[['cal',65],['hard',10]],ex:[
+ {t:'Upper Strength + Power',cat:'lift',min:85,lift:[['cal',75],['hard',10]],ex:[
   ['Bench Press','5×3–5 · pauză 90s'],
   ['Weighted Pull Up','4×4–6 · pauză 90s'],
   ['Incline Dumbbell Press','4×6–8 · pauză 90s'],
@@ -2093,7 +2111,9 @@ const PLAN=[
   ['Close Grip Bench Press','3×8–10 · pauză 90s'],
   ['Barbell Curl','3×8–10 · pauză 90s'],
   ['Tricep Overhead Extension','3×10–12 · pauză 90s'],
-  ['Power finisher — EMOM 10 min','minutele impare: 6 Med Ball Chest Throws · minutele pare: 8 Plyo Push Ups']]},
+  ['Power finisher — EMOM 10 min','minutele impare: 6 Med Ball Chest Throws · minutele pare: 8 Plyo Push Ups'],
+  ['Dragon Flag','3×3–6 · pauză 90s — negative lente sau repetări complete'],
+  ['Ab Wheel Rollout','3×8–10 · pauză 60s']]},
  {t:'Long run',cat:'run',min:65,run:'lng',lift:[],ex:[
   ['Warm up','10–15 min alergare ușoară'],
   ['Long run Z2','45 min continuu · ritm conversațional, zona 2'],
@@ -2105,23 +2125,28 @@ const PLAN=[
   ['Foam roll / trigger point','după nevoie'],
   ['Deep breathing / mindset reset','5 min']]}
 ];
+/* v9: abdomen la finalul zilelor de upper; [zi, câte exerciții avea ziua înainte] — pentru bifarea automată a zilelor deja terminate */
+const PLAN_ABS=[[0,8],[2,9],[4,9]];
 const NOTES=[
  {wk:'Bază aerobă + forță pe partea de sus',d:[
   ['Coaching','Alergarea rămâne UȘOARĂ — stai în zona 2. Tempo controlat și amplitudine completă la ridicări. Începi săptămâna construind elan, nu oboseală.'],
-  ['Progresie','Adaugi 5–10 min la alergare în fiecare săptămână. La ridicări crești întâi repetările, apoi greutatea.']]},
+  ['Progresie','Adaugi 5–10 min la alergare în fiecare săptămână. La ridicări crești întâi repetările, apoi greutatea.'],
+  ['Abdomen','La final, ridicări la bară și planșă: lent, controlat, fără balans. Când faci 12 repetări curate cu genunchii, treci la picioarele întinse.']]},
  {wk:'Pragul lactic — sesiunea-cheie de performanță',d:[
   ['Coaching','Asta e sesiunea-cheie. Ritm controlat și puternic în fiecare repriză. Rămâi relaxat, nu forța efortul. Reprize egale. Calitate peste cantitate.'],
   ['Progresie','Adaugi o repriză (până la 5–6). Apoi lungești repriza la 7–8 min. Sau scurtezi pauza la 60s.']]},
  {wk:'Forță pe partea de sus + conditioning hibrid',d:[
   ['Coaching','Greu, cu intenție, fără să ajungi la eșec la exercițiile principale. Amplitudine completă. Conditioning-ul trebuie să fie provocator, nu maximal.'],
-  ['Progresie','Adaugi repetări sau greutate la exercițiile principale în fiecare săptămână. Crești densitatea la conditioning.']]},
+  ['Progresie','Adaugi repetări sau greutate la exercițiile principale în fiecare săptămână. Crești densitatea la conditioning.'],
+  ['Dragon Flag','Începe cu negative: urci cu genunchii la piept, întinzi corpul sus și cobori drept, în 4–5 secunde. Doar umerii și spatele de sus stau pe bancă, lombarul nu se arcuiește. Când controlezi toată coborârea, încearcă repetări complete.']]},
  {wk:'Alergare ușoară + forță pe picioare',d:[
   ['Hack Squat în loc de Back Squat','Spatele stă lipit de spătar și traiectoria e ghidată, dar greutatea tot pe umeri apasă — coboară doar cât bazinul rămâne lipit de spătar.'],
   ['Coaching','Alergarea rămâne ușoară — e flush, nu antrenament. Forță și calitate la ridicări, nu volum. Fără eșec la exercițiile compuse.'],
   ['Progresie','Adaugi 5 min la easy run sau păstrezi și alergi mai ușor. Crești greutatea când ai făcut toate seriile și repetările.']]},
  {wk:'Forță maximă + putere explozivă',d:[
   ['Coaching','Intenție grea și explozivă la ridicările principale. Amplitudine completă la fiecare repetare. Pauză corectă, ridici cu scop. Calitate peste cantitate.'],
-  ['Progresie','Adaugi greutate la ridicările principale în fiecare săptămână. Încerci să bați seria de top de săptămâna trecută. Viteză mai bună a barei.']]},
+  ['Progresie','Adaugi greutate la ridicările principale în fiecare săptămână. Încerci să bați seria de top de săptămâna trecută. Viteză mai bună a barei.'],
+  ['Abdomen','A doua sesiune de Dragon Flag din săptămână (48 de ore după miercuri), cu o serie mai puțin; apoi roata, doar cât spatele rămâne drept.']]},
  {wk:'Rezistență + motorul aerob',d:[
   ['Coaching','Pulsul în zona 2. Respirație relaxată, ritm fluid. Constant, nu vânezi ritmul. Hidratare înainte și după. Termini simțindu-te mai bine decât ai început.'],
   ['Progresie','Adaugi 5–10 min pe săptămână pe măsură ce crește rezistența. Intensitatea rămâne aceeași — nu devine tempo. Urmărești distanța sau timpul și încerci să le bați.']]},
@@ -2231,6 +2256,7 @@ function suggestBase(e){
   const top=Math.max(...prev.s.map(s=>s[0])), atTop=prev.s.filter(s=>s[0]===top), bestR=Math.max(...atTop.map(s=>s[1]));
   const last=prev.s.map(fmtSet).join(' · '), bw=top===0;
   if(atTop.length>=e.sets&&atTop.every(s=>s[1]>=e.hi)){
+    if(bw&&BW_PROG[e.n]) return {kg:0,reps:e.lo,kind:'up',last,d:prev.d,txt:'Ai atins <b>'+e.hi+' repetări</b> la toate seriile → <b>'+BW_PROG[e.n]+'</b> și începe iar de la '+e.lo+'.'};
     if(tired) return {kg:top,reps:e.hi,kind:'same',last,d:prev.d,txt:'Ai fi meritat să urci, dar azi ești obosit → <b>rămâi la '+num(top)+' kg</b> și ține forma.'};
     const kg=top+incFor(e.n);
     return {kg,reps:e.lo,kind:'up',last,d:prev.d,txt:'Ai atins <b>'+e.hi+' repetări</b> la toate seriile → <b>urcă la '+num(kg)+' kg</b> și începe iar de la '+e.lo+'.'}; }
@@ -2353,13 +2379,16 @@ const jOf=k=>((S.journal||{})[k])||{};
 async function jSet(k,o){ const j=Object.assign({},S.journal), d=Object.assign({},j[k]||{},o);
   Object.keys(d).forEach(x=>{ if(d[x]==null||d[x]==='') delete d[x]; }); if(Object.keys(d).length) j[k]=d; else delete j[k]; await save('journal',j); }
 /* mușchii lucrați: seriile fiecărui exercițiu, pe grupe (1 = mușchi principal, 0,5 = secundar) */
-const MUSC=[['piept','Piept'],['spate','Spate'],['umeri','Umeri'],['biceps','Biceps'],['triceps','Triceps'],['cvadriceps','Cvadriceps'],['femurali','Femurali'],['fesieri','Fesieri'],['gambe','Gambe']];
+const MUSC=[['piept','Piept'],['spate','Spate'],['umeri','Umeri'],['biceps','Biceps'],['triceps','Triceps'],['cvadriceps','Cvadriceps'],['femurali','Femurali'],['fesieri','Fesieri'],['gambe','Gambe'],['abdomen','Abdomen']];
 const EXM={'Bench Press':{piept:1,triceps:.5,umeri:.5},'Pull Up / Lat Pulldown':{spate:1,biceps:.5},'Incline Dumbbell Press':{piept:1,umeri:.5,triceps:.5},
   'Chest Supported Row':{spate:1,biceps:.5,umeri:.5},'Lateral Raise':{umeri:1},'Dumbbell Lateral Raise':{umeri:1},'Tricep Pushdown':{triceps:1},'Tricep Rope Pushdown':{triceps:1},
   'Tricep Overhead Extension':{triceps:1},'Bicep Curl':{biceps:1},'Alternating Dumbbell Curl':{biceps:1},'Barbell Curl':{biceps:1},'Weighted Pull Up':{spate:1,biceps:.5},
   'Flat Dumbbell Press':{piept:1,triceps:.5,umeri:.5},'Seated Overhead Press':{umeri:1,triceps:.5},'Cable Face Pull':{umeri:1,spate:.5},'Hack Squat':{cvadriceps:1,fesieri:.5},
   'Romanian Deadlift':{femurali:1,fesieri:.5},'Walking Lunge':{cvadriceps:1,fesieri:1},'Hip Thrust':{fesieri:1,femurali:.5},'Leg Press':{cvadriceps:1,fesieri:.5},
-  'Hamstring Curl':{femurali:1},'Calf Raise':{gambe:1},'Push Press':{umeri:1,triceps:.5},'Close Grip Bench Press':{triceps:1,piept:.5}};
+  'Hamstring Curl':{femurali:1},'Calf Raise':{gambe:1},'Push Press':{umeri:1,triceps:.5},'Close Grip Bench Press':{triceps:1,piept:.5},
+  'Dragon Flag':{abdomen:1},'Hanging Leg Raise':{abdomen:1},'Ab Wheel Rollout':{abdomen:1},'Pallof Press':{abdomen:1},'Plank':{abdomen:1}};
+/* exerciții cu greutatea corpului: progresia e varianta mai grea, nu kilogramele */
+const BW_PROG={'Dragon Flag':'coboară mai lent (5–6 s) sau treci de la negative la repetări complete','Hanging Leg Raise':'treci de la genunchi la picioarele întinse','Ab Wheel Rollout':'rulează mai departe sau mai lent, cu spatele drept'};
 function muscleSets(from,to){ const m={}, by={}; MUSC.forEach(([k])=>{ m[k]=0; by[k]={}; });
   Object.keys(S.lifts||{}).forEach(n=>{ const map=EXM[n]; if(!map) return; (S.lifts[n]||[]).forEach(e=>{ if(e.d<from||e.d>to) return; const c=e.s.length;
     Object.keys(map).forEach(k=>{ m[k]+=c*map[k]; by[k][n]=(by[k][n]||0)+c; }); }); });
@@ -2398,7 +2427,7 @@ function bodySVG(view,m,sel,noAct,ex){
   return `<svg class="body-svg" viewBox="0 0 200 410" role="img" aria-label="Mușchi, ${view==='f'?'față':'spate'}"><g class="base">${BODY_BASE}</g>${view==='f'?'<rect class="core" x="84" y="124" width="32" height="70" rx="10"/>':''}${parts}</svg>`;
 }
 /* zone de puls (Tanaka; Karvonen dacă știm pulsul în repaus), ritmuri din ritmul de prag, predicții Riegel */
-function hrZones(){ const P=prof(), max=Math.round(208-.7*P.age), rest=+P.hrRest||0, Z=[[.5,.6,'Recuperare'],[.6,.7,'Ușor · easy, long run'],[.7,.8,'Aerob'],[.8,.9,'Prag'],[.9,1,'Maxim']];
+function hrZones(){ const P=prof(), max=+P.hrMax>0?Math.round(+P.hrMax):Math.round(208-.7*P.age), rest=+P.hrRest||0, Z=[[.5,.6,'Recuperare'],[.6,.7,'Ușor · easy, long run'],[.7,.8,'Aerob'],[.8,.9,'Prag'],[.9,1,'Maxim']];
   return {max,rest,z:Z.map(([a,b,l],i)=>({n:i+1,l,lo:Math.round(rest?rest+(max-rest)*a:max*a),hi:Math.round(rest?rest+(max-rest)*b:max*b)}))}; }
 function thrPace(){ const P=prof(); if(+P.thrPace>0) return {v:+P.thrPace,src:'setat de tine'};
   const rs=(S.runs||[]).filter(r=>r.kind==='thr'&&paceOf(r)&&r.date>=dayShift(todayKey(),-56)); if(!rs.length) return null;
@@ -2792,7 +2821,7 @@ function hrData(ev){ const v=hrParse(ev.target.value), now=Date.now(); if(!(v.bp
   if(v.rr.length) HR.hasRR=true;
   if(HR.m){ HR.m.b.push(v.bpm); HR.m.rr.push(...v.rr); }
   if(S.sess){ S.sess.hr=S.sess.hr||hrNew(); hrAcc(S.sess.hr,v.bpm,now,S.sess.cur); if(now-HR.ps>30000){ HR.ps=now; persistSess(); } }
-  if(TM.st&&TM.st.started&&!TM.st.done){ TM.st.hr=TM.st.hr||hrNew(); hrAcc(TM.st.hr,v.bpm,now); }
+  if(TM.st&&TM.st.started&&!TM.st.done){ TM.st.hr=TM.st.hr||hrNew(); hrAcc(TM.st.hr,v.bpm,now); const tp=TM.st.ph[TM.st.i]; if(tp&&tp.meas&&!TM.st.pAt){ const m=TM.st.mh=TM.st.mh||{n:0,s:0}; m.n++; m.s+=v.bpm; } }
   hrPaint(); }
 const hrState=()=>hrLive()?'live':HR.on||HR.busy||(HR.dev&&!HR.off)?'stale':'off';
 const hrChip=()=>{ const lv=hrLive(), z=lv?hrZone(HR.bpm):-1;
@@ -4065,8 +4094,12 @@ function viewSet(){
       <div class="fld"><label for="pS">Greutate la start (kg)</label><input class="inp" id="pS" data-p="startW" type="number" step="0.1" inputmode="decimal" value="${P.startW}"></div>
       <div class="fld"><label for="pG">Greutate țintă (kg)</label><input class="inp" id="pG" data-p="goalW" type="number" step="0.1" inputmode="decimal" value="${P.goalW}"></div>
       <div class="fld"><label for="pHr">Puls în repaus (opțional)</label><input class="inp" id="pHr" data-p="hrRest" data-opt="1" type="number" inputmode="numeric" value="${P.hrRest||''}" placeholder="ex: 62"></div>
+      <div class="fld"><label for="pHm">Puls maxim (opțional)</label><input class="inp" id="pHm" data-p="hrMax" data-opt="1" type="number" inputmode="numeric" value="${+P.hrMax>0?P.hrMax:''}" placeholder="estimat: ${Math.round(208-.7*P.age)}"></div>
+      <div class="fld"><label for="pLt">Puls la prag · LTHR (opțional)</label><input class="inp" id="pLt" data-p="lthr" data-opt="1" type="number" inputmode="numeric" value="${+P.lthr>0?P.lthr:''}" placeholder="din testul de 30 min"></div>
       <div class="fld"><label for="pTp">Ritm de prag (min:sec /km)</label><input class="inp" id="pTp" data-pace="1" inputmode="text" value="${+P.thrPace>0?mmss(+P.thrPace):''}" placeholder="automat"></div></div>
-    <div class="note">Vârsta și pulsul în repaus dau zonele de puls; înălțimea și greutatea, forța relativă și compoziția corporală.</div></div>
+    <div class="note">Vârsta și pulsul în repaus dau zonele de puls; pulsul maxim măsurat le face mai exacte (altfel se estimează din vârstă). Înălțimea și greutatea dau forța relativă și compoziția corporală.</div>
+    ${(H=>H.sug?`<button class="chip" style="margin-top:10px" data-a="hrMaxUse" data-i="${H.sug.v}">${ic('heart')} Ai atins ${H.sug.v} bpm (${relDay(H.sug.d)}): folosește-l ca puls maxim</button>`:'')(hrMaxInfo())}
+    <button class="btn ghost sm" style="margin-top:10px" data-a="tab" data-k="prog" data-s="t">${ic('heart')} Testul de prag · 30 min</button></div>
   <div class="card"><div class="eyebrow">${ic('flame')} Ținte de nutriție</div>
     <div class="form">
       <div class="fld"><label for="pAct">Activitate</label><select class="inp" id="pAct" data-p="act">${[[1.375,'Ușoară'],[1.55,'Moderată'],[1.725,'Mare'],[1.9,'Foarte mare']].map(a=>`<option value="${a[0]}" ${+P.act===a[0]?'selected':''}>${a[1]} (×${a[0]})</option>`).join('')}</select></div>
@@ -4490,6 +4523,7 @@ function tmPresetFor(e,day,w){
   if(e.n==='Mobility flow') return P_MOBILITY();
   if(e.n==='Warm up'&&/drills/.test(e.p)) return P_WARMRUN();
   if(/^Deep breathing/.test(e.n)) return P_BREATH();
+  if(e.n==='Plank'){ const ph=[{k:'prep',d:5,l:'Pregătește-te',s:'Pe antebrațe, corpul drept'}]; for(let i=1;i<=3;i++){ ph.push({k:'work',d:50,l:'Planșă '+i+'/3',s:'Abdomen și fesieri strânși, respiră normal'}); if(i<3) ph.push({k:'rest',d:45,l:'Pauză',s:'Urmează planșa '+(i+1)}); } return {title:'Plank 3 × 50 s',kind:'plank',ph}; }
   if(/Foam roll/.test(e.n)) return {title:e.n,ph:[{k:'work',d:300,l:e.n,s:'Insistă pe zonele tensionate'}]};
   const m=/(\d+)(?:–(\d+))?\s*min/.exec(e.p); if(m){ const mins=Math.round((+m[1]+ +(m[2]||m[1]))/2); return {title:e.n,ph:[{k:'prep',d:5,l:'Pregătește-te',s:''},{k:'work',d:mins*60,l:e.n,s:e.p}]}; }
   return null;
@@ -4499,7 +4533,7 @@ const TM_LIST=()=>{ const nx=nextDay(), w=nx?nx.w:0; return [
   ['emom','bolt','EMOM 10 min','Power finisher de vineri',P_EMOM],['amrap','flame','AMRAP 10 min','Conditioning B de miercuri',P_AMRAP],
   ['engine','refresh','Engine Builder','Conditioning A: 8 runde × 250 m',P_ENGINE],['stretch','leaf','Stretching 45/15','10 întinderi',P_STRETCH],
   ['wup','flame','Încălzire pentru forță','5 minute înainte de greutăți',P_WARMUP],['warmrun','run','Încălzire de alergare','10 min ușor + drills + accelerări',P_WARMRUN],
-  ['mob','leaf','Mobility flow','11 mișcări ghidate, 12 minute',P_MOBILITY],['breath','sun','Respirație 4-4-4-4','5 minute de calm',P_BREATH],['free','clock','Cronometru liber','Pornește, apasă Gata când termini',P_FREE]]; };
+  ['mob','leaf','Mobility flow','11 mișcări ghidate, 12 minute',P_MOBILITY],['breath','sun','Respirație 4-4-4-4','5 minute de calm',P_BREATH],['lt30','heart','Test de prag · 30 min','Pulsul și ritmul de prag, ghidat',()=>P_LT30()],['free','clock','Cronometru liber','Pornește, apasă Gata când termini',P_FREE]]; };
 function tmOpen(pr,from){
   TM.open=true; TM.list=false; TM.choose=null;
   if(pr.choose){ TM.choose={from}; tmRender(); return; }
@@ -4509,7 +4543,8 @@ function tmOpen(pr,from){
 const tmPh=()=>TM.st.ph[TM.st.i];
 function tmEl(){ const st=TM.st; if(!st||!st.t0) return 0; return ((st.pAt||Date.now())-st.t0)/1000; }
 function tmGo(){ const st=TM.st; st.start=Date.now(); st.t0=Date.now(); st.started=true; actxGet(); keepAlive(true); tmSched(); tmRender(); say(tmPh().l); }
-const tmSay=p=>say(p.k==='breath'||p.k==='rest'||!p.s?p.l:p.l+'. '+p.s.split(' — ')[0]);
+const spSay=v=>{ const r=Math.round(v*10)/10, i=Math.floor(r), d=Math.round((r-i)*10); return i+(d?' virgulă '+d:''); };
+const tmSay=p=>say((p.k==='breath'||p.k==='rest'||!p.s?p.l:p.l+'. '+p.s.split(' — ')[0])+(p.sp?'. Viteza '+spSay(p.sp):''));
 function tmSched(){
   cancelSched('tm'); const st=TM.st; if(!st||!st.started||st.done||st.pAt) return;
   const list=[]; let j=st.i, cur=st.ph[j]; if(cur.d==null) return;
@@ -4551,6 +4586,8 @@ function tmPaint(){
   const tEl=$('#tmTime'); if(tEl) tEl.textContent=fmtClock(ph.d!=null?Math.ceil(Math.max(0,ph.d-el)):el);
   const rr=$('#tmRing'); if(rr){ const C=2*Math.PI*130, f=ph.d!=null?clamp(el/ph.d,0,1):(el%60)/60; rr.setAttribute('stroke-dashoffset',(C*(1-f)).toFixed(1)); }
   const tot=$('#tmTot'); if(tot) tot.textContent=fmtClock(((st.pAt||Date.now())-st.start-st.pausedMs)/1000);
+  const hz=$('#tmHrz'); if(hz&&ph.hr){ const lv=hrLive(), b=HR.bpm, c=!lv?'':b<ph.hr[0]?'lo':b>ph.hr[1]?'hi':'ok';
+    hz.className='tm-hrz '+c; hz.textContent=lv?b+' bpm · '+(c==='ok'?'în țintă':c==='hi'?'peste țintă: scade 0,3 km/h':'sub țintă'):'țintă puls '+ph.hr[0]+'–'+ph.hr[1]; }
 }
 function tmRender(){
   const r=$('#tmRoot'); if(!TM.open){ r.innerHTML=''; updLock(); return; }
@@ -4567,7 +4604,8 @@ function tmRender(){
     r.innerHTML=`<div class="tm"><div class="tm-in">${top(st.title)}
       <div class="tm-ring"><svg viewBox="0 0 300 300"><circle cx="150" cy="150" r="130" fill="none" style="stroke:rgba(var(--w),.07)" stroke-width="14"/></svg>
         <div class="c"><div><div class="tm-lbl">Gata?</div><div class="tm-time">${totalD?fmtClock(totalD):'∞'}</div><div class="tm-sub">${works.length} ${works.length===1?'bloc':'blocuri'} de lucru${st.ph.some(p=>p.k==='manual')?' · rundele se termină când apeși tu':''}</div></div></div></div>
-      <div class="note" style="text-align:center">Sunetele te anunță la fiecare schimbare, inclusiv cu telefonul blocat (lasă volumul pornit).</div>
+      ${st.ph.some(p=>p.sp)?`<div class="tm-spl">${st.ph.filter(p=>p.sp&&p.k!=='prep').filter((p,i,a)=>i===0||p.l.replace(/\d+\/\d+/,'')!==a[i-1].l.replace(/\d+\/\d+/,'')).slice(0,6).map(p=>`<span><b>${num(p.sp,1)}</b> km/h · ${esc(p.l.replace(/ \d+\/\d+/,''))}</span>`).join('')}</div>`:''}
+      <div class="note" style="text-align:center">Sunetele te anunță la fiecare schimbare, inclusiv cu telefonul blocat (lasă volumul pornit).${st.ph.some(p=>p.sp)?' Vocea îți spune viteza la fiecare bucată.':''}</div>
       <div class="tm-ctl" style="grid-template-columns:1fr"><button class="btn pri xl glow" data-a="tmGo">${ic('play')} Start</button></div></div></div>`; return; }
   if(st.done){
     r.innerHTML=`<div class="tm"><div class="tm-in">${top(st.title)}
@@ -4576,6 +4614,7 @@ function tmRender(){
         ${st.amrap?`<div class="kpi"><div class="k">Runde</div><div class="v">${st.rounds}</div></div>`:''}
         ${st.laps.length?`<div class="kpi"><div class="k">Runda medie</div><div class="v">${fmtClock(st.laps.reduce((a,b)=>a+b,0)/st.laps.length)}</div></div>`:''}</div>
       ${st.laps.length>1?`<div class="card">${st.laps.map((l,i)=>`<div class="list-row"><span>Runda ${i+1}</span><span class="v">${fmtClock(l)}</span></div>`).join('')}</div>`:''}
+      ${st.kind==='lt30'?lt30Form(st):st.kind==='tread'&&st.from==null?treadDone(st):''}
       <div class="tm-ctl" style="grid-template-columns:1fr">${st.from!=null&&S.sess?`<button class="btn pri xl" data-a="tmApply">${ic('check')} ${st.run?'Folosește timpul: '+num(st.total/60,1)+' min':'Marchează exercițiul ca făcut'}</button>`:''}
         <button class="btn ghost" data-a="tmClose">Închide</button></div></div></div>`; return; }
   const next=st.ph[st.i+1], cls=ph.k==='rest'?'rest':ph.k==='prep'?'prep':'';
@@ -4585,8 +4624,9 @@ function tmRender(){
       <circle id="tmRing" cx="150" cy="150" r="130" fill="none" stroke="${ph.k==='rest'?COL().run:ph.k==='prep'?COL().warn:TH().ac}" stroke-width="14" stroke-linecap="round"
         stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${C.toFixed(1)}" transform="rotate(-90 150 150)" style="transition:stroke-dashoffset .25s linear;filter:drop-shadow(0 0 10px ${ph.k==='rest'?'rgba(77,163,255,.6)':ph.k==='prep'?'rgba(255,176,32,.5)':'var(--acg)'})"/></svg>
       <div class="c"><div><div class="tm-lbl">${esc(ph.l)}</div><div class="tm-time" id="tmTime">0:00</div><div class="tm-sub">${esc(ph.s||'')}</div></div></div></div>
+    ${ph.sp?`<div class="tm-spd"><b>${num(ph.sp,1)}</b><small>km/h</small><span>${mmss(60/ph.sp)} /km</span></div>`:''}${ph.hr?`<div class="tm-hrz" id="tmHrz">țintă puls ${ph.hr[0]}–${ph.hr[1]}</div>`:''}
     ${st.amrap&&ph.k==='work'?`<div class="tm-next">Runde: <b id="tmRounds">${st.rounds}</b></div>`:''}
-    ${next?`<div class="tm-next">Urmează: <b>${esc(next.l)}</b>${next.d?' · '+fmtClock(next.d):''}</div>`:`<div class="tm-next">Ultimul bloc</div>`}
+    ${next?`<div class="tm-next">Urmează: <b>${esc(next.l)}</b>${next.d?' · '+fmtClock(next.d):''}${next.sp?' · <b>'+num(next.sp,1)+' km/h</b>':''}</div>`:`<div class="tm-next">Ultimul bloc</div>`}
     ${dots}
     <div class="tm-ctl">
       ${ph.k==='manual'?`<button class="btn pri xl glow" style="grid-column:1/-1" data-a="tmLap">${ic('check')} ${st.ph.length===1?'Gata':'Gata runda'}</button>`:''}
@@ -4972,6 +5012,7 @@ function snapshot(){
     return 'Ultimele alergări:\n'+rs.map(r=>`- ${r.date} ${RUNK[r.kind]||r.kind}: ${num(r.km,2)} km în ${num(r.min)} min (${fmtPace(paceOf(r))})`+(r.rpe?`, efort ${r.rpe}/10`:'')+(r.hr?`, puls mediu ${r.hr}`:'')+(r.sid?', din Strava':'')).join('\n')+
       `\nKm pe săptămână, ultimele 6 săptămâni (cea curentă la final): ${wk.join(', ')}.`; });
   sec('Antrenamente terminate',()=>(S.hist||[]).slice(-10).map(h=>`- ${h.date}: ${h.t} (ciclul ${h.cyc}, S${h.w+1}), ${Math.round(h.dur/60)} min, ${h.sets} serii`+(h.km?`, ${num(h.km,2)} km`:'')+(h.ready!=null?`, stare ${h.ready}/100`:'')+(h.rpe?`, RPE ${h.rpe}`:'')+(h.hr?`, puls mediu ${h.hr.avg} (max ${h.hr.max})`:'')).join('\n'));
+  sec('Abdomen adăugat în plan (la cererea utilizatorului)',()=>'La finalul zilelor de upper: luni Hanging Leg Raise 3×8–12 și Plank 3 × 45–60 s; miercuri Dragon Flag 4×3–6 (negative lente până la repetări complete) și Pallof Press 3×10–12 pe parte; vineri Dragon Flag 3×3–6 și Ab Wheel Rollout 3×8–10. Fac parte din plan ca orice alt exercițiu.');
   sec('Alte antrenamente, importate din Strava (ex. Polar Beat) sau notate manual (ultimele 14 zile)',()=>(S.ext||[]).filter(x=>x.date>=dayShift(tk,-13)).sort((a,b)=>a.start-b.start)
     .map(x=>`- ${x.date} ${stName(x.type)}${x.name?' „'+x.name+'”':''}: ${num(x.min,0)} min`+(x.km?`, ${num(x.km,1)} km`:'')+(x.hr?`, puls mediu ${x.hr}`+(x.hrMax?` (max ${x.hrMax})`:''):'')+(x.rpe?`, efort ${x.rpe}/10`:'')+(x.dup?' — același antrenament ca o sesiune ZECE, numărat o singură dată':'')).join('\n'));
   sec('Readiness și profilul atletului (indicatori de antrenament, nu medicali)',()=>{ const R=readiness(), tw=twinNow();
@@ -5362,7 +5403,17 @@ const GUIDE={
  'Hamstring Curl':{m:['Femurali','Gambe'],c:['Genunchii aliniați cu axa de rotație a aparatului.','Tamponul stă deasupra călcâielor.','Bazinul lipit de bancă (sau coapsele fixate, la varianta șezut).','Îndoaie genunchii complet și strânge o secundă.','Revino lent, în 2–3 secunde.'],
   x:['Bazinul se ridică ca să ajute.','Smucituri la începutul mișcării.','Amplitudine scurtă la întindere.'],s:'Fără smucituri: femuralii se accidentează cel mai des la viteză necontrolată.'},
  'Calf Raise':{m:['Gambe'],c:['Vârful piciorului pe treaptă, călcâiele în aer.','Coboară călcâiele lent, cât mai jos, și ține întinderea 1–2 secunde.','Urcă pe vârfuri cât de sus poți și ține o secundă.','Genunchii drepți, dar nu blocați.','Ritm lent, fără sărituri.'],
-  x:['Săltări rapide fără control.','Amplitudine scurtă.','Genunchii se îndoaie ca să ajute.'],s:'Tendonul lui Ahile se adaptează încet: crește volumul treptat, mai ales în săptămânile cu multă alergare.'}
+  x:['Săltări rapide fără control.','Amplitudine scurtă.','Genunchii se îndoaie ca să ajute.'],s:'Tendonul lui Ahile se adaptează încet: crește volumul treptat, mai ales în săptămânile cu multă alergare.'},
+ 'Hanging Leg Raise':{m:['Abdomen','Flexorii șoldului'],c:['Atârnat la bară, priza la lățimea umerilor, umerii trași ușor în jos (activi).','Începe cu genunchii: ridică-i spre piept și rulează bazinul în sus, nu doar picioarele.','Sus, ține o secundă; coapsele ajung cel puțin paralele cu podeaua.','Coboară în 2–3 secunde, fără să te legeni.','Când faci 12 repetări curate, treci la picioarele întinse.'],
+  x:['Balans și elan din corp.','Doar ridici picioarele, fără să rulezi bazinul: lucrează mai mult flexorii șoldului.','Cobori brusc.'],s:'Dacă priza cedează înaintea abdomenului, folosește chingi pentru încheieturi sau fă varianta pe paralele (sprijinit pe antebrațe).'},
+ 'Plank':{m:['Abdomen','Fesieri','Umeri'],c:['Pe antebrațe, coatele sub umeri.','Corpul o linie dreaptă de la cap la călcâie.','Strânge abdomenul ca înaintea unei lovituri și strânge fesierii.','Respiră normal, scurt, fără să-ți ții aerul.','Ține 45–60 s; când e ușor, ridică un picior sau pune o greutate pe spate.'],
+  x:['Bazinul cade spre podea (lombarul se arcuiește).','Fundul prea sus.','Îți ții respirația.'],s:'Calitatea contează mai mult decât timpul: oprește seria când bazinul începe să cadă.'},
+ 'Dragon Flag':{m:['Abdomen','Dorsal mare','Fesieri'],c:['Culcat pe bancă, apucă banca (sau un stâlp) în spatele capului.','Urcă genunchii la piept, apoi întinde corpul în sus, sprijinit doar pe umeri și spatele de sus.','Corpul rămâne drept ca o scândură, de la umeri la vârfuri; fesierii strânși.','Coboară încet, în 4–5 secunde, până aproape de bancă, fără să atingi cu fundul.','Începe cu negative (doar coborârea); apoi varianta cu genunchii îndoiți la urcare; apoi repetări complete.'],
+  x:['Te îndoi din șold (fundul cade primul): pierzi tensiunea din abdomen.','Lombarul pe bancă se arcuiește.','Cobori necontrolat, prin cădere.','Gâtul împins în bancă.'],s:'E un exercițiu avansat și greu la greutate corporală mare: progresează din negative, fără eșec, și oprește-te la orice durere de spate sau gât.'},
+ 'Pallof Press':{m:['Abdomen','Oblici'],c:['Lateral față de cablu, mânerul la piept, picioarele la lățimea umerilor.','Strânge abdomenul și fesierii, bazinul stă drept.','Împinge mânerul drept în față și ține 2 secunde.','Nu lăsa trunchiul să se rotească spre cablu.','Revino lent la piept; toate repetările pe o parte, apoi pe cealaltă.'],
+  x:['Trunchiul se rotește după cablu.','Greutate prea mare: corpul se înclină.','Brațele fac toată treaba, abdomenul relaxat.'],s:'E un exercițiu anti-rotație: ajută stabilitatea la alergare. Greutatea mică, controlul mare.'},
+ 'Ab Wheel Rollout':{m:['Abdomen','Dorsal mare','Umeri'],c:['În genunchi, mâinile pe roată sub umeri, spatele ușor rotunjit.','Strânge abdomenul și fesierii înainte să pleci.','Rulează în față doar cât poți ține spatele drept (fără arcuire).','Trage înapoi din abdomen, nu din șold.','Crește distanța treptat; mai târziu, din picioare.'],
+  x:['Lombarul se arcuiește la capătul drumului.','Fundul urcă primul la întoarcere.','Ieșire prea lungă de la început.'],s:'Începe cu o ieșire scurtă sau spre un perete care oprește roata; mărește distanța doar când spatele rămâne drept.'}
 };
 /* mișcările din conditioning și din finisher: câte 3 repere */
 const MOVES=[
@@ -6299,7 +6350,7 @@ document.addEventListener('touchend',e=>{
 
 /* copie de siguranță — cheia API nu intră în export */
 const EXPORT_KEYS=['zece:lifts','zece:weights','zece:runs','zece:wlog','zece:cyc','zece:runPlan','zece:nutri','zece:mlog','zece3:hist','zece3:aiChat','zece3:aiEffort','zece3:sound',
-  'zece3:water','zece3:body','zece3:theme','zece3:fx','zece3:aiUsed','zece3:seenAch','zece3:lvl','zece3:journal','zece3:tech','zece3:voice','zece3:recap','zece3:mplan','zece3:shop','zece3:mf','zece3:intro','zece3:motion','zece3:ptests','zece3:tmlog','zece3:adj','zece3:onb','zece3:motionAsked','zece3:ext','zece3:goals','zece3:supp','zece3:exnote','zece3:foods','zece3:shoes','zece3:mode','zece3:bg','zece3:dash','zece3:ach','zece3:notif','zece3:notifCfg','zece3:exfav','zece3:excustom','zece:tests','zece:shoes','zece:body','zece:gtg','zece:workouts','zece:counts','zece:curBlock'];
+  'zece3:water','zece3:body','zece3:theme','zece3:fx','zece3:aiUsed','zece3:seenAch','zece3:lvl','zece3:journal','zece3:tech','zece3:voice','zece3:recap','zece3:mplan','zece3:shop','zece3:mf','zece3:intro','zece3:motion','zece3:ptests','zece3:tmlog','zece3:adj','zece3:onb','zece3:motionAsked','zece3:ext','zece3:goals','zece3:supp','zece3:exnote','zece3:foods','zece3:shoes','zece3:mode','zece3:bg','zece3:planv','zece3:dash','zece3:ach','zece3:notif','zece3:notifCfg','zece3:exfav','zece3:excustom','zece:tests','zece:shoes','zece:body','zece:gtg','zece:workouts','zece:counts','zece:curBlock'];
 async function doExport(withPh){
   const data={app:'ZECE',v:4,at:new Date().toISOString(),keys:{}};
   for(const k of EXPORT_KEYS){ const v=await store.get(k); if(v!=null) data.keys[k]=v; }
@@ -6319,6 +6370,7 @@ async function phImport(ps){ let n=0;
 async function doImport(file){
   try{ const data=JSON.parse(await file.text()); if(!data||!data.keys||typeof data.keys!=='object') throw new Error('format');
     let n=0; for(const k of Object.keys(data.keys)){ if(EXPORT_KEYS.indexOf(k)>=0){ await store.set(k,data.keys[k]); n++; } }
+    if(!('zece3:planv' in data.keys)) await store.set(K.planV,1);
     await loadAll(); applyTheme(); applyFx(); syncMark('lifts');
     const np=Array.isArray(data.photos)?await phImport(data.photos):0;
     render(); toast('Copie importată',n+' seturi de date restaurate'+(np?' · '+np+' poze':'')+'.','info');
@@ -6371,7 +6423,7 @@ function syMergeKey(k,a,b){
       (a[n]||[]).forEach(e=>{ const x=m[e.d]; m[e.d]=!x||(e.s||[]).length>=(x.s||[]).length?e:x; }); o[n]=Object.values(m).sort((x,y)=>x.d<y.d?-1:x.d>y.d?1:0).slice(-80); }); return o; }
   /* ciclul: câștigă ultima schimbare (ciclu nou sau corectare); versiunile fără oră iau numărul mai mare */
   if(k==='zece:cyc'){ const ta=+(a&&a.t)||0, tb=+(b&&b.t)||0; if(ta||tb) return ta>=tb?a:b; return {h:Math.max(+(a&&a.h)||1,+(b&&b.h)||1)}; }
-  if(k==='zece3:aiUsed'||k==='zece3:recap') return Math.max(+a||0,+b||0);
+  if(k==='zece3:aiUsed'||k==='zece3:recap'||k==='zece3:planv') return Math.max(+a||0,+b||0);
   if(Array.isArray(a)&&Array.isArray(b)){ const id=SY_ID[k]||(x=>JSON.stringify(x)), seen=new Set(), out=[];
     a.concat(b).forEach(x=>{ const i=id(x); if(seen.has(i)) return; seen.add(i); out.push(x); });
     if(/^(zece:runs|zece3:hist|zece3:ptests|zece3:tmlog)$/.test(k)) out.sort((x,y)=>(x.date||'')<(y.date||'')?-1:(x.date||'')>(y.date||'')?1:0); return out; }
@@ -7143,7 +7195,7 @@ ACT.runCmp=()=>{ const s=S.rSel||[]; if(s.length===2){ SH={kind:'rcmp',a:s[0],b:
 function zonesCard(){ const z=hrZones(), pz=paceZones(), rp=racePred(), ZC=HRZC();
   return `<div class="card" id="zonesCard"><div class="eyebrow">${ic('target')} Zonele tale de puls</div>
       <div class="zones">${z.z.map((x,i)=>`<div class="zn ${i===1?'hl':''}"><b style="color:${ZC[i]}">Z${x.n}</b><span>${x.l}</span><span class="v">${x.lo}–${x.hi} bpm</span></div>`).join('')}</div>
-      <div class="note">Puls maxim estimat <b>${z.max} bpm</b> (formula Tanaka)${z.rest?', cu pulsul în repaus '+z.rest+' (metoda Karvonen)':'. Adaugă pulsul în repaus în Setări pentru zone mai precise'}. Easy run și long run se fac în <b>zona 2</b>.</div>
+      <div class="note">Puls maxim ${+prof().hrMax>0?'măsurat':'estimat'} <b>${z.max} bpm</b>${+prof().hrMax>0?'':' (formula Tanaka)'}${z.rest?', cu pulsul în repaus '+z.rest+' (metoda Karvonen)':'. Adaugă pulsul în repaus în Setări pentru zone mai precise'}. Easy run și long run se fac în <b>zona 2</b>.</div>
       ${pz?`<div class="eyebrow" style="margin-top:16px">${ic('run')} Ritmurile tale</div><div class="zones">${pz.z.map(([l,v],i)=>`<div class="zn ${i===0?'hl':''}"><b style="color:${[COL().run,COL().warn,TH().ac][i]}">${['E','P','I'][i]}</b><span>${l}</span><span class="v">${v} /km</span></div>`).join('')}</div>
         <div class="note">Calculate din ritmul de prag de ${mmss(pz.thr)} /km (${pz.src}).</div>`
       :`<div class="note">Notează o alergare de prag sau setează ritmul de prag în Setări ca să-ți calculez ritmurile pe zone.</div>`}</div>
@@ -7535,6 +7587,7 @@ const EXDB_RAW=[
  ['Plank','Planșă','Abdomen','abdomen',{},'Greutatea corpului',1,['Pe antebrațe, coatele sub umeri, corpul drept.','Strânge abdomenul și fesierii, respiră normal.','Ține poziția fără ca bazinul să cadă.'],['Bazinul cade sau se ridică mult.','Îți ții respirația.'],['Side Plank'],['Dead Bug','Ab Wheel Rollout']],
  ['Side Plank','Planșă laterală','Abdomen','oblici',{},'Greutatea corpului',1,['Pe un antebraț, cotul sub umăr, picioarele una peste alta.','Ridică șoldurile într-o linie dreaptă.','Ține, apoi schimbă partea.'],['Șoldul cade.','Umărul urcă spre ureche.'],[],['Pallof Press']],
  ['Hanging Leg Raise','Ridicări de picioare la bară','Abdomen','abdomen',{},'Bară fixă',2,['Atârnat la bară, umerii activi.','Ridică genunchii (sau picioarele întinse) spre piept, rulând bazinul.','Coboară controlat, fără balans.'],['Balans și elan.','Doar flexia șoldului, fără rularea bazinului.'],['cu genunchii îndoiți (mai ușor)'],['Ab Wheel Rollout','Crunch']],
+ ['Dragon Flag','Dragon flag','Abdomen','abdomen',{abdomen:1},'Greutatea corpului',3,null,null,['negative (doar coborârea)','cu genunchii îndoiți'],['Ab Wheel Rollout','Hanging Leg Raise']],
  ['Ab Wheel Rollout','Roata pentru abdomen','Abdomen','abdomen',{},'Greutatea corpului',2,['În genunchi, mâinile pe roată sub umeri.','Rulează în față cât poți ține spatele drept.','Revino trăgând din abdomen.'],['Spatele se arcuiește.','Ieșire prea lungă la început.'],[],['Plank']],
  ['Cable Crunch','Abdomene la cablu','Abdomen','abdomen',{},'Cablu',1,['În genunchi, frânghia la ceafă.','Rulează trunchiul în jos, apropiind coastele de bazin.','Revino lent.'],['Tragi din brațe.','Flexezi doar din șold.'],[],['Crunch']],
  ['Pallof Press','Presa Pallof','Abdomen','oblici',{},'Cablu',1,['Lateral față de cablu, mânerul la piept.','Împinge mânerul în față și ține, fără să lași trunchiul să se rotească.','Adu-l înapoi la piept.'],['Te rotești spre cablu.','Umerii ridicați.'],[],['Side Plank']],
@@ -7916,12 +7969,14 @@ Object.assign(IC,{
 });
 
 /* =====================================================================
-   v9 · VITEZA PENTRU ALERGARE — scrii viteza și pulsul de acum (ex. 7 km/h la 140 bpm), alegi ziua din plan
-   și primești viteza de bandă pentru fiecare bucată: încălzire, reprize, pauze, răcire.
+   v9 · VITEZA PENTRU ALERGARE — viteza de bandă pentru fiecare bucată din ziua aleasă (încălzire, reprize, pauze, răcire).
    Model: în alergare, pulsul crește aproape liniar cu viteza. Ecuația ACSM pentru alergare (VO2 = 3,5 + 0,2·v)
    și echivalența %rezervă de puls ≈ %rezervă VO2 (Swain 1997) dau v = v0 · (puls țintă − repaus) / (puls acum − repaus).
-   Dacă ai destule alergări cu puls din ultimele 4 luni, panta vine din ele, iar punctul de azi o așază pe forma zilei.
-   Zonele țintă sunt aceleași ca în „Zone de puls" (Karvonen): Z2 60–70%, Z4 (prag) 80–90% din rezerva de puls.
+   Calibrarea: viteza și pulsul de azi, dacă le scrii; altfel, automat, din ultimele alergări liniștite cu puls (easy, long),
+   cu greutate mai mare pentru cele recente. Panta vine din alergările tale când sunt destule și coerente.
+   Zonele: Karvonen (Z2 60–70%, prag 80–90% din rezerva de puls), cu pulsul maxim măsurat dacă îl ai;
+   cu pulsul la prag (LTHR) din testul de 30 de minute, reprizele țintesc 95–100% din el.
+   Modul bandă: aceleași bucăți, pe cronometru, cu viteza mare pe ecran, sunet și voce la fiecare schimbare.
    ===================================================================== */
 const SPD_DAYS=[[0,'Luni','ez1'],[1,'Marți','thr'],[3,'Joi','ez2'],[5,'Sâmbătă','lng']];
 const SPD_K='zece3:spd';
@@ -7929,62 +7984,175 @@ const SPD_K='zece3:spd';
 function restHR(){ const P=prof(); if(+P.hrRest>0) return {v:+P.hrRest,src:'din profil'};
   const tk=todayKey(), xs=[]; for(let i=0;i<14;i++){ const j=(S.journal||{})[dayShift(tk,-i)]; if(j&&+j.rhr>=30&&+j.rhr<=120) xs.push(+j.rhr); }
   if(!xs.length) return null; xs.sort((a,b)=>a-b); return {v:xs[Math.floor(xs.length/2)],src:'mediana check-in-urilor din ultimele 14 zile'}; }
-/* panta personală (km/h pe bătaie) din alergările cu puls; doar dacă datele sunt destule și coerente */
+/* alergările liniștite cu puls (fără prag: media lor amestecă încălzirea cu reprizele), cele mai noi întâi */
+function spdRuns(days){ const from=dayShift(todayKey(),-(days||60));
+  return (S.runs||[]).filter(r=>r.date>=from&&r.kind!=='thr'&&+r.hr>=90&&+r.km>=1&&+r.min>0).map(r=>({date:r.date,h:+r.hr,v:r.km/(r.min/60),r}))
+    .filter(p=>p.v>=4&&p.v<=25).sort((a,b)=>a.date<b.date?1:a.date>b.date?-1:0); }
+/* panta personală (km/h pe bătaie): regresie pe alergările din ultimele 4 luni, doar dacă e coerentă */
 function spdFit(){
-  const from=dayShift(todayKey(),-120), pts=(S.runs||[]).filter(r=>r.date>=from&&+r.hr>=90&&+r.km>=1&&+r.min>0).map(r=>[+r.hr,r.km/(r.min/60)]).filter(p=>p[1]>=5&&p[1]<=25);
-  if(pts.length<6) return null; const n=pts.length, mx=pts.reduce((a,p)=>a+p[0],0)/n, my=pts.reduce((a,p)=>a+p[1],0)/n;
+  const pts=spdRuns(120).map(p=>[p.h,p.v]); if(pts.length<6) return null; const n=pts.length, mx=pts.reduce((a,p)=>a+p[0],0)/n, my=pts.reduce((a,p)=>a+p[1],0)/n;
   let sxy=0,sxx=0,syy=0; pts.forEach(([x,y])=>{ sxy+=(x-mx)*(y-my); sxx+=(x-mx)*(x-mx); syy+=(y-my)*(y-my); });
   const hs=pts.map(p=>p[0]); if(Math.max(...hs)-Math.min(...hs)<12||!sxx||!syy) return null;
   const b=sxy/sxx, r=sxy/Math.sqrt(sxx*syy); return b>=.03&&b<=.25&&r>=.5?{b,n,r}:null; }
-/* ultima alergare cu puls: punctul de pornire propus */
-function spdLastRun(){ return (S.runs||[]).filter(r=>+r.hr>=90&&+r.km>0&&+r.min>0).sort((a,b)=>a.date<b.date?1:-1)[0]||null; }
-/* ziua implicită: azi, dacă e zi cu alergare, altfel următoarea zi cu alergare din săptămână */
+/* calibrarea automată: media ponderată (timp de înjumătățire 14 zile) a ultimelor 6 alergări liniștite cu puls */
+function spdAuto(){ const rs=spdRuns(60).slice(0,6); if(!rs.length) return null; const tk=todayKey(); let sw=0,sh=0,sv=0;
+  rs.forEach(p=>{ const w=Math.pow(.5,daysBetween(p.date,tk)/14); sw+=w; sh+=w*p.h; sv+=w*p.v; }); return {v0:sv/sw,h0:sh/sw,n:rs.length,last:rs[0]}; }
+/* calibrarea de azi (scrisă de tine în unealtă), dacă există */
+function spdToday(){ let sv=null; try{ sv=JSON.parse(localStorage.getItem(SPD_K)||'null'); }catch(e){} return sv&&sv.date===todayKey()&&+sv.v>0&&+sv.h>0?{v0:+String(sv.v).replace(',','.'),h0:+sv.h,R:+sv.r||null}:null; }
+/* modelul folosit peste tot (unealta, modul bandă, cronometrele din antrenament) */
+function spdModel(o){
+  const t=o||spdToday(), R=t&&t.R>0?t.R:(restHR()||{}).v, M=hrZones().max, F=spdFit();
+  if(!(R>=30&&R<=110)) return {err:'rest',M};
+  if(t&&t.v0>0&&t.h0>0){ if(t.h0<=R+15||t.h0>=M||t.v0<3||t.v0>25) return {err:'bad',R,M}; return {v0:t.v0,h0:t.h0,R,M,F,src:'today'}; }
+  const a=spdAuto(); if(!a||a.h0<=R+10) return {err:'none',R,M};
+  return Object.assign({R,M,F,src:'auto'},a); }
+const spdAt=(c,h)=>Math.max(3,c.F?c.v0+c.F.b*(h-c.h0):c.v0*(h-c.R)/(c.h0-c.R));
+/* bucățile zilei: [nume, durată, secunde, puls de jos, puls de sus] și vitezele lor */
+function spdSegs(kind,w,c){ const p=runPlan(), lt=+prof().lthr>0?+prof().lthr:0, hr=f=>Math.round(c.R+(c.M-c.R)*f);
+  const seg=(l,dur,sec,lo,hi,o)=>{ const vl=spdAt(c,lo), vh=spdAt(c,hi); return Object.assign({l,dur,sec,lo,hi,vl,vh,vm:Math.round((vl+vh)*5)/10},o||{}); };
+  const ez=(a,b)=>[hr(a),hr(b)], TH=lt?[Math.round(lt*.95),lt]:ez(.8,.9);
+  if(kind==='thr'){ const r=p.thr.r[w]||0; return [seg('Încălzire','10–15 min ușor',720,...ez(.55,.65),{wu:1}),seg('Reprize la prag',r+' × '+mmss(p.thr.m),p.thr.m*60,...TH,{main:1,rep:r}),
+    seg('Pauză · jog ușor',p.thr.rest+' s',p.thr.rest,...ez(.5,.6),{between:1}),seg('Răcire','10 min ușor',600,...ez(.55,.65),{cd:1})]; }
+  if(kind==='lng'){ const n=p.lng.w[w]||0; return [seg('Încălzire','10–15 min ușor',720,...ez(.55,.65),{wu:1}),seg('Long run · zona 2',n+' min continuu',n*60,...ez(.6,.7),{main:1}),seg('Răcire','5–10 min ușor',480,...ez(.55,.65),{cd:1})]; }
+  const n=((p[kind]||{}).w||[])[w]||0; return [seg(kind==='ez2'?'Easy run · flush':'Easy run · zona 2',n+' min',n*60,...ez(.6,kind==='ez2'?.65:.7),{main:1})]; }
+/* ziua implicită: azi, dacă e zi cu alergare, altfel următoarea zi cu alergare */
 function spdDefDay(){ const dow=(new Date().getDay()+6)%7; for(let i=0;i<7;i++){ const d=(dow+i)%7; if(SPD_DAYS.some(x=>x[0]===d)) return d; } return 1; }
 /* săptămâna din ciclu în care urmează ziua aleasă */
 function spdWeek(d){ if(S.sess&&S.sess.d===d) return S.sess.w; for(let w=0;w<WEEKS;w++) if(!dayFull(w,d)) return w; return WEEKS-1; }
-function spdSegs(kind,w){ const p=runPlan();
-  if(kind==='thr'){ const r=p.thr.r[w]||0; return [['Încălzire','10–15 min ușor',.55,.65],['Reprize la prag',r+' × '+mmss(p.thr.m),.80,.90,1],['Pauză · jog ușor',p.thr.rest+' s',.50,.60],['Răcire','10 min ușor',.55,.65]]; }
-  if(kind==='lng') return [['Încălzire','10–15 min ușor',.55,.65],['Long run · zona 2',(p.lng.w[w]||0)+' min continuu',.60,.70,1],['Răcire','5–10 min ușor',.55,.65]];
-  return [[kind==='ez2'?'Easy run · flush':'Easy run · zona 2',(p[kind].w[w]||0)+' min',.60,kind==='ez2'?.65:.70,1]]; }
+const spdKind=d=>(SPD_DAYS.find(x=>x[0]===d)||[])[2]||null;
 function spdDefaults(){
-  if(TL.sv!=null) return;
-  let sv=null; try{ sv=JSON.parse(localStorage.getItem(SPD_K)||'null'); }catch(e){}
-  const rr=restHR(); TL.sr=rr?String(rr.v):''; TL.sd=String(spdDefDay());
-  if(sv&&sv.date===todayKey()){ TL.sv=sv.v; TL.sh=sv.h; if(sv.r) TL.sr=sv.r; TL.sSrc=''; return; }
-  const L=spdLastRun(); if(L){ TL.sv=num(L.km/(L.min/60),1); TL.sh=String(L.hr); TL.sSrc=`Am completat din ultima alergare cu puls (${relDay(L.date)}, ${num(L.km,1)} km). Pune valorile de azi dacă le ai.`; }
-  else { TL.sv=''; TL.sh=''; TL.sSrc=''; }
-}
+  /* pulsul de repaus se completează oricând apare (din profil sau din check-in-uri) */
+  if(!TL.sr){ const rr=restHR(); if(rr) TL.sr=String(rr.v); }
+  if(TL.sd!=null) return; const t=spdToday();
+  TL.sd=String(spdDefDay()); TL.sv=t?num(t.v0,1):''; TL.sh=t?String(t.h0):''; if(t&&t.R) TL.sr=String(t.R); }
 let SPD_T=0;
-function spdKeep(){ clearTimeout(SPD_T); SPD_T=setTimeout(()=>{ try{ localStorage.setItem(SPD_K,JSON.stringify({v:TL.sv,h:TL.sh,r:TL.sr,date:todayKey()})); }catch(e){} },400); }
-TOOLS.push(['spd','gauge','Viteza pentru alergare','Din viteza și pulsul de acum: viteza pentru ziua din plan']);
+function spdKeep(){ clearTimeout(SPD_T); SPD_T=setTimeout(()=>{ try{ if(tlN('sv')>0&&tlN('sh')>0) localStorage.setItem(SPD_K,JSON.stringify({v:TL.sv,h:TL.sh,r:TL.sr,date:todayKey()})); else localStorage.removeItem(SPD_K); }catch(e){} },300); }
+TOOLS.push(['spd','gauge','Viteza pentru alergare','Viteza pe bandă pentru ziua din plan, calibrată pe pulsul tău']);
 TOOL_CAT[0][2].unshift('spd');
 TOOL2.spd={
-  in:()=>{ spdDefaults(); const d=+TL.sd, lv=hrLive();
-    return `<div class="form">${tlIn('sv','Viteza acum (km/h)',{step:'0.1',ph:'ex: 7'})}${tlIn('sh','Pulsul la viteza asta',{step:'1',ph:'ex: 140'})}
-        ${tlIn('sr','Puls de repaus',{step:'1',ph:'ex: 60'})}<div class="fld"><label>Puls maxim</label><div class="inp ro">${hrZones().max} <small class="mu">din vârstă</small></div></div></div>
+  in:()=>{ spdDefaults(); const d=+TL.sd, lv=hrLive(), H=hrMaxInfo(), a=spdAuto();
+    return `<div class="form">${tlIn('sv','Viteza acum (km/h)',{step:'0.1',ph:a?'auto: '+num(a.v0,1):'ex: 7'})}${tlIn('sh','Pulsul la viteza asta',{step:'1',ph:a?'auto: '+Math.round(a.h0):'ex: 140'})}
+        ${tlIn('sr','Puls de repaus',{step:'1',ph:'ex: 60'})}<div class="fld"><label>Puls maxim</label><div class="inp ro">${H.v} <small class="mu">${H.src}</small></div></div></div>
+      ${H.sug?`<button class="chip" style="margin-top:10px" data-a="hrMaxUse" data-i="${H.sug.v}">${ic('heart')} Ai atins ${H.sug.v} bpm (${relDay(H.sug.d)}): folosește-l ca puls maxim</button>`:''}
       ${lv?`<button class="chip" style="margin-top:10px" data-a="spdLive">${ic('heart')} Folosește pulsul live · ${HR.bpm}</button>`:''}
-      ${TL.sSrc?`<div class="xs mu" style="margin-top:8px">${esc(TL.sSrc)}</div>`:''}
+      <div class="xs mu" style="margin-top:8px">${a?'Viteza și pulsul de acum sunt opționale: fără ele calculez din alergările tale. Scrie-le dacă vrei să ții cont de forma de azi.':'Aleargă 5 minute la o viteză constantă, apoi scrie viteza și pulsul.'}</div>
       <div class="fld" style="margin-top:14px"><label>Pentru ziua</label><div class="seg" style="margin-top:0">${SPD_DAYS.map(([dd,l])=>`<button class="${d===dd?'on':''}" data-a="tlSet" data-k="sd" data-s="${dd}">${l}</button>`).join('')}</div></div>`; },
   out:()=>{
-    const v0=tlN('sv'), h0=tlN('sh'), R=tlN('sr'), Z=hrZones(), M=Z.max, d=+TL.sd, D=SPD_DAYS.find(x=>x[0]===d)||SPD_DAYS[1], w=spdWeek(d);
+    const v0=tlN('sv'), h0=tlN('sh'), R=tlN('sr'), d=+TL.sd, D=SPD_DAYS.find(x=>x[0]===d)||SPD_DAYS[1], w=spdWeek(d);
     spdKeep();
-    if(!(v0>0&&h0>0)) return `<div class="sm mu">Aleargă 5 minute la o viteză constantă, apoi scrie viteza și pulsul. Îți dau viteza pentru fiecare bucată din ziua aleasă.</div>`;
     if(!(R>=30&&R<=110)) return `<div class="sm mu">Scrie pulsul de repaus (dimineața, în pat). Fără el nu pot calcula zonele corect.</div>`;
-    if(v0<3||v0>25) return `<div class="sm mu">Viteza pare greșită: scrie-o în km/h (ex. 7 sau 9,5).</div>`;
-    if(h0<=R+15||h0>=M) return `<div class="sm mu">Pulsul trebuie să fie cel din timpul alergării, după câteva minute la aceeași viteză (între ${R+16} și ${M-1}).</div>`;
-    const F=spdFit(), at=h=>F?v0+F.b*(h-h0):v0*(h-R)/(h0-R), hrAt=f=>Math.round(R+(M-R)*f), pNow=(h0-R)/(M-R), zNow=pNow<.5?-1:Math.min(4,Math.floor((pNow-.5)/.1+1e-9));
-    const rows=spdSegs(D[2],w).map(([l,dur,a,b,main])=>{ const lo=hrAt(a), hi=hrAt(b), vl=Math.max(3,at(lo)), vh=Math.max(3,at(hi)), vm=(vl+vh)/2;
-      return `<div class="spd-r ${main?'main':''}"><div class="sp"><b>${l}</b><span class="xs mu">${esc(dur)} · puls ${lo}–${hi}</span></div>
-        <div class="spd-v"><b>${num(vm,1)}</b><small>km/h</small><span class="xs mu">${num(vl,1)}–${num(vh,1)} · ${mmss(60/vm)} /km</span></div></div>`; }).join('');
-    return `<div class="spd-now"><span class="xs mu">Acum</span> <b>${num(v0,1)} km/h la ${Math.round(h0)} bpm</b> <span class="xs mu">= ${Math.round(pNow*100)}% din rezerva de puls${zNow>=0?' · zona '+(zNow+1):''}</span></div>
+    const man=v0>0&&h0>0;
+    if(!man&&(v0>0||h0>0)) return `<div class="sm mu">Scrie și ${v0>0?'pulsul':'viteza'}, sau șterge câmpul ca să folosesc calibrarea automată.</div>`;
+    if(man&&(v0<3||v0>25)) return `<div class="sm mu">Viteza pare greșită: scrie-o în km/h (ex. 7 sau 9,5).</div>`;
+    const c=spdModel(man?{v0,h0,R}:{R});
+    if(c.err==='bad') return `<div class="sm mu">Pulsul trebuie să fie cel din timpul alergării, după câteva minute la aceeași viteză (între ${R+16} și ${c.M-1}).</div>`;
+    if(c.err) return `<div class="sm mu">Încă nu am o alergare cu puls din care să mă calibrez. Aleargă 5 minute la o viteză constantă și scrie viteza și pulsul, sau notează o alergare cu puls (vine singură din Strava / Polar).</div>`;
+    const pNow=(c.h0-R)/(c.M-R), zNow=pNow<.5?-1:Math.min(4,Math.floor((pNow-.5)/.1+1e-9));
+    const rows=spdSegs(D[2],w,c).map(g=>`<div class="spd-r ${g.main?'main':''}"><div class="sp"><b>${g.l}</b><span class="xs mu">${esc(g.dur)} · puls ${g.lo}–${g.hi}</span></div>
+        <div class="spd-v"><b>${num(g.vm,1)}</b><small>km/h</small><span class="xs mu">${num(g.vl,1)}–${num(g.vh,1)} · ${mmss(60/g.vm)} /km</span></div></div>`).join('');
+    return `<div class="spd-now">${c.src==='today'?`<span class="xs mu">Azi</span> <b>${num(c.v0,1)} km/h la ${Math.round(c.h0)} bpm</b> <span class="xs mu">= ${Math.round(pNow*100)}% din rezerva de puls${zNow>=0?' · zona '+(zNow+1):''}</span>`
+        :`<span class="xs mu">Calibrare automată</span> <b>${num(c.v0,1)} km/h la ${Math.round(c.h0)} bpm</b> <span class="xs mu">· din ${c.n} ${c.n===1?'alergare':'alergări'} cu puls (ultima ${relDay(c.last.date)})</span>`}</div>
       <div class="dsec"><h4>${D[1]} · săptămâna ${w+1}</h4>${rows}</div>
-      ${v0<6?`<div class="note">Sub 6 km/h mulți merg în loc să alerge. Când treci în alergare pulsul sare, așa că măsoară din alergare ca rezultatul să fie corect.</div>`:''}
+      <button class="btn pri xl wide" style="margin-top:12px" data-a="treadGo">${ic('play')} Pornește modul bandă</button>
+      ${spdCalHTML(c)}
       <div class="xs mu2" style="margin-top:10px">Pune viteza de la început și nu o crește ca să „prinzi" pulsul: pulsul urcă spre țintă în 2–3 minute. Dacă trece de capătul de sus, scade cu 0,3 km/h.
-        ${F?`Panta e potrivită pe ${F.n} alergări de-ale tale cu puls.`:'Calcul din pulsul de repaus și cel maxim (proporțional cu rezerva de puls).'} Aceeași înclinație a benzii ca acum.</div>`; }
+        ${c.F?`Panta e potrivită pe ${c.F.n} alergări de-ale tale cu puls.`:'Calcul proporțional cu rezerva de puls (repaus → maxim).'}${+prof().lthr>0?' Reprizele țintesc 95–100% din pulsul tău la prag ('+Math.round(+prof().lthr)+').':''} Aceeași înclinație a benzii ca acum.</div>`; }
 };
-ACT.spdLive=()=>{ if(hrLive()){ TL.sh=String(HR.bpm); TL.sSrc=''; } if(SH&&SH.kind==='tool') shRender(); };
+/* cum se potrivesc ultimele alergări cu modelul: arată dacă ești în formă sau obosit, iar calibrarea se mută singură după ele */
+function spdCalHTML(c){ const rs=spdRuns(60).slice(0,3); if(!rs.length) return '';
+  return `<div class="dsec"><h4>Ultimele alergări față de calibrare</h4>${rs.map(p=>{ const ex=spdAt(c,p.h), df=(p.v-ex)/ex*100, t=Math.abs(df)<3?['în linie','']:df>0?['mai rapid ca de obicei','good']:['mai lent ca de obicei','bad'];
+    return `<div class="list-row"><span class="sp"><b>${relDay(p.date)}</b> <span class="xs mu">${num(p.v,1)} km/h la ${p.h} bpm · așteptat ${num(ex,1)}</span></span><span class="xs ${t[1]}">${df>0?'+':''}${Math.round(df)}% · ${t[0]}</span></div>`; }).join('')}
+    <div class="xs mu2" style="margin-top:6px">Mai rapid la același puls = formă mai bună; mai lent = oboseală, căldură, somn puțin. Calibrarea automată se mută după fiecare alergare nouă.</div></div>`; }
+ACT.spdLive=()=>{ if(hrLive()) TL.sh=String(HR.bpm); if(SH&&SH.kind==='tool') shRender(); };
 /* deschiderea directă, de pe copertă sau din plan, cu ziua deja aleasă */
 ACT.spdOpen=(el,{D})=>{ spdDefaults(); if(D>=0&&SPD_DAYS.some(x=>x[0]===D)) TL.sd=String(D); SH={kind:'tool',k:'spd'}; shRender(); };
+
+/* ---------- modul bandă ---------- */
+function treadPhases(kind,w,c){ const sg=spdSegs(kind,w,c), rest=sg.find(g=>g.between), ph=[{k:'prep',d:10,l:'Pregătește-te',s:'Pornește banda',sp:sg[0].vm}];
+  sg.forEach(g=>{ if(g.between) return;
+    if(g.rep){ for(let i=1;i<=g.rep;i++){ ph.push({k:'work',d:g.sec,l:'Repriza '+i+'/'+g.rep,s:'Prag · puls '+g.lo+'–'+g.hi,sp:g.vm,hr:[g.lo,g.hi]});
+      if(i<g.rep&&rest) ph.push({k:'rest',d:rest.sec,l:'Jog ușor',s:'puls '+rest.lo+'–'+rest.hi,sp:rest.vm,hr:[rest.lo,rest.hi]}); } }
+    else ph.push({k:'work',d:g.sec,l:g.l,s:'puls '+g.lo+'–'+g.hi,sp:g.vm,hr:[g.lo,g.hi],half:g.sec>=600&&!!g.main}); });
+  return ph; }
+ACT.treadGo=()=>{ const d=+TL.sd, kind=spdKind(d), w=spdWeek(d), v0=tlN('sv'), h0=tlN('sh'), R=tlN('sr'), c=spdModel(v0>0&&h0>0?{v0,h0,R}:{R});
+  if(!kind||c.err) return; SH=null; shRender();
+  tmOpen({title:'Modul bandă · '+DAYN[d],kind:'tread',run:true,tread:{d,w,kind},ph:treadPhases(kind,w,c)}); };
+/* cronometrele din antrenament (încălzire, prag, easy, long, răcire) primesc și ele vitezele, când există o calibrare */
+function spdDecorate(pr,e,day,w){
+  if(!pr||!pr.ph||!day||!day.run) return pr; const kind=day.run, c=spdModel(); if(c.err) return pr;
+  const sg=spdSegs(kind,w,c), main=sg.find(g=>g.main), rest=sg.find(g=>g.between), wu=sg.find(g=>g.wu), cd=sg.find(g=>g.cd);
+  const put=(p,g)=>{ if(p&&g){ p.sp=g.vm; p.hr=[g.lo,g.hi]; } };
+  if(e.n==='Threshold') pr.ph.forEach(p=>put(p,p.k==='work'?main:p.k==='rest'?rest:null));
+  else if(/^(Easy run|Long run)/.test(e.n)) pr.ph.forEach(p=>put(p,p.k==='work'?main:null));
+  else if(e.n==='Warm up') pr.ph.forEach(p=>put(p,p.k==='work'&&/Alergare ușoară|Warm up/.test(p.l)?wu:null));
+  else if(e.n==='Cool down') pr.ph.forEach(p=>put(p,p.k==='work'?cd:null));
+  return pr; }
+const tmPresetFor0=tmPresetFor;
+tmPresetFor=(e,day,w)=>{ const pr=tmPresetFor0(e,day,w); try{ spdDecorate(pr,e,day,w); }catch(x){ errLog((x&&x.message)||x,'spd decorate'); } return pr; };
+/* distanța din viteze (bucățile terminate întregi + cea curentă, cât s-a alergat din ea) */
+function treadKm(st){ let km=0; st.ph.forEach((p,i)=>{ if(!p.sp||p.d==null) return; if(i<st.i||st.done) km+=p.sp*p.d/3600; }); return km; }
+function treadDone(st){ const km=treadKm(st), hs=hrSum(st.hr); TL.trKm=TL.trKm!=null&&TL.trFor===st.start?TL.trKm:num(km,2); TL.trFor=st.start;
+  if(st.saved) return `<div class="note" style="text-align:center">${ic('check')} Alergarea e salvată${hs?' cu pulsul mediu '+hs.avg+' bpm':''}.</div>`;
+  return `<div class="card"><div class="eyebrow">${ic('run')} Salvează alergarea</div>
+    <div class="form">${tlIn('trKm','Distanța (km), de pe bandă',{step:'0.01'})}<div class="fld"><label>Timp</label><div class="inp ro">${fmtClock(st.total)}</div></div></div>
+    <div class="xs mu" style="margin-top:6px">Am estimat distanța din viteze; corecteaz-o după afișajul benzii.${hs?' Puls mediu '+hs.avg+' bpm: alergarea intră și în calibrare.':''}</div>
+    <button class="btn pri wide" style="margin-top:10px" data-a="treadSave">${ic('check')} Salvează în alergări</button></div>`; }
+ACT.treadSave=async()=>{ const st=TM.st; if(!st||st.kind!=='tread'||st.saved) return; const km=tlN('trKm'); if(!(km>0&&km<100)) return shake('#tl_trKm');
+  const hs=hrSum(st.hr), r={date:todayKey(),kind:st.tread.kind==='thr'?'thr':st.tread.kind==='lng'?'lng':'ez',km:Math.round(km*100)/100,min:Math.round(st.total/6)/10,src:'tread',name:'Modul bandă'};
+  if(hs){ r.hr=hs.avg; r.hrMax=hs.max; } await save('runs',(S.runs||[]).concat([r])); st.saved=true; tmRender(); toast('Alergare salvată',num(r.km,2)+' km · '+fmtClock(st.total),'info'); };
+
+/* =====================================================================
+   v9 · PULS MAXIM MĂSURAT ȘI TESTUL DE PRAG (30 MIN)
+   Pulsul maxim: cel scris în profil; altfel estimat din vârstă (Tanaka), cu propunerea de a folosi cel mai mare puls
+   înregistrat în ultimul an (alergări și activități din Strava, antrenamente ZECE, cronometre), dacă e mai mare.
+   Testul de prag (Friel): 15 min încălzire, apoi 30 min cât de tare poți ține egal; pulsul mediu din ultimele 20 de minute
+   = pulsul la prag (LTHR), iar ritmul mediu pe 30 de minute = ritmul de prag. Ambele intră în profil, zone și viteze.
+   ===================================================================== */
+function hrMaxObs(){ const from=dayShift(todayKey(),-365); let b=null;
+  const t=(v,d,src)=>{ v=+v; if(v>=120&&v<=230&&d&&d>=from&&(!b||v>b.v)) b={v:Math.round(v),d,src}; };
+  (S.runs||[]).forEach(r=>t(r.hrMax,r.date,'alergare')); (S.ext||[]).forEach(x=>t(x.hrMax,x.date,stName(x.type)));
+  (S.hist||[]).forEach(h=>{ if(h.hr) t(h.hr.max,h.date,'antrenament'); }); (S.tmlog||[]).forEach(x=>{ if(x.hr) t(x.hr.max,x.date,x.title||'cronometru'); });
+  return b; }
+function hrMaxInfo(){ const P=prof(), est=Math.round(208-.7*P.age), ob=hrMaxObs();
+  if(+P.hrMax>0) return {v:Math.round(+P.hrMax),src:'măsurat',est,ob};
+  return {v:est,src:'din vârstă',est,ob,sug:ob&&ob.v>est?ob:null}; }
+ACT.hrMaxUse=async(el,{I})=>{ if(!(I>=120&&I<=230)) return; await save('prof',Object.assign({},S.prof||{},{hrMax:I})); STC=null;
+  if(SH&&SH.kind==='tool') shRender(); render(); toast('Puls maxim: '+I+' bpm','Zonele și vitezele folosesc acum pulsul tău măsurat.','info'); };
+
+/* ---------- testul de 30 de minute, pe cronometru ---------- */
+const P_LT30=()=>({title:'Test de prag · 30 min',kind:'lt30',ph:[
+  {k:'prep',d:10,l:'Pregătește-te',s:'15 minute de încălzire ușoară'},
+  {k:'work',d:900,l:'Încălzire',s:'Ușor, ultimele 2 minute mai alert',half:true},
+  {k:'work',d:600,l:'Test · minutele 1–10',s:'Cât de tare poți ține 30 de minute, egal. Nu porni prea tare.'},
+  {k:'work',d:1200,l:'Test · minutele 11–30',s:'Acum se măsoară pulsul. Ține ritmul până la capăt.',meas:true,half:true},
+  {k:'work',d:600,l:'Răcire',s:'Ușor, cât să-ți revină respirația'}]});
+function lt30Form(st){ const m=st.mh&&st.mh.n>=30?Math.round(st.mh.s/st.mh.n):null, hs=hrSum(st.hr);
+  if(TL.ltFor!==st.start){ TL.ltFor=st.start; TL.ltHr=m?String(m):''; TL.ltKm=''; TL.ltMax=hs?String(hs.max):''; }
+  if(st.saved) return `<div class="note" style="text-align:center">${ic('check')} Rezultatul e salvat în profil și în Teste.</div>`;
+  return `<div class="card"><div class="eyebrow">${ic('medal')} Rezultatul testului</div>
+    <div class="form">${tlIn('ltKm','Distanța în cele 30 de minute (km)',{step:'0.01',ph:'de pe bandă sau ceas'})}${tlIn('ltHr','Puls mediu, minutele 11–30',{step:'1',ph:m?'':'de pe ceas'})}
+      ${tlIn('ltMax','Puls maxim atins (opțional)',{step:'1',full:1})}</div>
+    <div class="xs mu" style="margin-top:6px">${m?'Pulsul mediu vine din senzor ('+st.mh.n+' citiri).':'Fără senzor conectat, ia pulsul mediu al ultimelor 20 de minute de pe ceas (Polar / Strava).'}</div>
+    <button class="btn pri wide" style="margin-top:10px" data-a="lt30Save">${ic('check')} Salvează rezultatul</button></div>`; }
+ACT.lt30Save=async()=>{ const st=TM.st; if(!st||st.kind!=='lt30'||st.saved) return;
+  const km=tlN('ltKm'), hr=Math.round(tlN('ltHr')||0), mx=Math.round(tlN('ltMax')||0);
+  if(!(hr>=100&&hr<=220)) return shake('#tl_ltHr'); if(km!=null&&TL.ltKm!==''&&!(km>1&&km<15)) return shake('#tl_ltKm');
+  const pace=km>0?30/km:null, o={lthr:hr}; if(pace) o.thrPace=Math.round(pace*1000)/1000; if(mx>=120&&mx<=230&&mx>hrMaxInfo().v) o.hrMax=mx;
+  await save('prof',Object.assign({},S.prof||{},o)); STC=null;
+  await save('ptests',(S.ptests||[]).concat([Object.assign({date:todayKey(),type:'lt30',value:hr},pace?{pace:Math.round(pace*1000)/1000,km:Math.round(km*100)/100}:{})]));
+  st.saved=true; tmRender(); toast('Pulsul la prag: '+hr+' bpm',pace?'Ritmul de prag: '+mmss(pace)+' /km. Zonele și vitezele s-au actualizat.':'Zonele și vitezele s-au actualizat.','info'); };
+ACT.lt30Go=()=>{ SH=null; shRender(); tmOpen(P_LT30()); };
+/* cardul din Performanță → Teste */
+function lt30Card(){ const P=prof(), h=(S.ptests||[]).filter(t=>t.type==='lt30'), last=h[h.length-1], H=hrMaxInfo();
+  return `<div class="card"><div class="row"><div class="sp"><div class="eyebrow">${ic('heart')} Test de prag · 30 min</div><div class="xs mu" style="margin-top:2px">pulsul la prag (LTHR) și ritmul de prag</div></div>
+      ${last?`<div style="text-align:right"><div class="big sm">${last.value}<small>bpm</small></div><div class="xs mu">${last.pace?mmss(last.pace)+' /km · ':''}${relDay(last.date)}</div></div>`:''}</div>
+    <div class="note">După 15 minute de încălzire, aleargă 30 de minute cât de tare poți ține egal, singur (nu în cursă). Pulsul mediu din ultimele 20 de minute e pulsul tău la prag; distanța dă ritmul de prag. Repetă-l la 6–8 săptămâni, odihnit.</div>
+    <div class="kpis c2"><div class="kpi"><div class="k">Puls maxim</div><div class="v">${H.v}<small>bpm</small></div><div class="s">${H.src}</div></div>
+      <div class="kpi"><div class="k">Puls la prag</div><div class="v">${+P.lthr>0?Math.round(+P.lthr):'—'}<small>${+P.lthr>0?'bpm':''}</small></div><div class="s">${+P.lthr>0?'din test':'fă testul'}</div></div></div>
+    ${H.sug?`<button class="chip" style="margin-top:10px" data-a="hrMaxUse" data-i="${H.sug.v}">${ic('heart')} Ai atins ${H.sug.v} bpm (${relDay(H.sug.d)}): folosește-l ca puls maxim</button>`:''}
+    <button class="btn pri wide" style="margin-top:12px" data-a="lt30Go">${ic('play')} Pornește testul ghidat</button></div>`; }
+const progTests0=progTests;
+progTests=()=>lt30Card()+progTests0();
 
 /* =====================================================================
    v9 · RESPIRAȚIE GHIDATĂ — un cerc care crește la inspir, stă pe loc la pauză și scade la expir.
@@ -8190,6 +8358,16 @@ ACT.cfGo=async()=>{
   toast('Ai revenit la ciclul '+P.p,P.moves.length?P.moves.length+(P.moves.length===1?' zi mutată':' zile mutate')+' din ciclul '+P.h+'.':'Continui de unde ai rămas.','',
     {l:'Anulează',f:async()=>{ await save('wlog',before.wlog); await save('hist',before.hist); await save('adj',before.adj); await save('cyc',Object.assign({},before.cyc||{},{t:Date.now()})); render(); toast('Corectarea a fost anulată','','info'); }});
 };
+
+/* v9: exercițiile de abdomen adăugate în plan (PLAN_ABS) ar face ca zilele deja terminate să pară neterminate.
+   O singură dată (și la importul unei copii mai vechi): o zi cu toate exercițiile vechi bifate primește bife și pentru cele noi. */
+async function planAbsMigrate(v){
+  if(v>=2) return; const log=Object.assign({},S.wlog||{}); let n=0;
+  Object.keys(log).forEach(k=>{ const m=/^hc(\d+)w(\d+)d(\d+)$/.exec(k); if(!m) return; const d=+m[3], pa=PLAN_ABS.find(x=>x[0]===d); if(!pa) return;
+    const o=log[k]||{}; let full=true; for(let x=0;x<pa[1];x++) if(!o[k+'e'+x]){ full=false; break; } if(!full) return;
+    const o2=Object.assign({},o); for(let x=pa[1];x<PLAN[d].ex.length;x++) o2[k+'e'+x]=1; log[k]=o2; n++; });
+  if(n) await save('wlog',log); await save('planV',2);
+}
 
 /* =====================================================================
    v8 · IMPORT / EXPORT — Excel (.xlsx real, generat în browser, fără biblioteci), CSV pe seturi de date,
@@ -8406,7 +8584,7 @@ async function loadAll(){
   /* conversațiile din v3 au alt set de unelte și alt prompt: le închidem, altfel istoricul nu mai corespunde */
   if(o.aiChat&&Array.isArray(o.aiChat.msgs)&&o.aiChat.msgs.length&&o.aiChat.ver!==4){ S.aiChat=null; AI.note='Conversația veche a fost închisă după actualizarea aplicației. Începe una nouă.'; await store.set(K.aiChat,null); }
   else S.aiChat=o.aiChat&&Array.isArray(o.aiChat.msgs)?Object.assign({tools:{}},o.aiChat):null;
-  await migrate(); await cfAchFix();
+  await migrate(); await cfAchFix(); await planAbsMigrate(+o.planV||0);
   STC=null; S.loaded=true;
 }
 /* migrări de date, la fiecare încărcare (și după import sau sincronizare):
