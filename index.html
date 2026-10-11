@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>ZECE — Hybrid365</title>
-<meta name="theme-color" content="#050506">
+<meta name="theme-color" content="#0E1013">
 <link rel="icon" type="image/svg+xml" href="icon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="manifest" href="manifest.webmanifest">
@@ -1522,6 +1522,219 @@ html.rm .rc-bars i.cur b{animation:none;width:100%}
 .ob-fb.on .setup-c{background:var(--ac);border-color:transparent;color:var(--on)}
 
 /* =====================================================================
+   ZECE v9 · design „Oțel"
+   Antracit în loc de negru pur (Setări → Aspect → Fundal: negru readuce varianta veche), accent albastru-oțel,
+   Acasă cu antrenamentul zilei direct pe poză, bandă foto în capul paginilor, pătrățele cu cifre, scurtături rotunde.
+   ===================================================================== */
+:root{
+  --bg:#0E1013; --bg-rgb:14,16,19;
+  --s1:#171A20; --s2:#1D2128; --s3:#272C34; --s4:#323843;
+  --tx:#F2F4F7; --mu:#A3ABB7; --mu2:#6E7683;
+  --glass:rgba(21,24,30,.86); --glass2:rgba(27,31,38,.95);
+  --sh-card:inset 0 1px 0 rgba(var(--w),.05),0 22px 44px -30px rgba(0,0,0,.9);
+  --fade:14,16,19;
+}
+html.bg-black:not([data-mode="light"]){
+  --bg:#050506; --bg-rgb:5,5,6; --s1:#0E0E10; --s2:#151517; --s3:#202023; --s4:#2B2B30;
+  --tx:#F4F4F5; --mu:#A1A1AA; --mu2:#6E6E78; --glass:rgba(13,13,16,.84); --glass2:rgba(22,22,26,.94); --fade:5,5,6;
+}
+html[data-mode="light"]{--fade:14,16,19}
+/* cu Oțel, alergarea e turcoaz: altfel s-ar confunda cu accentul albastru */
+html.th-otel{--run:#3CCBBB;--run-t:#8DE6DB;--rung:rgba(60,203,187,.5);--run-bg:rgba(60,203,187,.13)}
+html.th-otel[data-mode="light"]{--run:#0E8C80;--run-t:#0A6E65;--rung:rgba(14,140,128,.35);--run-bg:rgba(14,140,128,.10)}
+html.th-otel .bfb.run > i{background:linear-gradient(90deg,#1FA597,#7FE3D6)}
+.bfb.ok > i{background:linear-gradient(90deg,var(--ok),var(--ok-t))}
+body.ontop .top{background:linear-gradient(180deg,rgba(var(--fade),.62),rgba(var(--fade),0))}
+.cv-fd{background:linear-gradient(180deg,rgba(var(--fade),.5) 0,rgba(var(--fade),0) 26%,rgba(var(--fade),0) 46%,rgba(var(--fade),.72) 76%,var(--bg) 100%),linear-gradient(90deg,rgba(var(--fade),.5),rgba(var(--fade),0) 70%)}
+
+/* ---------- Acasă: antrenamentul pe poză ---------- */
+.cover.cv-hero{min-height:calc(540px + env(safe-area-inset-top));padding:0 18px 18px}
+.cover.cv-hero .cv-ph{background-position:50% 4%}
+.cover.cv-hero .cv-fd{background:linear-gradient(180deg,rgba(var(--fade),.55) 0,rgba(var(--fade),0) 20%,rgba(var(--fade),0) 34%,rgba(var(--fade),.62) 56%,rgba(var(--fade),.93) 80%,var(--bg) 100%),
+  radial-gradient(90% 50% at 0% 100%,rgba(var(--fade),.6),transparent 70%)}
+.cover .cv-t{width:100%}
+.cv-date{display:flex;justify-content:space-between;gap:12px;font:600 11px/1.2 var(--fb);letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.62);margin-bottom:16px}
+.cv-k{display:flex;align-items:center;gap:7px;font:700 12px/1.2 var(--fb);letter-spacing:.16em;text-transform:uppercase;color:#A9C6E4}
+html:not(.th-otel) .cv-k{color:rgba(255,255,255,.8)}
+.cv-k .i{width:15px;height:15px}
+.cv-k .dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 4px var(--ok-bg);animation:pulseS 1.6s ease-in-out infinite}
+.cv-h{font:700 50px/.95 var(--fd);text-transform:uppercase;letter-spacing:.01em;margin:8px 0 10px;color:#fff;
+  background:linear-gradient(180deg,#fff 35%,#AEB9C7);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 4px 18px rgba(0,0,0,.75))}
+.cv-m{display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px;font-size:14px;color:rgba(255,255,255,.8)}
+.cv-m span{display:inline-flex;align-items:center;gap:6px}
+.cv-m .i{width:15px;height:15px;opacity:.8}
+.cv-m .big{color:#fff}
+.cover .adjb{margin-top:10px}
+.cv-pb{height:3px;border-radius:3px;background:rgba(255,255,255,.14);margin-top:16px;overflow:hidden}
+.cv-pb > i{display:block;height:100%;border-radius:3px;background:linear-gradient(90deg,var(--lo),var(--ac2));box-shadow:0 0 12px var(--acg);transform-origin:left;animation:barIn .9s var(--e1) .2s both}
+html.th-onix .cv-pb > i{background:#fff}
+.cv-b{display:flex;gap:10px;margin-top:16px}
+.cv-b .btn.pri{flex:1}
+.btn.cv-alt{min-height:58px;padding:0 18px;border-radius:16px;font-size:15px;color:#fff;border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.08);
+  backdrop-filter:blur(14px) saturate(1.4);-webkit-backdrop-filter:blur(14px) saturate(1.4);box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}
+.btn.cv-alt .i{color:#A9C6E4}
+.cv-under .rd-row{margin-top:0;background:var(--s1)}
+.dash{margin-top:14px}
+.cv-card{padding:20px}
+.cv-card .cv-k,.cv-card .cv-m{color:var(--mu)} .cv-card .cv-h{-webkit-text-fill-color:currentColor;color:var(--tx);filter:none} .cv-card .btn.cv-alt{color:var(--tx);border-color:var(--ln2);background:var(--s2)}
+#view.anim .cv-hero .cv-t > *{animation:cvUp .8s var(--e1) both}
+#view.anim .cv-hero .cv-t > :nth-child(2){animation-delay:.08s} #view.anim .cv-hero .cv-t > :nth-child(3){animation-delay:.14s} #view.anim .cv-hero .cv-t > :nth-child(4){animation-delay:.2s}
+#view.anim .cv-hero .cv-t > :nth-child(5){animation-delay:.26s} #view.anim .cv-hero .cv-t > :nth-child(6){animation-delay:.32s} #view.anim .cv-hero .cv-t > :nth-child(7){animation-delay:.38s}
+@keyframes cvUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+
+/* pătrățelele „Pe scurt" */
+.bf-g{gap:10px}
+.bf{background:linear-gradient(180deg,rgba(var(--w),.035),transparent 60%),var(--bg);border-radius:16px;padding:13px 13px 12px}
+.bf b{font-size:30px}
+
+/* scurtăturile: butoane rotunde, în lateral pe telefon */
+.qr{display:flex;gap:4px;overflow-x:auto;scroll-snap-type:x proximity;margin:0 -16px;padding:4px 12px 6px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.qr::-webkit-scrollbar{display:none}
+.qr-b{appearance:none;position:relative;flex:none;width:78px;display:flex;flex-direction:column;align-items:center;gap:8px;border:0;background:none;color:var(--mu);
+  font:600 11.5px/1.2 var(--fb);cursor:pointer;scroll-snap-align:start;padding:2px 0;text-align:center}
+.qr-i{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;color:var(--ac);border:1px solid var(--ln2);
+  background:radial-gradient(120% 120% at 30% 15%,rgba(var(--w),.11),transparent 55%),var(--s2);box-shadow:var(--sh-card);transition:transform .15s var(--sp),border-color .2s,box-shadow .2s}
+.qr-i .i{width:24px;height:24px}
+.qr-b:active .qr-i{transform:scale(.88)}
+@media(hover:hover){.qr-b:hover{color:var(--tx)} .qr-b:hover .qr-i{border-color:var(--a40);box-shadow:0 0 22px -8px var(--acg)}}
+.qr-b input{position:absolute;inset:0;opacity:0;cursor:pointer}
+@media(min-width:760px){.qr{margin:0;padding:6px 0;flex-wrap:wrap;overflow:visible;gap:8px}}
+
+/* ---------- banda foto din capul paginilor ---------- */
+.band{position:relative;isolation:isolate;overflow:hidden;display:flex;align-items:flex-end;margin:calc(-68px - env(safe-area-inset-top)) -16px 2px;
+  min-height:calc(236px + env(safe-area-inset-top));padding:0 20px 16px;color:#F4F4F5}
+.band-ph{position:absolute;inset:0;z-index:0;background:var(--cover) 50% 6%/cover no-repeat;transform:translate3d(0,var(--py,0px),0) scale(1.08);transform-origin:50% 0;will-change:transform}
+.band-fd{position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(var(--fade),.6) 0,rgba(var(--fade),.15) 32%,rgba(var(--fade),.72) 70%,var(--bg) 100%),linear-gradient(90deg,rgba(var(--fade),.85),rgba(var(--fade),.15) 80%)}
+.band-t{position:relative;z-index:1;width:100%;min-width:0}
+.band .eyebrow{color:rgba(255,255,255,.68)}
+.band .h1{font-size:46px;margin:6px 0 4px;color:#fff;background:linear-gradient(180deg,#fff 35%,#AEB9C7);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 4px 16px rgba(0,0,0,.75))}
+.band-s{font-size:13.5px;color:rgba(255,255,255,.78)}
+.band .cv-pb{max-width:440px;margin-top:12px}
+.band + .seg{margin-top:12px!important}
+#view.anim .band .band-t > *{animation:cvUp .7s var(--e1) both}
+#view.anim .band .band-t > :nth-child(2){animation-delay:.06s} #view.anim .band .band-t > :nth-child(3){animation-delay:.12s} #view.anim .band .band-t > :nth-child(4){animation-delay:.18s}
+#view.anim .band-ph{animation:cvIn 1.6s cubic-bezier(.16,.7,.2,1) backwards}
+/* tema luminoasă și ecranele late: poza devine un card închis, cu colțuri rotunjite */
+html[data-mode="light"] .band{margin:6px 0 2px;min-height:190px;border-radius:var(--r-xl);box-shadow:var(--sh-card)}
+html[data-mode="light"] .band-fd{background:linear-gradient(180deg,rgba(var(--fade),.3) 0,rgba(var(--fade),.2) 35%,rgba(var(--fade),.85) 100%),linear-gradient(90deg,rgba(var(--fade),.8),rgba(var(--fade),.1) 80%)}
+html[data-mode="light"] .cover.cv-hero{min-height:470px}
+html[data-mode="light"] .cover.cv-hero .cv-fd{background:linear-gradient(180deg,rgba(var(--fade),.3) 0,rgba(var(--fade),0) 26%,rgba(var(--fade),.66) 58%,rgba(var(--fade),.94) 100%)}
+@media(min-width:1100px){
+  .band{margin:6px 0 2px;min-height:200px;border-radius:var(--r-xl);padding:0 32px 22px;box-shadow:var(--sh-card)}
+  .band-ph{background-position:50% 18%}
+  .band-fd{background:linear-gradient(180deg,rgba(var(--fade),.2) 0,rgba(var(--fade),.1) 30%,rgba(var(--fade),.8) 100%),linear-gradient(90deg,rgba(var(--fade),.9),rgba(var(--fade),.1) 70%)}
+  #view.lay-mas > .band{column-span:all}
+  .cover.cv-hero{min-height:440px;padding:0 32px 28px}
+  .cover.cv-hero .cv-ph{background-position:50% 16%}
+  .cover.cv-hero .cv-t{max-width:640px}
+  .cover.cv-hero .cv-fd{background:linear-gradient(180deg,rgba(var(--fade),.2) 0,rgba(var(--fade),0) 30%,rgba(var(--fade),.7) 75%,rgba(var(--fade),.92) 100%),linear-gradient(90deg,rgba(var(--fade),.85),rgba(var(--fade),0) 70%)}
+  .cv-h{font-size:60px}
+}
+@media(max-width:380px){.cv-h{font-size:42px}.band .h1{font-size:40px}}
+
+/* antetul planului (cifrele ciclului stau acum în bandă) */
+.plan-hd .h3{margin-bottom:3px}
+
+/* ---------- Viteza pentru alergare ---------- */
+.inp.ro{display:flex;align-items:center;gap:6px;background:transparent;border-style:dashed;color:var(--tx)}
+.inp.ro small{font-size:12px}
+.spd-now{margin-top:2px;padding:10px 12px;border-radius:12px;background:var(--a08);border:1px solid var(--a25);font-size:13.5px;line-height:1.45}
+.spd-r{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--ln)}
+.dsec h4 + .spd-r{border-top:0}
+.spd-r .sp b{display:block;font-size:14.5px}
+.spd-r .sp .xs{display:block;margin-top:2px}
+.spd-v{text-align:right;white-space:nowrap}
+.spd-v b{font:700 26px/1 var(--fd);font-variant-numeric:tabular-nums}
+.spd-v small{font:600 12px var(--fb);color:var(--mu);margin-left:3px}
+.spd-v .xs{display:block;margin-top:4px}
+.spd-r.main{margin:4px -12px;padding:14px 12px;border:1px solid var(--a40);border-radius:14px;background:linear-gradient(135deg,var(--a14),transparent 75%)}
+.spd-r.main .spd-v b{font-size:36px;color:var(--act)}
+.spd-r.main + .spd-r{border-top:0}
+
+/* ---------- Respirație ghidată ---------- */
+.br-st{position:relative;display:grid;place-items:center;height:270px;margin-top:8px}
+.br-st::before,.br-st::after{content:'';position:absolute;left:50%;top:50%;border-radius:50%;pointer-events:none;border:1px dashed var(--ln3)}
+.br-st::before{width:224px;height:224px;margin:-112px 0 0 -112px}
+.br-st::after{width:126px;height:126px;margin:-63px 0 0 -63px;border-style:solid;border-color:var(--ln2)}
+.br-c{position:absolute;left:50%;top:50%;width:224px;height:224px;margin:-112px 0 0 -112px;border-radius:50%;transform:scale(var(--sc,.56));will-change:transform}
+.br-g{position:absolute;inset:-34px;border-radius:50%;background:radial-gradient(closest-side,var(--a40),transparent);opacity:.9}
+.br-r{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 34% 28%,color-mix(in srgb,var(--ac) 45%,#fff),var(--ac) 48%,color-mix(in srgb,var(--ac) 60%,#000));
+  box-shadow:0 0 44px -6px var(--acg),inset 0 -14px 30px rgba(0,0,0,.22),inset 0 10px 24px rgba(255,255,255,.18)}
+.br-st:not(.on) .br-r{opacity:.55}
+.br-t{position:relative;z-index:1;display:grid;justify-items:center;color:var(--on);text-align:center;pointer-events:none}
+.br-st:not(.on) .br-t{color:var(--tx)}
+.br-t b{font:700 24px/1 var(--fd);text-transform:uppercase;letter-spacing:.06em}
+.br-t span{font:700 44px/1.05 var(--fd);font-variant-numeric:tabular-nums;min-height:4px}
+.br-t small{font-size:11.5px;opacity:.8}
+html.th-onix .br-r{background:radial-gradient(circle at 34% 28%,#fff,#D9D9DE 50%,#9A9AA3)}
+
+/* ---------- Activități ---------- */
+.act-tg{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:14px}
+.act-tb,.act-qb{appearance:none;display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 4px;border-radius:13px;border:1px solid var(--ln);background:var(--s2);color:var(--mu);
+  font:600 11px/1.15 var(--fb);cursor:pointer;text-align:center;transition:border-color .2s,background .2s,transform .12s var(--sp)}
+.act-tb .i,.act-qb .i{width:22px;height:22px}
+.act-tb:active,.act-qb:active{transform:scale(.94)}
+.act-tb.on{border-color:var(--a80);color:var(--tx);background:var(--a14);box-shadow:0 0 18px -8px var(--acg)}
+.act-tb.on .i,.act-qb .i{color:var(--ac)}
+.act-q{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
+.act-qb{padding:12px 4px;background:linear-gradient(180deg,rgba(var(--w),.04),transparent),var(--s2)}
+@media(hover:hover){.act-qb:hover,.act-tb:hover{border-color:var(--a40);color:var(--tx)}}
+.act-r{gap:10px}
+.ic-s.man{background:var(--a14);color:var(--act)}
+.linkb2{appearance:none;border:0;background:none;padding:0;color:inherit;font:inherit;cursor:pointer;text-align:left}
+.linkb2:disabled{cursor:default;color:inherit}
+@media(min-width:760px){.act-tg{grid-template-columns:repeat(7,1fr)}.act-q{grid-template-columns:repeat(7,1fr)}}
+
+/* ---------- animația de deschidere v9: cadran de cronometru ---------- */
+.intro{background:radial-gradient(70% 42% at 50% 64%,rgba(110,155,199,.17),transparent 70%),#0E1013}
+.in-ph{animation:inPh calc(var(--k) * 2.8s) cubic-bezier(.16,.7,.2,1) calc(var(--k) * 1.05s) both}
+.in-ph::after{background:radial-gradient(120% 70% at 50% 30%,transparent 35%,rgba(14,16,19,.72) 100%),linear-gradient(180deg,rgba(14,16,19,.55) 0,transparent 20%,transparent 40%,rgba(14,16,19,.86) 66%,#0E1013 90%)}
+.in-light{animation-delay:calc(var(--k) * 1.5s)}
+.in-flash{background:radial-gradient(55% 34% at 50% 60%,rgba(169,201,234,.32),transparent 70%);animation-delay:calc(var(--k) * 1.4s)}
+.in-c{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
+.in-lw{display:block;position:relative;width:180px;height:180px;margin:0 auto}
+.in-dial{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.in-ticks{color:rgba(255,255,255,.3);animation:inTicksLit calc(var(--k) * 1.1s) ease calc(var(--k) * 1.45s) both}
+.in-ticks line{stroke:currentColor;stroke-width:1.3;stroke-linecap:round;opacity:0;animation:inTick .3s ease calc(var(--k) * (.06s + var(--i) * .008s)) forwards}
+.in-ticks line.b{stroke-width:2.4}
+@keyframes inTick{to{opacity:1}}
+@keyframes inTicksLit{0%{color:rgba(255,255,255,.3)}22%{color:#E2EEF9}100%{color:rgba(156,192,228,.5)}}
+.in-track{fill:none;stroke:rgba(255,255,255,.08);stroke-width:3}
+.in-arc{fill:none;stroke:url(#inRingG);stroke-width:3.4;stroke-linecap:round;stroke-dasharray:1 1;stroke-dashoffset:1;opacity:0;filter:drop-shadow(0 0 5px rgba(110,155,199,.85));
+  animation:inArc calc(var(--k) * 1.1s) cubic-bezier(.65,0,.35,1) calc(var(--k) * .35s) forwards,inArcGlow calc(var(--k) * 1.1s) ease calc(var(--k) * 1.45s) forwards}
+@keyframes inArc{0%{stroke-dashoffset:1;opacity:0}6%{opacity:1}100%{stroke-dashoffset:0;opacity:1}}
+@keyframes inArcGlow{0%{stroke-width:3.4;opacity:1}18%{stroke-width:6;opacity:1;filter:drop-shadow(0 0 16px rgba(169,201,234,1))}100%{stroke-width:3.4;opacity:1}}
+.in-hand{transform-box:view-box;transform-origin:100px 100px;opacity:0;animation:inHand calc(var(--k) * 1.1s) cubic-bezier(.65,0,.35,1) calc(var(--k) * .35s) forwards}
+@keyframes inHand{0%{opacity:0;transform:rotate(0)}6%{opacity:1}94%{opacity:1}100%{opacity:0;transform:rotate(360deg)}}
+.in-head{fill:#fff}
+.in-headg{fill:rgba(169,201,234,.5);filter:blur(3px)}
+.in-cnt{position:absolute;inset:0;display:grid;place-items:center;font:700 66px/1 var(--fd);letter-spacing:.02em;font-variant-numeric:tabular-nums;
+  background:linear-gradient(180deg,#fff 35%,#9FB2C8);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;opacity:0;
+  animation:inCntIn .3s ease calc(var(--k) * .3s) forwards,inCntOut .4s ease calc(var(--k) * 1.45s) forwards}
+@keyframes inCntIn{to{opacity:1}}
+@keyframes inCntOut{from{opacity:1}to{opacity:0;transform:scale(1.3);filter:blur(8px)}}
+.intro .in-logo{position:absolute;left:50%;top:50%;width:86px;height:73px;margin:-37px 0 0 -43px;overflow:visible;opacity:0;
+  animation:inLogoIn .8s cubic-bezier(.2,.9,.25,1) calc(var(--k) * 1.45s) both}
+@keyframes inLogoIn{0%{opacity:0;transform:scale(1.4);filter:blur(6px) brightness(2)}35%{opacity:1;filter:blur(0) brightness(1.7) drop-shadow(0 0 20px rgba(169,201,234,.95))}100%{opacity:1;transform:none;filter:drop-shadow(0 0 12px rgba(156,192,228,.4))}}
+.in-lbar{filter:drop-shadow(0 0 4px rgba(156,192,228,.9))}
+.intro .in-ring{width:150px;height:150px;margin:-75px 0 0 -75px;border-color:rgba(169,201,234,.9);animation-delay:calc(var(--k) * 1.45s)}
+.intro .in-ring.r2{border-width:2px;border-color:rgba(255,255,255,.5);animation-delay:calc(var(--k) * 1.58s)}
+.in-word{font-size:54px;margin-top:24px}
+.in-word span{background:linear-gradient(180deg,#fff 30%,#A9B6C6);-webkit-background-clip:text;background-clip:text}
+.in-word span:nth-child(1){animation-delay:calc(var(--k) * 1.62s)}.in-word span:nth-child(2){animation-delay:calc(var(--k) * 1.7s)}
+.in-word span:nth-child(3){animation-delay:calc(var(--k) * 1.78s)}.in-word span:nth-child(4){animation-delay:calc(var(--k) * 1.86s)}
+.in-bar{background:linear-gradient(90deg,transparent,#9CC0E4,transparent);animation-delay:calc(var(--k) * 1.95s)}
+.in-sub{animation-delay:calc(var(--k) * 2.1s)}
+.in-skip{animation-delay:1.9s}
+@media(max-height:700px){.in-lw{width:150px;height:150px}.in-cnt{font-size:56px}.intro .in-logo{width:72px;height:61px;margin:-31px 0 0 -36px}.in-word{font-size:46px;margin-top:16px}}
+
+/* albastrul scris direct în componentele vechi devine turcoazul alergării, cu Oțel */
+html.th-otel .btn.blue{background:linear-gradient(180deg,#52D8C8,#1FA597);color:#04211E}
+html.th-otel .bar.run > i,html.th-otel .dist-r .b.run i,html.th-otel .spl-r .b i{background:linear-gradient(90deg,#1FA597,#7FE3D6)}
+html.th-otel .tm.rest{--tc:rgba(60,203,187,.22)}
+
+/* =====================================================================
    Mișcare · intrarea în ecran, apariția la derulare, grafice care se desenează.
    Mișcare redusă: după setarea sistemului („Automat") sau aleasă explicit în Setări.
    ===================================================================== */
@@ -1565,7 +1778,7 @@ html.rm *,html.rm *::before,html.rm *::after{animation-duration:.01ms!important;
 html.rm .burst,html.rm .flash,html.rm #pt{display:none}
 </style>
 <script>/* tema (întunecată / luminoasă) se aplică înainte de prima randare, ca să nu clipească */
-try{ var m=JSON.parse(localStorage.getItem('zece3:mode')||'"dark"'); if(m==='auto') m=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'; if(m==='light') document.documentElement.setAttribute('data-mode','light'); }catch(e){}</script>
+try{ var m=JSON.parse(localStorage.getItem('zece3:mode')||'"dark"'); if(m==='auto') m=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'; if(m==='light') document.documentElement.setAttribute('data-mode','light'); if(JSON.parse(localStorage.getItem('zece3:bg')||'"anthr"')==='black') document.documentElement.classList.add('bg-black'); }catch(e){}</script>
 </head>
 <body class="fx-normal">
 <canvas id="pt" aria-hidden="true"></canvas>
@@ -1574,16 +1787,18 @@ try{ var m=JSON.parse(localStorage.getItem('zece3:mode')||'"dark"'); if(m==='aut
 <div class="intro" id="intro" aria-hidden="true">
   <div class="in-ph"></div><div class="in-light"></div>
   <canvas id="introCv"></canvas><div class="in-flash"></div>
-  <div class="in-c"><div class="in-lw"><span class="in-ring"></span>
-    <svg class="in-logo" id="inLogo" viewBox="0 0 48 48">
-      <rect class="s" pathLength="1" x="1" y="1" width="46" height="46" rx="12" fill="#17171B" stroke="currentColor" style="color:var(--ac)"/>
-      <rect class="s" pathLength="1" x="13.2" y="12.4" width="5.8" height="19" fill="#F4F4F5" stroke="#F4F4F5"/>
-      <rect class="s" pathLength="1" x="8.6" y="26.8" width="14.8" height="4.6" fill="#F4F4F5" stroke="#F4F4F5"/>
-      <path class="s" pathLength="1" d="M8.9 16.6 L13.2 12.4 L13.2 18.6 L10.2 21.4 Z" fill="#F4F4F5" stroke="#F4F4F5"/>
-      <rect class="s" pathLength="1" x="26.4" y="12.4" width="13.6" height="19" rx="6.6" fill="#F4F4F5" stroke="#F4F4F5"/>
-      <rect class="s" pathLength="1" x="30.5" y="16.4" width="5.4" height="11" rx="2.6" fill="#17171B" stroke="#F4F4F5"/>
-      <rect class="s" pathLength="1" x="13.2" y="35.4" width="21.6" height="2.8" fill="currentColor" stroke="currentColor" style="color:var(--ac)"/>
-    </svg></div>
+  <div class="in-c"><div class="in-lw">
+    <svg class="in-dial" id="inDial" viewBox="0 0 200 200">
+      <defs><linearGradient id="inRingG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E2EEF9"/><stop offset=".4" stop-color="#9CC0E4"/><stop offset=".75" stop-color="#6E9BC7"/><stop offset="1" stop-color="#3C6690"/></linearGradient>
+        <linearGradient id="inMetal" x1="0" y1="12" x2="0" y2="32" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".42" stop-color="#E4EBF3"/><stop offset=".5" stop-color="#B9C7D6"/><stop offset="1" stop-color="#8396AC"/></linearGradient></defs>
+      <g class="in-ticks" id="inTicks"></g>
+      <circle class="in-track" cx="100" cy="100" r="74"/>
+      <circle class="in-arc" cx="100" cy="100" r="74" pathLength="1" transform="rotate(-90 100 100)"/>
+      <g class="in-hand"><circle class="in-headg" cx="100" cy="26" r="10"/><circle class="in-head" cx="100" cy="26" r="3.6"/></g>
+    </svg>
+    <div class="in-cnt" id="inCnt">01</div>
+    <svg class="in-logo" id="inLogo" viewBox="8 11 33 28"><path d="M13.2 12.4H19V26.8H23.4V31.4H8.6V26.8H13.2V18.6L10.2 21.4L8.9 16.6Z" fill="url(#inMetal)"/><path d="M33 12.4H33.4A6.6 6.6 0 0 1 40 19V24.8A6.6 6.6 0 0 1 33.4 31.4H33A6.6 6.6 0 0 1 26.4 24.8V19A6.6 6.6 0 0 1 33 12.4ZM33.1 16.4H33.3A2.6 2.6 0 0 1 35.9 19V24.8A2.6 2.6 0 0 1 33.3 27.4H33.1A2.6 2.6 0 0 1 30.5 24.8V19A2.6 2.6 0 0 1 33.1 16.4Z" fill="url(#inMetal)" fill-rule="evenodd"/><path class="in-lbar" d="M13.2 35.4H34.8V38.2H13.2Z" fill="#9CC0E4"/></svg>
+    <span class="in-ring"></span><span class="in-ring r2"></span></div>
     <div class="in-word"><span>Z</span><span>E</span><span>C</span><span>E</span></div>
     <div class="in-bar"></div>
     <div class="in-sub" id="inSub">Hybrid365</div>
@@ -1593,7 +1808,7 @@ try{ var m=JSON.parse(localStorage.getItem('zece3:mode')||'"dark"'); if(m==='aut
 
 <aside class="side" id="side" aria-label="Meniu"></aside>
 <header class="top"><div class="top-in">
-  <svg class="logo wait" viewBox="0 0 48 48" aria-hidden="true"><rect x="1" y="1" width="46" height="46" rx="12" fill="#17171B" stroke="currentColor" stroke-width="1.6" style="color:var(--ac)"/><rect x="13.2" y="12.4" width="5.8" height="19" fill="#F4F4F5"/><rect x="8.6" y="26.8" width="14.8" height="4.6" fill="#F4F4F5"/><path d="M8.9 16.6 L13.2 12.4 L13.2 18.6 L10.2 21.4 Z" fill="#F4F4F5"/><rect x="26.4" y="12.4" width="13.6" height="19" rx="6.6" fill="#F4F4F5"/><rect x="30.5" y="16.4" width="5.4" height="11" rx="2.6" fill="#17171B"/><rect x="13.2" y="35.4" width="21.6" height="2.8" fill="currentColor" style="color:var(--ac)"/></svg>
+  <svg class="logo wait" viewBox="0 0 48 48" aria-hidden="true"><rect x="1" y="1" width="46" height="46" rx="12" fill="#191D23" stroke="rgba(255,255,255,.14)"/><circle cx="24" cy="24" r="17" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="1.8"/><circle cx="24" cy="24" r="17" fill="none" stroke="currentColor" style="color:var(--ac)" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="85.5 107" transform="rotate(-90 24 24)"/><g transform="translate(9.42 9.22) scale(.6)"><path d="M13.2 12.4H19V26.8H23.4V31.4H8.6V26.8H13.2V18.6L10.2 21.4L8.9 16.6Z" fill="#F2F4F7"/><path d="M33 12.4H33.4A6.6 6.6 0 0 1 40 19V24.8A6.6 6.6 0 0 1 33.4 31.4H33A6.6 6.6 0 0 1 26.4 24.8V19A6.6 6.6 0 0 1 33 12.4ZM33.1 16.4H33.3A2.6 2.6 0 0 1 35.9 19V24.8A2.6 2.6 0 0 1 33.3 27.4H33.1A2.6 2.6 0 0 1 30.5 24.8V19A2.6 2.6 0 0 1 33.1 16.4Z" fill="#F2F4F7" fill-rule="evenodd"/><path d="M13.2 35.4H34.8V38.2H13.2Z" fill="currentColor" style="color:var(--ac)"/></g></svg>
   <div class="brand-w"><div class="brand">ZECE<small>Hybrid365</small></div></div>
   <button class="search-t" id="srchT" data-a="palOpen" aria-label="Caută sau scrie o comandă (Ctrl+K)"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><span>Caută sau scrie o comandă</span><kbd>Ctrl K</kbd></button>
   <button class="hr-live hrc off" id="hrTop" data-a="hrOpen" aria-label="Puls"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21.2l8.8-8.8a5.5 5.5 0 0 0 0-7.8z"/></svg><span class="v">—</span><span class="z"></span></button>
@@ -1757,9 +1972,9 @@ const K={lifts:'zece:lifts',weights:'zece:weights',runs:'zece:runs',wlog:'zece:w
   journal:'zece3:journal',tech:'zece3:tech',voice:'zece3:voice',recapSeen:'zece3:recap',
   mplan:'zece3:mplan',shop:'zece3:shop',mf:'zece3:mf',intro:'zece3:intro',motion:'zece3:motion',motionAsked:'zece3:motionAsked',
   ptests:'zece3:ptests',tmlog:'zece3:tmlog',adj:'zece3:adj',strava:'zece3:strava',ext:'zece3:ext',stq:'zece3:stq',look:'zece3:look',goals:'zece3:goals',supp:'zece3:supp',bk:'zece3:bk',exNote:'zece3:exnote',foods:'zece3:foods',shoes:'zece3:shoes',sync:'zece3:sync',mode:'zece3:mode',
-  dash:'zece3:dash',ach:'zece3:ach',notif:'zece3:notif',notifCfg:'zece3:notifCfg',exFav:'zece3:exfav',exCustom:'zece3:excustom'};
+  dash:'zece3:dash',bg:'zece3:bg',ach:'zece3:ach',notif:'zece3:notif',notifCfg:'zece3:notifCfg',exFav:'zece3:exfav',exCustom:'zece3:excustom'};
 const S={tab:'azi',lifts:{},weights:{},runs:[],wlog:{},cyc:{},runPlan:{},prof:{},mlog:{},hist:[],sess:null,sound:true,
-  aiKey:'',aiChat:null,aiEffort:'medium',aiUsed:0,water:{},body:{},theme:'onix',mode:'dark',fx:'normal',onb:false,seenAch:null,seenLvl:null,
+  aiKey:'',aiChat:null,aiEffort:'medium',aiUsed:0,water:{},body:{},theme:'otel',bg:'anthr',mode:'dark',fx:'normal',onb:false,seenAch:null,seenLvl:null,
   journal:{},tech:{},voice:true,recapSeen:0,photos:undefined,mSel:null,phPose:'fata',
   mplan:{},shop:{},mf:{port:false,cold:false},intro:'full',nTab:'azi',planDay:0,shopDays:7,motion:'auto',motionAsked:false,
   ptests:[],tmlog:[],twAttr:'str',twRange:90,ciOpen:null,adj:{},strava:{},ext:[],stq:[],mWin:7,shotN:1,shotF:'all',shotOpen:null,
@@ -1773,6 +1988,7 @@ const prof=()=>Object.assign({sex:'m',age:30,h:180,startW:90,goalW:80,act:1.55,d
    ===================================================================== */
 /* fiecare culoare de accent are o variantă pentru tema luminoasă (L): mai închisă, ca textul și liniile să rămână lizibile pe alb */
 const THEMES={
+  otel:{n:'Oțel',ac:'#6E9BC7',ac2:'#A9C6E4',hi:'#86AFD8',lo:'#5584B3',on:'#08111B',L:{ac:'#2F6496',ac2:'#4C82B8',hi:'#3A72A8',lo:'#265583',on:'#FFFFFF'}},
   onix:{n:'Onix',ac:'#F4F4F5',ac2:'#A1A1AA',hi:'#F4F4F5',lo:'#C9C9CE',on:'#0A0A0B',L:{ac:'#0D0D10',ac2:'#55555E',hi:'#2A2A30',lo:'#0D0D10',on:'#FFFFFF'}},
   jar:{n:'Jar',ac:'#FF4D2E',ac2:'#FF8A3D',hi:'#FF5C3D',lo:'#E5391D',on:'#FFFFFF',L:{ac:'#E23E1C',ac2:'#F07A2E',hi:'#EF4C2A',lo:'#CC3416',on:'#FFFFFF'}},
   neon:{n:'Neon',ac:'#A3E635',ac2:'#D9F99D',hi:'#B5F24A',lo:'#7CC21A',on:'#0B0F05',L:{ac:'#4F8F0E',ac2:'#78B81C',hi:'#5DA314',lo:'#43790B',on:'#FFFFFF'}},
@@ -1784,18 +2000,20 @@ const THEMES={
 /* tema: întunecată (implicit), luminoasă sau automată (după sistem) */
 const MQ_LIGHT=matchMedia('(prefers-color-scheme: light)');
 const modeNow=()=>S.mode==='light'||(S.mode==='auto'&&MQ_LIGHT.matches)?'light':'dark';
-const TH=()=>{ const b=THEMES[S.theme]||THEMES.onix; return modeNow()==='light'&&b.L?Object.assign({},b,b.L):b; };
+const TH=()=>{ const b=THEMES[S.theme]||THEMES.otel; return modeNow()==='light'&&b.L?Object.assign({},b,b.L):b; };
 function applyTheme(){ const m=modeNow(), t=TH(), h=document.documentElement, r=h.style;
   if(m==='light') h.setAttribute('data-mode','light'); else h.removeAttribute('data-mode');
   r.setProperty('--ac',t.ac); r.setProperty('--ac2',t.ac2); r.setProperty('--hi',t.hi); r.setProperty('--lo',t.lo); r.setProperty('--on',t.on);
-  Object.keys(THEMES).forEach(k=>h.classList.toggle('th-'+k,k===(THEMES[S.theme]?S.theme:'onix')));
-  const mt=document.querySelector('meta[name="theme-color"]'); if(mt) mt.setAttribute('content',m==='light'?'#F2F2EF':'#050506'); }
+  Object.keys(THEMES).forEach(k=>h.classList.toggle('th-'+k,k===(THEMES[S.theme]?S.theme:'otel')));
+  h.classList.toggle('bg-black',S.bg==='black');
+  const mt=document.querySelector('meta[name="theme-color"]'); if(mt) mt.setAttribute('content',m==='light'?'#F2F2EF':S.bg==='black'?'#050506':'#0E1013'); }
 try{ MQ_LIGHT.addEventListener('change',()=>{ if(S.mode==='auto'){ applyTheme(); render(); } }); }catch(e){}
 /* schimbarea temei, cu o tranziție scurtă doar pe culori */
 async function setMode(m){ if(['dark','light','auto'].indexOf(m)<0) return; const h=document.documentElement; h.classList.add('mode-tr');
   await save('mode',m); applyTheme(); render(); setTimeout(()=>h.classList.remove('mode-tr'),350); }
 ACT.modeToggle=()=>setMode(modeNow()==='light'?'dark':'light');
 ACT.modeSet=(el,{k})=>setMode(k);
+ACT.bgSet=async(el,{k})=>{ if(['anthr','black'].indexOf(k)<0) return; await save('bg',k); applyTheme(); render(); };
 /* poza de copertă (ecranul de pornire și „Azi"): build.ps1 o pune aici ca data:, versiunea online o ia din cover.jpg */
 const COVER='cover.jpg';
 if(COVER) document.documentElement.style.setProperty('--cover',`url("${COVER}")`);
@@ -2694,7 +2912,8 @@ function streakWeeks(){
 let gid=0;
 const isLight=()=>document.documentElement.getAttribute('data-mode')==='light';
 /* culorile semantice ca valori (atributele SVG și canvas-ul nu înțeleg var()) */
-const COL=()=>isLight()?{run:'#1F78DC',ok:'#12966A',warn:'#C27800',bad:'#D23A3A',z1:'#8A8A93',vio:'#7C4DE8',tx:'#0D0D10',mu:'#55555E',bg:'#F2F2EF',card:'#FFFFFF'}
+const COL=()=>{ const c=COL0(); if(S.theme==='otel'||!THEMES[S.theme]) c.run=isLight()?'#0E8C80':'#3CCBBB'; if(!isLight()&&S.bg!=='black'){ c.bg='#0E1013'; c.card='#15181D'; } return c; };
+const COL0=()=>isLight()?{run:'#1F78DC',ok:'#12966A',warn:'#C27800',bad:'#D23A3A',z1:'#8A8A93',vio:'#7C4DE8',tx:'#0D0D10',mu:'#55555E',bg:'#F2F2EF',card:'#FFFFFF'}
   :{run:'#4DA3FF',ok:'#3DDC97',warn:'#FFB020',bad:'#FF5C5C',z1:'#9AA0A8',vio:'#8B5CF6',tx:'#F4F4F5',mu:'#A1A1AA',bg:'#050506',card:'#0E0E10'};
 function ring(f,o={}){
   const s=o.s||44, sw=o.sw||4, r=s/2-sw/2-1, C=2*Math.PI*r, ff=clamp(f||0,0,1), c=s/2;
@@ -2886,19 +3105,25 @@ let STEST='';
 function briefCard(){
   const ws=wStats(), P=prof(), tk=todayKey(), tg=targets(), dt=dayTotals(tk), wat=waterOf(tk);
   const cur=ws?ws.a7:null, gp=cur!=null&&P.startW>P.goalW?clamp((P.startW-cur)/(P.startW-P.goalW),0,1):0;
-  const rs=runsIn(dayShift(tk,-6),tk), km7=sumKm(rs), n7=rs.length, pc=(a,b)=>(clamp(b>0?a/b:0,0,1)*100).toFixed(1);
+  const rs=runsIn(dayShift(tk,-6),tk), km7=sumKm(rs), n7=rs.length, pc=(a,b)=>(clamp(b>0?a/b:0,0,1)*100).toFixed(1), R=readiness(), AW=actWeek();
   return `<div class="card brief"><div class="eyebrow">${ic('chart')} Pe scurt · azi</div>
     <div class="bf-g">
       <button class="bf" data-a="goBody"><span class="k">${ic('scale')} Greutate</span>
         <b>${ws?`<span data-cnt="${num(ws.last.w)}" data-dec="1">${num(ws.last.w)}</span>`:'—'}<small>kg</small></b>
         <span class="s ${ws&&ws.wk!=null?(ws.wk<=0?'good':'bad'):''}">${ws&&ws.wk!=null?(ws.wk>0?'+':'')+num(ws.wk,2)+' kg / săpt.':ws?'mai cântărește-te câteva zile':'nicio cântărire'}</span>
         <i class="bfb" title="spre ${P.goalW} kg"><i style="width:${(gp*100).toFixed(1)}%"></i></i></button>
-      <button class="bf" data-a="tab" data-k="nutri"><span class="k">${ic('flame')} Mâncare</span>
-        <b>${Math.round(dt.k)}<small>/ ${tg.kcal} kcal</small></b><span class="s">${Math.round(dt.p)} / ${tg.p} g proteină</span>
-        <i class="bfb"><i style="width:${pc(dt.k,tg.kcal)}%"></i></i></button>
       <button class="bf" data-a="goRuns"><span class="k">${ic('run')} Alergare · 7 zile</span>
         <b>${km7.toFixed(1)}<small>km</small></b><span class="s">${n7} ${n7===1?'ieșire':'ieșiri'}</span>
         <i class="bfb run"><i style="width:${pc(n7,3)}%"></i></i></button>
+      <button class="bf" data-a="ciOpen"><span class="k">${ic('heart')} Recuperare</span>
+        <b>${R.v!=null?R.v:'—'}<small>/ 100</small></b><span class="s ${R.v!=null?(rdLabel(R.v)[1]==='good'?'good':rdLabel(R.v)[1]==='bad'?'bad':''):''}">${R.v!=null?esc(rdLabel(R.v)[0]):'fă check-in-ul de azi'}</span>
+        <i class="bfb ok"><i style="width:${R.v!=null?R.v:0}%"></i></i></button>
+      <button class="bf" data-a="tab" data-k="plan" data-s="acts"><span class="k">${ic('activity')} Activități</span>
+        <b>${AW.n}<small>${AW.n===1?'activitate':'activități'}</small></b><span class="s">${AW.n?'săpt. asta · '+num(AW.min,0)+' min':'bike, row, înot, tenis…'}</span>
+        <i class="bfb"><i style="width:${pc(AW.min,150)}%"></i></i></button>
+      <button class="bf" data-a="tab" data-k="nutri"><span class="k">${ic('flame')} Mâncare</span>
+        <b>${Math.round(dt.k)}<small>/ ${tg.kcal} kcal</small></b><span class="s">${Math.round(dt.p)} / ${tg.p} g proteină</span>
+        <i class="bfb"><i style="width:${pc(dt.k,tg.kcal)}%"></i></i></button>
       <button class="bf" data-a="tab" data-k="nutri"><span class="k">${ic('drop')} Apă</span>
         <b>${num(wat/1000,1)}<small>/ ${num(tg.water/1000,1)} L</small></b><span class="s">${wat>=tg.water?'ținta atinsă':'mai ai '+num(Math.max(0,tg.water-wat)/1000,1)+' L'}</span>
         <i class="bfb run"><i style="width:${pc(wat,tg.water)}%"></i></i></button></div>
@@ -2923,19 +3148,18 @@ function viewPlan(){
           ${e.kind==='lift'?`<button class="xb" data-a="tech" data-k="${esc(e.n)}" aria-label="Tehnică pentru ${esc(e.n)}">${ic('info')}</button>`:''}</div>`; }).join('')}
         <details class="notes"><summary>${ic('info')} ${esc(day.notes.wk)}</summary>
           ${day.notes.d.map(([t,x])=>`<p><b>${esc(t)}.</b> ${esc(x)}</p>`).join('')}</details>
-        <div class="day-act"><button class="btn pri wide" data-a="start" data-w="${w}" data-d="${d}">${ic('play')} ${dn&&dn<tot?'Continuă ziua':dn===tot?'Reia ziua':'Începe ziua'}</button></div>
+        <div class="day-act inrow"><button class="btn pri" style="flex:1" data-a="start" data-w="${w}" data-d="${d}">${ic('play')} ${dn&&dn<tot?'Continuă ziua':dn===tot?'Reia ziua':'Începe ziua'}</button>${day.run?`<button class="btn" data-a="spdOpen" data-d="${d}">${ic('gauge')} Viteza</button>`:''}</div>
       </div></div></div>`; }).join('');
   return `
-  <div class="card"><div class="eyebrow">Ciclul ${cyc()} · Hybrid365</div>
-    <div class="h2" style="margin-top:6px">Planul de 4 săptămâni</div>
+  <div class="card plan-hd"><div class="h3">Planul de 4 săptămâni</div>
     <div class="sm mu">3 alergări · 3 upper · 1 lower · 1 conditioning · 1 zi de recuperare</div>
-    <div class="bar"><i style="width:${(full/(WEEKS*7)*100).toFixed(1)}%"></i></div>
-    <div class="cyc-bar"><span>${full} din ${WEEKS*7} zile complete</span><span>${nx?'următorul: S'+(nx.w+1)+' · '+DAYN[nx.d]:'ciclu complet'}</span></div>
-    ${cycList().length?`<button class="btn ghost sm wide" style="margin-top:12px" data-a="cycOpen">${ic('star')} Raportul ciclului</button>`:''}</div>
+    ${COVER?'':`<div class="bar"><i style="width:${(full/(WEEKS*7)*100).toFixed(1)}%"></i></div>
+    <div class="cyc-bar"><span>${full} din ${WEEKS*7} zile complete</span><span>${nx?'următorul: S'+(nx.w+1)+' · '+DAYN[nx.d]:'ciclu complet'}</span></div>`}
+    ${cycList().length||cyc()>1?`<div class="inrow" style="margin-top:12px">${cycList().length?`<button class="btn ghost sm" style="flex:1" data-a="cycOpen">${ic('star')} Raportul ciclului</button>`:''}${cyc()>1?`<button class="btn ghost sm" style="flex:1" data-a="cfOpen">${ic('refresh')} Corectează ciclul</button>`:''}</div>`:''}</div>
   <div class="seg" role="tablist">${Array.from({length:WEEKS},(_,a)=>`<button class="${a===w?'on':''}" data-a="planW" data-i="${a}" role="tab" aria-selected="${a===w}">S${a+1}${weekFull(a)?` <span class="ok">${ic('check')}</span>`:''}</button>`).join('')}</div>
   ${days}
   <div class="card"><div class="row"><div class="sp"><div class="h3">Ciclu nou</div><div class="sm mu">Reia planul de la săptămâna 1. Istoricul rămâne.</div></div>
-    <button class="btn ghost sm" data-a="newCycle" data-confirm="Sigur? Apasă iar">${ic('refresh')} Ciclul ${cyc()+1}</button></div></div>`;
+    <button class="btn ghost sm" data-a="newCycle" data-confirm="${full<WEEKS*7?'Mai ai '+(WEEKS*7-full)+' zile. Sigur?':'Sigur? Apasă iar'}">${ic('refresh')} Ciclul ${cyc()+1}</button></div></div>`;
 }
 
 /* ---------- raportul ciclului: ce s-a schimbat între începutul și finalul celor 4 săptămâni ---------- */
@@ -3864,6 +4088,8 @@ function viewSet(){
   <div class="card"><div class="eyebrow">${ic('sun')} Temă</div>
     <div class="swatches">${[['dark','Întunecată','#050506'],['light','Luminoasă','#F2F2EF'],['auto','Automată','linear-gradient(135deg,#050506 50%,#F2F2EF 50%)']].map(([k,l,c])=>`<button class="swatch mode ${md===k?'on':''}" style="--c1:${k==='auto'?'var(--mu)':c}" data-a="modeSet" data-k="${k}"><i style="background:${c}"></i>${l}</button>`).join('')}</div>
     <div class="note">„Automată" urmează setarea telefonului sau a calculatorului (zi / noapte).</div>
+    <div class="sm" style="margin-top:14px;font-weight:600">Fundalul temei întunecate</div>
+    <div class="seg">${[['anthr','Antracit'],['black','Negru']].map(([k,l])=>`<button class="${(S.bg||'anthr')===k?'on':''}" data-a="bgSet" data-k="${k}">${l}</button>`).join('')}</div>
     <div class="sm" style="margin-top:14px;font-weight:600">Culoarea de accent</div>
     <div class="swatches">${Object.keys(THEMES).map(k=>{ const t=THEMES[k], v=modeNow()==='light'&&t.L?t.L:t; return `<button class="swatch ${S.theme===k?'on':''}" style="--c1:${v.ac};--c2:${v.ac2}" data-a="theme" data-k="${k}"><i></i>${t.n}</button>`; }).join('')}</div>
     <div class="sm" style="margin-top:14px;font-weight:600">Efecte vizuale</div>
@@ -3926,7 +4152,7 @@ function viewSet(){
       <button class="btn ghost" data-a="export" data-i="1">${ic('camera')} Copie cu poze</button>
       <label class="btn file-l">${ic('upload')} Restaurează<input type="file" id="impFile" accept="application/json,.json"></label></div>
     <div class="set-row" style="margin-top:12px"><span class="sp"><b>Ciclul ${cyc()}</b><div class="sm mu">${cycleDaysDone()} din ${WEEKS*7} zile bifate</div></span>
-      <button class="btn ghost sm danger" data-a="resetCycle" data-confirm="Sigur? Apasă iar">Șterge bifele</button></div></div>
+      ${cyc()>1?`<button class="btn ghost sm" data-a="cfOpen">Corectează</button>`:''}<button class="btn ghost sm danger" data-a="resetCycle" data-confirm="Sigur? Apasă iar">Șterge bifele</button></div></div>
   ${ioCard()}
   ${syncCard()}
   ${errCard()}
@@ -4746,7 +4972,7 @@ function snapshot(){
     return 'Ultimele alergări:\n'+rs.map(r=>`- ${r.date} ${RUNK[r.kind]||r.kind}: ${num(r.km,2)} km în ${num(r.min)} min (${fmtPace(paceOf(r))})`+(r.rpe?`, efort ${r.rpe}/10`:'')+(r.hr?`, puls mediu ${r.hr}`:'')+(r.sid?', din Strava':'')).join('\n')+
       `\nKm pe săptămână, ultimele 6 săptămâni (cea curentă la final): ${wk.join(', ')}.`; });
   sec('Antrenamente terminate',()=>(S.hist||[]).slice(-10).map(h=>`- ${h.date}: ${h.t} (ciclul ${h.cyc}, S${h.w+1}), ${Math.round(h.dur/60)} min, ${h.sets} serii`+(h.km?`, ${num(h.km,2)} km`:'')+(h.ready!=null?`, stare ${h.ready}/100`:'')+(h.rpe?`, RPE ${h.rpe}`:'')+(h.hr?`, puls mediu ${h.hr.avg} (max ${h.hr.max})`:'')).join('\n'));
-  sec('Alte antrenamente importate din Strava (ultimele 14 zile; ex. Polar Beat)',()=>(S.ext||[]).filter(x=>x.date>=dayShift(tk,-13)).sort((a,b)=>a.start-b.start)
+  sec('Alte antrenamente, importate din Strava (ex. Polar Beat) sau notate manual (ultimele 14 zile)',()=>(S.ext||[]).filter(x=>x.date>=dayShift(tk,-13)).sort((a,b)=>a.start-b.start)
     .map(x=>`- ${x.date} ${stName(x.type)}${x.name?' „'+x.name+'”':''}: ${num(x.min,0)} min`+(x.km?`, ${num(x.km,1)} km`:'')+(x.hr?`, puls mediu ${x.hr}`+(x.hrMax?` (max ${x.hrMax})`:''):'')+(x.rpe?`, efort ${x.rpe}/10`:'')+(x.dup?' — același antrenament ca o sesiune ZECE, numărat o singură dată':'')).join('\n'));
   sec('Readiness și profilul atletului (indicatori de antrenament, nu medicali)',()=>{ const R=readiness(), tw=twinNow();
     let s=R.v!=null?`Readiness azi: ${R.v}/100 (recuperare ${R.rec.v}, echilibru încărcare ${R.ls!=null?R.ls:'—'}). Factori: `+R.f.map(([v,t])=>(v>0?'+':'')+v+' '+t).join('; ')+'.':'Fără check-in azi.';
@@ -5378,7 +5604,7 @@ function render(){
   STC=null; ACTC=null; TWC=null; TGC=null; ADC=null; IXC=null; WLC=null;
   if(!VIEWS[S.tab]) S.tab='azi';
   const v=$('#view'), changed=S.tab!==lastTab;
-  v.innerHTML=VIEWS[S.tab]();
+  v.innerHTML=(COVER&&BANDS[S.tab]?bandHTML(S.tab):'')+VIEWS[S.tab]();
   v.classList.remove('lay-home','lay-narrow','lay-mas'); v.classList.add(VIEW_LAY[S.tab]||'lay-narrow'); v.dataset.tab=S.tab;
   if(changed){ const oi=NAV.findIndex(n=>n[0]===lastTab), ni=NAV.findIndex(n=>n[0]===S.tab);
     v.dataset.dir=oi<0||ni<0?'':ni>oi?'r':'l'; v.classList.remove('anim'); void v.offsetWidth; v.classList.add('anim'); lastTab=S.tab; countUp(v); reveal(v); }
@@ -5399,7 +5625,7 @@ document.addEventListener('pointermove',e=>{ if(e.pointerType!=='mouse') return;
   const r=c.getBoundingClientRect(); c.style.setProperty('--mx',(spEv.clientX-r.left).toFixed(0)+'px'); c.style.setProperty('--my',(spEv.clientY-r.top).toFixed(0)+'px'); }); },{passive:true});
 /* coperta de pe „Azi": antetul e transparent cât timp ești sus, iar poza urcă mai încet decât pagina */
 let cvRaf=0;
-function coverScroll(){ cvRaf=0; const ph=S.tab==='azi'?$('.cv-ph'):null, y=Math.max(0,scrollY);
+function coverScroll(){ cvRaf=0; const ph=$(S.tab==='azi'?'.cv-ph':'.band-ph'), y=Math.max(0,scrollY);
   /* antetul transparent peste poză doar pe telefon, în tema întunecată (în rest poza e un card separat) */
   document.body.classList.toggle('ontop',!!ph&&y<24&&!isLight()&&innerWidth<1100);
   if(ph) ph.style.setProperty('--py',motionOff()?'0px':(Math.min(y,500)*.35).toFixed(1)+'px'); }
@@ -5413,7 +5639,7 @@ function renderSide(){
   const sd=$('#side'); if(!sd) return;
   const it=([k,l,icn],kb)=>`<button class="sb ${S.tab===k?'on':''}" data-a="tab" data-k="${k}" ${S.tab===k?'aria-current="page"':''}>${ic(icn)}<span>${l}</span>${k==='coach'&&AI.busy&&S.tab!=='coach'?'<span class="cnt">·</span>':kb?`<span class="kb">${kb}</span>`:''}</button>`;
   const lt=modeNow()==='light';
-  sd.innerHTML=`<button class="side-br" data-a="tab" data-k="azi" aria-label="Acasă"><svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><rect x="1" y="1" width="46" height="46" rx="12" fill="#17171B" stroke="currentColor" stroke-width="1.6" style="color:var(--ac)"/><rect x="13.2" y="12.4" width="5.8" height="19" fill="#F4F4F5"/><rect x="8.6" y="26.8" width="14.8" height="4.6" fill="#F4F4F5"/><path d="M8.9 16.6 L13.2 12.4 L13.2 18.6 L10.2 21.4 Z" fill="#F4F4F5"/><rect x="26.4" y="12.4" width="13.6" height="19" rx="6.6" fill="#F4F4F5"/><rect x="30.5" y="16.4" width="5.4" height="11" rx="2.6" fill="#17171B"/><rect x="13.2" y="35.4" width="21.6" height="2.8" fill="currentColor" style="color:var(--ac)"/></svg>
+  sd.innerHTML=`<button class="side-br" data-a="tab" data-k="azi" aria-label="Acasă"><svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><rect x="1" y="1" width="46" height="46" rx="12" fill="#191D23" stroke="rgba(255,255,255,.14)"/><circle cx="24" cy="24" r="17" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="1.8"/><circle cx="24" cy="24" r="17" fill="none" stroke="currentColor" style="color:var(--ac)" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="85.5 107" transform="rotate(-90 24 24)"/><g transform="translate(9.42 9.22) scale(.6)"><path d="M13.2 12.4H19V26.8H23.4V31.4H8.6V26.8H13.2V18.6L10.2 21.4L8.9 16.6Z" fill="#F2F4F7"/><path d="M33 12.4H33.4A6.6 6.6 0 0 1 40 19V24.8A6.6 6.6 0 0 1 33.4 31.4H33A6.6 6.6 0 0 1 26.4 24.8V19A6.6 6.6 0 0 1 33 12.4ZM33.1 16.4H33.3A2.6 2.6 0 0 1 35.9 19V24.8A2.6 2.6 0 0 1 33.3 27.4H33.1A2.6 2.6 0 0 1 30.5 24.8V19A2.6 2.6 0 0 1 33.1 16.4Z" fill="#F2F4F7" fill-rule="evenodd"/><path d="M13.2 35.4H34.8V38.2H13.2Z" fill="currentColor" style="color:var(--ac)"/></g></svg>
       <div class="brand">ZECE<small>Hybrid365</small></div></button>
     <button class="side-search" data-a="palOpen">${ic('search')}<span>Caută sau comandă</span><kbd>Ctrl K</kbd></button>
     ${NAV.map((n,i)=>it(n,'Alt '+(i+1))).join('')}
@@ -5657,6 +5883,7 @@ async function stFlush(){
       await stPatch({own:(stCfg().own||[]).concat([aid]).slice(-500)});
       await save('stq',(S.stq||[]).filter(x=>x.key!==it.key));
       const h=(S.hist||[]).slice(), ix=h.findIndex(x=>String(x.end)===it.key); if(ix>=0){ h[ix]=Object.assign({},h[ix],{strava:aid}); await save('hist',h); }
+      const xe=(S.ext||[]).slice(), jx=xe.findIndex(x=>x.src==='manual'&&String(x.sid)===it.key); if(jx>=0){ xe[jx]=Object.assign({},xe[jx],{strava:aid}); await save('ext',xe); }
       ST.sum[it.key]='ok'; ST.msg=''; stSumPaint(it.key);
     }catch(e){ ST.sum[it.key]='err'; ST.msg=stErrText(e); stSumPaint(it.key); if(e.code!=='http') break; }
   }
@@ -5712,7 +5939,7 @@ function stCard(){
       <button class="btn ghost sm danger" data-a="stOff" data-confirm="Sigur? Apasă iar">Deconectează Strava</button></div></div>`;
 }
 function extCard(){
-  const xs=(S.ext||[]).slice().sort((a,b)=>(b.start||0)-(a.start||0)).slice(0,8); if(!xs.length) return '';
+  const xs=(S.ext||[]).filter(x=>x.src!=='manual').sort((a,b)=>(b.start||0)-(a.start||0)).slice(0,8); if(!xs.length) return '';
   return `<div class="card"><div class="eyebrow">${ic('refresh')} Alte antrenamente · din Strava</div><div style="margin-top:4px">
     ${xs.map(x=>`<div class="list-row"><span class="tag ${x.dup?'':'rest'}">${esc(stName(x.type))}</span><span class="sp"><b>${esc(x.name||stName(x.type))}</b> <span class="mu sm">· ${num(x.min,0)} min${x.km?' · '+num(x.km,1)+' km':''}${x.hr?' · '+x.hr+' bpm':''} · ${relDay(x.date)}</span>${x.dup?'<div class="xs mu">Același antrenament ca sesiunea ZECE: numărat o singură dată.</div>':''}</span>
       <button class="xb" data-a="extDel" data-k="${esc(x.sid)}" data-confirm="?" aria-label="Șterge">${ic('trash')}</button></div>`).join('')}</div>
@@ -5826,7 +6053,7 @@ document.addEventListener('click',async ev=>{
       if(j>=0&&j<h.length){ h[j]=Object.assign({},h[j],{rpe:I}); await save('hist',h); } buzz(10); renderFocus(); return; }
     case 'rdSkip': { const r=RD; RD=null; rdRender(); await startSess(r.w,r.d,null); return; }
     case 'rdClose': RD=null; rdRender(); return;
-    case 'newCycle': { const c=Object.assign({},S.cyc||{}); c.h=cyc()+1; await save('cyc',c); S.planW=0; S.openDay=-1; render(); toast('Ciclul '+cyc(),'Planul reîncepe de la săptămâna 1.'); return; }
+    case 'newCycle': { const c=Object.assign({},S.cyc||{}); c.h=cyc()+1; c.t=Date.now(); await save('cyc',c); S.planW=0; S.openDay=-1; render(); toast('Ciclul '+cyc(),'Planul reîncepe de la săptămâna 1.'); return; }
     case 'resetCycle': { const log=Object.assign({},S.wlog), pre='hc'+cyc()+'w'; Object.keys(log).forEach(x=>{ if(x.indexOf(pre)===0) delete log[x]; }); await save('wlog',log); render(); toast('Bife șterse','Ciclul '+cyc()+' reîncepe de la zero.','info'); return; }
     case 'wAdd': { const inp=$('#wIn'), v=parseFloat(String(inp&&inp.value||'').replace(',','.')); if(!(v>30&&v<400)){ shake('#wIn'); return; }
       /* o cântărire cu peste 6% față de media ultimelor zile e, de obicei, o greșeală de tastare: cer confirmare */
@@ -6072,7 +6299,7 @@ document.addEventListener('touchend',e=>{
 
 /* copie de siguranță — cheia API nu intră în export */
 const EXPORT_KEYS=['zece:lifts','zece:weights','zece:runs','zece:wlog','zece:cyc','zece:runPlan','zece:nutri','zece:mlog','zece3:hist','zece3:aiChat','zece3:aiEffort','zece3:sound',
-  'zece3:water','zece3:body','zece3:theme','zece3:fx','zece3:aiUsed','zece3:seenAch','zece3:lvl','zece3:journal','zece3:tech','zece3:voice','zece3:recap','zece3:mplan','zece3:shop','zece3:mf','zece3:intro','zece3:motion','zece3:ptests','zece3:tmlog','zece3:adj','zece3:onb','zece3:motionAsked','zece3:ext','zece3:goals','zece3:supp','zece3:exnote','zece3:foods','zece3:shoes','zece3:mode','zece3:dash','zece3:ach','zece3:notif','zece3:notifCfg','zece3:exfav','zece3:excustom','zece:tests','zece:shoes','zece:body','zece:gtg','zece:workouts','zece:counts','zece:curBlock'];
+  'zece3:water','zece3:body','zece3:theme','zece3:fx','zece3:aiUsed','zece3:seenAch','zece3:lvl','zece3:journal','zece3:tech','zece3:voice','zece3:recap','zece3:mplan','zece3:shop','zece3:mf','zece3:intro','zece3:motion','zece3:ptests','zece3:tmlog','zece3:adj','zece3:onb','zece3:motionAsked','zece3:ext','zece3:goals','zece3:supp','zece3:exnote','zece3:foods','zece3:shoes','zece3:mode','zece3:bg','zece3:dash','zece3:ach','zece3:notif','zece3:notifCfg','zece3:exfav','zece3:excustom','zece:tests','zece:shoes','zece:body','zece:gtg','zece:workouts','zece:counts','zece:curBlock'];
 async function doExport(withPh){
   const data={app:'ZECE',v:4,at:new Date().toISOString(),keys:{}};
   for(const k of EXPORT_KEYS){ const v=await store.get(k); if(v!=null) data.keys[k]=v; }
@@ -6105,7 +6332,7 @@ async function doImport(file){
    ===================================================================== */
 const SY={busy:false,msg:'',err:'',timer:0,applying:false,gen:0,lastAuto:0};
 const SY_FILE='zece-sync.json', SY_DESC='ZECE · sincronizare (criptat)', GH='https://api.github.com';
-const SYNC_KEYS=EXPORT_KEYS.filter(k=>['zece3:aiChat','zece3:theme','zece3:fx','zece3:intro','zece3:motion','zece3:motionAsked','zece3:sound','zece3:voice','zece3:onb','zece3:mode','zece3:notif'].indexOf(k)<0);
+const SYNC_KEYS=EXPORT_KEYS.filter(k=>['zece3:aiChat','zece3:theme','zece3:fx','zece3:intro','zece3:motion','zece3:motionAsked','zece3:sound','zece3:voice','zece3:onb','zece3:mode','zece3:bg','zece3:notif'].indexOf(k)<0);
 const syCfg=()=>S.sync||{};
 const syOn=()=>{ const c=syCfg(); return !!(c.tok&&c.gist&&c.pass); };
 const syOk=()=>!!(window.crypto&&crypto.subtle&&window.fetch);
@@ -6133,13 +6360,17 @@ async function syLocal(){ const o={}; for(const k of SYNC_KEYS){ const v=await s
 async function syApply(o){ SY.applying=true; try{ for(const k of SYNC_KEYS){ if(o[k]!==undefined) await store.set(k,o[k]); } const keep=S.sync; await loadAll(); S.sync=keep; } finally { SY.applying=false; } }
 const syHas=o=>['zece:weights','zece:lifts','zece:runs','zece:mlog','zece3:hist'].some(k=>{ const v=o[k]; return v&&(Array.isArray(v)?v.length:Object.keys(v).length); });
 /* unirea a două versiuni: nimic nu se pierde; la aceeași înregistrare modificată pe ambele, rămâne cea de pe dispozitivul acesta */
-function syMerge(L,R){ const out={}; new Set([...Object.keys(L),...Object.keys(R)]).forEach(k=>{ const a=L[k], b=R[k]; out[k]=a===undefined?b:b===undefined?a:syMergeKey(k,a,b); }); return out; }
+function syMerge(L,R){ const out={}; new Set([...Object.keys(L),...Object.keys(R)]).forEach(k=>{ const a=L[k], b=R[k]; out[k]=a===undefined?b:b===undefined?a:syMergeKey(k,a,b); });
+  /* bifele dintr-un ciclu mai mare decât cel curent (rămase de pe celălalt dispozitiv după o corectare) nu au cum să fie valabile */
+  const h=+((out['zece:cyc']||{}).h)||1, wl=out['zece:wlog']; if(wl&&typeof wl==='object'){ const o={}; Object.keys(wl).forEach(x=>{ const m=/^hc(\d+)w/.exec(x); if(!m||+m[1]<=h) o[x]=wl[x]; }); out['zece:wlog']=o; }
+  return out; }
 const SY_ID={'zece3:goals':x=>x.id,'zece3:ext':x=>'s'+x.sid,'zece3:shoes':x=>x.id,'zece3:foods':x=>x.n,'zece3:hist':x=>x.date+'|'+x.w+'|'+x.d+'|'+x.dur,
   'zece:runs':x=>x.sid?'s'+x.sid:x.date+'|'+x.km+'|'+x.min,'zece3:ptests':x=>x.date+'|'+x.type+'|'+x.value};
 function syMergeKey(k,a,b){
   if(k==='zece:lifts'&&a&&b&&typeof a==='object'){ const o=Object.assign({},b,a); Object.keys(o).forEach(n=>{ const m={}; (b[n]||[]).forEach(e=>m[e.d]=e);
       (a[n]||[]).forEach(e=>{ const x=m[e.d]; m[e.d]=!x||(e.s||[]).length>=(x.s||[]).length?e:x; }); o[n]=Object.values(m).sort((x,y)=>x.d<y.d?-1:x.d>y.d?1:0).slice(-80); }); return o; }
-  if(k==='zece:cyc') return {h:Math.max(+(a&&a.h)||1,+(b&&b.h)||1)};
+  /* ciclul: câștigă ultima schimbare (ciclu nou sau corectare); versiunile fără oră iau numărul mai mare */
+  if(k==='zece:cyc'){ const ta=+(a&&a.t)||0, tb=+(b&&b.t)||0; if(ta||tb) return ta>=tb?a:b; return {h:Math.max(+(a&&a.h)||1,+(b&&b.h)||1)}; }
   if(k==='zece3:aiUsed'||k==='zece3:recap') return Math.max(+a||0,+b||0);
   if(Array.isArray(a)&&Array.isArray(b)){ const id=SY_ID[k]||(x=>JSON.stringify(x)), seen=new Set(), out=[];
     a.concat(b).forEach(x=>{ const i=id(x); if(seen.has(i)) return; seen.add(i); out.push(x); });
@@ -6425,10 +6656,10 @@ function achAll(){
     ['t10','10 tone ridicate','Tonaj cumulat (kg × repetări)',(X._t||{})[10000]||null,[ton/1000,10]],
     ['t100','100 de tone ridicate','Tonaj cumulat (kg × repetări)',(X._t||{})[100000]||null,[ton/1000,100]],
     ['st4','4 săptămâni la rând','4 săptămâni consecutive cu cel puțin 3 zile active',streakWeeks()>=4?todayKey():null,[streakWeeks(),4]],
-    ['cyc','Primul ciclu complet','Toate cele 28 de zile ale unui ciclu Hybrid365',cycList().find(c=>c<cyc())||!nextDay()?(S.hist||[]).map(h=>h.date).sort().pop()||null:null,null]
+    ['cyc','Primul ciclu complet','Toate cele 28 de zile ale unui ciclu Hybrid365',cycDoneAny()?(S.hist||[]).map(h=>h.date).sort().pop()||null:null,null]
   ].map(([id,t,d,date,pr])=>({id,t,d,date,done:!!date,prog:pr&&!date?clamp(pr[0]/pr[1],0,1):null,pv:pr}));
   /* data păstrată la prima deblocare (seria de săptămâni poate scădea, realizarea rămâne) */
-  const seen=S.ach||{}; A.forEach(a=>{ if(seen[a.id]&&!a.done){ a.done=true; a.date=seen[a.id]; a.prog=null; } else if(seen[a.id]&&a.done&&seen[a.id]<a.date) a.date=seen[a.id]; });
+  const seen=S.ach||{}; A.forEach(a=>{ if(seen[a.id]&&!a.done&&a.id!=='cyc'){ a.done=true; a.date=seen[a.id]; a.prog=null; } else if(seen[a.id]&&a.done&&seen[a.id]<a.date) a.date=seen[a.id]; });
   X.ach=A; return A;
 }
 
@@ -6437,7 +6668,7 @@ function achAll(){
    apoi widgeturi pe care le rearanjezi, le ascunzi sau le alegi dintr-un layout gata făcut.
    ===================================================================== */
 const DASH_PRESETS={
-  bal:{n:'Echilibrat',d:'Antrenamentul, cifrele zilei și analiza',o:['next','adapt','week','brief','insights','goals','k1','prs','trend','recent','body','run','quick']},
+  bal:{n:'Echilibrat',d:'Antrenamentul, cifrele zilei și analiza',o:['next','adapt','week','brief','quick','insights','goals','k1','prs','trend','recent','body','run']},
   train:{n:'Antrenament',d:'Doar ce ai de făcut azi și săptămâna',o:['next','adapt','week','quick','prs','run','recent']},
   data:{n:'Analiză',d:'Tendințe, recorduri și obiective',o:['insights','trend','goals','k1','body','run','prs','load','heat','recent','ach']},
   min:{n:'Minimal',d:'Antrenamentul de azi și scurtăturile',o:['next','brief','quick']}
@@ -6463,7 +6694,8 @@ const WIDGETS={
   nutri:{t:'Nutriție azi',sz:'m',r:()=>wNutri()},
   ach:{t:'Realizări',sz:'m',r:()=>wAch()}
 };
-const dashCfg=()=>{ const d=S.dash||{}; const o=Array.isArray(d.o)?d.o.filter(id=>WIDGETS[id]):DASH_PRESETS.bal.o.slice(); return {o,p:d.p||(Array.isArray(d.o)?'':'bal')}; };
+/* un layout gata făcut, neatins după alegere, urmează mereu ordinea lui actuală (ex. scurtăturile urcă sub cifre în v9) */
+const dashCfg=()=>{ const d=S.dash||{}, pre=d.p&&DASH_PRESETS[d.p]; const o=Array.isArray(d.o)&&!pre?d.o.filter(id=>WIDGETS[id]):(pre||DASH_PRESETS.bal).o.slice(); return {o,p:d.p||(Array.isArray(d.o)?'':'bal')}; };
 /* „Cum stai acum": săptămâna curentă (de luni până azi) în câteva cifre reale */
 function nowLine(){
   const tk=todayKey(), m=mondayOf(tk), o=ixSum(m,tk), R=readiness(), bits=[];
@@ -6480,16 +6712,43 @@ function viewHome(){
   const rc=dow===6?0:dow<2?1:-1, cfg=dashCfg();
   const sys=[setupCard(),bkCard(),rc>=0?`<div class="card recap-cta" data-a="rcOpen" data-i="${rc}"><div class="cc-ic">${ic('star')}</div>
     <div class="sp"><div class="h3">Recapitularea săptămânii</div><div class="sm mu">${rc?'Săptămâna trecută':'Săptămâna asta'}, în povești animate</div></div>${ic('play')}</div>`:''].filter(Boolean);
-  const wl=cfg.o.map(id=>{ let h=''; try{ h=WIDGETS[id].r()||''; }catch(e){ errLog((e&&e.message)||e,'widget '+id); h=`<div class="card"><div class="err">${ic('alert')}<span>Widgetul „${esc(WIDGETS[id].t)}" nu a putut fi afișat.</span></div></div>`; }
+  /* v9: antrenamentul zilei stă pe poză (dacă widgetul lui e vizibil); restul widgeturilor vin dedesubt */
+  const heroOn=cfg.o.indexOf('next')>=0;
+  const wl=cfg.o.filter(id=>!(heroOn&&id==='next')).map(id=>{ let h=''; try{ h=WIDGETS[id].r()||''; }catch(e){ errLog((e&&e.message)||e,'widget '+id); h=`<div class="card"><div class="err">${ic('alert')}<span>Widgetul „${esc(WIDGETS[id].t)}" nu a putut fi afișat.</span></div></div>`; }
     return h?`<section class="wg wg-${WIDGETS[id].sz}" data-w="${id}">${h}</section>`:''; }).filter(Boolean);
-  /* primul widget (de obicei antrenamentul) rămâne primul; mementourile vin imediat după el */
-  const ws=wl.slice(0,1).join('')+(sys.length?`<section class="wg wg-l dash-sys">${sys.join('')}</section>`:'')+wl.slice(1).join('');
+  /* check-in-ul și ajustările antrenorului vin imediat sub poză, apoi mementourile, apoi widgeturile */
+  const under=heroOn&&!S.sess&&nextDay()?`<section class="wg wg-l cv-under">${rdRow()}</section>`:'';
+  const ws=under+(sys.length?`<section class="wg wg-l dash-sys">${sys.join('')}</section>`:'')+wl.join('');
+  let hero=''; if(heroOn){ try{ hero=coverHero(); }catch(e){ errLog((e&&e.message)||e,'widget next'); } }
   return `
-  ${COVER?`<div class="hello cover"><div class="cv-ph" aria-hidden="true"></div><div class="cv-fd" aria-hidden="true"></div>
-    <div class="cv-t"><div class="eyebrow">${esc(dstr)}</div><div class="h1">${hello}.</div><div class="cv-sub">${nowLine()}</div></div></div>`
-    :`<div class="hello"><div class="eyebrow">${esc(dstr)}</div><div class="h1">${hello}.</div><div class="sm mu">${nowLine()}</div></div>`}
-  <div class="dash">${wl.length?ws:(sys.length?`<section class="wg wg-l dash-sys">${sys.join('')}</section>`:'')}${wl.length?'':`<div class="card"><div class="empty">${ic('grid')}<div>Ai ascuns toate widgeturile.</div><button class="btn sm" data-a="dashEdit">${ic('sliders')} Alege ce vezi</button></div></div>`}</div>
+  ${COVER?`<div class="hello cover ${hero?'cv-hero':''}"><div class="cv-ph" aria-hidden="true"></div><div class="cv-fd" aria-hidden="true"></div>
+    <div class="cv-t"><div class="cv-date"><span>${esc(dstr)}</span><span>${hello}</span></div>${hero||`<div class="h1">${hello}.</div><div class="cv-sub">${nowLine()}</div>`}</div></div>`
+    :`<div class="hello"><div class="eyebrow">${esc(dstr)}</div><div class="h1">${hello}.</div><div class="sm mu">${nowLine()}</div></div>${hero?`<div class="card hero cv-card">${hero}</div>`:''}`}
+  <div class="dash">${ws}${wl.length||under||sys.length?'':`<div class="card"><div class="empty">${ic('grid')}<div>Ai ascuns toate widgeturile.</div><button class="btn sm" data-a="dashEdit">${ic('sliders')} Alege ce vezi</button></div></div>`}</div>
   <div class="dash-foot"><button class="btn ghost sm" data-a="dashEdit">${ic('sliders')} Personalizează Acasă</button></div>`;
+}
+/* antrenamentul zilei, așezat direct pe poză: ziua, titlul, ce conține, progresul și butoanele */
+function coverHero(){
+  const nx=nextDay();
+  if(S.sess){ const day=sessDay(S.sess), dn=day.ex.filter((_,x)=>sessIsDone(S.sess,x)).length;
+    return `<div class="cv-k"><span class="dot"></span> În desfășurare · ${DAYN[S.sess.d]} · S${S.sess.w+1}</div><div class="cv-h">${esc(day.t)}</div>
+      <div class="cv-m"><span class="big sm" id="heroClock">${fmtClock(sessSec())}</span><span>${dn}/${day.ex.length} exerciții</span></div>
+      <div class="cv-pb"><i style="width:${(dn/day.ex.length*100).toFixed(1)}%"></i></div>
+      <div class="cv-b"><button class="btn pri xl glow" data-a="fxOpen">${ic('play')} Continuă antrenamentul</button></div>`; }
+  if(!nx) return `<div class="cv-k">${ic('star')} Ciclul ${cyc()} · complet</div><div class="cv-h">Ai terminat cele 4 săptămâni</div>
+      <div class="cv-m"><span>Ciclul următor reia același plan.</span></div>
+      <div class="cv-b"><button class="btn pri xl glow" data-a="newCycle">${ic('refresh')} Începe ciclul ${cyc()+1}</button>${cycList().length?`<button class="btn cv-alt" data-a="cycOpen">${ic('star')} Raport</button>`:''}</div>`;
+  const day=dayFor(nx.w,nx.d), dn=doneCount(nx.w,nx.d), tot=day.ex.length, p=runPlan(), lifts=day.ex.filter(e=>e.kind==='lift').length;
+  const run=day.run==='thr'?(p.thr.r[nx.w]||0)+' × '+mmss(p.thr.m)+' la prag':day.run==='lng'?(p.lng.w[nx.w]||0)+' min long run':day.run?'Easy run '+((p[day.run]||{w:[]}).w[nx.w]||0)+' min':'';
+  const what=[run,lifts?lifts+' exerciții de forță':'',!run&&!lifts?tot+' exerciții':''].filter(Boolean).join(' + ');
+  const today=(new Date().getDay()+6)%7===nx.d;
+  return `<div class="cv-k">${today?'Azi':'Următorul'} · ${DAYN[nx.d]} · S${nx.w+1} · Ciclul ${cyc()}</div>
+    <div class="cv-h">${esc(day.t)}</div>
+    <div class="cv-m"><span>${esc(what)}</span><span>${ic('clock')} ${day.min} min</span></div>
+    ${day.adj?`<div class="adjb">${ic('coach')} Cu ajustările antrenorului adaptiv</div>`:''}
+    <div class="cv-pb" title="${dn} din ${tot} exerciții"><i style="width:${(dn/tot*100).toFixed(1)}%"></i></div>
+    <div class="cv-b"><button class="btn pri xl glow" data-a="start" data-w="${nx.w}" data-d="${nx.d}">${ic('play')} ${dn?'Continuă':'Începe'}</button>
+      ${day.run?`<button class="btn cv-alt" data-a="spdOpen" data-d="${nx.d}">${ic('gauge')} Viteza</button>`:`<button class="btn cv-alt" data-a="openDay" data-w="${nx.w}" data-d="${nx.d}">${ic('list')} Exerciții</button>`}</div>`;
 }
 /* cardul antrenamentului: în desfășurare, ciclu terminat sau următoarea zi din plan */
 function heroHTML(){
@@ -6595,14 +6854,13 @@ function wRun(){
 }
 /* „Notează greutatea": deschide Corp și pune cursorul în câmpul de greutate */
 ACT.wFocus=()=>{ S.tab='prog'; S.progTab='b'; render(); window.scrollTo({top:0}); requestAnimationFrame(()=>{ const i=$('#wIn'); if(i){ i.scrollIntoView({block:'center'}); i.focus(); } }); };
+/* v9: scurtăturile sunt un rând de butoane rotunde (pe telefon se derulează în lateral) */
 function wQuick(){
-  return `<div class="qa qa6">
-    <button class="qa-b" data-a="tmList">${ic('clock')}<span>Cronometru</span></button>
-    <button class="qa-b" data-a="wFocus">${ic('scale')}<span>Notează greutatea</span></button>
-    <button class="qa-b" data-a="tab" data-k="prog" data-s="r" data-f="runForm">${ic('run')}<span>Notează alergare</span></button>
-    <label class="qa-b">${ic('camera')}<span>Scanează masa</span><input type="file" accept="image/*" capture="environment" data-scan="1" aria-label="Scanează o masă"></label>
-    <button class="qa-b" data-a="water" data-i="250">${ic('drop')}<span>+250 ml apă</span></button>
-    <button class="qa-b" data-a="toolOpen">${ic('tool')}<span>Unelte</span></button></div>`;
+  const it=[['tmList','clock','Cronometru'],['actAdd','plus','Activitate',' data-k="Ride"'],['spdOpen','gauge','Viteza'],['toolGo','wind','Respirație',' data-k="br"'],
+    ['wFocus','scale','Greutate'],['tab','run','Alergare',' data-k="prog" data-s="r" data-f="runForm"'],['water','drop','+250 ml',' data-i="250"']];
+  return `<div class="qr" role="group" aria-label="Acțiuni rapide">${it.map(([a,icn,l,x])=>`<button class="qr-b" data-a="${a}"${x||''}><span class="qr-i">${ic(icn)}</span><span>${l}</span></button>`).join('')}
+    <label class="qr-b"><span class="qr-i">${ic('camera')}</span><span>Scanează</span><input type="file" accept="image/*" capture="environment" data-scan="1" aria-label="Scanează o masă"></label>
+    <button class="qr-b" data-a="toolOpen"><span class="qr-i">${ic('tool')}</span><span>Unelte</span></button></div>`;
 }
 function wNutri(){ const tk=todayKey(), tg=targets(), d=dayTotals(tk);
   return `<div class="card">${wHead('flame','Nutriție azi',`data-a="tab" data-k="nutri"`)}<div class="row" style="margin-top:10px">${ringsNut(tk,64).join('')}
@@ -7082,7 +7340,7 @@ function timelineItems(a,b){
     s:[Math.round((+h.dur||0)/60)+' min',h.sets?h.sets+' serii':'',h.vol?num(h.vol/1000,1)+' t':'',h.km?num(h.km,1)+' km':'',h.prs?h.prs+(h.prs===1?' record':' recorduri'):''].filter(Boolean).join(' · '),a:'histOpen',i,ord:h.end||0}); });
   X.days.forEach(d=>{ if(!inR(d)) return; const o=X.day[d]; if(o.sets&&!o.hist.length) out.push({d,k:'wo',icon:'dumbbell',t:'Serii notate',s:o.sets+' serii · '+Object.keys(o.ex).slice(0,3).join(', ')+(Object.keys(o.ex).length>3?'…':''),a:'dayOpen',k2:d,ord:1});
     o.tm.forEach(t=>out.push({d,k:'wo',icon:'clock',t:t.title||'Cronometru',s:fmtClock(t.total)+(t.rounds?' · '+t.rounds+' runde':''),ord:2}));
-    o.ext.forEach(x=>out.push({d,k:'wo',icon:'refresh',t:stName(x.type)+(x.name?' · '+x.name:''),s:num(x.min,0)+' min'+(x.km?' · '+num(x.km,1)+' km':'')+' · Strava',ord:x.start||3})); });
+    o.ext.forEach(x=>out.push({d,k:'wo',icon:actIcon(x.type),t:stName(x.type)+(x.name?' · '+x.name:''),s:num(x.min,0)+' min'+(x.km?' · '+num(x.km,1)+' km':'')+(x.src==='manual'?'':' · Strava'),ord:x.start||3})); });
   (S.runs||[]).forEach((r,i)=>{ if(!inR(r.date)) return; out.push({d:r.date,k:'run',icon:'run',t:(RUNK[r.kind]||'Alergare')+' · '+num(r.km,2)+' km',s:fmtClock((+r.min||0)*60)+' · '+fmtPace(paceOf(r))+(r.hr?' · '+r.hr+' bpm':'')+(r.sid?' · Strava':''),a:'runOpen',i,ord:4}); });
   prBook().ev.forEach(p=>{ if(!inR(p.d)) return; if(p.cat==='rep') return; out.push({d:p.d,k:'pr',icon:'trophy',t:'Record · '+prName(p),s:(p.prev!=null?(p.cat==='pace'?mmss(p.prev)+' /km':p.cat==='time'?fmtClock(p.prev):num(p.prev,1))+' → ':'')+prVal(p),a:'tab',k2:'prog',s2:'pr',ord:5}); });
   goalsAll().forEach(g=>{ if(g.d0&&inR(g.d0)&&g.id!=='wt') out.push({d:g.d0,k:'goal',icon:'target',t:'Obiectiv nou · '+goalTitle(g),s:'pornit de la '+goalFmt(g,g.from),a:'goalOpen',k2:g.id,ord:6});
@@ -7370,10 +7628,10 @@ SHEETS.ex=()=>exHTML();
 /* =====================================================================
    v8 · ANTRENAMENT — Plan Hybrid365 (neschimbat) · Istoric.
    ===================================================================== */
-const TR_TABS=[['plan','Plan','plan'],['hist','Istoric','history']];
+const TR_TABS=[['plan','Plan','plan'],['acts','Activități','activity'],['hist','Istoric','history']];
 function viewTrain(){
   const T=TR_TABS.some(t=>t[0]===S.trTab)?S.trTab:'plan';
-  const body=T==='hist'?trainHist():viewPlan();
+  const body=T==='hist'?trainHist():T==='acts'?viewActs():viewPlan();
   return `<div class="seg scr" style="margin-top:6px">${TR_TABS.map(t=>`<button class="${T===t[0]?'on':''}" data-a="trTab" data-k="${t[0]}">${ic(t[2])} ${t[1]}</button>`).join('')}</div>${body}`;
 }
 ACT.trTab=(el,{k})=>{ S.trTab=k; render(); window.scrollTo({top:0}); };
@@ -7392,6 +7650,20 @@ function trainHist(){
     +(Object.keys(by).length>ks.length?`<button class="btn ghost wide" style="margin-top:12px" data-a="thMore">${ic('down')} Lunile anterioare</button>`:'');
 }
 ACT.thMore=()=>{ S.thN=(S.thN||6)+6; render(); };
+
+/* =====================================================================
+   v9 · BANDA DE SUS — paginile principale încep cu o bandă din poza de pe copertă, cu titlul și cifra-cheie a paginii,
+   în același stil cu Acasă (antetul e transparent peste ea cât timp ești sus).
+   ===================================================================== */
+const BANDS={
+  plan:()=>{ const nx=nextDay(), full=cycleDaysDone(); return {e:'Ciclul '+cyc()+' · Hybrid365',t:'Antrenament',s:full+' din '+WEEKS*7+' zile complete'+(nx?' · următorul: S'+(nx.w+1)+' · '+DAYN[nx.d]:' · ciclu complet'),p:full/(WEEKS*7)}; },
+  prog:()=>{ const tk=todayKey(), o=ixSum(dayShift(tk,-29),tk); return {e:'Ultimele 30 de zile',t:'Performanță',s:[o.days+(o.days===1?' zi activă':' zile active'),o.vol>0?num(o.vol/1000,1)+' t ridicate':'',o.km>0?num(o.km,1)+' km alergați':''].filter(Boolean).join(' · ')}; },
+  nutri:()=>{ const tk=todayKey(), tg=targets(), d=dayTotals(tk); return {e:'Azi',t:'Nutriție',s:Math.round(d.k)+' / '+tg.kcal+' kcal · '+Math.round(d.p)+' / '+tg.p+' g proteină',p:tg.kcal>0?clamp(d.k/tg.kcal,0,1):0}; },
+  set:()=>({e:'ZECE · Hybrid365',t:'Setări',s:'Profil, aspect, conexiuni și datele tale'})
+};
+function bandHTML(k){ let b=null; try{ b=BANDS[k](); }catch(e){ errLog((e&&e.message)||e,'band '+k); return ''; }
+  return `<div class="band" data-b="${k}"><div class="band-ph" aria-hidden="true"></div><div class="band-fd" aria-hidden="true"></div>
+    <div class="band-t"><div class="eyebrow">${esc(b.e)}</div><div class="h1">${esc(b.t)}</div><div class="band-s">${esc(b.s)}</div>${b.p!=null?`<div class="cv-pb"><i style="width:${(b.p*100).toFixed(1)}%"></i></div>`:''}</div></div>`; }
 
 /* =====================================================================
    v8 · PALETA DE COMENZI (Ctrl+K) — căutare globală instantă, comenzi, navigare și
@@ -7630,6 +7902,296 @@ ACT.swLap=()=>{ const t=swEl(), prev=SW.laps[0]?SW.laps[0].t:0; SW.laps.unshift(
 ACT.swReset=()=>{ SW.on=false; SW.acc=0; SW.laps=[]; clearInterval(SW.iv); SW.iv=0; swRe(); };
 
 /* =====================================================================
+   v9 · iconițe noi: activitățile din afara planului și respirația
+   ===================================================================== */
+Object.assign(IC,{
+  bike:'<circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><circle cx="15" cy="5" r="1"/><path d="M12 17.5V14l-3-3 4-3 2 3h2"/>',
+  fan:'<path d="M10.8 16.4a6.1 6.1 0 0 1-8.6-7l5.4 1.4a6.1 6.1 0 0 1 7-8.6l-1.4 5.4a6.1 6.1 0 0 1 8.6 7l-5.4-1.4a6.1 6.1 0 0 1-7 8.6l1.4-5.4z"/><path d="M12 12v.01"/>',
+  row:'<path d="M2 19h20"/><path d="M5 19l1.5-3h11L19 19"/><path d="M4 4l10 12"/><circle cx="15.5" cy="6.5" r="2"/>',
+  walk:'<path d="M4 16v-2.4C4 11.5 3 10.5 3 8c0-2.7 1.5-6 4.5-6C9.4 2 10 3.8 10 5.5c0 3.1-2 5.7-2 8.7V16a2 2 0 1 1-4 0z"/><path d="M20 20v-2.4c0-2.1 1-3.1 1-5.6 0-2.7-1.5-6-4.5-6-1.9 0-2.5 1.8-2.5 3.5 0 3.1 2 5.7 2 8.7V20a2 2 0 1 0 4 0z"/><path d="M16 17h4M4 13h4"/>',
+  wave:'<path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>',
+  racket:'<circle cx="9.5" cy="9.5" r="6"/><path d="M13.8 13.8L20 20"/><path d="M5.5 9.5h8M9.5 5.5v8"/><circle cx="19" cy="5" r="1.5"/>',
+  ball:'<circle cx="12" cy="12" r="9"/><path d="M12 7.5l4 2.9-1.5 4.6h-5L8 10.4z"/><path d="M12 3v4.5M21 10.4l-5-.1M17.6 19.2l-3.1-4.2M6.4 19.2l3.1-4.2M3 10.4l5-.1"/>',
+  wind:'<path d="M12.8 19.6A2 2 0 1 0 14 16H2"/><path d="M17.5 8a2.5 2.5 0 1 1 2 4H2"/><path d="M9.8 4.4A2 2 0 1 1 11 8H2"/>'
+});
+
+/* =====================================================================
+   v9 · VITEZA PENTRU ALERGARE — scrii viteza și pulsul de acum (ex. 7 km/h la 140 bpm), alegi ziua din plan
+   și primești viteza de bandă pentru fiecare bucată: încălzire, reprize, pauze, răcire.
+   Model: în alergare, pulsul crește aproape liniar cu viteza. Ecuația ACSM pentru alergare (VO2 = 3,5 + 0,2·v)
+   și echivalența %rezervă de puls ≈ %rezervă VO2 (Swain 1997) dau v = v0 · (puls țintă − repaus) / (puls acum − repaus).
+   Dacă ai destule alergări cu puls din ultimele 4 luni, panta vine din ele, iar punctul de azi o așază pe forma zilei.
+   Zonele țintă sunt aceleași ca în „Zone de puls" (Karvonen): Z2 60–70%, Z4 (prag) 80–90% din rezerva de puls.
+   ===================================================================== */
+const SPD_DAYS=[[0,'Luni','ez1'],[1,'Marți','thr'],[3,'Joi','ez2'],[5,'Sâmbătă','lng']];
+const SPD_K='zece3:spd';
+/* pulsul de repaus: din profil, altfel mediana check-in-urilor din ultimele 14 zile */
+function restHR(){ const P=prof(); if(+P.hrRest>0) return {v:+P.hrRest,src:'din profil'};
+  const tk=todayKey(), xs=[]; for(let i=0;i<14;i++){ const j=(S.journal||{})[dayShift(tk,-i)]; if(j&&+j.rhr>=30&&+j.rhr<=120) xs.push(+j.rhr); }
+  if(!xs.length) return null; xs.sort((a,b)=>a-b); return {v:xs[Math.floor(xs.length/2)],src:'mediana check-in-urilor din ultimele 14 zile'}; }
+/* panta personală (km/h pe bătaie) din alergările cu puls; doar dacă datele sunt destule și coerente */
+function spdFit(){
+  const from=dayShift(todayKey(),-120), pts=(S.runs||[]).filter(r=>r.date>=from&&+r.hr>=90&&+r.km>=1&&+r.min>0).map(r=>[+r.hr,r.km/(r.min/60)]).filter(p=>p[1]>=5&&p[1]<=25);
+  if(pts.length<6) return null; const n=pts.length, mx=pts.reduce((a,p)=>a+p[0],0)/n, my=pts.reduce((a,p)=>a+p[1],0)/n;
+  let sxy=0,sxx=0,syy=0; pts.forEach(([x,y])=>{ sxy+=(x-mx)*(y-my); sxx+=(x-mx)*(x-mx); syy+=(y-my)*(y-my); });
+  const hs=pts.map(p=>p[0]); if(Math.max(...hs)-Math.min(...hs)<12||!sxx||!syy) return null;
+  const b=sxy/sxx, r=sxy/Math.sqrt(sxx*syy); return b>=.03&&b<=.25&&r>=.5?{b,n,r}:null; }
+/* ultima alergare cu puls: punctul de pornire propus */
+function spdLastRun(){ return (S.runs||[]).filter(r=>+r.hr>=90&&+r.km>0&&+r.min>0).sort((a,b)=>a.date<b.date?1:-1)[0]||null; }
+/* ziua implicită: azi, dacă e zi cu alergare, altfel următoarea zi cu alergare din săptămână */
+function spdDefDay(){ const dow=(new Date().getDay()+6)%7; for(let i=0;i<7;i++){ const d=(dow+i)%7; if(SPD_DAYS.some(x=>x[0]===d)) return d; } return 1; }
+/* săptămâna din ciclu în care urmează ziua aleasă */
+function spdWeek(d){ if(S.sess&&S.sess.d===d) return S.sess.w; for(let w=0;w<WEEKS;w++) if(!dayFull(w,d)) return w; return WEEKS-1; }
+function spdSegs(kind,w){ const p=runPlan();
+  if(kind==='thr'){ const r=p.thr.r[w]||0; return [['Încălzire','10–15 min ușor',.55,.65],['Reprize la prag',r+' × '+mmss(p.thr.m),.80,.90,1],['Pauză · jog ușor',p.thr.rest+' s',.50,.60],['Răcire','10 min ușor',.55,.65]]; }
+  if(kind==='lng') return [['Încălzire','10–15 min ușor',.55,.65],['Long run · zona 2',(p.lng.w[w]||0)+' min continuu',.60,.70,1],['Răcire','5–10 min ușor',.55,.65]];
+  return [[kind==='ez2'?'Easy run · flush':'Easy run · zona 2',(p[kind].w[w]||0)+' min',.60,kind==='ez2'?.65:.70,1]]; }
+function spdDefaults(){
+  if(TL.sv!=null) return;
+  let sv=null; try{ sv=JSON.parse(localStorage.getItem(SPD_K)||'null'); }catch(e){}
+  const rr=restHR(); TL.sr=rr?String(rr.v):''; TL.sd=String(spdDefDay());
+  if(sv&&sv.date===todayKey()){ TL.sv=sv.v; TL.sh=sv.h; if(sv.r) TL.sr=sv.r; TL.sSrc=''; return; }
+  const L=spdLastRun(); if(L){ TL.sv=num(L.km/(L.min/60),1); TL.sh=String(L.hr); TL.sSrc=`Am completat din ultima alergare cu puls (${relDay(L.date)}, ${num(L.km,1)} km). Pune valorile de azi dacă le ai.`; }
+  else { TL.sv=''; TL.sh=''; TL.sSrc=''; }
+}
+let SPD_T=0;
+function spdKeep(){ clearTimeout(SPD_T); SPD_T=setTimeout(()=>{ try{ localStorage.setItem(SPD_K,JSON.stringify({v:TL.sv,h:TL.sh,r:TL.sr,date:todayKey()})); }catch(e){} },400); }
+TOOLS.push(['spd','gauge','Viteza pentru alergare','Din viteza și pulsul de acum: viteza pentru ziua din plan']);
+TOOL_CAT[0][2].unshift('spd');
+TOOL2.spd={
+  in:()=>{ spdDefaults(); const d=+TL.sd, lv=hrLive();
+    return `<div class="form">${tlIn('sv','Viteza acum (km/h)',{step:'0.1',ph:'ex: 7'})}${tlIn('sh','Pulsul la viteza asta',{step:'1',ph:'ex: 140'})}
+        ${tlIn('sr','Puls de repaus',{step:'1',ph:'ex: 60'})}<div class="fld"><label>Puls maxim</label><div class="inp ro">${hrZones().max} <small class="mu">din vârstă</small></div></div></div>
+      ${lv?`<button class="chip" style="margin-top:10px" data-a="spdLive">${ic('heart')} Folosește pulsul live · ${HR.bpm}</button>`:''}
+      ${TL.sSrc?`<div class="xs mu" style="margin-top:8px">${esc(TL.sSrc)}</div>`:''}
+      <div class="fld" style="margin-top:14px"><label>Pentru ziua</label><div class="seg" style="margin-top:0">${SPD_DAYS.map(([dd,l])=>`<button class="${d===dd?'on':''}" data-a="tlSet" data-k="sd" data-s="${dd}">${l}</button>`).join('')}</div></div>`; },
+  out:()=>{
+    const v0=tlN('sv'), h0=tlN('sh'), R=tlN('sr'), Z=hrZones(), M=Z.max, d=+TL.sd, D=SPD_DAYS.find(x=>x[0]===d)||SPD_DAYS[1], w=spdWeek(d);
+    spdKeep();
+    if(!(v0>0&&h0>0)) return `<div class="sm mu">Aleargă 5 minute la o viteză constantă, apoi scrie viteza și pulsul. Îți dau viteza pentru fiecare bucată din ziua aleasă.</div>`;
+    if(!(R>=30&&R<=110)) return `<div class="sm mu">Scrie pulsul de repaus (dimineața, în pat). Fără el nu pot calcula zonele corect.</div>`;
+    if(v0<3||v0>25) return `<div class="sm mu">Viteza pare greșită: scrie-o în km/h (ex. 7 sau 9,5).</div>`;
+    if(h0<=R+15||h0>=M) return `<div class="sm mu">Pulsul trebuie să fie cel din timpul alergării, după câteva minute la aceeași viteză (între ${R+16} și ${M-1}).</div>`;
+    const F=spdFit(), at=h=>F?v0+F.b*(h-h0):v0*(h-R)/(h0-R), hrAt=f=>Math.round(R+(M-R)*f), pNow=(h0-R)/(M-R), zNow=pNow<.5?-1:Math.min(4,Math.floor((pNow-.5)/.1+1e-9));
+    const rows=spdSegs(D[2],w).map(([l,dur,a,b,main])=>{ const lo=hrAt(a), hi=hrAt(b), vl=Math.max(3,at(lo)), vh=Math.max(3,at(hi)), vm=(vl+vh)/2;
+      return `<div class="spd-r ${main?'main':''}"><div class="sp"><b>${l}</b><span class="xs mu">${esc(dur)} · puls ${lo}–${hi}</span></div>
+        <div class="spd-v"><b>${num(vm,1)}</b><small>km/h</small><span class="xs mu">${num(vl,1)}–${num(vh,1)} · ${mmss(60/vm)} /km</span></div></div>`; }).join('');
+    return `<div class="spd-now"><span class="xs mu">Acum</span> <b>${num(v0,1)} km/h la ${Math.round(h0)} bpm</b> <span class="xs mu">= ${Math.round(pNow*100)}% din rezerva de puls${zNow>=0?' · zona '+(zNow+1):''}</span></div>
+      <div class="dsec"><h4>${D[1]} · săptămâna ${w+1}</h4>${rows}</div>
+      ${v0<6?`<div class="note">Sub 6 km/h mulți merg în loc să alerge. Când treci în alergare pulsul sare, așa că măsoară din alergare ca rezultatul să fie corect.</div>`:''}
+      <div class="xs mu2" style="margin-top:10px">Pune viteza de la început și nu o crește ca să „prinzi" pulsul: pulsul urcă spre țintă în 2–3 minute. Dacă trece de capătul de sus, scade cu 0,3 km/h.
+        ${F?`Panta e potrivită pe ${F.n} alergări de-ale tale cu puls.`:'Calcul din pulsul de repaus și cel maxim (proporțional cu rezerva de puls).'} Aceeași înclinație a benzii ca acum.</div>`; }
+};
+ACT.spdLive=()=>{ if(hrLive()){ TL.sh=String(HR.bpm); TL.sSrc=''; } if(SH&&SH.kind==='tool') shRender(); };
+/* deschiderea directă, de pe copertă sau din plan, cu ziua deja aleasă */
+ACT.spdOpen=(el,{D})=>{ spdDefaults(); if(D>=0&&SPD_DAYS.some(x=>x[0]===D)) TL.sd=String(D); SH={kind:'tool',k:'spd'}; shRender(); };
+
+/* =====================================================================
+   v9 · RESPIRAȚIE GHIDATĂ — un cerc care crește la inspir, stă pe loc la pauză și scade la expir.
+   Sunet discret și vibrație la fiecare schimbare (dacă sunetul e pornit). Cu „Reducere mișcare",
+   cercul nu se mai mișcă: rămân textul, secundele și bara de progres.
+   ===================================================================== */
+const BR_PAT={
+  box:{n:'Pătrat · 4-4-4-4',d:'Calm și concentrare, înainte de antrenament',ph:[['in',4],['hold',4],['out',4],['rest',4]]},
+  f478:{n:'4-7-8',d:'Relaxare seara, înainte de somn',ph:[['in',4],['hold',7],['out',8]]},
+  calm:{n:'Calmare · 4-6',d:'După antrenament: expirul mai lung ajută corpul să se liniștească',ph:[['in',4],['out',6]]},
+  slow:{n:'Ritm lent · 5,5',d:'Cam 5,5 respirații pe minut, inspir și expir egale',ph:[['in',5.5],['out',5.5]]}
+};
+const BR_L={in:['Inspiră','pe nas, lent'],hold:['Ține','aerul în piept'],out:['Expiră','lung, pe gură'],rest:['Ține','plămânii goi']};
+const BR={on:false,t0:0,raf:0,pi:-1,done:false};
+TOOLS.push(['br','wind','Respirație ghidată','Pătrat, 4-7-8, calmare după efort']);
+TOOL_CAT[3][2].unshift('br');
+const brPat=()=>BR_PAT[TL.bp]||BR_PAT.box;
+const brDur=()=>(+TL.bd||3)*60;
+/* unde suntem în exercițiu la secunda t: faza, cât a trecut din ea, scara cercului */
+function brAt(t){ const P=brPat().ph, L=P.reduce((a,p)=>a+p[1],0); let x=t%L, i=0; while(i<P.length-1&&x>=P[i][1]){ x-=P[i][1]; i++; }
+  const [k,len]=P[i], f=clamp(x/len,0,1), e=f<.5?2*f*f:1-Math.pow(-2*f+2,2)/2;
+  const sc=k==='in'?.56+.44*e:k==='out'?1-.44*e:k==='hold'?1:.56;
+  return {i,k,len,left:Math.ceil(len-x-1e-6),sc,round:Math.floor(t/L)+1}; }
+TOOL2.br={
+  in:()=>`<div class="chips" style="margin-top:14px">${Object.keys(BR_PAT).map(k=>`<button class="chip ${(TL.bp||'box')===k?'on':''}" data-a="brSet" data-k="bp" data-s="${k}">${BR_PAT[k].n}</button>`).join('')}</div>
+      <div class="xs mu" style="margin-top:8px">${esc(brPat().d)}</div>
+      <div class="chips" style="margin-top:12px">${[1,2,3,5,10].map(m=>`<button class="chip ${String(TL.bd||3)===String(m)?'on':''}" data-a="brSet" data-k="bd" data-s="${m}">${m} min</button>`).join('')}</div>`,
+  out:()=>{ const s=BR.on?brAt((performance.now()-BR.t0)/1000):null, l=s?BR_L[s.k]:null;
+    return `<div class="br-st ${BR.on?'on':''}"><div class="br-c" id="brC" style="--sc:${s?s.sc.toFixed(3):.56}"><span class="br-g"></span><span class="br-r"></span></div>
+        <div class="br-t"><b id="brL">${l?l[0]:BR.done?'Gata':'Pregătit'}</b><span id="brN">${s?s.left:''}</span><small id="brS">${l?l[1]:BR.done?'ai terminat':'apasă Start'}</small></div></div>
+      <div class="bar" style="height:4px;margin-top:12px"><i id="brB" style="width:0%"></i></div>
+      <div class="xs mu" style="text-align:center;margin-top:6px" id="brM">${BR.on?'':brPat().n+' · '+(+TL.bd||3)+' min'}</div>
+      <button class="btn ${BR.on?'':'pri'} xl wide" style="margin-top:12px" data-a="brGo">${BR.on?ic('stop')+' Oprește':ic('play')+' Start'}</button>`; }
+};
+ACT.brSet=(el,{k})=>{ if(BR.on) return; TL[k]=el.dataset.s; BR.done=false; if(SH&&SH.kind==='tool') shRender(); };
+function brStop(done){ BR.on=false; cancelAnimationFrame(BR.raf); BR.raf=0; BR.pi=-1; BR.done=!!done; keepAwake(false); }
+ACT.brGo=()=>{ if(BR.on){ brStop(false); shRender(); return; }
+  BR.on=true; BR.done=false; BR.t0=performance.now(); BR.pi=-1; keepAwake(true); shRender(); brTick(); };
+function brTick(){
+  const c=$('#brC'); if(!BR.on) return; if(!c||!(SH&&SH.kind==='tool'&&SH.k==='br')){ brStop(false); return; }
+  const t=(performance.now()-BR.t0)/1000, T=brDur(), s=brAt(t), L=brPat().ph.reduce((a,p)=>a+p[1],0);
+  /* se termină la capătul unei runde întregi, după durata aleasă */
+  if(t>=Math.ceil(T/L)*L){ brStop(true); beep(523,.12); setTimeout(()=>beep(784,.18),160); buzz([30,60,30]); shRender(); toast('Respirație terminată',brPat().n+' · '+Math.round(t/60)+' min','info'); return; }
+  if(!motionOff()) c.style.setProperty('--sc',s.sc.toFixed(3));
+  const key=s.round+'|'+s.i; if(key!==BR.pi){ BR.pi=key; const l=BR_L[s.k]; $('#brL').textContent=l[0]; $('#brS').textContent=l[1]; c.dataset.k=s.k;
+    beep(s.k==='in'?440:s.k==='out'?330:392,.06); buzz(12); }
+  $('#brN').textContent=s.left; const b=$('#brB'); if(b) b.style.width=(Math.min(1,t/T)*100).toFixed(1)+'%';
+  const m=$('#brM'); if(m) m.textContent='runda '+s.round+' · '+fmtClock(Math.max(0,T-t))+' rămas';
+  BR.raf=requestAnimationFrame(brTick);
+}
+
+/* =====================================================================
+   v9 · ACTIVITĂȚI — antrenamentele din afara planului, notate de mână: bicicletă, assault bike, canotaj,
+   mers, înot, tenis și altele. Stau lângă cele importate din Strava (zece3:ext, cu src:'manual'),
+   deci intră în încărcarea zilei, statistici, cronologie, export și sincronizare.
+   Opțional pleacă și pe Strava, ca activitate manuală (fără puls pe secunde).
+   ===================================================================== */
+/* [tip, nume, iconiță, are distanță] — tipul e cel din Strava, ca importurile și exporturile să se potrivească */
+const ACT_T=[['Ride','Bicicletă','bike',1],['AssaultBike','Assault bike','fan',0],['Rowing','Canotaj · row','row',1],['Walk','Mers','walk',1],['Swim','Înot','wave',1],['Tennis','Tenis','racket',0],
+  ['Hike','Drumeție','mountain',1],['Elliptical','Eliptică','activity',1],['StairStepper','Scări','up',0],['Soccer','Fotbal','ball',0],['Padel','Padel','racket',0],['Basketball','Baschet','ball',0],
+  ['Yoga','Yoga · stretching','leaf',0],['Workout','Altceva','bolt',0]];
+const ACT_RPE=[[3,'Ușor'],[5,'Mediu'],[7,'Greu'],[9,'Foarte greu']];
+ST_TYPES.AssaultBike='Assault bike';
+/* Strava nu are „assault bike": pleacă drept antrenament */
+const ACT_UP={AssaultBike:'Workout'};
+const actT=t=>ACT_T.find(x=>x[0]===t)||null;
+const actIcon=t=>{ const a=actT(t); return a?a[2]:ST_RUN.indexOf(t)>=0?'run':ST_STR.indexOf(t)>=0?'dumbbell':/Ride/.test(t)?'bike':/Row/.test(t)?'row':/Swim/.test(t)?'wave':'activity'; };
+const actName=x=>x.name||stName(x.type);
+/* rezumatul săptămânii curente (de luni până azi), fără dublurile sesiunilor ZECE */
+function actWeek(){ const tk=todayKey(), m=mondayOf(tk), xs=(S.ext||[]).filter(x=>x.date>=m&&x.date<=tk&&!x.dup);
+  return {n:xs.length,min:xs.reduce((a,x)=>a+(+x.min||0),0),km:xs.reduce((a,x)=>a+(+x.km||0),0)}; }
+
+/* ---------- formularul ---------- */
+let AF=null;
+function afNew(type,x){
+  const now=new Date();
+  if(x) return {id:x.sid,type:x.type,date:x.date,time:x.start?new Date(x.start).toTimeString().slice(0,5):'',min:x.min!=null?String(x.min):'',km:x.km?String(x.type==='Swim'?Math.round(x.km*1000):x.km):'',
+    hr:x.hr?String(x.hr):'',kcal:x.kcal?String(x.kcal):'',rpe:x.rpe||0,name:x.name||'',note:x.note||'',st:false,up:!!x.strava};
+  return {id:null,type:type||'Ride',date:todayKey(),time:pad(now.getHours())+':'+pad(now.getMinutes()),min:'',km:'',hr:'',kcal:'',rpe:0,name:'',note:'',st:stOn()&&stCanWrite()&&stCfg().auto!==false,up:false};
+}
+ACT.actAdd=(el,{k})=>{ AF=afNew(k); SH={kind:'actf'}; shRender(); };
+ACT.actEdit=(el,{k})=>{ const x=(S.ext||[]).find(e=>String(e.sid)===String(k)); if(!x) return; AF=afNew(null,x); SH={kind:'actf'}; shRender(); };
+ACT.afType=(el,{k})=>{ if(!AF) return; AF.type=k; shRender(); };
+ACT.afRpe=(el,{I})=>{ if(!AF) return; AF.rpe=AF.rpe===I?0:I; shRender(); };
+ACT.afSt=()=>{ if(!AF) return; AF.st=!AF.st; shRender(); };
+document.addEventListener('input',e=>{ const t=e.target; if(AF&&t&&t.dataset&&t.dataset.af!=null) AF[t.dataset.af]=t.value; });
+const afIn=(id,label,o={})=>`<div class="fld ${o.full?'full':''}"><label for="af_${id}">${label}</label><input class="inp" id="af_${id}" data-af="${id}" ${o.type?`type="${o.type}"`:o.text?'':`type="number" step="${o.step||'any'}" inputmode="decimal"`} value="${esc(AF[id]==null?'':AF[id])}" ${o.ph?`placeholder="${esc(o.ph)}"`:''}></div>`;
+function actFormHTML(){
+  const A=AF, T=actT(A.type)||ACT_T[ACT_T.length-1], swim=A.type==='Swim';
+  /* aceeași activitate venită deja din Strava (de ex. din Polar Beat): o semnalez, ca să nu o notezi de două ori */
+  const twin=!A.id&&(S.ext||[]).find(x=>x.src!=='manual'&&x.date===A.date&&(stName(x.type)===stName(A.type)||actIcon(x.type)===T[2]));
+  return `<button class="ib sh-x" data-a="shClose" aria-label="Închide">${ic('x')}</button><div class="eyebrow">${ic(T[2])} ${A.id?'Modifică activitatea':'Activitate nouă'}</div>
+    <div class="h2" style="margin-top:6px">${esc(T[1])}</div>
+    <div class="act-tg">${ACT_T.map(([t,l,icn])=>`<button class="act-tb ${A.type===t?'on':''}" data-a="afType" data-k="${t}" aria-pressed="${A.type===t}">${ic(icn)}<span>${l}</span></button>`).join('')}</div>
+    <div class="form">${afIn('min','Durata (min)',{step:'1',ph:'ex: 30'})}${T[3]?afIn('km',swim?'Distanța (m)':'Distanța (km)',{step:swim?'25':'0.1',ph:swim?'ex: 1000':'ex: 12'}):''}
+      ${afIn('hr','Puls mediu (opțional)',{step:'1',ph:'ex: 135'})}${afIn('kcal','Calorii (opțional)',{step:'10',ph:'de pe ceas'})}
+      ${afIn('date','Data',{type:'date'})}${afIn('time','Ora începerii',{type:'time'})}
+      ${afIn('name',A.type==='Workout'?'Ce ai făcut':'Nume (opțional)',{text:1,full:1,ph:A.type==='Workout'?'ex: box, înot în mare, ski':'ex: '+T[1]+' ușor'})}</div>
+    <div class="fld" style="margin-top:12px"><label>Cât de greu a fost</label><div class="seg" style="margin-top:0">${ACT_RPE.map(([v,l])=>`<button class="${A.rpe===v?'on':''}" data-a="afRpe" data-i="${v}">${l}</button>`).join('')}</div></div>
+    <div class="xs mu2" style="margin-top:6px">Intră în încărcarea zilei ca minute × efort. Dacă nu alegi, efortul se estimează din puls.</div>
+    ${twin?`<div class="note">${ic('info')} Ai deja din Strava, în aceeași zi: ${esc(actName(twin))} · ${num(twin.min,0)} min. Notează doar dacă e altă activitate.</div>`:''}
+    ${!A.id&&stOn()&&stCanWrite()?`<div class="set-row" style="margin-top:10px"><span class="sp"><b>Trimite și pe Strava</b><div class="sm mu">ca activitate manuală</div></span><button class="sw ${A.st?'on':''}" data-a="afSt" role="switch" aria-checked="${!!A.st}" aria-label="Trimite și pe Strava"></button></div>`:''}
+    ${A.up?`<div class="xs mu2" style="margin-top:8px">E deja pe Strava. Modificările de aici nu se mai trimit acolo.</div>`:''}
+    <div class="inrow" style="margin-top:14px">${A.id?`<button class="btn ghost danger" data-a="actDel" data-k="${esc(A.id)}" data-confirm="Ștergi?">${ic('trash')}</button>`:''}
+      <button class="btn pri xl" style="flex:1" data-a="afSave">${ic('check')} ${A.id?'Salvează':'Adaugă activitatea'}</button></div>`;
+}
+SHEETS.actf=()=>AF?actFormHTML():'';
+ACT.afSave=async()=>{
+  const A=AF; if(!A) return; const n=v=>{ const x=parseFloat(String(v==null?'':v).replace(',','.')); return isFinite(x)?x:null; };
+  const min=n(A.min), km0=n(A.km), hr=Math.round(n(A.hr)||0), kcal=Math.round(n(A.kcal)||0);
+  if(!(min>0&&min<=1440)) return shake('#af_min');
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(A.date||'')||A.date>todayKey()) return shake('#af_date');
+  if(A.hr&&!(hr>=40&&hr<=220)) return shake('#af_hr');
+  if(A.type==='Workout'&&!String(A.name||'').trim()) return shake('#af_name');
+  const km=actT(A.type)&&actT(A.type)[3]&&km0>0?(A.type==='Swim'?km0/1000:km0):0;
+  const st=parseKey(A.date); if(/^\d{1,2}:\d{2}$/.test(A.time||'')){ const [h,m]=A.time.split(':').map(Number); st.setHours(h,m,0,0); } else st.setHours(12,0,0,0);
+  const old=A.id?(S.ext||[]).find(x=>String(x.sid)===String(A.id)):null;
+  const x=Object.assign({},old||{},{sid:A.id||'m'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),src:'manual',date:A.date,start:st.getTime(),type:A.type,name:String(A.name||'').trim().slice(0,60),
+    min:Math.round(min*10)/10,el:Math.round(min),km:Math.round(km*1000)/1000,dup:false});
+  ['hr','kcal','rpe','note'].forEach(k=>delete x[k]); if(hr) x.hr=hr; if(kcal) x.kcal=kcal; if(A.rpe) x.rpe=A.rpe; if(String(A.note||'').trim()) x.note=String(A.note).trim().slice(0,200);
+  const ext=(S.ext||[]).filter(e=>String(e.sid)!==String(x.sid)).concat([x]).sort((a,b)=>(a.start||0)-(b.start||0));
+  await save('ext',ext);
+  if(!A.id&&A.st&&stOn()&&stCanWrite()){
+    await stQueue({key:x.sid,start:x.start,end:x.start+min*60000,dur:Math.round(min*60),km,sport:ACT_UP[x.type]||x.type,name:x.name||actT(x.type)[1],
+      desc:(actT(x.type)[1]+' · '+num(min,0)+' min'+(km?' · '+num(km,2)+' km':'')+(hr?' · puls mediu '+hr:'')+'\n\nNotat în ZECE · Hybrid365'),hr:null,pts:[]});
+    setTimeout(stFlush,50); }
+  AF=null; SH=null; shRender(); render();
+  toast(A.id?'Activitate salvată':'Activitate adăugată',actName(x)+' · '+num(min,0)+' min'+(km?' · '+num(km,1)+' km':''),'info');
+};
+ACT.actDel=async(el,{k})=>{ const prev=S.ext; const x=(prev||[]).find(e=>String(e.sid)===String(k)); if(!x) return;
+  await save('ext',(prev||[]).filter(e=>String(e.sid)!==String(k))); AF=null; SH=null; shRender(); render();
+  toast('Activitate ștearsă',actName(x)+(x.strava?' · rămâne pe Strava':''),'',{l:'Anulează',f:async()=>{ await save('ext',prev); render(); }}); };
+
+/* ---------- fila „Activități" din Antrenament ---------- */
+function actRow(x){ const man=x.src==='manual';
+  return `<div class="list-row act-r"><span class="ic-s ${man?'man':''}">${ic(actIcon(x.type))}</span>
+    <button class="sp linkb2" ${man?`data-a="actEdit" data-k="${esc(x.sid)}"`:'disabled'} style="text-align:left"><b>${esc(actName(x))}</b>
+      <span class="xs mu" style="display:block">${fmtDay(x.date)} · ${num(x.min,0)} min${x.km?' · '+num(x.km,x.km<10?2:1)+' km':''}${x.hr?' · '+x.hr+' bpm':''}${x.rpe?' · '+((ACT_RPE.find(r=>r[0]===x.rpe)||[0,'efort '+x.rpe])[1]).toLowerCase():''}</span>
+      ${x.dup?'<span class="xs mu2" style="display:block">Același antrenament ca sesiunea ZECE: numărat o singură dată.</span>':''}</button>
+    <span class="tag ${man?'':'rest'}">${man?'notat':'Strava'}</span>
+    ${man?'':`<button class="xb" data-a="extDel" data-k="${esc(x.sid)}" data-confirm="?" aria-label="Șterge">${ic('trash')}</button>`}</div>`; }
+function viewActs(){
+  const W=actWeek(), xs=(S.ext||[]).slice().sort((a,b)=>(b.start||0)-(a.start||0)), by={};
+  xs.forEach(x=>{ const m=String(x.date).slice(0,7); (by[m]=by[m]||[]).push(x); });
+  const ks=Object.keys(by).sort().reverse(), shown=ks.slice(0,S.acN||3);
+  return `<div class="card act-hd"><div class="row"><div class="sp"><div class="eyebrow">${ic('activity')} În afara planului</div><div class="h2" style="margin-top:6px">Activități</div>
+      <div class="sm mu">${W.n?`Săptămâna asta: <b class="tx">${W.n}</b> ${W.n===1?'activitate':'activități'} · ${num(W.min,0)} min${W.km?' · '+num(W.km,1)+' km':''}`:'Nimic notat săptămâna asta.'}</div></div></div>
+    <div class="act-q">${ACT_T.slice(0,6).map(([t,l,icn])=>`<button class="act-qb" data-a="actAdd" data-k="${t}">${ic(icn)}<span>${l}</span></button>`).join('')}
+      <button class="act-qb" data-a="actAdd" data-k="Hike">${ic('plus')}<span>Altele</span></button></div></div>
+  ${shown.length?shown.map(m=>{ const y=+m.slice(0,4), mo=+m.slice(5,7), g=by[m], mins=g.filter(x=>!x.dup).reduce((a,x)=>a+(+x.min||0),0);
+      return `<div class="card"><div class="card-h"><div class="eyebrow">${MON_S[mo-1]} ${y}</div><span class="xs mu">${g.length} · ${num(mins/60,1)} h</span></div>${g.map(actRow).join('')}</div>`; }).join('')
+    :`<div class="card"><div class="empty">${ic('activity')}<div>Aici apar antrenamentele din afara planului: bicicletă, assault bike, canotaj, mers, înot, tenis. Le notezi de mână sau vin singure din Strava.</div>
+      <button class="btn pri sm" data-a="actAdd" data-k="Ride">${ic('plus')} Adaugă prima activitate</button></div></div>`}
+  ${ks.length>shown.length?`<button class="btn ghost wide" style="margin-top:12px" data-a="acMore">${ic('down')} Lunile anterioare</button>`:''}`;
+}
+ACT.acMore=()=>{ S.acN=(S.acN||3)+3; render(); };
+
+/* =====================================================================
+   v9 · CORECTAREA CICLULUI — pentru un ciclu nou pornit din greșeală.
+   „Revino la ciclul anterior": numărul ciclului scade cu 1. Zilele bifate între timp în ciclul nou
+   se mută în ciclul vechi, la aceeași zi a săptămânii, în prima săptămână în care ziua aceea nu e făcută;
+   antrenamentele terminate primesc ciclul și săptămâna noi. Se poate anula din mesajul de confirmare.
+   ===================================================================== */
+const cfHas=(c,w,d)=>Object.keys((S.wlog||{})[dKeyC(c,w,d)]||{}).length>0;
+function cfCount(c){ let n=0; for(let w=0;w<WEEKS;w++) for(let d=0;d<7;d++) if(fullIn(c,w,d)) n++; return n; }
+/* un ciclu terminat de-adevărat: toate cele 28 de zile bifate (în ciclul curent sau într-unul anterior) */
+function cycDoneAny(){ if(!nextDay()) return true; for(let c=1;c<cyc();c++) if(cfCount(c)===WEEKS*7) return true; return false; }
+/* realizarea deblocată greșit de un ciclu nou pornit din greșeală se șterge */
+async function cfAchFix(){ if(S.ach&&S.ach.cyc&&!cycDoneAny()){ const a=Object.assign({},S.ach); delete a.cyc; await save('ach',a); } }
+function cfPlan(){
+  const h=cyc(); if(h<2) return null; const p=h-1, moves=[], stay=[], taken={};
+  for(let w=0;w<WEEKS;w++) for(let d=0;d<7;d++){ if(!cfHas(h,w,d)) continue;
+    let to=-1; for(let v=0;v<WEEKS;v++) if(!fullIn(p,v,d)&&!taken[v+'|'+d]){ to=v; break; }
+    if(to<0) stay.push({w,d}); else { taken[to+'|'+d]=1; moves.push({w,d,to}); } }
+  return {h,p,moves,stay,pf:cfCount(p),cf:cfCount(h)};
+}
+function cfHTML(){
+  const P=cfPlan();
+  if(!P) return `<button class="ib sh-x" data-a="shClose" aria-label="Închide">${ic('x')}</button><div class="eyebrow">${ic('refresh')} Ciclul</div><div class="h2" style="margin-top:6px">Ești în primul ciclu</div>
+    <div class="note">Nu există un ciclu anterior la care să revii.</div>`;
+  const row=m=>`<div class="list-row"><span class="sp"><b>${DAYN[m.d]}</b> <span class="xs mu">S${m.w+1}, ciclul ${P.h}</span></span><span class="xs mu">${ic('right')}</span><span class="v">S${m.to+1}, ciclul ${P.p}</span></div>`;
+  return `<button class="ib sh-x" data-a="shClose" aria-label="Închide">${ic('x')}</button><div class="eyebrow">${ic('refresh')} Corectează ciclul</div>
+    <div class="h2" style="margin-top:6px">Revii la ciclul ${P.p}?</div>
+    <div class="kpis c2" style="margin-top:14px"><div class="kpi"><div class="k">Ciclul ${P.p}</div><div class="v">${P.pf}<small>/ ${WEEKS*7} zile</small></div><div class="s">${P.pf<WEEKS*7?'neterminat':'complet'}</div></div>
+      <div class="kpi"><div class="k">Ciclul ${P.h} · acum</div><div class="v">${P.cf}<small>/ ${WEEKS*7} zile</small></div><div class="s">${P.moves.length+P.stay.length?(P.moves.length+P.stay.length===1?'1 zi începută':(P.moves.length+P.stay.length)+' zile începute'):'nimic bifat'}</div></div></div>
+    ${P.moves.length?`<div class="dsec"><h4>Ce mut în ciclul ${P.p}</h4>${P.moves.map(row).join('')}</div>`:''}
+    ${P.stay.length?`<div class="note">${P.stay.map(m=>DAYN[m.d]+' S'+(m.w+1)).join(', ')}: ziua e deja făcută în toate săptămânile ciclului ${P.p}, așa că rămâne în ciclul ${P.h}.</div>`:''}
+    <div class="note">Mut doar bifele din plan și eticheta ciclului de pe antrenamentele terminate. Seriile, alergările și restul istoricului rămân neatinse.</div>
+    <button class="btn pri xl wide" style="margin-top:14px" data-a="cfGo">${ic('refresh')} Revino la ciclul ${P.p}</button>`;
+}
+SHEETS.cfix=()=>cfHTML();
+ACT.cfOpen=()=>{ if(S.sess) return toast('Ai un antrenament în desfășurare','Termină-l sau închide-l, apoi corectează ciclul.','info'); SH={kind:'cfix'}; shRender(); };
+ACT.cfGo=async()=>{
+  const P=cfPlan(); if(!P||S.sess) return;
+  const before={wlog:S.wlog,hist:S.hist,adj:S.adj,cyc:S.cyc};
+  const log=Object.assign({},S.wlog), adj=Object.assign({},S.adj||{});
+  P.moves.forEach(m=>{ const a=dKeyC(P.h,m.w,m.d), b=dKeyC(P.p,m.to,m.d), o=Object.assign({},log[b]||{});
+    Object.keys(log[a]||{}).forEach(e=>{ o[b+e.slice(a.length)]=1; }); log[b]=o; delete log[a];
+    if(adj[a]){ adj[b]=adj[a]; delete adj[a]; } });
+  const hist=(S.hist||[]).map(x=>{ if(x.cyc!==P.h) return x; const m=P.moves.find(m=>m.w===x.w&&m.d===x.d); return m?Object.assign({},x,{cyc:P.p,w:m.to}):x; });
+  await save('wlog',log); await save('hist',hist); await save('adj',adj); await save('cyc',Object.assign({},S.cyc||{},{h:P.p,t:Date.now()}));
+  await cfAchFix(); S.planW=null; S.openDay=-1; SH=null; shRender(); render();
+  toast('Ai revenit la ciclul '+P.p,P.moves.length?P.moves.length+(P.moves.length===1?' zi mutată':' zile mutate')+' din ciclul '+P.h+'.':'Continui de unde ai rămas.','',
+    {l:'Anulează',f:async()=>{ await save('wlog',before.wlog); await save('hist',before.hist); await save('adj',before.adj); await save('cyc',Object.assign({},before.cyc||{},{t:Date.now()})); render(); toast('Corectarea a fost anulată','','info'); }});
+};
+
+/* =====================================================================
    v8 · IMPORT / EXPORT — Excel (.xlsx real, generat în browser, fără biblioteci), CSV pe seturi de date,
    copia JSON (backup / restaurare, deja existentă) și importul CSV pentru alergări, greutate și jurnal,
    cu previzualizare înainte de salvare (duplicatele sunt sărite).
@@ -7836,15 +8398,15 @@ async function loadAll(){
   S.sess=o.sess&&o.sess.start&&o.sess.sets?Object.assign({tmMin:{},tasks:{},runs:{},prs:[],best:{},kg:{},rp:{}},o.sess):null;
   S.sound=o.sound!==false; S.aiKey=typeof o.aiKey==='string'?o.aiKey:''; S.aiUsed=+o.aiUsed||0;
   S.aiEffort=['low','medium','high'].indexOf(o.aiEffort)>=0?o.aiEffort:'medium';
-  S.theme=THEMES[o.theme]?o.theme:'onix'; S.mode=['dark','light','auto'].indexOf(o.mode)>=0?o.mode:'dark';
-  /* designul v6 pornește o singură dată pe tema Onix; după aceea tema aleasă în Setări rămâne */
-  if((+o.look||0)<6){ S.theme='onix'; await store.set(K.theme,'onix'); await store.set(K.look,6); }
+  S.theme=THEMES[o.theme]?o.theme:'otel'; S.mode=['dark','light','auto'].indexOf(o.mode)>=0?o.mode:'dark'; S.bg=o.bg==='black'?'black':'anthr';
+  /* designul v9 pornește o singură dată pe tema Oțel (antracit + albastru oțel); după aceea tema aleasă în Setări rămâne */
+  if((+o.look||0)<9){ S.theme='otel'; await store.set(K.theme,'otel'); await store.set(K.look,9); }
   S.fx=['min','normal','max'].indexOf(o.fx)>=0?o.fx:'normal'; S.onb=!!o.onb;
   S.seenAch=Array.isArray(o.seenAch)?o.seenAch:null; S.seenLvl=typeof o.seenLvl==='number'?o.seenLvl:null;
   /* conversațiile din v3 au alt set de unelte și alt prompt: le închidem, altfel istoricul nu mai corespunde */
   if(o.aiChat&&Array.isArray(o.aiChat.msgs)&&o.aiChat.msgs.length&&o.aiChat.ver!==4){ S.aiChat=null; AI.note='Conversația veche a fost închisă după actualizarea aplicației. Începe una nouă.'; await store.set(K.aiChat,null); }
   else S.aiChat=o.aiChat&&Array.isArray(o.aiChat.msgs)?Object.assign({tools:{}},o.aiChat):null;
-  await migrate();
+  await migrate(); await cfAchFix();
   STC=null; S.loaded=true;
 }
 /* migrări de date, la fiecare încărcare (și după import sau sincronizare):
@@ -7861,27 +8423,47 @@ async function migrate(){
 }
 /* ---------- animația de deschidere ---------- */
 const INTRO={on:false,leaving:false,done:null,mode:'full'};
-/* praf fin în lumina de studio: puncte care plutesc încet în sus și sclipesc (mai vii pe mijloc), apoi se sting la ieșire */
+/* v9: praf fin în lumina de studio, iar la finalul numărătorii o explozie de scântei din cadran (albe și albastru-oțel) */
+const IN_T1=1.45; /* secunda (× k) la care inelul se închide și „10" devine logo */
 function introParticles(mode){
   const cv=$('#introCv'); if(!cv||!cv.getContext) return;
   const ctx=cv.getContext('2d'), dpr=Math.min(2,devicePixelRatio||1), W=cv.width=innerWidth*dpr, H=cv.height=innerHeight*dpr;
-  const cols=['#ffffff','#ffffff',TH().ac], N=mode==='full'?90:50;
-  const ps=Array.from({length:N},(_,i)=>({x:Math.random()*W,y:Math.random()*H,r:(.4+Math.random()*1.3)*dpr,vx:(Math.random()-.5)*14*dpr,vy:-(6+Math.random()*24)*dpr,
-    a:.25+Math.random()*.6,tw:Math.random()*6.283,c:cols[i%3],d:Math.random()*.8}));
+  const cols=['#ffffff','#9CC0E4',TH().ac], N=mode==='full'?80:44, k=mode==='full'?1:.42;
+  const ps=Array.from({length:N},(_,i)=>({x:Math.random()*W,y:Math.random()*H,r:(.4+Math.random()*1.2)*dpr,vx:(Math.random()-.5)*14*dpr,vy:-(6+Math.random()*24)*dpr,
+    a:.2+Math.random()*.5,tw:Math.random()*6.283,c:cols[i%3],d:Math.random()*.8}));
+  const sp=[]; let burst=false;
   const t0=performance.now(); let last=t0;
   const frame=now=>{ if(!INTRO.on) return; const t=(now-t0)/1000, dt=Math.min(.05,(now-last)/1000); last=now;
     const out=INTRO.leaving?clamp(1-(now-INTRO.leftAt)/350,0,1):1;
+    if(!burst&&t>=IN_T1*k){ burst=true; const dl=$('#inDial'); if(dl){ const r=dl.getBoundingClientRect(), cx=(r.left+r.width/2)*dpr, cy=(r.top+r.height/2)*dpr, R0=r.width*.37*dpr;
+      for(let i=0;i<(mode==='full'?64:36);i++){ const an=Math.random()*6.283, v=(170+Math.random()*380)*dpr;
+        sp.push({x:cx+Math.cos(an)*R0,y:cy+Math.sin(an)*R0,vx:Math.cos(an)*v,vy:Math.sin(an)*v,l:0,L:.55+Math.random()*.6,w:(.8+Math.random()*1.4)*dpr,c:i%3?'#CFE2F5':'#ffffff'}); } } }
     ctx.clearRect(0,0,W,H); ctx.globalCompositeOperation='lighter';
     ps.forEach(p=>{ p.x+=p.vx*dt; p.y+=p.vy*dt; p.tw+=dt*2.2; if(p.y<-10){ p.y=H+10; p.x=Math.random()*W; }
       const cone=1-Math.min(1,Math.abs(p.x/W-.5)*1.6), al=p.a*clamp((t-p.d)/1.2,0,1)*out*(.55+.45*Math.sin(p.tw))*(.35+.65*cone);
       if(al<.01) return; ctx.globalAlpha=al; ctx.fillStyle=p.c; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,6.283); ctx.fill(); });
+    ctx.lineCap='round';
+    sp.forEach(p=>{ if(p.l>=p.L) return; p.l+=dt; const f=Math.pow(.06,dt); p.vx*=f; p.vy*=f; p.vy+=60*dpr*dt; const x0=p.x, y0=p.y; p.x+=p.vx*dt; p.y+=p.vy*dt;
+      const al=(1-p.l/p.L)*out; if(al<.02) return; ctx.globalAlpha=al; ctx.strokeStyle=p.c; ctx.lineWidth=p.w; ctx.beginPath(); ctx.moveTo(x0-(p.x-x0)*2.2,y0-(p.y-y0)*2.2); ctx.lineTo(p.x,p.y); ctx.stroke(); });
     requestAnimationFrame(frame); };
   requestAnimationFrame(frame);
 }
+/* cadranul: 60 de gradații care apar pe rând, în sensul acelor de ceasornic */
+function introDial(){ const g=$('#inTicks'); if(!g) return; let h='';
+  for(let i=0;i<60;i++){ const a=(i*6-90)*Math.PI/180, big=i%5===0, r1=big?83:86, r2=92;
+    h+='<line style="--i:'+i+'" class="'+(big?'b':'')+'" x1="'+(100+r1*Math.cos(a)).toFixed(2)+'" y1="'+(100+r1*Math.sin(a)).toFixed(2)+'" x2="'+(100+r2*Math.cos(a)).toFixed(2)+'" y2="'+(100+r2*Math.sin(a)).toFixed(2)+'"/>'; }
+  g.innerHTML=h; }
+/* numărătoarea 01 → 10, sincronizată cu inelul (aceeași curbă ca animația CSS a inelului) */
+function introCount(k){ const el=$('#inCnt'); if(!el) return; const t0=performance.now(), a=.35*k, d=1.1*k;
+  const ease=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+  const step=now=>{ if(!INTRO.on||INTRO.leaving) return; const p=clamp(((now-t0)/1000-a)/d,0,1), n=p>=1?10:1+Math.floor(ease(p)*9.999);
+    const s=(n<10?'0':'')+n; if(el.textContent!==s) el.textContent=s; if(p<1) requestAnimationFrame(step); };
+  requestAnimationFrame(step); }
 function introStart(){
   const intro=$('#intro'); let mode='full';
   try{ const m=JSON.parse(localStorage.getItem(K.intro)||'"full"'); if(['full','short','off'].indexOf(m)>=0) mode=m; }catch(e){}
-  try{ const lk=+JSON.parse(localStorage.getItem(K.look)||'0')||0, t=lk>=6?JSON.parse(localStorage.getItem(K.theme)||'null'):'onix'; if(THEMES[t]) S.theme=t; }catch(e){}
+  try{ const lk=+JSON.parse(localStorage.getItem(K.look)||'0')||0, t=lk>=9?JSON.parse(localStorage.getItem(K.theme)||'null'):'otel'; if(THEMES[t]) S.theme=t; }catch(e){}
+  try{ S.bg=JSON.parse(localStorage.getItem(K.bg)||'"anthr"')==='black'?'black':'anthr'; }catch(e){}
   try{ const md=JSON.parse(localStorage.getItem(K.mode)||'"dark"'); if(['dark','light','auto'].indexOf(md)>=0) S.mode=md; }catch(e){}
   applyTheme();
   try{ const m=JSON.parse(localStorage.getItem(K.motion)||'"auto"'); if(['auto','on','off'].indexOf(m)>=0) S.motion=m; }catch(e){}
@@ -7890,10 +8472,10 @@ function introStart(){
   INTRO.done=new Promise(res=>{ INTRO.resolve=res; });
   if(mode==='off'||motionOff()){ intro.remove(); $('.top .logo').classList.remove('wait'); INTRO.resolve(); return; }
   if(mode==='short') intro.classList.add('short');
-  INTRO.on=true; introParticles(mode);
-  setTimeout(()=>buzz(25),(mode==='full'?1020:430));
+  INTRO.on=true; introDial(); introParticles(mode); introCount(mode==='full'?1:.42);
+  setTimeout(()=>buzz([18,40,30]),Math.round(IN_T1*(mode==='full'?1000:420)));
   intro.addEventListener('click',introExit);
-  setTimeout(introExit,mode==='full'?3500:1500);
+  setTimeout(introExit,mode==='full'?3700:1500);
 }
 /* ieșirea: logo-ul zboară în antet, poza se apropie, iar ecranul se strânge ca un iris în jurul logo-ului */
 function introExit(){
@@ -7905,7 +8487,7 @@ function introExit(){
     const r1=il.getBoundingClientRect(), r2=hl.getBoundingClientRect(), cx=r2.left+r2.width/2, cy=r2.top+r2.height/2;
     const dx=cx-(r1.left+r1.width/2), dy=cy-(r1.top+r1.height/2), sc=r2.width/r1.width;
     il.animate([{transform:'translate(0,0) scale(1)',opacity:1},{transform:`translate(${dx}px,${dy}px) scale(${sc})`,opacity:1}],{duration:560,easing:'cubic-bezier(.6,0,.2,1)',fill:'forwards'});
-    intro.querySelectorAll('.in-word,.in-bar,.in-sub,.in-skip,.in-ring').forEach(el=>el.animate([{opacity:1},{opacity:0,transform:'translateY(14px)'}],{duration:240,fill:'forwards'}));
+    intro.querySelectorAll('.in-word,.in-bar,.in-sub,.in-skip,.in-ring,.in-dial,.in-cnt').forEach(el=>el.animate([{opacity:1},{opacity:0,transform:'translateY(14px)'}],{duration:240,fill:'forwards'}));
     const ph=intro.querySelector('.in-ph'); if(ph) ph.animate([{transform:'scale(1.03)'},{transform:'scale(1.12)'}],{duration:700,easing:'cubic-bezier(.6,0,.2,1)',fill:'forwards'});
     const a=intro.animate([{clipPath:`circle(${Math.hypot(innerWidth,innerHeight)}px at ${cx}px ${cy}px)`},{clipPath:`circle(${r2.width/2}px at ${cx}px ${cy}px)`}],
       {duration:640,delay:60,easing:'cubic-bezier(.7,0,.25,1)',fill:'forwards'});
