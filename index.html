@@ -160,7 +160,7 @@ body.ontop .top .brand{color:#F4F4F5}
 /* ---------- bara de jos (telefon): capsulă de sticlă ---------- */
 .nav{position:fixed;left:50%;bottom:calc(10px + env(safe-area-inset-bottom));z-index:50;transform:translateX(-50%);width:min(calc(100% - 24px),520px);border-radius:26px;
   border:1px solid rgba(var(--w),.09);background:var(--glass);backdrop-filter:blur(26px) saturate(1.8);-webkit-backdrop-filter:blur(26px) saturate(1.8);box-shadow:var(--sh-pop)}
-.nav-in{position:relative;display:grid;grid-template-columns:repeat(5,1fr);padding:5px}
+.nav-in{position:relative;display:grid;grid-template-columns:repeat(var(--n,5),1fr);padding:5px}
 .nb{appearance:none;border:0;background:none;color:var(--mu2);display:flex;flex-direction:column;align-items:center;gap:4px;padding:9px 0 8px;font-size:10px;letter-spacing:0;font-weight:600;cursor:pointer;position:relative;z-index:1;border-radius:20px;transition:color .2s;min-width:0}
 .nb span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 2px}
 .nb .i{width:24px;height:24px;transition:transform .25s var(--sp),color .2s}
@@ -168,7 +168,7 @@ body.ontop .top .brand{color:#F4F4F5}
 .nb.on{color:var(--tx)}
 .nb.on .i{color:var(--ac);transform:translateY(-1px)}
 .nb .badge{position:absolute;top:7px;left:calc(50% + 8px);width:8px;height:8px;border-radius:50%;background:var(--ac);box-shadow:0 0 10px var(--acg)}
-.nav-ind{position:absolute;top:5px;left:5px;width:calc((100% - 10px) / 5);height:calc(100% - 10px);pointer-events:none;transition:transform .28s var(--sp),opacity .2s}
+.nav-ind{position:absolute;top:5px;left:5px;width:calc((100% - 10px) / var(--n,5));height:calc(100% - 10px);pointer-events:none;transition:transform .28s var(--sp),opacity .2s}
 .nav-ind::before{content:'';position:absolute;bottom:4px;left:50%;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--ac);box-shadow:0 0 10px var(--acg)}
 .nav-ind::after{content:'';position:absolute;inset:0;border-radius:20px;background:linear-gradient(180deg,rgba(var(--w),.12),rgba(var(--w),.035));box-shadow:inset 0 1px 0 rgba(var(--w),.12),0 6px 18px -8px rgba(0,0,0,.8)}
 html[data-mode="light"] .nav-ind::after{background:linear-gradient(180deg,rgba(var(--w),.08),rgba(var(--w),.03));box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 6px 16px -10px rgba(0,0,0,.35)}
@@ -1749,6 +1749,128 @@ html.th-otel .tm.rest{--tc:rgba(60,203,187,.22)}
 .tm-spl b{color:var(--tx);font-size:14px}
 
 /* =====================================================================
+   v10 · abdomen opțional, fila Kickboxing (cardurile cu poze, foile, cronometrul de runde)
+   ===================================================================== */
+/* abdomenul opțional din plan și din antrenamentul ghidat */
+.ex-opt-h{padding:14px 16px 4px;border-top:1px dashed var(--ln2)}
+.ex-opt-h b{display:inline-flex;align-items:center;gap:7px;white-space:nowrap;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mu)}
+.ex-opt-h .i{width:13px;height:13px}
+.ex-opt-h span{display:block;margin-top:3px;font-size:12px;color:var(--mu2)}
+.ex-opt-h + .ex{border-top:0}
+.ex.opt .tick{border-style:dashed}
+.tag.opt{background:transparent;border:1px dashed var(--ln3);color:var(--mu);padding:2px 7px;font-size:10.5px;letter-spacing:.04em;text-transform:none}
+.fx-prog button.opt{background:transparent;box-shadow:inset 0 0 0 1.5px var(--ln3)}
+.fx-prog button.opt.ok{background:var(--ac);box-shadow:0 0 8px -1px var(--acg)}
+.fx-prog button.opt.cur{background:var(--tx)}
+.fx-abs{margin-top:10px;border-style:dashed}
+
+/* banda de sus a filei: operatorul în gardă, așezat în dreapta */
+#view[data-tab="kb"] .band-ph{background-image:var(--kb-band,var(--cover));background-position:70% 0%}
+@media(min-width:1100px){ #view[data-tab="kb"] .band-ph{background-position:50% 32%} }
+
+/* cardurile activităților: poză, titlu mare, ultima sesiune, formatul pregătit */
+.kb-acts{display:grid;gap:12px;margin-top:12px}
+.kb-card{appearance:none;position:relative;isolation:isolate;overflow:hidden;display:flex;align-items:flex-end;width:100%;min-height:196px;padding:16px 18px;border-radius:var(--r-xl);
+  border:1px solid rgba(255,255,255,.08);background:#060607;color:#F4F4F5;text-align:left;cursor:pointer;box-shadow:var(--sh-card);transition:transform .18s var(--e1),border-color .2s}
+.kb-card:active{transform:scale(.985)}
+@media(hover:hover){.kb-card:hover{border-color:rgba(255,255,255,.2)} .kb-card:hover .kb-ph{transform:scale(1.06)}}
+.kb-ph{position:absolute;inset:0;z-index:-2;background:var(--ph) 50% 35%/cover no-repeat;transform:scale(1.02);transition:transform 1.2s var(--e1)}
+.kb-fd{position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(180deg,rgba(5,5,6,.15) 0,rgba(5,5,6,0) 35%,rgba(5,5,6,.82) 100%),linear-gradient(90deg,rgba(5,5,6,.78),rgba(5,5,6,0) 72%)}
+.kb-ct{display:flex;flex-direction:column;gap:3px;min-width:0;max-width:78%}
+.kb-card .eyebrow{color:rgba(255,255,255,.66)}
+.kb-t{font:700 40px/1 var(--fd);text-transform:uppercase;letter-spacing:.015em;background:linear-gradient(180deg,#fff 35%,#AEB9C7);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 3px 12px rgba(0,0,0,.7))}
+.kb-s{font-size:13px;color:rgba(255,255,255,.78);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.kb-go{display:inline-flex;align-items:center;gap:6px;margin-top:8px;align-self:flex-start;font-size:12px;font-weight:600;padding:5px 10px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.kb-go .i{width:12px;height:12px}
+.kb-tgc{position:absolute;top:14px;right:14px;display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:5px 9px;border-radius:999px;color:rgba(255,255,255,.86);background:rgba(5,5,6,.55);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.kb-tgc .i{width:13px;height:13px}
+#view.anim .kb-card{animation:cvUp .7s var(--e1) both} #view.anim .kb-card:nth-child(2){animation-delay:.07s} #view.anim .kb-card:nth-child(3){animation-delay:.14s}
+#view.anim .kb-card .kb-ph{animation:cvIn 1.6s cubic-bezier(.16,.7,.2,1) backwards}
+@media(min-width:760px){ .kb-acts{grid-template-columns:1fr 1fr} .kb-card:first-child{grid-column:1/-1;min-height:240px} }
+.kb-wk-n{font-size:14px;color:var(--mu);margin-top:6px} .kb-wk-n b{color:var(--tx);font-variant-numeric:tabular-nums}
+.ic-s.kb{background:rgba(var(--w),.08);color:var(--tx)}
+
+/* uneltele: grilă compactă, ca să nu încurce */
+.kb-tools{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.kb-tool{appearance:none;display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:12px 10px;border-radius:14px;border:1px solid var(--ln);background:var(--s2);color:var(--tx);text-align:left;cursor:pointer;min-width:0;transition:border-color .2s,transform .12s var(--sp)}
+.kb-tool:active{transform:scale(.96)}
+@media(hover:hover){.kb-tool:hover{border-color:var(--a40)}}
+.kb-tool .ic-s{width:30px;height:30px;border-radius:10px;margin-bottom:4px} .kb-tool .ic-s .i{width:15px;height:15px}
+.kb-tool b{font-size:12.5px;line-height:1.2} .kb-tool span:last-child{font-size:11px;color:var(--mu2);line-height:1.3}
+@media(min-width:760px){ .kb-tools{grid-template-columns:repeat(6,1fr)} }
+
+/* istoric */
+.kb-mix{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.kb-bars{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;align-items:end;height:96px;margin-top:14px}
+.kb-bar{position:relative;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px}
+.kb-bar i{display:block;width:100%;min-height:3px;border-radius:6px 6px 3px 3px;background:linear-gradient(180deg,rgba(var(--w),.32),rgba(var(--w),.1))}
+.kb-bar.cur i{background:linear-gradient(180deg,var(--ac),var(--a40));box-shadow:0 0 14px -4px var(--acg)}
+.kb-bar span{font-size:10.5px;color:var(--mu2);font-variant-numeric:tabular-nums;min-height:12px}
+
+/* foile: antetul cu poză */
+.kb-hd{position:relative;isolation:isolate;overflow:hidden;display:flex;align-items:flex-end;min-height:178px;margin:-4px 0 0;padding:16px;border-radius:18px;color:#F4F4F5;background:#060607}
+.kb-hd.sm{min-height:150px}
+.kb-hd .eyebrow{color:rgba(255,255,255,.66)}
+.kb-hd .h1{color:#fff;margin:6px 0 4px;font-size:40px}
+.kb-hd .sm{color:rgba(255,255,255,.8);max-width:420px}
+.kb-hd .kb-ct{max-width:100%}
+.kb-x{position:absolute;top:12px;right:12px;z-index:2;background:rgba(5,5,6,.5);border-color:rgba(255,255,255,.16);color:#fff;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.kb-pick{grid-template-columns:repeat(4,1fr)!important}
+.kb-stps{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.kb-stp{display:flex;flex-direction:column;gap:6px;padding:10px;border-radius:14px;border:1px solid var(--ln);background:var(--bg);min-width:0;text-align:center}
+html[data-mode="light"] .kb-stp{background:var(--s2)}
+.kb-stp > span{font-size:11.5px;font-weight:600;color:var(--mu)}
+.kb-stp > b{font:700 26px/1 var(--fd);font-variant-numeric:tabular-nums;white-space:nowrap}
+.kb-stp .r{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.kb-stp button{appearance:none;height:34px;border-radius:10px;border:1px solid var(--ln2);background:var(--s2);color:var(--tx);font-size:18px;cursor:pointer;min-width:0}
+.kb-stp button:active{transform:scale(.9)}
+.kb-tgs{margin-top:16px;border:1px solid var(--ln);border-radius:16px;background:rgba(var(--w),.02);overflow:hidden}
+.kb-tgs summary{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;list-style:none}
+.kb-tgs summary::-webkit-details-marker{display:none}
+.kb-tgs summary b{display:flex;align-items:center;gap:6px;font-size:14px} .kb-tgs summary b .i{width:15px;height:15px;color:var(--ac)}
+.kb-tgs summary .xs{display:block;margin-top:2px}
+.kb-tgs summary > .i{transition:transform .2s;color:var(--mu)} .kb-tgs[open] summary > .i{transform:rotate(180deg)}
+.kb-tg{appearance:none;display:flex;align-items:center;gap:10px;width:100%;padding:11px 14px;border:0;border-top:1px solid var(--ln);background:none;color:var(--tx);text-align:left;cursor:pointer;font-size:14px}
+.kb-tg .xs{display:block;margin-top:2px}
+.kb-tg > .i{color:var(--mu2);width:16px;height:16px}
+.kb-tg.ok b{color:var(--mu)}
+@media(hover:hover){.kb-tg:hover{background:rgba(var(--w),.03)}}
+.kb-sug{appearance:none;display:flex;align-items:center;gap:10px;width:100%;margin-top:8px;padding:10px 14px;border-radius:14px;border:1px dashed var(--ln2);background:none;color:var(--mu);text-align:left;cursor:pointer;font-size:13px}
+.kb-sug b{color:var(--tx);font-weight:600} .kb-sug .i{width:15px;height:15px;flex:none}
+.kb-tg-st{margin-top:12px;padding:10px 12px;border-radius:12px;background:rgba(var(--w),.04);font-size:13px;color:var(--mu);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.kb-tg-st.ok{background:var(--ok-bg);color:var(--ok-t)} .kb-tg-st .i{width:15px;height:15px} .kb-tg-st b{color:var(--tx)}
+.kb-tg-q{margin-top:14px}
+
+/* cronometrul de runde: poza activității, discretă, în spate; combinația strigată, mare */
+.tm.kbt::after{content:'';position:fixed;inset:0 0 auto;height:72vh;z-index:-1;pointer-events:none;background:var(--ph) 50% 25%/cover no-repeat;opacity:.2;filter:grayscale(.3);
+  -webkit-mask-image:linear-gradient(180deg,#000 0,rgba(0,0,0,.6) 45%,transparent 100%);mask-image:linear-gradient(180deg,#000 0,rgba(0,0,0,.6) 45%,transparent 100%)}
+html[data-mode="light"] .tm.kbt::after{opacity:.1}
+.kb-call{margin:6px auto 0;min-height:84px;max-width:420px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:10px 14px;border-radius:18px;
+  border:1px solid var(--ln2);background:rgba(var(--w),.035);text-align:center}
+.kb-call b{font:800 40px/1 var(--fd);letter-spacing:.02em;text-transform:uppercase;animation:kbPop .32s var(--sp)}
+.kb-call span{font-size:13px;color:var(--mu)}
+@keyframes kbPop{from{opacity:.2;transform:scale(.88)}}
+.kb-start{display:flex;align-items:flex-start;gap:8px;justify-content:center;text-align:center;font-size:12.5px;color:var(--mu);margin-top:10px;line-height:1.5}
+.kb-start .i{width:15px;height:15px;flex:none;margin-top:2px}
+
+/* combinații, bandaje, geantă */
+.kb-nums{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.kb-nums div{display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:12px;border:1px solid var(--ln);background:var(--bg)}
+html[data-mode="light"] .kb-nums div{background:var(--s2)}
+.kb-nums b{font:800 24px/1 var(--fd);color:var(--ac)} .kb-nums span{font-size:12.5px;color:var(--mu)}
+.kb-lib{padding:11px 0;border-top:1px solid var(--ln)} .kb-lib b{font:700 20px/1.1 var(--fd);text-transform:uppercase;letter-spacing:.02em} .kb-lib .sm{margin-top:3px} .kb-lib .xs{margin-top:3px;line-height:1.45}
+.kb-steps{counter-reset:k;list-style:none;padding:0;margin:14px 0 0}
+.kb-steps li{counter-increment:k;position:relative;padding:10px 0 10px 44px;border-top:1px solid var(--ln)}
+.kb-steps li::before{content:counter(k);position:absolute;left:0;top:10px;width:30px;height:30px;border-radius:10px;display:grid;place-items:center;font:700 16px var(--fd);background:var(--a14);color:var(--ac)}
+.kb-steps b{display:block;font-size:14px} .kb-steps span{font-size:13px;color:var(--mu);line-height:1.45}
+.kb-gear{appearance:none;display:flex;align-items:center;gap:12px;width:100%;padding:9px 0;border:0;border-top:1px solid var(--ln);background:none;color:var(--tx);font-size:14px;text-align:left;cursor:pointer}
+.kb-gear .tick{pointer-events:none}
+.kb-gear.on span:last-child{color:var(--mu);text-decoration:line-through;text-decoration-color:rgba(var(--w),.3)}
+
+/* bara de jos cu 6 file: etichete mai strânse pe telefoanele înguste */
+@media(max-width:430px){ .nav-in[style*="--n:6"] .nb{font-size:9.5px;letter-spacing:-.01em} .nav-in[style*="--n:6"] .nb span{padding:0} }
+
+/* =====================================================================
    Mișcare · intrarea în ecran, apariția la derulare, grafice care se desenează.
    Mișcare redusă: după setarea sistemului („Automat") sau aleasă explicit în Setări.
    ===================================================================== */
@@ -2127,6 +2249,9 @@ const PLAN=[
 ];
 /* v9: abdomen la finalul zilelor de upper; [zi, câte exerciții avea ziua înainte] — pentru bifarea automată a zilelor deja terminate */
 const PLAN_ABS=[[0,8],[2,9],[4,9]];
+/* v10: abdomenul e opțional — o zi e completă când sunt bifate exercițiile de dinaintea lui */
+const absFrom=d=>{ const pa=PLAN_ABS.find(a=>a[0]===d); return pa?pa[1]:PLAN[d].ex.length; };
+const optX=(d,x)=>x>=absFrom(d);
 const NOTES=[
  {wk:'Bază aerobă + forță pe partea de sus',d:[
   ['Coaching','Alergarea rămâne UȘOARĂ — stai în zona 2. Tempo controlat și amplitudine completă la ridicări. Începi săptămâna construind elan, nu oboseală.'],
@@ -2189,7 +2314,7 @@ function dayBase(w,d){
     if(base.run==='thr'&&n==='Threshold'){ const r=p.thr.r[w]||0; txt=r+' × '+mmss(p.thr.m)+' @ ritm de prag · pauză '+p.thr.rest+'s jog ușor'; planMin=Math.round(runWork('thr',w)); }
     else if(base.run==='lng'&&/^Long run/.test(n)){ planMin=p.lng.w[w]||0; txt=planMin+' min continuu · ritm conversațional, zona 2'; }
     else if((base.run==='ez1'||base.run==='ez2')&&/^Easy run/.test(n)){ planMin=p[base.run].w[w]||0; txt=planMin+' min · ritm conversațional, zona 2'+(base.run==='ez2'?' — flush, nu antrenament':''); }
-    return Object.assign({x,n,p:txt,planMin},parseEx(n,txt,base));
+    return Object.assign({x,n,p:txt,planMin,opt:optX(d,x)},parseEx(n,txt,base));
   });
   const liftMin=(base.lift||[]).reduce((a,s)=>a+s[1],0);
   const min=base.run?Math.round(runTotal(base.run,w)+liftMin):base.min;
@@ -2200,9 +2325,11 @@ const dKeyC=(c,w,d)=>'hc'+c+'w'+w+'d'+d;
 const dKey=(w,d)=>dKeyC(cyc(),w,d);
 const eId=(w,d,x)=>dKey(w,d)+'e'+x;
 const isDone=(w,d,x)=>!!((S.wlog||{})[dKey(w,d)]||{})[eId(w,d,x)];
-function doneCount(w,d){ let n=0; PLAN[d].ex.forEach((_,x)=>{ if(isDone(w,d,x)) n++; }); return n; }
-const dayFull=(w,d)=>doneCount(w,d)===PLAN[d].ex.length;
-function fullIn(c,w,d){ const k=dKeyC(c,w,d), o=(S.wlog||{})[k]||{}; return PLAN[d].ex.every((_,x)=>o[k+'e'+x]); }
+/* exercițiile obligatorii bifate (abdomenul opțional se numără separat, în optDone) */
+function doneCount(w,d){ let n=0; for(let x=0;x<absFrom(d);x++) if(isDone(w,d,x)) n++; return n; }
+function optDone(w,d){ let n=0; for(let x=absFrom(d);x<PLAN[d].ex.length;x++) if(isDone(w,d,x)) n++; return n; }
+const dayFull=(w,d)=>doneCount(w,d)===absFrom(d);
+function fullIn(c,w,d){ const k=dKeyC(c,w,d), o=(S.wlog||{})[k]||{}; for(let x=0;x<absFrom(d);x++) if(!o[k+'e'+x]) return false; return true; }
 function nextDay(){ for(let w=0;w<WEEKS;w++) for(let d=0;d<7;d++) if(!dayFull(w,d)) return {w,d}; return null; }
 function cycleDaysDone(){ let n=0; for(let w=0;w<WEEKS;w++) for(let d=0;d<7;d++) if(dayFull(w,d)) n++; return n; }
 async function setDone(w,d,x,on){
@@ -3162,22 +3289,22 @@ function briefCard(){
 function viewPlan(){
   const nx=nextDay(), w=S.planW!=null?S.planW:(S.sess?S.sess.w:nx?nx.w:0), full=cycleDaysDone();
   const weekFull=a=>PLAN.every((_,d)=>dayFull(a,d));
-  const days=PLAN.map((_,d)=>{ const day=dayFor(w,d), dn=doneCount(w,d), tot=day.ex.length, open=S.openDay===d, isN=nx&&nx.w===w&&nx.d===d, c=CAT[day.cat], col=catCol(day.cat);
+  const days=PLAN.map((_,d)=>{ const day=dayFor(w,d), dn=doneCount(w,d), tot=absFrom(d), optN=PLAN[d].ex.length-tot, od=optDone(w,d), open=S.openDay===d, isN=nx&&nx.w===w&&nx.d===d, c=CAT[day.cat], col=catCol(day.cat);
     return `<div class="card day ${open?'open':''} ${isN?'next':''}" id="day${d}" style="--c:${col}">
       <button class="day-h" data-a="toggleDay" data-d="${d}" aria-expanded="${open}">
         <span class="day-bar"></span>
         <span class="sp"><span class="day-k">${DAYN[d]}${isN?' · următorul':''}</span><span class="day-t" style="display:block">${esc(day.t)}</span>
-          <span class="day-m" style="display:block">${c[0]} · ${day.min} min · ${dn}/${tot} bifate</span></span>
+          <span class="day-m" style="display:block">${c[0]} · ${day.min} min · ${dn}/${tot} bifate${optN?od===optN?' · + abdomen':' · abdomen opțional':''}</span></span>
         ${dn===tot?`<span class="tag pr">${ic('check')}</span>`:ring(dn/tot,{s:34,sw:3,c:col})}
         <span class="chev">${ic('down')}</span></button>
       <div class="day-b"><div>
-        ${day.ex.map(e=>{ const on=isDone(w,d,e.x); return `<div class="ex ${on?'done':''}">
+        ${day.ex.map((e,i)=>{ const on=isDone(w,d,e.x); return `${e.opt&&!(day.ex[i-1]||{}).opt?`<div class="ex-opt-h"><b>${ic('plus')} Abdomen · opțional</b><span>Nu contează la ziua completă: îl faci când ai chef.</span></div>`:''}<div class="ex ${on?'done':''} ${e.opt?'opt':''}">
           <button class="tick ${on?'on':''}" data-a="tick" data-w="${w}" data-d="${d}" data-x="${e.x}" aria-label="${on?'Debifează':'Bifează'} ${esc(e.n)}">${ic('check')}</button>
           <div class="sp"><div class="ex-n">${esc(e.n)}</div><div class="ex-p">${esc(e.p)}</div>${lastLine(e)}${exNote(e.n)?`<div class="ex-l ex-nt">${ic('edit')} ${esc(exNote(e.n))}</div>`:''}</div>
           ${e.kind==='lift'?`<button class="xb" data-a="tech" data-k="${esc(e.n)}" aria-label="Tehnică pentru ${esc(e.n)}">${ic('info')}</button>`:''}</div>`; }).join('')}
         <details class="notes"><summary>${ic('info')} ${esc(day.notes.wk)}</summary>
           ${day.notes.d.map(([t,x])=>`<p><b>${esc(t)}.</b> ${esc(x)}</p>`).join('')}</details>
-        <div class="day-act inrow"><button class="btn pri" style="flex:1" data-a="start" data-w="${w}" data-d="${d}">${ic('play')} ${dn&&dn<tot?'Continuă ziua':dn===tot?'Reia ziua':'Începe ziua'}</button>${day.run?`<button class="btn" data-a="spdOpen" data-d="${d}">${ic('gauge')} Viteza</button>`:''}</div>
+        <div class="day-act inrow"><button class="btn pri" style="flex:1" data-a="start" data-w="${w}" data-d="${d}">${ic('play')} ${dn&&dn<tot?'Continuă ziua':dn===tot?(optN&&od<optN?'Fă și abdomenul':'Reia ziua'):'Începe ziua'}</button>${day.run?`<button class="btn" data-a="spdOpen" data-d="${d}">${ic('gauge')} Viteza</button>`:''}</div>
       </div></div></div>`; }).join('');
   return `
   <div class="card plan-hd"><div class="h3">Planul de 4 săptămâni</div>
@@ -4213,6 +4340,11 @@ const sessSec=()=>S.sess?Math.max(0,Math.floor((Date.now()-S.sess.start)/1000)):
 const sessDay=s=>dayFor(s.w,s.d);
 const sessIsDone=(s,x)=>isDone(s.w,s.d,x);
 const sessKey=s=>s.cur;
+/* v10: abdomenul de la final e opțional — după ultimul exercițiu obligatoriu poți termina sau continua cu el */
+const lastReq=s=>absFrom(s.d)-1;
+const fxEnd=(day,x)=>x===day.ex.length-1||x===lastReq(S.sess);
+const absOffer=(day,x)=>x===lastReq(S.sess)&&x<day.ex.length-1?`<button class="btn ghost wide fx-abs" data-a="fxNext">${ic('plus')} Fac și abdomenul · opțional ${ic('right')}</button>`:'';
+const optBadge=e=>e.opt?`<span class="tag opt">opțional</span> `:'';
 async function markDone(s,x,on){ await setDone(s.w,s.d,x,on); }
 async function persistSess(){ await store.set(K.sess,S.sess); }
 /* întrebarea de dinainte: cum te simți (somn, energie, febră) — se poate sări */
@@ -4270,15 +4402,15 @@ function auxHTML(e,kg,sets){
 function updAux(){ const s=S.sess, el=$('#aux'); if(!s||!el) return; const e=sessDay(s).ex[s.cur]; if(!e) return;
   el.innerHTML=auxHTML({n:e.n},($('#inKg')||{}).value,s.sets[s.cur]); }
 /* ce urmează după exercițiul curent */
-function nextTxt(day,x){ const n=day.ex[x+1]; if(!n) return 'Ultimul exercițiu'; return 'Urmează: <b class="tx">'+esc(n.n)+'</b>'+(short(n)?' · '+esc(short(n)):''); }
+function nextTxt(day,x){ const n=day.ex[x+1]; if(!n) return 'Ultimul exercițiu'; return (n.opt&&!day.ex[x].opt?'Opțional, dacă vrei: ':'Urmează: ')+'<b class="tx">'+esc(n.n)+'</b>'+(short(n)?' · '+esc(short(n)):''); }
 /* confirmarea scurtă după o serie („SERIE TERMINATĂ") */
 const lvDone=()=>S.lvOk&&Date.now()-S.lvOk.t<1600?`<div class="lv-done">${ic('check')} ${esc(S.lvOk.txt)}</div>`:'';
 function fxLift(e,x){
-  const s=S.sess, day=sessDay(s), sets=s.sets[x]||[], sg=suggest(e), inc=incFor(e.n), isLast=x===day.ex.length-1;
+  const s=S.sess, day=sessDay(s), sets=s.sets[x]||[], sg=suggest(e), inc=incFor(e.n), isLast=fxEnd(day,x);
   let kg=s.kg[x]!=null?s.kg[x]:sets.length?sets[sets.length-1][0]:sg.kg!=null?sg.kg:'';
   const rp=s.rp[x]!=null?s.rp[x]:sets.length?sets[sets.length-1][1]:sg.reps, complete=sets.length>=e.sets, setNo=Math.min(sets.length+1,e.sets);
   return `
-    <div class="eyebrow">Exercițiul curent · ${e.sets} serii × ${e.lo}${e.hi!==e.lo?'–'+e.hi:''} · pauză ${e.rest} s</div>
+    <div class="eyebrow">${optBadge(e)}Exercițiul curent · ${e.sets} serii × ${e.lo}${e.hi!==e.lo?'–'+e.hi:''} · pauză ${e.rest} s</div>
     <div class="fx-n">${esc(e.n)}</div>
     <div class="lv-chips">${e.adj?`<span class="adjb">${ic('coach')} Ajustat azi: ${esc(e.adj.join(' · '))}</span>`:''}
       <button class="chip" data-a="tech" data-k="${esc(e.n)}">${ic('info')} Cum se execută?</button></div>
@@ -4297,7 +4429,7 @@ function fxLift(e,x){
         <input id="inRp" type="number" inputmode="numeric" value="${rp}"><button data-a="rp" data-v="1" aria-label="plus o repetare">+</button></div></div></div>
     ${complete
       ?`<button class="btn pri xl wide glow fx-cta" data-a="${isLast?'fxFinish':'fxNext'}">${isLast?ic('trophy')+' Termină antrenamentul':'Următorul exercițiu '+ic('right')}</button>
-        <div class="fx-sub"><button class="btn ghost" data-a="logSet">${ic('plus')} Încă o serie</button>${sets.length?`<button class="btn ghost" data-a="undoSet">Șterge ultima</button>`:''}</div>`
+        ${absOffer(day,x)}<div class="fx-sub"><button class="btn ghost" data-a="logSet">${ic('plus')} Încă o serie</button>${sets.length?`<button class="btn ghost" data-a="undoSet">Șterge ultima</button>`:''}</div>`
       :`<button class="btn pri xl wide ${S.rest?'':'glow'} fx-cta lv-cta" data-a="logSet">${ic('check')} Seria ${setNo} terminată</button>
         ${sets.length?`<div class="fx-sub"><button class="btn ghost" data-a="undoSet">Șterge ultima serie</button><button class="btn ghost" data-a="exDone">Gata cu exercițiul</button></div>`:''}`}
     <div class="sugg ${sg.kind}">${ic(sg.kind==='up'?'trophy':'bolt')}<span>${sg.txt}</span></div>
@@ -4306,14 +4438,14 @@ function fxLift(e,x){
     ${complete?'':`<div class="lv-next">${nextTxt(day,x)}</div>`}`;
 }
 function fxRun(e,x){
-  const s=S.sess, done=s.runs[x], day=sessDay(s), isLast=x===day.ex.length-1, pre=tmPresetFor(e,day,s.w);
+  const s=S.sess, done=s.runs[x], day=sessDay(s), isLast=fxEnd(day,x), pre=tmPresetFor(e,day,s.w);
   const mins=s.tmMin[x]!=null?s.tmMin[x]:e.planMin||'';
   return `
     <div class="eyebrow">${ic('run')} Alergare · ${RUNK[runKindOf(day.run)]}</div>
     <div class="fx-n">${esc(e.n)}</div><div class="fx-p">${esc(e.p)}</div>${e.adj?`<div class="adjb">${ic('coach')} Ajustat azi: ${esc(e.adj.join(' · '))}</div>`:''}
     ${(()=>{ const z=hrZones().z[e.n==='Threshold'?3:1]; return `<div class="tag run" style="margin-top:8px">${ic('target')} ${e.n==='Threshold'?'Zona 4 la reprize':'Zona 2'}: ${z.lo}–${z.hi} bpm</div>`; })()}
     ${done?`<div class="done-box">${ic('check')} ${num(done.km,2)} km în ${num(done.min)} min · ${fmtPace(paceOf(done))}</div>
-      <button class="btn pri xl wide glow" data-a="${isLast?'fxFinish':'fxNext'}">${isLast?'Termină antrenamentul':'Următorul exercițiu '+ic('right')}</button>`
+      <button class="btn pri xl wide glow" data-a="${isLast?'fxFinish':'fxNext'}">${isLast?'Termină antrenamentul':'Următorul exercițiu '+ic('right')}</button>${absOffer(day,x)}`
     :`${pre?`<button class="btn blue wide" style="margin-top:14px" data-a="tmFor" data-x="${x}">${ic('clock')} Pornește cronometrul${e.n==='Threshold'?' de intervale':''}</button>`:''}
       <div class="logger" style="margin-top:14px">
       <div class="stp"><label for="inKm">km</label><div class="r"><button data-a="km" data-v="-0.5">−</button>
@@ -4326,15 +4458,15 @@ function fxRun(e,x){
     <div class="lv-next">${nextTxt(day,x)}</div>`;
 }
 function fxTask(e,x){
-  const s=S.sess, day=sessDay(s), on=sessIsDone(s,x), isLast=x===day.ex.length-1, pre=tmPresetFor(e,day,s.w);
+  const s=S.sess, day=sessDay(s), on=sessIsDone(s,x), isLast=fxEnd(day,x), pre=tmPresetFor(e,day,s.w);
   return `
-    <div class="eyebrow">${ic(day.cat==='rest'?'leaf':'bolt')} ${day.cat==='rest'?'Recuperare':'Bloc'}</div>
+    <div class="eyebrow">${optBadge(e)}${ic(day.cat==='rest'?'leaf':'bolt')} ${day.cat==='rest'?'Recuperare':'Bloc'}</div>
     <div class="fx-n">${esc(e.n)}</div><div class="fx-p" style="font-size:16px;line-height:1.6">${esc(e.p)}</div>
     ${movesHTML(e)}
     ${on?`<div class="done-box">${ic('check')} Făcut.</div>`:''}
     ${pre&&!on?`<button class="btn blue wide xl" style="margin-top:16px" data-a="tmFor" data-x="${x}">${ic('clock')} Pornește cronometrul</button>`:''}
     <button class="btn pri xl wide ${on?'':'glow'} fx-cta" data-a="${on?(isLast?'fxFinish':'fxNext'):'exDone'}">${on?(isLast?'Termină antrenamentul':'Următorul '+ic('right')):ic('check')+' Gata'}</button>
-    <div class="lv-next">${nextTxt(day,x)}</div>`;
+    ${on?absOffer(day,x):''}<div class="lv-next">${nextTxt(day,x)}</div>`;
 }
 /* reperele de execuție pentru blocurile din plan care nu au serii: conditioning, finisher, încălzirea cu drills */
 function movesHTML(e){
@@ -4361,10 +4493,11 @@ function renderFocus(){
     <div class="fx-top"><button class="ib" data-a="fxMin" aria-label="Minimizează">${ic('down')}</button>
       <div class="fx-tt"><div class="eyebrow">S${s.w+1} · ${DAYN[s.d]}${n?' · '+(x+1)+'/'+n:''}</div><div class="t">${esc(day.t)}</div></div>
       ${hrChip()}<div class="fx-clock" id="fxClock">${fmtClock(sessSec())}</div></div>
-    ${n?`<div class="fx-prog">${day.ex.map((q,i)=>`<button class="${i===x?'cur':sessIsDone(s,i)?'ok':''}" data-a="fxGo" data-x="${i}" aria-label="${esc(q.n)}"></button>`).join('')}</div>`:''}
+    ${n?`<div class="fx-prog">${day.ex.map((q,i)=>`<button class="${i===x?'cur':sessIsDone(s,i)?'ok':''} ${q.opt?'opt':''}" data-a="fxGo" data-x="${i}" aria-label="${esc(q.n)}"></button>`).join('')}</div>`:''}
     <div class="fx-body ${S.fxDir}">${body}</div>
     ${n?`<div class="fx-nav"><button class="btn ghost" data-a="fxPrev" ${x===0?'disabled':''}>${ic('left')} Înapoi</button>
-      ${x<n-1?`<button class="btn" data-a="fxNext">Următorul ${ic('right')}</button>`:`<button class="btn pri" data-a="fxFinish">${ic('trophy')} Termină</button>`}</div>`:''}
+      ${x<n-1&&x!==lastReq(s)?`<button class="btn" data-a="fxNext">Următorul ${ic('right')}</button>`:`<button class="btn pri" data-a="fxFinish">${ic('trophy')} Termină</button>`}</div>
+      ${x>lastReq(s)&&x<n-1?`<button class="btn ghost wide sm" style="margin-top:8px" data-a="fxFinish">${ic('trophy')} Termină aici, fără restul abdomenului</button>`:''}`:''}
     <button class="btn ghost wide sm danger fx-quit" data-a="fxQuit" data-confirm="Sigur? Seriile notate rămân">Renunță la sesiune</button>
   </div></div>`;
   S.fxDir=''; fxWasOpen=true; document.body.classList.add('lock');
@@ -4389,6 +4522,7 @@ function summaryHTML(){
       <div class="zleg">${m.hrS.z.map((s_,i)=>`<span><b style="color:${HRZC()[i]}">Z${i+1}</b> ${Math.round(s_/60)} min</span>`).join('')}</div></div>`:''}
     ${m.prList.length?`<div class="card"><div class="eyebrow">${ic('trophy')} Recorduri noi</div>${m.prList.map(p=>`<div class="pr-row"><span class="tag pr">PR</span><b>${esc(p.n)}</b>
       <span class="xs mu">${num(p.w)}×${p.r}</span><span class="v">${p.prev}→${p.v}</span></div>`).join('')}</div>`:''}
+    ${m.absT?`<div class="note">${ic(m.absN?'check':'info')} Abdomen opțional: ${m.absN?m.absN+' din '+m.absT+' exerciții făcute':'sărit azi — ziua e completă oricum'}.</div>`:''}
     ${m.skipped.length?`<div class="note">Fără date notate: ${m.skipped.map(esc).join(', ')}. Ziua e bifată oricum, ca ciclul să meargă mai departe.</div>`:''}
     ${stOn()&&stCanWrite()?`<div class="note st-sum" id="stSum">${stSumTxt(m)}</div>`:''}
     <button class="btn pri xl wide glow" style="margin-top:18px" data-a="sumClose">${ic('check')} Gata</button>
@@ -4452,21 +4586,21 @@ async function logRun(){
   await markDone(s,x,true); buzz(40); await persistSess(); renderFocus();
 }
 async function exDone(){ const s=S.sess; s.tasks[s.cur]=1; await markDone(s,s.cur,true); buzz(25);
-  const day=sessDay(s); if(s.cur<day.ex.length-1&&day.ex[s.cur].kind!=='task'){ s.cur++; S.fxDir='r'; }
+  const day=sessDay(s); if(s.cur<day.ex.length-1&&s.cur!==lastReq(s)&&day.ex[s.cur].kind!=='task'){ s.cur++; S.fxDir='r'; }
   await persistSess(); renderFocus(); }
 async function finishSess(){
   const s=S.sess; if(!s) return; const day=sessDay(s);
   { const log=Object.assign({},S.wlog), k=dKey(s.w,s.d), dd=Object.assign({},log[k]||{});
-    day.ex.forEach((_,x)=>{ dd[eId(s.w,s.d,x)]=1; }); log[k]=dd; await save('wlog',log); }
+    day.ex.forEach((e,x)=>{ if(!e.opt) dd[eId(s.w,s.d,x)]=1; }); log[k]=dd; await save('wlog',log); }
   let sets=0,vol=0; Object.values(s.sets).forEach(a=>a.forEach(([w,r])=>{ sets++; vol+=w*r; }));
   const km=Object.values(s.runs).reduce((a,r)=>a+(+r.km||0),0);
   const has=x=>{ const e=day.ex[x]; return e.kind==='lift'?(s.sets[x]||[]).length:e.kind==='run'?s.runs[x]||s.tasks[x]:s.tasks[x]; };
-  const skipped=day.ex.filter((e,x)=>!has(x)).map(e=>e.n);
+  const skipped=day.ex.filter((e,x)=>!e.opt&&!has(x)).map(e=>e.n), absN=day.ex.filter((e,x)=>e.opt&&(has(x)||isDone(s.w,s.d,x))).length;
   const rec={date:todayKey(),dur:sessSec(),end:Date.now(),h:s.h,t:day.t,sets,vol:Math.round(vol),km:Math.round(km*100)/100,prs:s.prs.length,ready:s.ready?s.ready.score:null};
   Object.assign(rec,{cyc:cyc(),w:s.w,d:s.d});
   const hs=hrSum(s.hr); if(hs) rec.hr={avg:hs.avg,max:hs.max,z:hs.z}; if(s.adj) rec.adj=s.adj.src==='ai'?'ai':s.adj.kind;
   await save('hist',(S.hist||[]).concat([rec]));
-  S.summary=Object.assign({},rec,{hrS:hs,prList:s.prs,skipped});
+  S.summary=Object.assign({},rec,{hrS:hs,prList:s.prs,skipped,absN,absT:day.ex.filter(e=>e.opt).length});
   if(stOn()&&stCanWrite()){ const it=stItem(rec,s,day,hs); if(stCfg().auto!==false){ await stQueue(it); setTimeout(stFlush,50); } else ST.pend=it; }
   S.sess=null; stopRest(); S.fxOpen=false; await store.set(K.sess,null); keepAwake(false); keepAlive(false);
   render(); burstAt(innerWidth/2,innerHeight*.28,44); flash(); say('Antrenament terminat. Bravo!'); buzz([80,50,80,50,200]); beep(660,.1); setTimeout(()=>beep(880,.1),120); setTimeout(()=>beep(1320,.18),240);
@@ -4546,6 +4680,7 @@ function tmGo(){ const st=TM.st; st.start=Date.now(); st.t0=Date.now(); st.start
 const spSay=v=>{ const r=Math.round(v*10)/10, i=Math.floor(r), d=Math.round((r-i)*10); return i+(d?' virgulă '+d:''); };
 const tmSay=p=>say((p.k==='breath'||p.k==='rest'||!p.s?p.l:p.l+'. '+p.s.split(' — ')[0])+(p.sp?'. Viteza '+spSay(p.sp):''));
 function tmSched(){
+  if(TM.st&&TM.st.kb){ kbSched(); return; }
   cancelSched('tm'); const st=TM.st; if(!st||!st.started||st.done||st.pAt) return;
   const list=[]; let j=st.i, cur=st.ph[j]; if(cur.d==null) return;
   let t=cur.d-tmEl();
@@ -4571,6 +4706,7 @@ function tmAdvance(over,auto){
 function tmTick(){
   const st=TM.st; if(!st||!st.started||st.done||st.pAt) return;
   let g=0; while(!st.done&&tmPh().d!=null&&tmEl()>=tmPh().d&&g++<500) tmAdvance(tmEl()-tmPh().d,true);
+  if(st.kb&&!st.done) kbTick(st);
   tmPaint();
 }
 function tmFinish(auto){
@@ -4603,9 +4739,9 @@ function tmRender(){
   if(!st.started){
     r.innerHTML=`<div class="tm"><div class="tm-in">${top(st.title)}
       <div class="tm-ring"><svg viewBox="0 0 300 300"><circle cx="150" cy="150" r="130" fill="none" style="stroke:rgba(var(--w),.07)" stroke-width="14"/></svg>
-        <div class="c"><div><div class="tm-lbl">Gata?</div><div class="tm-time">${totalD?fmtClock(totalD):'∞'}</div><div class="tm-sub">${works.length} ${works.length===1?'bloc':'blocuri'} de lucru${st.ph.some(p=>p.k==='manual')?' · rundele se termină când apeși tu':''}</div></div></div></div>
+        <div class="c"><div><div class="tm-lbl">Gata?</div><div class="tm-time">${totalD?fmtClock(totalD):'∞'}</div><div class="tm-sub">${st.kb?works.length+(works.length===1?' rundă':' runde')+' × '+fmtClock(st.kb.rs):works.length+' '+(works.length===1?'bloc':'blocuri')+' de lucru'}${st.ph.some(p=>p.k==='manual')?' · rundele se termină când apeși tu':''}</div></div></div></div>
       ${st.ph.some(p=>p.sp)?`<div class="tm-spl">${st.ph.filter(p=>p.sp&&p.k!=='prep').filter((p,i,a)=>i===0||p.l.replace(/\d+\/\d+/,'')!==a[i-1].l.replace(/\d+\/\d+/,'')).slice(0,6).map(p=>`<span><b>${num(p.sp,1)}</b> km/h · ${esc(p.l.replace(/ \d+\/\d+/,''))}</span>`).join('')}</div>`:''}
-      <div class="note" style="text-align:center">Sunetele te anunță la fiecare schimbare, inclusiv cu telefonul blocat (lasă volumul pornit).${st.ph.some(p=>p.sp)?' Vocea îți spune viteza la fiecare bucată.':''}</div>
+      ${st.kb?kbStartNote(st):''}<div class="note" style="text-align:center">Sunetele te anunță la fiecare schimbare, inclusiv cu telefonul blocat (lasă volumul pornit).${st.ph.some(p=>p.sp)?' Vocea îți spune viteza la fiecare bucată.':''}</div>
       <div class="tm-ctl" style="grid-template-columns:1fr"><button class="btn pri xl glow" data-a="tmGo">${ic('play')} Start</button></div></div></div>`; return; }
   if(st.done){
     r.innerHTML=`<div class="tm"><div class="tm-in">${top(st.title)}
@@ -4614,17 +4750,17 @@ function tmRender(){
         ${st.amrap?`<div class="kpi"><div class="k">Runde</div><div class="v">${st.rounds}</div></div>`:''}
         ${st.laps.length?`<div class="kpi"><div class="k">Runda medie</div><div class="v">${fmtClock(st.laps.reduce((a,b)=>a+b,0)/st.laps.length)}</div></div>`:''}</div>
       ${st.laps.length>1?`<div class="card">${st.laps.map((l,i)=>`<div class="list-row"><span>Runda ${i+1}</span><span class="v">${fmtClock(l)}</span></div>`).join('')}</div>`:''}
-      ${st.kind==='lt30'?lt30Form(st):st.kind==='tread'&&st.from==null?treadDone(st):''}
+      ${st.kb?kbDoneHTML(st):st.kind==='lt30'?lt30Form(st):st.kind==='tread'&&st.from==null?treadDone(st):''}
       <div class="tm-ctl" style="grid-template-columns:1fr">${st.from!=null&&S.sess?`<button class="btn pri xl" data-a="tmApply">${ic('check')} ${st.run?'Folosește timpul: '+num(st.total/60,1)+' min':'Marchează exercițiul ca făcut'}</button>`:''}
-        <button class="btn ghost" data-a="tmClose">Închide</button></div></div></div>`; return; }
+        <button class="btn ghost" data-a="tmClose" ${st.kb?'data-confirm="Închizi fără să notezi?"':''}>Închide</button></div></div></div>`; return; }
   const next=st.ph[st.i+1], cls=ph.k==='rest'?'rest':ph.k==='prep'?'prep':'';
   const dots=st.ph.length<=40?`<div class="tm-dots">${st.ph.filter(p=>p.k!=='prep').map((p,i)=>{ const idx=st.ph.indexOf(p); return `<i class="${idx<st.i?'ok':idx===st.i?'cur':''}"></i>`; }).join('')}</div>`:'';
-  r.innerHTML=`<div class="tm ${cls}"><div class="tm-in">${top(st.title)}
+  r.innerHTML=`<div class="tm ${cls} ${st.kb?'kbt':''}" ${st.kb?`style="--ph:${kbPh((KB_A[st.kb.a]||KB_A.bag).ph)}"`:''}><div class="tm-in">${top(st.title)}
     <div class="tm-ring"><svg viewBox="0 0 300 300"><circle cx="150" cy="150" r="130" fill="none" style="stroke:rgba(var(--w),.07)" stroke-width="14"/>
       <circle id="tmRing" cx="150" cy="150" r="130" fill="none" stroke="${ph.k==='rest'?COL().run:ph.k==='prep'?COL().warn:TH().ac}" stroke-width="14" stroke-linecap="round"
         stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${C.toFixed(1)}" transform="rotate(-90 150 150)" style="transition:stroke-dashoffset .25s linear;filter:drop-shadow(0 0 10px ${ph.k==='rest'?'rgba(77,163,255,.6)':ph.k==='prep'?'rgba(255,176,32,.5)':'var(--acg)'})"/></svg>
       <div class="c"><div><div class="tm-lbl">${esc(ph.l)}</div><div class="tm-time" id="tmTime">0:00</div><div class="tm-sub">${esc(ph.s||'')}</div></div></div></div>
-    ${ph.sp?`<div class="tm-spd"><b>${num(ph.sp,1)}</b><small>km/h</small><span>${mmss(60/ph.sp)} /km</span></div>`:''}${ph.hr?`<div class="tm-hrz" id="tmHrz">țintă puls ${ph.hr[0]}–${ph.hr[1]}</div>`:''}
+    ${st.kb?kbLive(st,ph):''}${ph.sp?`<div class="tm-spd"><b>${num(ph.sp,1)}</b><small>km/h</small><span>${mmss(60/ph.sp)} /km</span></div>`:''}${ph.hr?`<div class="tm-hrz" id="tmHrz">țintă puls ${ph.hr[0]}–${ph.hr[1]}</div>`:''}
     ${st.amrap&&ph.k==='work'?`<div class="tm-next">Runde: <b id="tmRounds">${st.rounds}</b></div>`:''}
     ${next?`<div class="tm-next">Urmează: <b>${esc(next.l)}</b>${next.d?' · '+fmtClock(next.d):''}${next.sp?' · <b>'+num(next.sp,1)+' km/h</b>':''}</div>`:`<div class="tm-next">Ultimul bloc</div>`}
     ${dots}
@@ -4632,7 +4768,7 @@ function tmRender(){
       ${ph.k==='manual'?`<button class="btn pri xl glow" style="grid-column:1/-1" data-a="tmLap">${ic('check')} ${st.ph.length===1?'Gata':'Gata runda'}</button>`:''}
       ${st.amrap&&ph.k==='work'?`<button class="btn pri xl" style="grid-column:1/-1" data-a="tmRound">${ic('plus')} Rundă terminată</button>`:''}
       <button class="btn xl" data-a="tmPause">${st.pAt?ic('play')+' Continuă':ic('pause')+' Pauză'}</button>
-      <button class="btn xl ghost" data-a="tmSkip">${ic('skip')} Sari</button></div></div></div>`;
+      <button class="btn xl ghost" data-a="tmSkip">${ic('skip')} Sari</button>${st.kb?kbCtl(st):''}</div></div></div>`;
   tmPaint();
 }
 
@@ -4993,8 +5129,8 @@ function snapshot(){
     if(!nx) return s+' Toate cele 4 săptămâni sunt bifate; urmează un ciclu nou.';
     const day=dayFor(nx.w,nx.d);
     s+=` Următorul antrenament: săptămâna ${nx.w+1}/4, ${DAYN[nx.d]} — ${day.t} (~${day.min} min):\n`+day.ex.map(e=>{ const p=e.kind==='lift'?lastSession(e.n):null;
-      return `- ${e.n}: ${e.p}`+(p?` (ultima dată, ${p.d}: ${p.s.map(fmtSet).join(', ')})`:''); }).join('\n');
-    s+=`\nExerciții bifate în săptămâna ${nx.w+1}: `+PLAN.map((p,d)=>`${DAYS[d]} ${doneCount(nx.w,d)}/${p.ex.length}`).join(', ')+'.';
+      return `- ${e.n}${e.opt?' (opțional)':''}: ${e.p}`+(p?` (ultima dată, ${p.d}: ${p.s.map(fmtSet).join(', ')})`:''); }).join('\n');
+    s+=`\nExerciții bifate în săptămâna ${nx.w+1}: `+PLAN.map((p,d)=>`${DAYS[d]} ${doneCount(nx.w,d)}/${absFrom(d)}`).join(', ')+'.';
     return s; });
   sec('Antrenor adaptiv azi (ajustări peste planul de bază)',()=>{ const nx=nextDay(); if(!nx) return ''; const a=adjFor(nx.w,nx.d), P=a||adaptFor(nx.w,nx.d); if(!P) return 'Fără check-in azi: nu există propunere.';
     return (a?'Aplicate de utilizator ('+(a.src==='ai'?'AI':'reguli')+'): ':'Propunere neaplicată ('+P.title+'): ')+((P.groups||[]).map(g=>g.why).join(' ')||P.calm||'fără schimbări'); });
@@ -5012,7 +5148,8 @@ function snapshot(){
     return 'Ultimele alergări:\n'+rs.map(r=>`- ${r.date} ${RUNK[r.kind]||r.kind}: ${num(r.km,2)} km în ${num(r.min)} min (${fmtPace(paceOf(r))})`+(r.rpe?`, efort ${r.rpe}/10`:'')+(r.hr?`, puls mediu ${r.hr}`:'')+(r.sid?', din Strava':'')).join('\n')+
       `\nKm pe săptămână, ultimele 6 săptămâni (cea curentă la final): ${wk.join(', ')}.`; });
   sec('Antrenamente terminate',()=>(S.hist||[]).slice(-10).map(h=>`- ${h.date}: ${h.t} (ciclul ${h.cyc}, S${h.w+1}), ${Math.round(h.dur/60)} min, ${h.sets} serii`+(h.km?`, ${num(h.km,2)} km`:'')+(h.ready!=null?`, stare ${h.ready}/100`:'')+(h.rpe?`, RPE ${h.rpe}`:'')+(h.hr?`, puls mediu ${h.hr.avg} (max ${h.hr.max})`:'')).join('\n'));
-  sec('Abdomen adăugat în plan (la cererea utilizatorului)',()=>'La finalul zilelor de upper: luni Hanging Leg Raise 3×8–12 și Plank 3 × 45–60 s; miercuri Dragon Flag 4×3–6 (negative lente până la repetări complete) și Pallof Press 3×10–12 pe parte; vineri Dragon Flag 3×3–6 și Ab Wheel Rollout 3×8–10. Fac parte din plan ca orice alt exercițiu.');
+  sec('Abdomen adăugat în plan (la cererea utilizatorului)',()=>'La finalul zilelor de upper: luni Hanging Leg Raise 3×8–12 și Plank 3 × 45–60 s; miercuri Dragon Flag 4×3–6 (negative lente până la repetări complete) și Pallof Press 3×10–12 pe parte; vineri Dragon Flag 3×3–6 și Ab Wheel Rollout 3×8–10. Sunt opționale: le face când vrea, iar o zi fără ele e tot completă (bifele numără doar exercițiile de dinainte). Nu trata sărirea lor ca pe o abatere de la plan.');
+  sec('Kickboxing (în afara planului)',()=>kbAiCtx());
   sec('Alte antrenamente, importate din Strava (ex. Polar Beat) sau notate manual (ultimele 14 zile)',()=>(S.ext||[]).filter(x=>x.date>=dayShift(tk,-13)).sort((a,b)=>a.start-b.start)
     .map(x=>`- ${x.date} ${stName(x.type)}${x.name?' „'+x.name+'”':''}: ${num(x.min,0)} min`+(x.km?`, ${num(x.km,1)} km`:'')+(x.hr?`, puls mediu ${x.hr}`+(x.hrMax?` (max ${x.hrMax})`:''):'')+(x.rpe?`, efort ${x.rpe}/10`:'')+(x.dup?' — același antrenament ca o sesiune ZECE, numărat o singură dată':'')).join('\n'));
   sec('Readiness și profilul atletului (indicatori de antrenament, nu medicali)',()=>{ const R=readiness(), tw=twinNow();
@@ -5702,7 +5839,7 @@ function renderSide(){
 }
 function renderNav(){
   const nav=$('#nav'), i=NAV.findIndex(n=>n[0]===S.tab);
-  if(!nav.firstChild) nav.innerHTML=`<div class="nav-in"><i class="nav-ind"></i>${NAV.map(n=>`<button class="nb" data-a="tab" data-k="${n[0]}">${ic(n[2])}<span>${n[1]}</span></button>`).join('')}</div>`;
+  if(!nav.firstChild) nav.innerHTML=`<div class="nav-in" style="--n:${NAV.length}"><i class="nav-ind"></i>${NAV.map(n=>`<button class="nb" data-a="tab" data-k="${n[0]}">${ic(n[2])}<span>${n[1]}</span></button>`).join('')}</div>`;
   nav.querySelectorAll('.nb').forEach((b,j)=>{ b.classList.toggle('on',j===i); b.setAttribute('aria-current',j===i?'page':'false');
     const bd=b.querySelector('.badge'), want=NAV[j][0]==='coach'&&AI.busy&&S.tab!=='coach';
     if(want&&!bd) b.insertAdjacentHTML('beforeend','<span class="badge"></span>'); if(!want&&bd) bd.remove(); });
@@ -6028,7 +6165,7 @@ document.addEventListener('click',async ev=>{
         c.classList.toggle('open',S.openDay===D); c.querySelector('.day-h').setAttribute('aria-expanded',S.openDay===D); } } return;
     case 'planW': S.planW=I; render(); return;
     case 'tick': { const on=!isDone(W,D,X); await setDone(W,D,X,on); render(); if(on){ const t=document.querySelector(`.tick[data-w="${W}"][data-d="${D}"][data-x="${X}"]`); if(t) t.classList.add('pop'); buzz(15);
-        if(dayFull(W,D)){ const c=$('#day'+D); if(c){ const r=c.getBoundingClientRect(); burstAt(r.left+r.width/2,r.top+30,26); } toast('Zi completă',DAYN[D]+' · '+PLAN[D].t); } } return; }
+        if(!optX(D,X)&&dayFull(W,D)){ const c=$('#day'+D); if(c){ const r=c.getBoundingClientRect(); burstAt(r.left+r.width/2,r.top+30,26); } toast('Zi completă',DAYN[D]+' · '+PLAN[D].t); } } return; }
     case 'start': if(S.sess){ await startSess(W,D); return; } rdOpen(W,D); return;
     case 'rd': RD[k]=I; buzz(8); rdRender(); return;
     case 'rdGo': { const r=RD, sc=rdScore(r), rd={sleep:r.sleep,energy:r.energy,sore:r.sore,score:sc}; RD=null; rdRender(); await jSet(tk,{sleepQ:r.sleep,energy:r.energy,sore:r.sore});
@@ -6350,7 +6487,7 @@ document.addEventListener('touchend',e=>{
 
 /* copie de siguranță — cheia API nu intră în export */
 const EXPORT_KEYS=['zece:lifts','zece:weights','zece:runs','zece:wlog','zece:cyc','zece:runPlan','zece:nutri','zece:mlog','zece3:hist','zece3:aiChat','zece3:aiEffort','zece3:sound',
-  'zece3:water','zece3:body','zece3:theme','zece3:fx','zece3:aiUsed','zece3:seenAch','zece3:lvl','zece3:journal','zece3:tech','zece3:voice','zece3:recap','zece3:mplan','zece3:shop','zece3:mf','zece3:intro','zece3:motion','zece3:ptests','zece3:tmlog','zece3:adj','zece3:onb','zece3:motionAsked','zece3:ext','zece3:goals','zece3:supp','zece3:exnote','zece3:foods','zece3:shoes','zece3:mode','zece3:bg','zece3:planv','zece3:dash','zece3:ach','zece3:notif','zece3:notifCfg','zece3:exfav','zece3:excustom','zece:tests','zece:shoes','zece:body','zece:gtg','zece:workouts','zece:counts','zece:curBlock'];
+  'zece3:water','zece3:body','zece3:theme','zece3:fx','zece3:aiUsed','zece3:seenAch','zece3:lvl','zece3:journal','zece3:tech','zece3:voice','zece3:recap','zece3:mplan','zece3:shop','zece3:mf','zece3:intro','zece3:motion','zece3:ptests','zece3:tmlog','zece3:adj','zece3:onb','zece3:motionAsked','zece3:ext','zece3:goals','zece3:supp','zece3:exnote','zece3:foods','zece3:shoes','zece3:mode','zece3:bg','zece3:planv','zece3:dash','zece3:ach','zece3:notif','zece3:notifCfg','zece3:exfav','zece3:excustom','zece3:kb','zece:tests','zece:shoes','zece:body','zece:gtg','zece:workouts','zece:counts','zece:curBlock'];
 async function doExport(withPh){
   const data={app:'ZECE',v:4,at:new Date().toISOString(),keys:{}};
   for(const k of EXPORT_KEYS){ const v=await store.get(k); if(v!=null) data.keys[k]=v; }
@@ -6782,15 +6919,15 @@ function viewHome(){
 /* antrenamentul zilei, așezat direct pe poză: ziua, titlul, ce conține, progresul și butoanele */
 function coverHero(){
   const nx=nextDay();
-  if(S.sess){ const day=sessDay(S.sess), dn=day.ex.filter((_,x)=>sessIsDone(S.sess,x)).length;
+  if(S.sess){ const day=sessDay(S.sess), rq=absFrom(S.sess.d), dn=day.ex.filter((e,x)=>!e.opt&&sessIsDone(S.sess,x)).length;
     return `<div class="cv-k"><span class="dot"></span> În desfășurare · ${DAYN[S.sess.d]} · S${S.sess.w+1}</div><div class="cv-h">${esc(day.t)}</div>
-      <div class="cv-m"><span class="big sm" id="heroClock">${fmtClock(sessSec())}</span><span>${dn}/${day.ex.length} exerciții</span></div>
-      <div class="cv-pb"><i style="width:${(dn/day.ex.length*100).toFixed(1)}%"></i></div>
+      <div class="cv-m"><span class="big sm" id="heroClock">${fmtClock(sessSec())}</span><span>${dn}/${rq} exerciții</span></div>
+      <div class="cv-pb"><i style="width:${(dn/rq*100).toFixed(1)}%"></i></div>
       <div class="cv-b"><button class="btn pri xl glow" data-a="fxOpen">${ic('play')} Continuă antrenamentul</button></div>`; }
   if(!nx) return `<div class="cv-k">${ic('star')} Ciclul ${cyc()} · complet</div><div class="cv-h">Ai terminat cele 4 săptămâni</div>
       <div class="cv-m"><span>Ciclul următor reia același plan.</span></div>
       <div class="cv-b"><button class="btn pri xl glow" data-a="newCycle">${ic('refresh')} Începe ciclul ${cyc()+1}</button>${cycList().length?`<button class="btn cv-alt" data-a="cycOpen">${ic('star')} Raport</button>`:''}</div>`;
-  const day=dayFor(nx.w,nx.d), dn=doneCount(nx.w,nx.d), tot=day.ex.length, p=runPlan(), lifts=day.ex.filter(e=>e.kind==='lift').length;
+  const day=dayFor(nx.w,nx.d), dn=doneCount(nx.w,nx.d), tot=absFrom(nx.d), p=runPlan(), lifts=day.ex.filter(e=>e.kind==='lift'&&!e.opt).length;
   const run=day.run==='thr'?(p.thr.r[nx.w]||0)+' × '+mmss(p.thr.m)+' la prag':day.run==='lng'?(p.lng.w[nx.w]||0)+' min long run':day.run?'Easy run '+((p[day.run]||{w:[]}).w[nx.w]||0)+' min':'';
   const what=[run,lifts?lifts+' exerciții de forță':'',!run&&!lifts?tot+' exerciții':''].filter(Boolean).join(' + ');
   const today=(new Date().getDay()+6)%7===nx.d;
@@ -6805,18 +6942,18 @@ function coverHero(){
 /* cardul antrenamentului: în desfășurare, ciclu terminat sau următoarea zi din plan */
 function heroHTML(){
   const nx=nextDay();
-  if(S.sess){ const day=sessDay(S.sess), dn=day.ex.filter((_,x)=>sessIsDone(S.sess,x)).length;
+  if(S.sess){ const day=sessDay(S.sess), rq=absFrom(S.sess.d), dn=day.ex.filter((e,x)=>!e.opt&&sessIsDone(S.sess,x)).length;
     return `<div class="card hero">
       <div class="eyebrow"><span class="dot"></span> În desfășurare · ${DAYN[S.sess.d]} · săptămâna ${S.sess.w+1}</div>
       <div class="h1">${esc(day.t)}</div>
-      <div class="live-clock"><span class="big sm" id="heroClock">${fmtClock(sessSec())}</span><span class="mu">${dn}/${day.ex.length} exerciții</span></div>
+      <div class="live-clock"><span class="big sm" id="heroClock">${fmtClock(sessSec())}</span><span class="mu">${dn}/${rq} exerciții</span></div>
       <button class="btn pri xl wide glow" data-a="fxOpen">${ic('play')} Continuă antrenamentul</button></div>`; }
   if(!nx) return `<div class="card hero"><div class="eyebrow">${ic('star')} Ciclul ${cyc()} · complet</div>
       <div class="h1">Ai terminat cele 4 săptămâni</div>
       <p class="mu">Ciclul următor reia același plan. Dacă vrei alergări mai lungi, ajustează progresia în Setări.</p>
       ${cycList().length?`<button class="btn wide" style="margin-top:14px" data-a="cycOpen">${ic('star')} Vezi raportul ciclului</button>`:''}
       <button class="btn pri xl wide glow" data-a="newCycle">${ic('refresh')} Începe ciclul ${cyc()+1}</button></div>`;
-  const day=dayFor(nx.w,nx.d), dn=doneCount(nx.w,nx.d), tot=day.ex.length;
+  const day=dayFor(nx.w,nx.d), dn=doneCount(nx.w,nx.d), tot=absFrom(nx.d);
   return `<div class="card hero"><span class="hero-wm" aria-hidden="true">${pad(nx.d+1)}</span>
       <div class="hero-top"><div class="sp">
         <div class="eyebrow">Următorul · ${DAYN[nx.d]} · săpt. ${nx.w+1}/${WEEKS}</div>
@@ -6831,7 +6968,7 @@ function heroHTML(){
 }
 function weekHTML(){
   const nx=nextDay(), w=S.sess?S.sess.w:nx?nx.w:WEEKS-1;
-  const week=PLAN.map((p,d)=>{ const dn=doneCount(w,d), tot=p.ex.length, full=dn===tot, isN=nx&&nx.w===w&&nx.d===d, col=catCol(p.cat);
+  const week=PLAN.map((p,d)=>{ const dn=doneCount(w,d), tot=absFrom(d), full=dn===tot, isN=nx&&nx.w===w&&nx.d===d, col=catCol(p.cat);
     return `<button class="wd ${isN?'next':''}" data-a="openDay" data-w="${w}" data-d="${d}" aria-label="${DAYN[d]}: ${esc(p.t)}">
       ${ring(dn/tot,{s:40,sw:3.5,c:full?TH().ac:col,fill:full?TH().ac:'none',track:isN?TH().ac+'88':'var(--track)',
         inner:full?`<path d="M13 20.5l4.5 4.5L27 15.5" fill="none" style="stroke:var(--on)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`
@@ -7754,6 +7891,7 @@ function palCmds(){
    ['prog','Recuperare','moon','rec'],['prog','Recorduri și realizări','trophy','pr'],['prog','Profilul atletului','user','twin'],['prog','Teste fizice','medal','t'],
    ['nutri','Nutriție','flame'],['coach','Antrenor AI','coach'],['act','Activitate · cronologie','history'],['tools','Unelte','tool'],['set','Setări','gear']]
    .forEach(([t,l,icn,s])=>C.push({g:'Navigare',t:l,k:'mergi deschide pagina '+t,icn,f:go(t,s)}));
+  if(typeof kbPalCmds==='function') kbPalCmds(C);
   return C;
 }
 /* scorul unei potriviri: toate cuvintele căutate trebuie să apară; titlul contează mai mult */
@@ -8359,14 +8497,10 @@ ACT.cfGo=async()=>{
     {l:'Anulează',f:async()=>{ await save('wlog',before.wlog); await save('hist',before.hist); await save('adj',before.adj); await save('cyc',Object.assign({},before.cyc||{},{t:Date.now()})); render(); toast('Corectarea a fost anulată','','info'); }});
 };
 
-/* v9: exercițiile de abdomen adăugate în plan (PLAN_ABS) ar face ca zilele deja terminate să pară neterminate.
-   O singură dată (și la importul unei copii mai vechi): o zi cu toate exercițiile vechi bifate primește bife și pentru cele noi. */
+/* v9 bifa abdomenul pe zilele terminate înainte să existe. De la v10 abdomenul e opțional și nu mai contează
+   la ziua completă, deci nu mai bifez nimic în locul tău: rămâne doar versiunea planului. */
 async function planAbsMigrate(v){
-  if(v>=2) return; const log=Object.assign({},S.wlog||{}); let n=0;
-  Object.keys(log).forEach(k=>{ const m=/^hc(\d+)w(\d+)d(\d+)$/.exec(k); if(!m) return; const d=+m[3], pa=PLAN_ABS.find(x=>x[0]===d); if(!pa) return;
-    const o=log[k]||{}; let full=true; for(let x=0;x<pa[1];x++) if(!o[k+'e'+x]){ full=false; break; } if(!full) return;
-    const o2=Object.assign({},o); for(let x=pa[1];x<PLAN[d].ex.length;x++) o2[k+'e'+x]=1; log[k]=o2; n++; });
-  if(n) await save('wlog',log); await save('planV',2);
+  if(v>=2) return; await save('planV',2);
 }
 
 /* =====================================================================
@@ -8474,6 +8608,419 @@ ACT.impGo=async()=>{ const {p,add}=SH; if(!add.length) return;
 document.addEventListener('change',async e=>{ const t=e.target; if(t.dataset&&t.dataset.csv2&&t.files&&t.files[0]){ await ioPick(t.files[0]); t.value=''; } });
 
 /* =====================================================================
+   v10 · KICKBOXING — filă separată: sac, palmare, sparring (plus shadowboxing ca unealtă).
+   Cronometru de runde cu clopot și bătăi la 10 secunde, strigătorul de combinații, temă pe rundă,
+   ținte ocazionale (stau doar în pagina activității, nu în antrenamentul zilei), istoric și unelte.
+   Sesiunile stau în zece3:ext (tip „Kickboxing", src:'manual', detaliile în .kb), deci intră în încărcarea zilei,
+   cronologie, export, sincronizare și, dacă vrei, pe Strava. Țintele, preferințele și geanta stau în zece3:kb.
+   ===================================================================== */
+K.kb='zece3:kb'; S.kb={}; S.kbTab='train';
+/* pozele filei (operatorul SRI): build.js pune aici fotografiile, build_site.js le face fișiere */
+const KB_PH={"bag":"kb-bag.jpg","band":"kb-band.jpg","pads":"kb-pads.jpg","spar":"kb-spar.jpg","wraps":"kb-wraps.jpg"};
+Object.keys(KB_PH).forEach(k=>{ try{ document.documentElement.style.setProperty('--kb-'+k,`url("${KB_PH[k]}")`); }catch(e){} });
+const kbPh=k=>`var(--kb-${k},var(--cover))`;
+
+Object.assign(IC,{
+  glove:'<path d="M7 11V7.5A4.5 4.5 0 0 1 11.5 3H14a5 5 0 0 1 5 5v4.5a4 4 0 0 1-2 3.46V19a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2v-3"/><path d="M7 11a2.5 2.5 0 0 0 0 5h3.5"/><path d="M9 18h8"/>',
+  bag:'<path d="M9 2l3 3.5L15 2"/><rect x="7" y="6" width="10" height="16" rx="4"/><path d="M7 11h10M7 17h10"/>',
+  pads:'<ellipse cx="12" cy="10" rx="6.5" ry="7.5"/><circle cx="12" cy="10" r="2.6"/><path d="M9.5 17.2L8.5 21h7l-1-3.8"/>',
+  spar:'<path d="M2.5 9.5A3.5 3.5 0 0 1 6 6h3.5l3 3v2.5l-3 3H6a3.5 3.5 0 0 1-3.5-3.5z"/><path d="M21.5 14.5A3.5 3.5 0 0 1 18 18h-3.5l-3-3v-2.5l3-3H18a3.5 3.5 0 0 1 3.5 3.5z"/>',
+  wrap:'<path d="M6 4h9a3 3 0 0 1 3 3v13H9a3 3 0 0 1-3-3z"/><path d="M6 9l12-3M6 14l12-3M6 19l12-3"/>'
+});
+/* Kickboxing ca activitate: apare corect în „Activități", cronologie și pe Strava (unde pleacă drept antrenament) */
+ACT_T.splice(ACT_T.length-1,0,['Kickboxing','Kickboxing','glove',0]); ST_TYPES.Kickboxing='Kickboxing'; ACT_UP.Kickboxing='Workout';
+
+/* ---------- activitățile: [nume, eticheta mică, iconiță, poză, descriere, strigă combinații, formate [nume, runde, sec/rundă, pauză]] ---------- */
+const KB_A={
+  bag:{n:'Sac',t:'Heavy bag',ic:'bag',ph:'bag',sh:'Putere, volum și condiție',s:'Putere, volum și condiție, pe runde. Lucrezi singur, în ritmul tău.',call:1,
+    fmt:[['Clasic',5,180,60],['Putere',6,120,60],['Volum',8,180,60],['Sprinturi',10,30,30]],
+    foc:['Putere: fiecare lovitură cu intenție','Viteză: lovituri scurte, revenire rapidă','Lovituri de picior: low și middle kick','Combinații de 4, apoi ieși din linie','Mișcare: lucrezi din unghiuri, nu pe loc','Lucru la corp și la cap, schimbă nivelul'],
+    tips:['Bandajează mâinile de fiecare dată: încheieturile și articulațiile degetelor cedează primele la sac.','Lovește prin sac, nu doar în el, și revino în gardă după fiecare combinație.','Mișcă-te în jurul sacului: unghiuri, nu doar lovituri pe loc.','Expiră scurt la fiecare lovitură, pe nas sau printre dinți.']},
+  pads:{n:'Palmare',t:'Pad work',ic:'pads',ph:'pads',sh:'Precizie, viteză, combinații',s:'Precizie, viteză și combinații, cu un partener care ține palmarele.',call:1,
+    fmt:[['Tehnic',4,180,60],['Combinații',6,120,60],['Ritm de meci',3,180,60]],
+    foc:['Viteză: lovituri scurte și rapide','Putere: fiecare lovitură cu intenție','Revenire în gardă după fiecare combinație','Combinații terminate cu lovitură de picior','Apărare: partenerul atacă, tu răspunzi','Combinații lungi, de 5–6 lovituri'],
+    tips:['Partenerul care ține palmarele dă ritmul: combinațiile vin de la el.','Lovește la înălțimea la care e ținut palmarul, fără să forțezi umărul.','După fiecare combinație: gardă sus, un pas, gata de următoarea.']},
+  spar:{n:'Sparring',t:'Sparring',ic:'spar',ph:'spar',sh:'Tehnică pe un adversar viu',s:'Tehnica aplicată pe un adversar viu. Control, nu bătaie.',foc1:1,
+    fmt:[['Tehnic ușor',3,120,60],['Amator',3,180,60],['Pro',5,180,60]],
+    foc:['Jab-ul primul: deschizi fiecare atac cu el','Lucru la corp: coboară nivelul','Contre: răspunzi după fiecare lovitură primită','Mișcare: unghiuri, nu sta în linie','Low kick după combinație','Garda sus: mâna din spate la bărbie','Teep pentru distanță','Ritm: schimbi viteza, nu doar puterea','Apărare: blochezi sau eschivezi, apoi răspunzi'],
+    tips:['Echipament obligatoriu: mănuși 14–16 oz, apărătoare de dinți, tibiere, cască și cochilie.','Sparring-ul nu e meci: puterea se stabilește dinainte (de obicei 30–50%) și rămâne așa.','Fără sparring cu durere de cap, amețeală sau după o lovitură puternică la cap: pauză și medic.','O singură temă pe rundă: e mai ușor de ținut minte și de corectat.']},
+  shadow:{n:'Shadowboxing',t:'Shadow',ic:'glove',ph:'band',sh:'Încălzire și tehnică',s:'Încălzire și tehnică fără partener. Strigătorul îți dă combinațiile.',call:1,call1:1,
+    fmt:[['Încălzire',2,120,30],['Tehnică',3,180,60],['Lung',5,180,45]],
+    foc:['Doar jab și mișcare','Combinații de 3','Lovituri de picior, lejer','Apărare: eschivă și răspuns','Viteză maximă, tehnică curată'],
+    tips:['În fața unei oglinzi, ca să-ți vezi garda.','Lovituri complete, la viteză controlată: tehnica înainte de putere.']}
+};
+const KB_MAIN=['bag','pads','spar'];
+const KB_LVL=['','Ușor','Mediu','Greu'];
+
+/* ---------- ținte ocazionale: [id, activitate, titlu, descriere, tip ('ok' = reușit / nu încă, 'n' = număr), țintă, unitate, cronometru [runde, sec/rundă, pauză]] ---------- */
+const KB_TG=[
+  ['bag6','bag','6 runde × 3 min la ritm constant','Pauză 1 min. Ultima rundă la fel de vie ca prima: fără să te sprijini de sac și fără pauze lungi în rundă.','ok',0,'',[6,180,60]],
+  ['bag100','bag','100 de lovituri în 60 de secunde','Doar 1-2 (jab, cross) continuu, cu pumnul strâns la impact și brațul care revine în gardă. Numără perechile: 50 de 1-2.','n',100,'lovituri',[1,60,0]],
+  ['baglk','bag','50 de low kick-uri pe fiecare picior','Câte o rundă de 3 minute pe picior, cu rotație din șold și revenire în gardă după fiecare lovitură.','ok',0,'',[2,180,60]],
+  ['bag3m','bag','3 minute fără oprire, doar combinații de 4','Nicio pauză mai lungă de 2 secunde. Fiecare combinație se termină cu revenirea în gardă sau cu un pas lateral.','ok',0,'',[1,180,0]],
+  ['bagtab','bag','Tabata la sac: 8 × 20 de secunde','20 de secunde la maxim, 10 secunde pauză. Ritmul din ultima rundă cât mai aproape de cel din prima.','ok',0,'',[8,20,10]],
+  ['bag10','bag','10 runde × 2 min','Testul de anduranță: ritm de antrenament, pauză 1 min, tehnică curată până la capăt.','ok',0,'',[10,120,60]],
+  ['padcl','pads','10 combinații 1-2-3-2 curate, la rând','Jab, cross, croșeu, cross. Dacă una iese neclară sau scade garda, numărătoarea pornește de la zero.','ok',0,'',[1,180,0]],
+  ['pad6','pads','Combinația de 6 × 10 pe fiecare parte','Jab, cross, croșeu, cross, low kick, high kick, cu echilibru la final, fără să cazi după lovitura de picior.','ok',0,'',[2,180,60]],
+  ['padrx','pads','20 de contre într-o rundă','Partenerul atacă ușor cu palmarul; blochezi sau eschivezi și răspunzi imediat cu 1-2. Numără răspunsurile corecte.','n',20,'contre',[1,180,0]],
+  ['padfp','pads','3 runde × 3 min la ritm de meci','Partenerul strigă combinațiile, tu nu te oprești. Pauză 1 min. Garda revine după fiecare combinație.','ok',0,'',[3,180,60]],
+  ['padtp','pads','20 de teep-uri pe fiecare picior','Lovitura frontală de distanță: împingi cu talpa prin palmar și revii în gardă fără să-ți pierzi echilibrul.','ok',0,'',[2,120,45]],
+  ['padsp','pads','30 de lovituri în 15 secunde','Viteză pură: 1-2 scurte și rapide la palmare. Partenerul numără.','n',30,'lovituri',[1,15,0]],
+  ['sp3','spar','3 runde × 2 min cu garda sus','Sparring tehnic, la 30–50% putere. Partenerul sau antrenorul îți spune la final dacă garda a rămas sus.','ok',0,'',[3,120,60]],
+  ['spjab','spar','O rundă cu jab-ul primul','Deschizi fiecare atac cu jab-ul, o rundă întreagă de 3 minute.','ok',0,'',[1,180,0]],
+  ['spctr','spar','Răspuns la fiecare lovitură primită','O rundă în care, după fiecare lovitură primită, răspunzi imediat cu o combinație de cel puțin 2 lovituri.','ok',0,'',[1,180,0]],
+  ['spring','spar','O rundă fără să rămâi la corzi','Mișcare laterală și unghiuri: dacă ajungi la corzi sau în colț, ieși în cel mult 2 secunde.','ok',0,'',[1,180,0]],
+  ['spbody','spar','10 lovituri la corp într-o rundă','Jab sau croșeu la corp, middle kick: coboară nivelul înainte de lovitură, nu doar brațul.','n',10,'lovituri',[1,180,0]],
+  ['sp5','spar','5 runde × 3 min','Condiție de meci: sparring controlat cu pauză 1 min, fără să-ți pierzi forma în ultimele două runde.','ok',0,'',[5,180,60]]
+];
+const kbTgOf=id=>KB_TG.find(t=>t[0]===id)||null;
+const kbTgSt=id=>((S.kb||{}).tg||{})[id]||{};
+const kbTgDone=a=>KB_TG.filter(t=>(!a||t[1]===a)&&kbTgSt(t[0]).ok).length;
+const kbTgN=a=>KB_TG.filter(t=>!a||t[1]===a).length;
+
+/* ---------- combinațiile: sistemul cu cifre (1 jab, 2 cross, 3 croșeu, 4 croșeu dreapta, 5 uppercut, 6 uppercut dreapta) ---------- */
+const KB_P={1:'jab',2:'cross',3:'croșeu',4:'croșeu dreapta',5:'uppercut',6:'uppercut dreapta'};
+const KB_NUMV=['','unu','doi','trei','patru','cinci','șase'];
+const KB_CMB={1:['1','1-1','1-2','1-2-1','2-3','1-6','1-1-2','3-2'],
+  2:['1-2-3','1-2-3-2','1-6-3-2','2-3-2','1-1-2-3','3-2-3','1-2-5-2','1-2-3-4'],
+  3:['1-2-3-2-3','1-6-3-2-1','1-2-1-2-3-2','2-3-2-5-2','1-2-3-4-5-6','1-1-2-3-6','5-2-3-2','1-2-5-6-3-2']};
+const KB_KCK={1:['low kick','teep','1-2, low kick','1, middle kick'],
+  2:['1-2-3, low kick','2-3, middle kick','teep, 1-2','1-2, high kick','low kick, 2-3','genunchi, 2'],
+  3:['1-2-3-2, low kick','1-6-3, high kick','teep, 1-2-3, middle kick','low kick, 2-3, high kick','eschivă, 2-3, low kick','blochează, 3-2, middle kick']};
+const KB_DEF=['eschivă, 2-3','blochează, 1-2','pas înapoi, 2','eschivă, 3-2'];
+const kbNums=p=>/^[1-6](-[1-6])*$/.test(p);
+function kbFmtC(c){ const parts=String(c).split(', ');
+  return {c,big:parts.join(' · '),names:parts.map(p=>kbNums(p)?p.split('-').map(n=>KB_P[n]).join(' · '):p).join(' · '),
+    voice:parts.map(p=>kbNums(p)?p.split('-').map(n=>KB_NUMV[n]).join(', '):p).join(', ')}; }
+function kbCombo(lvl,kicks,last){ lvl=clamp(+lvl||2,1,3); const pool=KB_CMB[lvl].concat(kicks?KB_KCK[lvl]:[],lvl>=2?KB_DEF:[]);
+  let c=pool[Math.floor(Math.random()*pool.length)]; if(c===last&&pool.length>1) c=pool[(pool.indexOf(c)+1)%pool.length]; return kbFmtC(c); }
+const KB_GAP={1:[4.5,6.5],2:[3.5,5],3:[2.6,4]};
+const KB_LIB=[['1-2','Jab, cross','Combinația de bază: jab-ul măsoară distanța, cross-ul lovește.'],
+  ['1-2-3','Jab, cross, croșeu','Croșeul din față vine după cross, cu rotația șoldului.'],
+  ['1-2-3-2','Jab, cross, croșeu, cross','Combinația de 4 clasică, se termină pe mâna din spate.'],
+  ['1-6-3-2','Jab, uppercut dreapta, croșeu, cross','Schimbi nivelul: uppercut-ul deschide garda pentru croșeu.'],
+  ['1-2, low kick','Jab, cross, low kick','„Combinația olandeză": mâinile ridică garda adversarului, low kick-ul lovește coapsa.'],
+  ['1-2-3, low kick','Jab, cross, croșeu, low kick','Croșeul te așază pe piciorul din față; low kick-ul vine cu piciorul din spate.'],
+  ['teep, 1-2','Teep, jab, cross','Teep-ul ține distanța sau oprește atacul, apoi intri cu 1-2.'],
+  ['2-3, middle kick','Cross, croșeu, middle kick','Middle kick la corp, după ce mâinile au tras garda în sus.'],
+  ['eschivă, 2-3','Eschivă, cross, croșeu','Contră: ieși din linia loviturii și răspunzi imediat.'],
+  ['1-2, high kick','Jab, cross, high kick','High kick-ul pe partea pe care garda a coborât.']];
+const KB_GEAR=['Mănuși (14–16 oz pentru sparring)','Bandaje','Apărătoare de dinți','Tibiere','Cască','Cochilie','Coardă','Prosop și apă','Șlapi pentru vestiar'];
+const KB_WRAP=[['Bucla pe degetul mare','Prinzi bucla pe degetul mare, cu banda pe dosul palmei.'],['3 ture pe încheietură','Sprijin pentru încheietură, fără să strângi ca un garou.'],
+  ['3 ture peste articulațiile degetelor','Cu palma deschisă și degetele depărtate, ca să nu strângă când faci pumn.'],['Printre degete','Treci banda în X printre fiecare deget, pe rând.'],
+  ['Încă 2 ture peste articulații','Apoi în X pe dosul palmei, până la încheietură.'],['Închide pe încheietură','Prinzi scaiul și strângi pumnul: trebuie să fie ferm, fără să-ți amorțească degetele.']];
+const KB_WARM=[['Coardă sau sărituri pe loc',180,'Ritm ușor, pe vârfuri'],['Rotații: gât, umeri, șolduri, glezne',60,'Lent, pe toată amplitudinea'],
+  ['Shadow ușor',90,'Doar jab și mișcare'],['Shadow cu lovituri de picior',90,'Lejer, înalțimea crește treptat'],['Genuflexiuni și flotări ușoare',60,'Câte 10, fără grabă']];
+
+/* ---------- preferințele fiecărei activități (formatul, combinațiile, tema pe rundă) ---------- */
+function kbPref(a){ const A=KB_A[a]||KB_A.bag, f=A.fmt[0];
+  return Object.assign({r:f[1],rs:f[2],rest:f[3],call:!!A.call1,lvl:2,kicks:true,foc:!!A.foc1},(((S.kb||{}).pref)||{})[a]||{}); }
+async function kbPrefSet(a,o){ const pref=Object.assign({},(S.kb||{}).pref); pref[a]=Object.assign({},kbPref(a),o); await save('kb',Object.assign({},S.kb,{pref})); }
+
+/* ---------- sesiunile (din zece3:ext): cele notate aici, plus cele venite din Strava cu nume de kickboxing ---------- */
+const KB_RX=/kick|box|sparr|thai|mma|palmar|\bsac\b|shadow/i;
+const kbGuess=x=>x.kb&&KB_A[x.kb.a]?x.kb.a:/sparr/i.test(x.name||'')?'spar':/palmar|pad/i.test(x.name||'')?'pads':/\bsac\b|bag/i.test(x.name||'')?'bag':/shadow/i.test(x.name||'')?'shadow':'';
+function kbSessions(){ return (S.ext||[]).filter(x=>!x.dup&&(x.type==='Kickboxing'||(x.src!=='manual'&&KB_RX.test(x.name||''))))
+  .map(x=>({x,a:kbGuess(x)})).sort((p,q)=>(q.x.start||0)-(p.x.start||0)||(q.x.date<p.x.date?-1:1)); }
+const kbAName=a=>KB_A[a]?KB_A[a].n:'Kickboxing';
+const kbRounds=x=>x.kb&&+x.kb.r>0?+x.kb.r:0;
+function kbAgg(from,to){ const xs=kbSessions().filter(s=>s.x.date>=from&&s.x.date<=to), by={};
+  xs.forEach(s=>{ by[s.a||'']=(by[s.a||'']||0)+1; });
+  return {n:xs.length,r:xs.reduce((t,s)=>t+kbRounds(s.x),0),min:xs.reduce((t,s)=>t+(+s.x.min||0),0),by}; }
+function kbRowMeta(x){ const k=x.kb||{}, rpe=x.rpe?((ACT_RPE.find(r=>r[0]===x.rpe)||[0,''])[1]||'').toLowerCase():'';
+  return [k.r?k.r+(k.r===1?' rundă':' runde')+(k.rs?' × '+fmtClock(k.rs):''):'',num(x.min,0)+' min',x.hr?x.hr+' bpm':'',rpe].filter(Boolean).join(' · '); }
+
+/* ---------- banda de sus ---------- */
+BANDS.kb=()=>{ const tk=todayKey(), o=kbAgg(dayShift(tk,-29),tk), t=kbTgDone();
+  return {e:'Sac · Palmare · Sparring',t:'Kickboxing',s:[o.n?o.n+(o.n===1?' sesiune':' sesiuni')+' în 30 de zile':'Nicio sesiune în ultimele 30 de zile',o.r?o.r+' runde':'',t?'ținte '+t+'/'+KB_TG.length:''].filter(Boolean).join(' · ')}; };
+
+/* ---------- fila ---------- */
+const KB_TABS=[['train','Antrenează','glove'],['hist','Istoric','history']];
+function viewKb(){
+  const T=S.kbTab==='hist'?'hist':'train';
+  return `<div class="seg scr" style="margin-top:6px">${KB_TABS.map(t=>`<button class="${T===t[0]?'on':''}" data-a="kbTab" data-k="${t[0]}">${ic(t[2])} ${t[1]}</button>`).join('')}</div>${T==='hist'?kbHist():kbTrain()}`;
+}
+ACT.kbTab=(el,{k})=>{ S.kbTab=k; render(); window.scrollTo({top:0}); };
+function kbCard(a){ const A=KB_A[a], last=kbSessions().find(s=>s.a===a), p=kbPref(a), d=kbTgDone(a), n=kbTgN(a);
+  return `<button class="kb-card" data-a="kbOpen" data-k="${a}" style="--ph:${kbPh(A.ph)}" aria-label="${esc(A.n)}">
+    <span class="kb-ph" aria-hidden="true"></span><span class="kb-fd" aria-hidden="true"></span>
+    <span class="kb-tgc">${ic('target')} ${d}/${n}</span>
+    <span class="kb-ct"><span class="eyebrow">${esc(A.t)}</span><span class="kb-t">${esc(A.n)}</span>
+      <span class="kb-s">${last?'Ultima: '+relDay(last.x.date)+(kbRounds(last.x)?' · '+kbRounds(last.x)+' runde':''):esc(A.sh)}</span>
+      <span class="kb-go">${ic('play')} ${p.r} × ${fmtClock(p.rs)}${p.rest?' · pauză '+fmtClock(p.rest):''}</span></span></button>`; }
+const KB_TOOLS=[['kbRounds','clock','Cronometru de runde','Clopot, bătăi la 10 s'],['kbShadow','sound','Strigător de combinații','Shadowboxing ghidat'],['kbWarm','flame','Încălzire','8 minute, ghidat'],
+  ['kbLib','list','Combinații','Cifrele și clasicele'],['kbWrap','wrap','Bandaje','Pas cu pas'],['kbGear','check','Geanta','Ce iei la sală']];
+function kbTrain(){
+  const tk=todayKey(), wk=kbAgg(mondayOf(tk),tk);
+  return `<div class="kb-acts">${KB_MAIN.map(kbCard).join('')}</div>
+  <div class="card kb-wk"><div class="row"><div class="sp"><div class="eyebrow">${ic('glove')} Săptămâna asta</div>
+      <div class="kb-wk-n">${wk.n?`<b>${wk.n}</b> ${wk.n===1?'sesiune':'sesiuni'}${wk.r?` · <b>${wk.r}</b> runde`:''} · <b>${num(wk.min,0)}</b> min`:'Nimic încă. Alege o activitate de mai sus.'}</div></div>
+    <button class="btn ghost sm" data-a="kbLog" data-k="">${ic('edit')} Notează</button></div>
+    <div class="xs mu2" style="margin-top:8px">Kickboxing-ul e în afara planului Hybrid365: intră în încărcarea zilei, dar nu schimbă antrenamentele planului.</div></div>
+  <div class="card"><div class="eyebrow">${ic('tool')} Unelte</div><div class="kb-tools">${KB_TOOLS.map(([k,icn,t,s])=>`<button class="kb-tool" data-a="${k}"><span class="ic-s">${ic(icn)}</span><b>${esc(t)}</b><span>${esc(s)}</span></button>`).join('')}</div></div>`;
+}
+/* istoric: rezumat pe 4 săptămâni, runde pe săptămână (8 săptămâni), țintele atinse și sesiunile pe luni */
+function kbHist(){
+  const tk=todayKey(), all=kbSessions(), o=kbAgg(dayShift(tk,-27),tk);
+  if(!all.length) return `<div class="card"><div class="empty">${ic('glove')}<div>Aici apar sesiunile de sac, palmare și sparring. Le notezi după cronometru sau de mână, iar cele din Strava cu „box" sau „kickboxing" în nume apar singure.</div>
+    <button class="btn pri sm" data-a="kbLog" data-k="bag">${ic('plus')} Notează prima sesiune</button></div></div>`;
+  const m0=mondayOf(tk), wks=Array.from({length:8},(_,i)=>{ const a=dayShift(m0,-7*(7-i)), b=dayShift(a,6), g=kbAgg(a,b); return {a,r:g.r,n:g.n}; }), mx=Math.max(1,...wks.map(w=>w.r||w.n));
+  const by={}; all.forEach(s=>{ const m=s.x.date.slice(0,7); (by[m]=by[m]||[]).push(s); }); const ks=Object.keys(by).sort().reverse(), shown=ks.slice(0,S.kbN||3);
+  const done=KB_TG.filter(t=>kbTgSt(t[0]).ok).sort((p,q)=>kbTgSt(q[0]).ok<kbTgSt(p[0]).ok?-1:1);
+  return `<div class="card"><div class="eyebrow">${ic('chart')} Ultimele 4 săptămâni</div>
+    <div class="kpis"><div class="kpi"><div class="k">Sesiuni</div><div class="v">${o.n}</div></div><div class="kpi"><div class="k">Runde</div><div class="v">${o.r}</div></div><div class="kpi"><div class="k">Timp</div><div class="v">${num(o.min/60,1)}<small>h</small></div></div></div>
+    <div class="kb-mix">${KB_MAIN.concat(['shadow']).filter(a=>o.by[a]).map(a=>`<span class="tag">${ic(KB_A[a].ic)} ${KB_A[a].n} ${o.by[a]}</span>`).join('')||'<span class="xs mu2">Nimic în ultimele 4 săptămâni.</span>'}</div>
+    <div class="kb-bars" aria-label="Runde pe săptămână">${wks.map((w,i)=>`<div class="kb-bar ${i===7?'cur':''}"><i style="height:${Math.round((w.r||w.n)/mx*100)}%"></i><span>${w.r||w.n||''}</span></div>`).join('')}</div>
+    <div class="xs mu2" style="margin-top:6px">Runde pe săptămână, ultimele 8 săptămâni (unde nu sunt runde notate, numărul de sesiuni).</div></div>
+  <div class="card"><div class="card-h"><div class="eyebrow">${ic('target')} Ținte atinse</div><span class="xs mu">${done.length} din ${KB_TG.length}</span></div>
+    ${done.length?done.map(t=>`<button class="list-row link hl" data-a="kbTgOpen" data-k="${t[0]}"><span class="ic-s ok">${ic('check')}</span><span class="sp"><b>${esc(t[2])}</b><span class="xs mu" style="display:block">${KB_A[t[1]].n} · ${fmtDay(kbTgSt(t[0]).ok)}${kbTgSt(t[0]).best!=null?' · cel mai bun: '+kbTgSt(t[0]).best+' '+t[6]:''}</span></span>${ic('right')}</button>`).join('')
+      :'<div class="note">Țintele stau în pagina fiecărei activități. Le încerci când ai chef, nu fac parte din antrenamentul zilei.</div>'}</div>
+  ${shown.map(m=>{ const y=+m.slice(0,4), mo=+m.slice(5,7), g=by[m];
+    return `<div class="card"><div class="card-h"><div class="eyebrow">${MON_S[mo-1]} ${y}</div><span class="xs mu">${g.length} · ${g.reduce((t,s)=>t+kbRounds(s.x),0)} runde</span></div>${g.map(kbRow).join('')}</div>`; }).join('')}
+  ${ks.length>shown.length?`<button class="btn ghost wide" style="margin-top:12px" data-a="kbMore">${ic('down')} Lunile anterioare</button>`:''}`;
+}
+ACT.kbMore=()=>{ S.kbN=(S.kbN||3)+3; render(); };
+function kbRow(s){ const x=s.x, man=x.src==='manual', A=KB_A[s.a];
+  return `<button class="list-row link hl" ${man?`data-a="kbEdit" data-k="${esc(x.sid)}"`:'disabled'}><span class="ic-s kb">${ic(A?A.ic:'glove')}</span><span class="sp"><b>${esc(A?A.n:actName(x))}</b>
+    <span class="xs mu" style="display:block">${fmtDay(x.date)} · ${esc(kbRowMeta(x))}</span>${x.kb&&x.kb.tg?`<span class="xs mu2" style="display:block">${ic('target')} ${esc((kbTgOf(x.kb.tg.id)||[0,0,''])[2])}${x.kb.tg.ok?' · reușit':''}</span>`:''}</span>
+    ${man?ic('right'):'<span class="tag rest">Strava</span>'}</button>`; }
+
+/* ---------- foaia activității: formatul, combinațiile, tema pe rundă, pornirea, țintele ---------- */
+function kbStep(k,label,val,shown){ return `<div class="kb-stp"><span>${label}</span><b>${shown}</b><div class="r"><button data-a="kbStep" data-k="${k}" data-i="-1" aria-label="${label}: mai puțin">−</button><button data-a="kbStep" data-k="${k}" data-i="1" aria-label="${label}: mai mult">+</button></div></div>`; }
+function kbaHTML(){
+  const a=SH.k, A=KB_A[a]; if(!A) return '';
+  const p=kbPref(a), tgs=KB_TG.filter(t=>t[1]===a), dn=kbTgDone(a), ses=kbSessions().filter(s=>s.a===a).slice(0,3);
+  const sug=tgs.find(t=>!kbTgSt(t[0]).ok);
+  return `<div class="kb-hd" style="--ph:${kbPh(A.ph)}"><span class="kb-ph" aria-hidden="true"></span><span class="kb-fd" aria-hidden="true"></span>
+      <button class="ib kb-x" data-a="shClose" aria-label="Închide">${ic('x')}</button>
+      <div class="kb-ct"><div class="eyebrow">${esc(A.t)}</div><div class="h1">${esc(A.n)}</div><div class="sm">${esc(A.s)}</div></div></div>
+    ${SH.free?`<div class="act-tg kb-pick">${Object.keys(KB_A).map(k=>`<button class="act-tb ${k===a?'on':''}" data-a="kbSwitch" data-k="${k}">${ic(KB_A[k].ic)}<span>${KB_A[k].n}</span></button>`).join('')}</div>`:''}
+    <div class="eyebrow" style="margin-top:16px">${ic('clock')} Format</div>
+    <div class="chips" style="margin-top:8px">${A.fmt.map((f,i)=>`<button class="chip ${p.r===f[1]&&p.rs===f[2]&&p.rest===f[3]?'on':''}" data-a="kbFmt" data-i="${i}">${esc(f[0])} · ${f[1]}×${fmtClock(f[2])}</button>`).join('')}</div>
+    <div class="kb-stps">${kbStep('r','Runde',p.r,p.r)}${kbStep('rs','Runda',p.rs,fmtClock(p.rs))}${kbStep('rest','Pauză',p.rest,p.rest?fmtClock(p.rest):'fără')}</div>
+    ${A.call?`<div class="set-row"><span class="sp"><b>Strigă combinații</b><div class="sm mu">Vocea spune combinația, o vezi și mare pe ecran</div></span><button class="sw ${p.call?'on':''}" data-a="kbOpt" data-k="call" role="switch" aria-checked="${p.call}" aria-label="Strigă combinații"></button></div>
+      ${p.call?`<div class="seg" style="margin-top:0">${[1,2,3].map(l=>`<button class="${p.lvl===l?'on':''}" data-a="kbLvl" data-i="${l}">${KB_LVL[l]}</button>`).join('')}</div>
+        <div class="set-row"><span class="sp"><b>Cu lovituri de picior</b><div class="sm mu">Low, middle, high kick, teep, genunchi</div></span><button class="sw ${p.kicks?'on':''}" data-a="kbOpt" data-k="kicks" role="switch" aria-checked="${p.kicks}" aria-label="Cu lovituri de picior"></button></div>`:''}`:''}
+    <div class="set-row"><span class="sp"><b>Temă pe rundă</b><div class="sm mu">Un singur lucru de urmărit în fiecare rundă${a==='spar'?' (de ex. jab-ul primul)':''}</div></span><button class="sw ${p.foc?'on':''}" data-a="kbOpt" data-k="foc" role="switch" aria-checked="${p.foc}" aria-label="Temă pe rundă"></button></div>
+    <button class="btn pri xl wide glow" style="margin-top:12px" data-a="kbGo">${ic('play')} Pornește · ${p.r} × ${fmtClock(p.rs)}</button>
+    <button class="btn ghost wide" style="margin-top:8px" data-a="kbLog" data-k="${a}">${ic('edit')} Notează o sesiune făcută la sală</button>
+    <details class="kb-tgs" ${SH.tgOpen?'open':''}><summary><span class="sp"><b>${ic('target')} Ținte · ${dn} din ${tgs.length} atinse</b><span class="xs mu">ocazionale, le încerci când ai chef</span></span>${ic('down')}</summary>
+      ${tgs.map(t=>{ const st=kbTgSt(t[0]); return `<button class="kb-tg ${st.ok?'ok':''}" data-a="kbTgOpen" data-k="${t[0]}"><span class="ic-s ${st.ok?'ok':''}">${ic(st.ok?'check':'target')}</span>
+        <span class="sp"><b>${esc(t[2])}</b><span class="xs mu">${st.ok?'Atinsă · '+fmtDay(st.ok):st.n?st.n+(st.n===1?' încercare':' încercări')+(st.best!=null?' · cel mai bun: '+st.best+' '+t[6]:''):'Neîncercată'}</span></span>${ic('right')}</button>`; }).join('')}</details>
+    ${sug&&!SH.tgOpen?`<button class="kb-sug" data-a="kbTgOpen" data-k="${sug[0]}">${ic('target')} <span class="sp">Dacă ai chef azi: <b>${esc(sug[2])}</b></span>${ic('right')}</button>`:''}
+    ${ses.length?`<div class="eyebrow" style="margin-top:16px">${ic('history')} Ultimele sesiuni</div>${ses.map(kbRow).join('')}`:''}
+    <details class="notes"><summary>${ic('info')} Sfaturi · ${esc(A.n)}</summary>${A.tips.map(x=>`<p>${esc(x)}</p>`).join('')}</details>`;
+}
+SHEETS.kba=()=>kbaHTML();
+ACT.kbOpen=(el,{k})=>{ if(!KB_A[k]) return; SH={kind:'kba',k}; shRender(); };
+ACT.kbRounds=()=>{ const last=kbSessions().find(s=>s.a); SH={kind:'kba',k:last?last.a:'bag',free:true}; shRender(); };
+ACT.kbShadow=()=>{ SH={kind:'kba',k:'shadow'}; shRender(); };
+ACT.kbSwitch=(el,{k})=>{ if(!SH||!KB_A[k]) return; SH.k=k; shRender(); };
+ACT.kbFmt=async(el,{I})=>{ const a=SH&&SH.k, f=KB_A[a]&&KB_A[a].fmt[I]; if(!f) return; await kbPrefSet(a,{r:f[1],rs:f[2],rest:f[3]}); buzz(8); shRender(); };
+ACT.kbStep=async(el,{k,I})=>{ const a=SH&&SH.k; if(!KB_A[a]) return; const p=kbPref(a);
+  const v=k==='r'?clamp(p.r+I,1,15):k==='rs'?clamp(p.rs+I*(p.rs<60||(p.rs===60&&I<0)?10:30),10,600):clamp(p.rest+I*15,0,180);
+  await kbPrefSet(a,{[k]:v}); buzz(8); shRender(); };
+ACT.kbOpt=async(el,{k})=>{ const a=SH&&SH.k; if(!KB_A[a]) return; await kbPrefSet(a,{[k]:!kbPref(a)[k]}); shRender(); };
+ACT.kbLvl=async(el,{I})=>{ const a=SH&&SH.k; if(!KB_A[a]) return; await kbPrefSet(a,{lvl:I}); shRender(); };
+
+/* ---------- cronometrul de runde (motorul cronometrului de intervale, cu sunete de ring) ---------- */
+function kbFocusList(a,n){ const f=(KB_A[a]||KB_A.bag).foc.slice(); for(let i=f.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [f[i],f[j]]=[f[j],f[i]]; }
+  return Array.from({length:n},(_,i)=>f[i%f.length]); }
+function kbPreset(a,o,tg){
+  const A=KB_A[a]||KB_A.bag, n=clamp(+o.r||1,1,30), rs=clamp(+o.rs||180,5,900), rest=clamp(+o.rest||0,0,600), foc=o.foc?kbFocusList(a,n):null, T=tg?kbTgOf(tg):null;
+  const ph=[{k:'prep',d:10,l:'Pregătește-te',s:T?T[2]:foc?'Runda 1: '+foc[0]:'Gardă sus, respiră'}];
+  for(let i=1;i<=n;i++){ ph.push({k:'work',d:rs,l:n===1?A.n:'Runda '+i+'/'+n,s:foc?foc[i-1]:T?T[2]:i===n&&n>1?'Ultima rundă — dă tot':A.n});
+    if(i<n&&rest>0) ph.push({k:'rest',d:rest,l:'Pauză',s:'Urmează runda '+(i+1)+(foc?': '+foc[i]:'')}); }
+  return {title:T?T[2]:A.n+' · '+n+' × '+fmtClock(rs),ph,kb:{a,r:n,rs,rest,call:o.call&&A.call?{lvl:o.lvl||2,kicks:o.kicks!==false}:null,tg:tg||null,cur:null,next:0,ph:-1}};
+}
+ACT.kbGo=()=>{ const a=SH&&SH.k; if(!KB_A[a]) return; if(TM.open&&TM.st&&TM.st.started&&!TM.st.done){ toast('Cronometrul rulează deja','','info'); return; }
+  const pr=kbPreset(a,kbPref(a)); SH=null; shRender(); tmOpen(pr); };
+/* clopotul: câteva parțiale care se sting lent; bătăile de la 10 secunde: două lovituri scurte, înalte */
+function kbSched(){
+  const st=TM.st; cancelSched('tm'); if(!st||!st.started||st.done||st.pAt) return;
+  /* un clopot la începutul rundei, trei la final */
+  const L=[], bell=(at,n)=>{ for(let i=0;i<n;i++){ const t=at+i*.34; L.push([t,1046,1.4,.32],[t,2793,.8,.09],[t,5320,.4,.04]); } };
+  let j=st.i, t=st.ph[j].d-tmEl();
+  while(true){ const ph=st.ph[j], nx=st.ph[j+1];
+    if(ph.k==='work'&&ph.d>=20&&t>10) L.push([t-10,2200,.035,.45],[t-9.87,2200,.035,.45]);
+    if(ph.k!=='work') [3,2,1].forEach(s=>{ if(t>s) L.push([t-s,880,.06]); });
+    if(!nx){ bell(t,3); break; }
+    if(nx.k==='work') bell(t,1); else if(ph.k==='work') bell(t,3);
+    t+=nx.d; j++; if(L.length>900) break; }
+  schedule('tm',L);
+}
+/* strigătorul: o combinație la câteva secunde, doar în rundă (nu în primele 2,5 s, ca să se audă anunțul, și nu în ultimele 2 s) */
+function kbTick(st){ const k=st.kb, c=k.call; if(!c) return; const ph=st.ph[st.i]; if(!ph||ph.k!=='work') return;
+  const el=tmEl(), left=ph.d-el, now=Date.now();
+  if(k.ph!==st.i){ k.ph=st.i; k.next=now+2500; k.cur=null; kbPaintCall(st); return; }
+  if(left<2||now<k.next) return;
+  k.cur=kbCombo(c.lvl,c.kicks,k.cur&&k.cur.c); const g=KB_GAP[c.lvl]||KB_GAP[2]; k.next=now+Math.round((g[0]+Math.random()*(g[1]-g[0]))*1000);
+  say(k.cur.voice); kbPaintCall(st); }
+function kbPaintCall(st){ const el=$('#kbCall'); if(el) el.innerHTML=kbCallInner(st); }
+const kbCallInner=st=>st.kb.cur?`<b>${esc(st.kb.cur.big)}</b><span>${esc(st.kb.cur.names)}</span>`:`<span class="mu">Gardă sus · combinațiile vin imediat</span>`;
+function kbLive(st,ph){ return st.kb.call&&ph.k==='work'?`<div class="kb-call" id="kbCall" aria-live="polite">${kbCallInner(st)}</div>`:''; }
+const kbCtl=st=>`<button class="btn ghost" style="grid-column:1/-1" data-a="kbEnd">${ic('check')} Termină și notează</button>`;
+const kbStartNote=st=>`<div class="kb-start">${ic('bell')} Clopot la începutul și la finalul rundei · două bătăi cu 10 secunde înainte de final${st.kb.call?' · combinații: '+KB_LVL[st.kb.call.lvl].toLowerCase()+(st.kb.call.kicks?', cu picioare':''):''}</div>`;
+const kbWorks=st=>st.ph.filter(p=>p.k==='work').length;
+ACT.kbEnd=()=>{ const st=TM.st; if(!st||!st.kb||st.done) return; let r=0;
+  st.ph.forEach((p,i)=>{ if(p.k==='work'&&i<st.i) r++; }); const cur=st.ph[st.i]; if(cur&&cur.k==='work'&&cur.d&&tmEl()>=cur.d*.5) r++;
+  st.kb.rounds=r; if(st.pAt){ const pd=Date.now()-st.pAt; st.t0+=pd; st.pausedMs+=pd; st.pAt=null; } tmFinish(false); };
+function kbDoneHTML(st){ const r=st.kb.rounds!=null?st.kb.rounds:kbWorks(st), T=st.kb.tg?kbTgOf(st.kb.tg):null;
+  return `<div class="kpis c2"><div class="kpi"><div class="k">Runde</div><div class="v">${r}<small>/ ${kbWorks(st)}</small></div></div><div class="kpi"><div class="k">${esc(kbAName(st.kb.a))}</div><div class="v">${fmtClock(st.kb.rs)}<small>/ rundă</small></div></div></div>
+    ${T?`<div class="note" style="text-align:center">${ic('target')} La pasul următor notezi rezultatul la ținta „${esc(T[2])}".</div>`:''}
+    <button class="btn pri xl wide glow" style="margin-top:14px" data-a="kbLogTm">${ic('edit')} Notează sesiunea</button>`; }
+ACT.kbLogTm=()=>{ const st=TM.st; if(!st||!st.kb) return; const hs=hrSum(st.hr), r=st.kb.rounds!=null?st.kb.rounds:kbWorks(st), d=new Date(st.start||Date.now());
+  KF=kfNew({a:st.kb.a,r,rs:st.kb.rs,rest:st.kb.rest,min:Math.max(1,Math.round((st.total||0)/60)),hr:hs?hs.avg:'',tg:st.kb.tg,time:pad(d.getHours())+':'+pad(d.getMinutes())});
+  TM.open=false; TM.st=null; cancelSched('tm'); if(!S.sess){ keepAlive(false); keepAwake(false); } tmRender(); SH={kind:'kbf'}; shRender(); };
+/* încălzirea ghidată (fără notare: e doar pregătire) */
+ACT.kbWarm=()=>{ const ph=[{k:'prep',d:5,l:'Pregătește-te',s:'Încălzire pentru kickboxing'}]; KB_WARM.forEach(([l,d,s])=>ph.push({k:'work',d,l,s})); tmOpen({title:'Încălzire · kickboxing',ph}); };
+
+/* ---------- ținte: foaia țintei, încercarea cu cronometrul și rezultatul notat direct ---------- */
+function kbtHTML(){ const T=kbTgOf(SH.k); if(!T) return ''; const st=kbTgSt(T[0]), A=KB_A[T[1]], pr=T[7];
+  return `<button class="ib sh-x" data-a="shClose" aria-label="Închide">${ic('x')}</button>
+    <button class="linkb" style="margin-top:0" data-a="kbOpen" data-k="${T[1]}">${ic('left')} ${esc(A.n)}</button>
+    <div class="eyebrow" style="margin-top:10px">${ic('target')} Țintă · ${esc(A.n)}</div><div class="h2" style="margin-top:6px">${esc(T[2])}</div>
+    <p class="mu" style="margin-top:8px;line-height:1.55">${esc(T[3])}</p>
+    <div class="kb-tg-st ${st.ok?'ok':''}">${st.ok?ic('check')+' Atinsă pe '+fmtDay(st.ok):'Încă neatinsă'}${st.best!=null?' · cel mai bun: <b>'+st.best+'</b> '+esc(T[6]):''}${st.n?' · '+st.n+(st.n===1?' încercare':' încercări'):''}</div>
+    <button class="btn pri xl wide glow" style="margin-top:14px" data-a="kbTgGo" data-k="${T[0]}">${ic('play')} Încearcă acum · ${pr[0]>1?pr[0]+' × ':''}${fmtClock(pr[1])}${pr[0]>1&&pr[2]?' · pauză '+fmtClock(pr[2]):''}</button>
+    <div class="card kb-tg-q"><div class="sm"><b>Ai făcut-o deja, la sală?</b></div>
+      ${T[4]==='n'?`<div class="inrow" style="margin-top:10px"><input class="inp" id="kbTgV" type="number" inputmode="numeric" placeholder="Câte ${esc(T[6])} · ținta ${T[5]}"><button class="btn pri" data-a="kbTgRec" data-k="${T[0]}">${ic('check')} Notează</button></div>`
+        :`<div class="inrow" style="margin-top:10px"><button class="btn pri" style="flex:1" data-a="kbTgRec" data-k="${T[0]}" data-i="1">${ic('check')} Am reușit</button><button class="btn ghost" data-a="kbTgRec" data-k="${T[0]}" data-i="0">Nu încă</button></div>`}</div>
+    ${(st.tries||[]).length?`<div class="eyebrow" style="margin-top:14px">${ic('history')} Încercări</div>${st.tries.slice().reverse().slice(0,6).map(t=>`<div class="list-row"><span class="sp">${fmtDay(t.d)}</span><span class="v">${t.v!=null?t.v+' '+esc(T[6]):''}${t.ok?' '+ic('check'):''}</span></div>`).join('')}`:''}`; }
+SHEETS.kbt=()=>kbtHTML();
+ACT.kbTgOpen=(el,{k})=>{ if(!kbTgOf(k)) return; SH={kind:'kbt',k}; shRender(); };
+ACT.kbTgGo=(el,{k})=>{ const T=kbTgOf(k); if(!T) return; const p=T[7]; SH=null; shRender(); tmOpen(kbPreset(T[1],{r:p[0],rs:p[1],rest:p[2],call:false,foc:false},k)); };
+async function kbTgMark(id,v,okv,date){ const T=kbTgOf(id); if(!T) return null; const tg=Object.assign({},(S.kb||{}).tg), o=Object.assign({n:0,tries:[]},tg[id]||{});
+  const ok=T[4]==='n'?(v!=null&&v>=T[5]):!!okv, first=ok&&!o.ok;
+  o.n=(o.n||0)+1; o.last=date; if(v!=null&&(o.best==null||v>o.best)) o.best=v; if(ok&&!o.ok) o.ok=date;
+  o.tries=(o.tries||[]).concat([v!=null?{d:date,v,ok}:{d:date,ok}]).slice(-12); tg[id]=o;
+  await save('kb',Object.assign({},S.kb,{tg})); return {ok,first,T}; }
+function kbTgCelebrate(r){ if(!r) return; if(r.first){ burstAt(innerWidth/2,innerHeight*.3,40); buzz([60,40,60,40,160]); toast('Țintă atinsă',r.T[2]); say('Țintă atinsă. Bravo!'); }
+  else toast(r.ok?'Reușită notată':'Încercare notată',r.T[2],'info'); }
+ACT.kbTgRec=async(el,{k,I})=>{ const T=kbTgOf(k); if(!T) return; let v=null;
+  if(T[4]==='n'){ v=parseInt(($('#kbTgV')||{}).value,10); if(!(v>=0&&v<10000)) return shake('#kbTgV'); }
+  const r=await kbTgMark(k,v,T[4]==='n'?null:I===1,todayKey()); shRender(); render(); kbTgCelebrate(r); };
+
+/* ---------- formularul sesiunii (după cronometru sau notată de mână) ---------- */
+let KF=null;
+function kfNew(o){ const now=new Date();
+  return Object.assign({id:null,a:'bag',date:todayKey(),time:pad(now.getHours())+':'+pad(now.getMinutes()),r:'',rs:180,rest:60,min:'',rpe:0,hr:'',note:'',ok:'',fix:'',who:'',tg:null,tgv:'',tgok:null,
+    st:stOn()&&stCanWrite()&&stCfg().auto!==false,up:false},o||{},{r:o&&o.r!=null?String(o.r):'',min:o&&o.min!=null?String(o.min):'',hr:o&&o.hr?String(o.hr):''}); }
+ACT.kbLog=(el,{k})=>{ const a=KB_A[k]?k:(kbSessions().find(s=>s.a)||{}).a||'bag', p=kbPref(a); KF=kfNew({a,rs:p.rs,rest:p.rest}); SH={kind:'kbf'}; shRender(); };
+ACT.kbEdit=(el,{k})=>{ const x=(S.ext||[]).find(e=>String(e.sid)===String(k)); if(!x) return; kbEditX(x); };
+function kbEditX(x){ const b=x.kb||{};
+  KF=kfNew({id:x.sid,a:KB_A[b.a]?b.a:kbGuess(x)||'bag',date:x.date,time:x.start?new Date(x.start).toTimeString().slice(0,5):'',r:b.r||'',rs:b.rs||180,rest:b.rest!=null?b.rest:60,min:x.min,rpe:x.rpe||0,hr:x.hr||'',
+    note:x.note||'',ok:b.ok||'',fix:b.fix||'',who:b.who||'',st:false,up:!!x.strava}); SH={kind:'kbf'}; shRender(); }
+/* din „Activități": sesiunile de kickboxing se deschid în formularul lor */
+{ const _ed=ACT.actEdit; ACT.actEdit=(el,o)=>{ const x=(S.ext||[]).find(e=>String(e.sid)===String(o.k)); if(x&&x.type==='Kickboxing'&&x.src==='manual') return kbEditX(x); return _ed(el,o); }; }
+document.addEventListener('input',e=>{ const t=e.target; if(KF&&t&&t.dataset&&t.dataset.kf!=null) KF[t.dataset.kf]=t.value; });
+const kfIn=(id,label,o={})=>`<div class="fld ${o.full?'full':''}"><label for="kf_${id}">${label}</label>${o.area?`<textarea class="inp" id="kf_${id}" data-kf="${id}" rows="2" ${o.ph?`placeholder="${esc(o.ph)}"`:''}>${esc(KF[id]||'')}</textarea>`
+  :`<input class="inp" id="kf_${id}" data-kf="${id}" ${o.type?`type="${o.type}"`:o.text?'':`type="number" step="${o.step||'any'}" inputmode="decimal"`} value="${esc(KF[id]==null?'':KF[id])}" ${o.ph?`placeholder="${esc(o.ph)}"`:''}>`}</div>`;
+const kfAuto=()=>{ const r=parseInt(KF.r,10)||0; return r?Math.round((r*(+KF.rs||0)+Math.max(0,r-1)*(+KF.rest||0))/60):0; };
+function kbfHTML(){
+  const F=KF, A=KB_A[F.a]||KB_A.bag, T=F.tg?kbTgOf(F.tg):null, auto=kfAuto();
+  return `<button class="ib sh-x" data-a="shClose" aria-label="Închide">${ic('x')}</button><div class="eyebrow">${ic('glove')} ${F.id?'Modifică sesiunea':'Sesiune de kickboxing'}</div>
+    <div class="h2" style="margin-top:6px">${esc(A.n)}</div>
+    <div class="act-tg kb-pick">${Object.keys(KB_A).map(k=>`<button class="act-tb ${k===F.a?'on':''}" data-a="kfA" data-k="${k}" aria-pressed="${k===F.a}">${ic(KB_A[k].ic)}<span>${KB_A[k].n}</span></button>`).join('')}</div>
+    ${T?`<div class="card kb-tg-q"><div class="eyebrow">${ic('target')} Ținta încercată</div><div class="sm" style="margin-top:6px"><b>${esc(T[2])}</b></div>
+      ${T[4]==='n'?`<div class="fld" style="margin-top:10px"><label for="kf_tgv">Câte ${esc(T[6])} ai făcut · ținta ${T[5]}</label><input class="inp" id="kf_tgv" data-kf="tgv" type="number" inputmode="numeric" value="${esc(F.tgv)}"></div>`
+        :`<div class="inrow" style="margin-top:10px"><button class="chip ${F.tgok===true?'on':''}" style="flex:1" data-a="kfTg" data-i="1">${ic('check')} Am reușit</button><button class="chip ${F.tgok===false?'on':''}" style="flex:1" data-a="kfTg" data-i="0">Nu încă</button></div>`}</div>`:''}
+    <div class="form">${kfIn('r','Runde',{step:'1',ph:'ex: 5'})}${kfIn('min','Durata totală (min)',{step:'1',ph:auto?'≈ '+auto+' din runde':'ex: 45'})}
+      <div class="fld"><label>Runda</label><div class="seg" style="margin-top:0">${[[120,'2 min'],[180,'3 min']].map(([v,l])=>`<button class="${+F.rs===v?'on':''}" data-a="kfRs" data-i="${v}">${l}</button>`).join('')}</div></div>
+      ${kfIn('hr','Puls mediu (opțional)',{step:'1',ph:'ex: 150'})}
+      ${kfIn('date','Data',{type:'date'})}${kfIn('time','Ora începerii',{type:'time'})}
+      ${F.a==='spar'?kfIn('who','Partener (opțional)',{text:1,full:1,ph:'cu cine ai făcut sparring'})+kfIn('ok','Ce a mers',{area:1,full:1,ph:'ex: jab-ul, low kick-ul după 1-2'})+kfIn('fix','De lucrat',{area:1,full:1,ph:'ex: garda cade după croșeu'})
+        :kfIn('note','Notițe (opțional)',{area:1,full:1,ph:'ex: combinațiile lungi, putere bună'})}</div>
+    <div class="fld" style="margin-top:12px"><label>Cât de greu a fost</label><div class="seg" style="margin-top:0">${ACT_RPE.map(([v,l])=>`<button class="${F.rpe===v?'on':''}" data-a="kfRpe" data-i="${v}">${l}</button>`).join('')}</div></div>
+    <div class="xs mu2" style="margin-top:6px">Intră în încărcarea zilei ca minute × efort, ca orice activitate din afara planului.</div>
+    ${!F.id&&stOn()&&stCanWrite()?`<div class="set-row" style="margin-top:10px"><span class="sp"><b>Trimite și pe Strava</b><div class="sm mu">ca antrenament („Kickboxing · ${esc(A.n)}")</div></span><button class="sw ${F.st?'on':''}" data-a="kfSt" role="switch" aria-checked="${!!F.st}" aria-label="Trimite și pe Strava"></button></div>`:''}
+    ${F.up?`<div class="xs mu2" style="margin-top:8px">E deja pe Strava. Modificările de aici nu se mai trimit acolo.</div>`:''}
+    <div class="inrow" style="margin-top:14px">${F.id?`<button class="btn ghost danger" data-a="kbDel" data-k="${esc(F.id)}" data-confirm="Ștergi?">${ic('trash')}</button>`:''}
+      <button class="btn pri xl" style="flex:1" data-a="kfSave">${ic('check')} ${F.id?'Salvează':'Salvează sesiunea'}</button></div>`;
+}
+SHEETS.kbf=()=>KF?kbfHTML():'';
+ACT.kfA=(el,{k})=>{ if(!KF||!KB_A[k]) return; KF.a=k; shRender(); };
+ACT.kfRs=(el,{I})=>{ if(!KF) return; KF.rs=I; shRender(); };
+ACT.kfRpe=(el,{I})=>{ if(!KF) return; KF.rpe=KF.rpe===I?0:I; shRender(); };
+ACT.kfTg=(el,{I})=>{ if(!KF) return; KF.tgok=I===1; shRender(); };
+ACT.kfSt=()=>{ if(!KF) return; KF.st=!KF.st; shRender(); };
+ACT.kfSave=async()=>{
+  const F=KF; if(!F) return; const n=v=>{ const x=parseFloat(String(v==null?'':v).replace(',','.')); return isFinite(x)?x:null; };
+  const r=Math.round(n(F.r)||0), hr=Math.round(n(F.hr)||0), min=n(F.min)||kfAuto();
+  if(F.r!==''&&!(r>=1&&r<=30)) return shake('#kf_r');
+  if(!(min>0&&min<=600)) return shake('#kf_min');
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(F.date||'')||F.date>todayKey()) return shake('#kf_date');
+  if(F.hr&&!(hr>=40&&hr<=220)) return shake('#kf_hr');
+  const T=F.tg?kbTgOf(F.tg):null, tv=T&&T[4]==='n'&&String(F.tgv).trim()!==''?Math.round(n(F.tgv)):null;
+  if(T&&T[4]==='n'&&String(F.tgv).trim()!==''&&!(tv>=0&&tv<10000)) return shake('#kf_tgv');
+  const A=KB_A[F.a]||KB_A.bag, st=parseKey(F.date); if(/^\d{1,2}:\d{2}$/.test(F.time||'')){ const [h,m]=F.time.split(':').map(Number); st.setHours(h,m,0,0); } else st.setHours(18,0,0,0);
+  const old=F.id?(S.ext||[]).find(x=>String(x.sid)===String(F.id)):null;
+  const kb=Object.assign({},(old&&old.kb)||{},{a:F.a,rs:+F.rs||180,rest:+F.rest||0}); if(r) kb.r=r; else delete kb.r;
+  ['ok','fix','who'].forEach(k=>{ const v=String(F[k]||'').trim(); if(F.a==='spar'&&v) kb[k]=v.slice(0,200); else delete kb[k]; });
+  let tr=null; if(T&&(tv!=null||F.tgok!=null)){ tr=await kbTgMark(T[0],tv,F.tgok,F.date); kb.tg={id:T[0],ok:tr.ok}; if(tv!=null) kb.tg.v=tv; }
+  const x=Object.assign({},old||{},{sid:F.id||'k'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),src:'manual',date:F.date,start:st.getTime(),type:'Kickboxing',name:'Kickboxing · '+A.n,
+    min:Math.round(min*10)/10,el:Math.round(min),km:0,dup:false,kb});
+  ['hr','rpe','note'].forEach(k=>delete x[k]); if(hr) x.hr=hr; if(F.rpe) x.rpe=F.rpe; if(F.a!=='spar'&&String(F.note||'').trim()) x.note=String(F.note).trim().slice(0,200);
+  const ext=(S.ext||[]).filter(e=>String(e.sid)!==String(x.sid)).concat([x]).sort((p,q)=>(p.start||0)-(q.start||0));
+  await save('ext',ext);
+  if(!F.id&&F.st&&stOn()&&stCanWrite()){
+    const sp=F.a==='spar'?[kb.ok?'Ce a mers: '+kb.ok:'',kb.fix?'De lucrat: '+kb.fix:''].filter(Boolean).join('\n'):x.note||'';
+    await stQueue({key:x.sid,start:x.start,end:x.start+min*60000,dur:Math.round(min*60),km:0,sport:'Workout',name:x.name,
+      desc:(A.n+(r?' · '+r+(r===1?' rundă':' runde')+' × '+fmtClock(kb.rs)+(kb.rest&&r>1?' · pauză '+fmtClock(kb.rest):''):'')+' · '+num(min,0)+' min'+(hr?' · puls mediu '+hr:'')+(sp?'\n\n'+sp:'')+'\n\nNotat în ZECE · Hybrid365'),hr:null,pts:[]});
+    setTimeout(stFlush,50); }
+  KF=null; SH=null; shRender(); render();
+  if(tr&&tr.first) kbTgCelebrate(tr); else toast(F.id?'Sesiune salvată':'Sesiune notată',A.n+(r?' · '+r+(r===1?' rundă':' runde'):'')+' · '+num(min,0)+' min','info');
+};
+ACT.kbDel=async(el,{k})=>{ const prev=S.ext, x=(prev||[]).find(e=>String(e.sid)===String(k)); if(!x) return;
+  await save('ext',(prev||[]).filter(e=>String(e.sid)!==String(k))); KF=null; SH=null; shRender(); render();
+  toast('Sesiune ștearsă',actName(x)+(x.strava?' · rămâne pe Strava':''),'',{l:'Anulează',f:async()=>{ await save('ext',prev); render(); }}); };
+
+/* ---------- uneltele: combinațiile, bandajarea, geanta ---------- */
+SHEETS.kbLib=()=>`<button class="ib sh-x" data-a="shClose" aria-label="Închide">${ic('x')}</button><div class="eyebrow">${ic('list')} Kickboxing</div><div class="h2" style="margin-top:6px">Combinații</div>
+  <p class="mu" style="margin-top:8px;line-height:1.55">Antrenorii strigă loviturile cu cifre. Pentru gardă normală (stânga în față):</p>
+  <div class="kb-nums">${[1,2,3,4,5,6].map(n=>`<div><b>${n}</b><span>${KB_P[n]}</span></div>`).join('')}</div>
+  <p class="xs mu2" style="margin-top:8px">Picioare: low kick (coapsă), middle kick (corp), high kick (cap), teep (frontală, de distanță), genunchi.</p>
+  <div class="eyebrow" style="margin-top:16px">${ic('star')} Clasice</div>
+  ${KB_LIB.map(([c,n,d])=>`<div class="kb-lib"><b>${esc(kbFmtC(c).big)}</b><div class="sm">${esc(n)}</div><div class="xs mu">${esc(d)}</div></div>`).join('')}
+  <button class="btn pri wide" style="margin-top:14px" data-a="kbShadow">${ic('sound')} Exersează cu strigătorul</button>`;
+SHEETS.kbWrap=()=>`<div class="kb-hd sm" style="--ph:${kbPh('wraps')}"><span class="kb-ph" aria-hidden="true"></span><span class="kb-fd" aria-hidden="true"></span>
+  <button class="ib kb-x" data-a="shClose" aria-label="Închide">${ic('x')}</button><div class="kb-ct"><div class="eyebrow">Înainte de sac și palmare</div><div class="h1">Bandaje</div></div></div>
+  <ol class="kb-steps">${KB_WRAP.map(([t,d])=>`<li><b>${esc(t)}</b><span>${esc(d)}</span></li>`).join('')}</ol>
+  <div class="note">Bandajele de 4–4,5 m ajung pentru mâini mari. Spală-le după fiecare antrenament.</div>`;
+SHEETS.kbGear=()=>{ const g=(S.kb||{}).gear||{}, n=KB_GEAR.filter((_,i)=>g[i]).length;
+  return `<button class="ib sh-x" data-a="shClose" aria-label="Închide">${ic('x')}</button><div class="eyebrow">${ic('check')} Înainte să pleci</div><div class="h2" style="margin-top:6px">Geanta · ${n}/${KB_GEAR.length}</div>
+  <div style="margin-top:10px">${KB_GEAR.map((t,i)=>`<button class="kb-gear ${g[i]?'on':''}" data-a="kbGearT" data-i="${i}" aria-pressed="${!!g[i]}"><span class="tick ${g[i]?'on':''}">${ic('check')}</span><span>${esc(t)}</span></button>`).join('')}</div>
+  ${n?`<button class="btn ghost wide" style="margin-top:12px" data-a="kbGearR">${ic('refresh')} Golește bifele</button>`:''}`; };
+ACT.kbLib=()=>{ SH={kind:'kbLib'}; shRender(); };
+ACT.kbWrap=()=>{ SH={kind:'kbWrap'}; shRender(); };
+ACT.kbGear=()=>{ SH={kind:'kbGear'}; shRender(); };
+ACT.kbGearT=async(el,{I})=>{ const g=Object.assign({},(S.kb||{}).gear); if(g[I]) delete g[I]; else g[I]=1; await save('kb',Object.assign({},S.kb,{gear:g})); buzz(10); shRender(); };
+ACT.kbGearR=async()=>{ await save('kb',Object.assign({},S.kb,{gear:{}})); shRender(); };
+
+/* ---------- comenzile din Ctrl+K și contextul antrenorului AI ---------- */
+function kbPalCmds(C){
+  const go=()=>{ S.tab='kb'; render(); window.scrollTo({top:0}); };
+  [['Kickboxing · sac','sac heavy bag box kickboxing runde','bag',()=>{ go(); ACT.kbOpen(null,{k:'bag'}); }],
+   ['Kickboxing · palmare','palmare pad work kickboxing','pads',()=>{ go(); ACT.kbOpen(null,{k:'pads'}); }],
+   ['Kickboxing · sparring','sparring kickboxing meci','spar',()=>{ go(); ACT.kbOpen(null,{k:'spar'}); }],
+   ['Cronometru de runde','runde box clopot ring kickboxing timer','clock',ACT.kbRounds],
+   ['Strigător de combinații · shadowboxing','shadow combinatii strigator voce kickboxing','sound',ACT.kbShadow],
+   ['Notează o sesiune de kickboxing','noteaza kickboxing sesiune sac sparring palmare','edit',()=>ACT.kbLog(null,{k:''})]
+  ].forEach(([t,k,icn,f])=>C.push({g:'Comenzi',t,k,icn,f}));
+  C.push({g:'Navigare',t:'Kickboxing',k:'mergi deschide pagina kb kickboxing',icn:'glove',f:go});
+}
+function kbAiCtx(){ const tk=todayKey(), xs=kbSessions().filter(s=>s.x.date>=dayShift(tk,-27)), t=kbTgDone();
+  const tail=` Ținte de kickboxing atinse: ${t} din ${KB_TG.length} (sunt ocazionale, le alege utilizatorul; nu fac parte din planul zilnic).`;
+  if(!xs.length) return 'Nicio sesiune de kickboxing în ultimele 4 săptămâni.'+tail;
+  const o=kbAgg(dayShift(tk,-27),tk), l=xs[0];
+  return `În ultimele 4 săptămâni: ${o.n} sesiuni (${Object.keys(o.by).map(a=>kbAName(a).toLowerCase()+' '+o.by[a]).join(', ')}), ${o.r} runde, ${num(o.min/60,1)} h. Ultima: ${kbAName(l.a).toLowerCase()}, ${l.x.date}, ${kbRowMeta(l.x)}.`+tail; }
+
+/* ---------- fila în meniu: după Antrenament ---------- */
+NAV.splice(2,0,['kb','Kickboxing','glove']); VIEWS.kb=viewKb; VIEW_LAY.kb='lay-narrow';
+/* lista de ținte rămâne deschisă cât lucrezi în foaie (foaia se redesenează la fiecare setare) */
+document.addEventListener('toggle',e=>{ const t=e.target; if(t&&t.classList&&t.classList.contains('kb-tgs')&&SH&&SH.kind==='kba') SH.tgOpen=t.open; },true);
+
+/* =====================================================================
    v8 · ANTRENORUL AI — unelte de citire. Modelul își cere singur datele exacte din aplicație
    (istoric, alergări, recorduri, rezumatul unei perioade, corp, obiective, insights) în loc să
    ghicească dintr-un rezumat. Rulează automat, fără confirmare (doar citesc); uneltele care scriu
@@ -8563,7 +9110,7 @@ function aiReadCard(chat,b){ const t=(chat.tools||{})[b.id]||{}, L=AI_RT_LBL[b.n
 async function loadAll(){
   const keys=Object.keys(K), vals=await Promise.all(keys.map(k=>store.get(K[k]))), o=Object.fromEntries(keys.map((k,i)=>[k,vals[i]]));
   const obj=v=>v&&typeof v==='object'&&!Array.isArray(v)?v:{};
-  ['lifts','weights','wlog','cyc','runPlan','prof','mlog','water','body','journal','tech','mplan','shop','adj','strava','exNote','dash','notifCfg'].forEach(k=>{ S[k]=obj(o[k]); });
+  ['lifts','weights','wlog','cyc','runPlan','prof','mlog','water','body','journal','tech','mplan','shop','adj','strava','exNote','dash','notifCfg','kb'].forEach(k=>{ S[k]=obj(o[k]); });
   S.ach=o.ach&&typeof o.ach==='object'&&!Array.isArray(o.ach)?o.ach:null; S.notif=Array.isArray(o.notif)?o.notif:undefined;
   S.exFav=Array.isArray(o.exFav)?o.exFav:[]; S.exCustom=Array.isArray(o.exCustom)?o.exCustom:[];
   try{ const r=JSON.parse(localStorage.getItem('zece3:rng')||'"m"'); if(RANGES.some(x=>x[0]===r)) S.rng=r; }catch(e){}
