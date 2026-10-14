@@ -1875,6 +1875,15 @@ html[data-mode="light"] .kb-nums div{background:var(--s2)}
 /* bara de jos cu 6 file: etichete mai strânse pe telefoanele înguste */
 @media(max-width:430px){ .nav-in[style*="--n:6"] .nb{font-size:9.5px;letter-spacing:-.01em} .nav-in[style*="--n:6"] .nb span{padding:0} }
 
+/* v11 · strigătorul: nivel + ritm, lista combinațiilor; setările vocii */
+.kb-cfg{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:8px 12px;margin-top:4px}
+.kb-cfg > span{font-size:12.5px;font-weight:600;color:var(--mu)}
+.kb-cfg .seg{margin-top:0}
+.kb-cmbs .kb-cmb{display:flex;align-items:baseline;gap:12px;padding:9px 14px;border-top:1px solid var(--ln)}
+.kb-cmb b{font:800 17px/1.2 var(--fd);letter-spacing:.02em;text-transform:uppercase;min-width:96px}
+.kb-cmb span{font-size:13px;color:var(--mu)}
+.vox-set{margin-top:8px;padding-top:12px;border-top:1px solid var(--ln)}
+
 /* =====================================================================
    Mișcare · intrarea în ecran, apariția la derulare, grafice care se desenează.
    Mișcare redusă: după setarea sistemului („Automat") sau aleasă explicit în Setări.
@@ -3037,12 +3046,176 @@ function hrHTML(){
       ${HR.res?HR.res.err?`<div class="err">${ic('alert')}<span>${esc(HR.res.err)}</span></div>`:`<div class="easy" style="margin-top:10px">${ic('check')} Puls în repaus <b>${HR.res.rhr}</b>${HR.res.hrv?' · HRV <b>'+HR.res.hrv+' ms</b>':HR.res.noRR?' · fără HRV: senzorul nu trimite intervale RR':' · HRV: prea multe artefacte, mai încearcă'}. Salvate azi.</div>`:''}</div>
     <div class="inrow"><button class="btn ghost" data-a="hrDisc">Deconectează</button><button class="btn" style="flex:1" data-a="shClose">Gata</button></div>`;
 }
-/* voce: folosește vocea românească a sistemului; fără ea, rămân doar sunetele */
-const VO={ok:'speechSynthesis' in window,v:null};
-function pickVoice(){ try{ VO.v=speechSynthesis.getVoices().find(v=>/^ro/i.test(v.lang))||null; }catch(e){} }
+/* vocea (say, VO) stă din v11 în 085-voice.js */
+
+/* =====================================================================
+   v11 · VOCEA — Emil (voce neurală înregistrată, gravă, mai lentă) și replici motivante peste tot unde vorbește aplicația
+   Frazele aplicației sunt înregistrate dinainte (tools/vox: edge-tts ro-RO-EmilNeural, −12 % viteză, −8 Hz ton; combinațiile −18 %),
+   în src/assets/vox: build.js le pune în pagină (VOXB), build_site.js le mută în vox.json. Se redau pe ceasul audio
+   (același AudioContext ca bipurile). Frazele cu numere („Runda 3 din 5", „Viteza 12 virgulă 5") se compun din cuvinte înregistrate;
+   ce nu e înregistrat deloc se spune cu vocea telefonului (mai lent, ton mai jos). În Setări poți alege și vocea telefonului.
+   Încurajările au variație (nu repetă aceeași replică de două ori la rând); respirația, stretching-ul și mobilitatea rămân calme.
+   Preferințele stau în zece3:vox, doar pe acest dispozitiv: nu intră în export și sincronizare.
+   ===================================================================== */
+K.vox='zece3:vox'; S.vox={};
+let VOXB='vox.json';
+const voxCfg=()=>Object.assign({src:'emil',enc:true},S.vox||{});
+async function voxSet(o){ await save('vox',Object.assign({},S.vox,o)); }
+
+/* ---------- banca de fraze înregistrate ---------- */
+const VB={buf:{},load:null,gen:0,src:[],miss:[]};
+const vbKey=s=>String(s).toLowerCase().replace(/[„"”]/g,'').replace(/\s+/g,' ').replace(/^[\s.,!?:;·—-]+|[\s.,!?:;·—-]+$/g,'');
+/* pe site banca e un fișier separat (vox.json), adus o singură dată, la prima nevoie */
+function vbReady(){ if(typeof VOXB!=='string') return Promise.resolve(VOXB);
+  return VB.load||(VB.load=fetch(VOXB).then(r=>r.json()).then(j=>VOXB=j).catch(()=>{ VB.load=null; return {}; })); }
+const vbHas=k=>typeof VOXB==='object'&&!!VOXB[k];
+function vbBuf(k){ if(VB.buf[k]) return VB.buf[k];
+  return VB.buf[k]=new Promise((res,rej)=>{ const c=actxGet(); if(!c||!vbHas(k)) return rej();
+    const b=atob(VOXB[k]), u=new Uint8Array(b.length); for(let i=0;i<b.length;i++) u[i]=b.charCodeAt(i);
+    try{ const p=c.decodeAudioData(u.buffer,res,rej); if(p&&p.then) p.then(res,rej); }catch(e){ rej(e); } }).catch(()=>{ delete VB.buf[k]; return null; }); }
+/* textul pentru voce, citit corect în română: „3/5" → „3 din 5", „5–6" → „5 până la 6", „puls 140–150" → „puls între 140 și 150",
+   „1:32" → „un minut și 32 de secunde", „22,5 s", „200 m", „10 min", „90°", „~90%", „×", „Z2", „1-2-3-2"; „·" desparte frazele.
+   „2f"/„22f" = forma de feminin („două", „douăzeci și două"), pentru bucățile înregistrate */
+const vxDe=n=>{ const r=n%100; return n>=20&&(r===0||r>=20)?' de':''; };
+const vxFem=n=>n===1?'o':n<100&&(n%10===2||n===12)?n+'f':String(n);
+function vxNorm(t){ return String(t).replace(/\b90\/90\b/g,'90 90').replace(/(\d+)\/(\d+)/g,'$1 din $2').replace(/\bZ(\d)\b/g,'zona $1')
+  .replace(/~\s*(\d+)\s*%/g,'aproape $1 la sută').replace(/(\d+)\s*%/g,'$1 la sută').replace(/(\d+)°/g,'$1 de grade')
+  .replace(/\b\d(?:-\d)+\b/g,m=>m.split('-').join(', '))
+  .replace(/de 6 × 10/g,'de 6, de 10 ori').replace(/(\d+) runde × /g,'$1 runde a câte ').replace(/(\d+) × (\d+) de secunde/g,'$1 runde a câte $2 de secunde').replace(/ × /g,' ori ')
+  .replace(/puls (\d+)\s*–\s*(\d+)/g,'puls între $1 și $2').replace(/(\d+)\s*–\s*(\d+)/g,'$1 până la $2').replace(/ · /g,'. ')
+  .replace(/(\d+):(\d\d)\b/g,(m,a,b)=>{ a=+a; b=+b; return (a===1?'un minut':a===2?'două minute':a+vxDe(a)+' minute')+(b?' și '+vxFem(b)+vxDe(b)+(b===1?' secundă':' secunde'):''); })
+  .replace(/(\d+)[.,](\d)\b/g,'$1 virgulă $2')
+  .replace(/(\d+) min\b/g,(m,a)=>+a===1?'un minut':vxFem(+a)+vxDe(+a)+' minute')
+  .replace(/(\d+) s\b/g,(m,a)=>vxFem(+a)+vxDe(+a)+(+a===1?' secundă':' secunde'))
+  .replace(/(\d+) m\b/g,(m,a)=>a+vxDe(+a)+' metri')
+  .replace(/\b(\d+) (minute|secunde|runde|repetări|lovituri|contre|repere|ture)\b/g,(m,a,w)=>vxFem(+a)+' '+w)
+  .replace(/(^|\s)în un minut/g,'$1într-un minut'); }
+/* textul → bucăți înregistrate, cât mai lungi (sună natural): fraze întregi (și mai multe la rând, ca „Start! Hai, poți!"),
+   apoi bucățile despărțite de „:", apoi cuvinte la rând („w:trebuie să fii la", „w:runda 3", „w:din 5") și numere („h:2" + „n:45").
+   null dacă lipsește ceva: atunci vorbește vocea telefonului */
+function vbNum(w){ const f=/f$/.test(w), n=parseInt(w,10); if(f) return ['f:'+n];
+  if(n<100) return ['n:'+n]; if(n===1000) return ['n:1000']; if(n>1000) return [null]; return ['h:'+Math.floor(n/100)].concat(n%100?vbNum(String(n%100)):[]); }
+const vbSegs=t=>(vxNorm(t).match(/[^.!?]+[.!?]*/g)||[]).map(s=>s.trim()).filter(s=>vbKey(s));
+const vbToks=u=>vbKey(u).split(/[\s,:;]+/).filter(Boolean);
+function vbUnit(u){ const ws=vbToks(u), part=[];
+  for(let i=0;i<ws.length;){ let j=ws.length, hit=null;
+    for(;j>i;j--){ const k='w:'+ws.slice(i,j).join(' '); if(vbHas(k)){ hit=k; break; } }
+    if(hit){ part.push(hit); i=j; continue; }
+    if(!/^\d+f?$/.test(ws[i])) return null; const ks=vbNum(ws[i]); if(ks.some(x=>!x||!vbHas(x))) return null; part.push(...ks); i++; }
+  return part; }
+/* cel mai lung șir de bucăți [i, j) care există întreg în bancă, unite cu sep */
+function vbLong(xs,i,sep){ for(let j=xs.length;j>i;j--){ const k=vbKey(xs.slice(i,j).join(sep)); if(vbHas(k)) return [k,j]; } return null; }
+function vbPlan(t){
+  const segs=vbSegs(t), out=[];
+  for(let i=0;i<segs.length;){ const w=vbLong(segs,i,' '); if(w){ out.push([w[0],.22]); i=w[1]; continue; }
+    const us=segs[i].split(':').map(s=>s.trim()).filter(s=>vbKey(s));
+    for(let a=0;a<us.length;){ const h=vbLong(us,a,': '); if(h){ out.push([h[0],.12]); a=h[1]; continue; }
+      const p=vbUnit(us[a]); if(!p) return null; p.forEach(x=>out.push([x,.04])); out[out.length-1][1]=.12; a++; }
+    if(out.length) out[out.length-1][1]=.22; i++; }
+  return out.length?out:null; }
+function vbStop(){ VB.gen++; VB.src.forEach(s=>{ try{ s.stop(); }catch(e){} }); VB.src=[]; }
+async function vbSay(plan,o,gen){
+  const bufs=await Promise.all(plan.map(p=>vbBuf(p[0]))); if(gen!==VB.gen) return;
+  if(bufs.some(b=>!b)) return ttsSay(o.text,o);
+  const c=actxGet(); if(!c) return; let t=c.currentTime+.04; const g=c.createGain(); g.gain.value=1; g.connect(c.destination);
+  bufs.forEach((b,i)=>{ const s=c.createBufferSource(); s.buffer=b; s.connect(g); s.start(t); VB.src.push(s);
+    if(i===bufs.length-1) s.onended=()=>{ if(gen===VB.gen){ VO.end=0; VB.src=[]; if(o.end) o.end(); } };
+    t+=b.duration+(i<bufs.length-1?plan[i][1]:0); });
+  VO.end=Date.now()+Math.round((t-c.currentTime)*1000)+300; }
+
+/* ---------- vocea telefonului (rezerva): o voce românească, mai lentă și mai gravă ---------- */
+const VO={ok:'speechSynthesis' in window,v:null,list:[],end:0};
+function voRo(){ try{ return speechSynthesis.getVoices().filter(v=>/^ro/i.test(v.lang)); }catch(e){ return []; } }
+const voScore=v=>(/natural|neural|enhanced|premium|online/i.test(v.name)?10:0)+(/emil|andrei/i.test(v.name)?2:0)+(v.localService?1:0);
+function pickVoice(){ const l=voRo(); VO.list=l; VO.v=l.slice().sort((a,b)=>voScore(b)-voScore(a))[0]||null; }
 if(VO.ok){ pickVoice(); try{ speechSynthesis.addEventListener('voiceschanged',pickVoice); }catch(e){} }
-function say(t){ if(!VO.ok||!S.voice||!S.sound||document.hidden) return; if(!VO.v) pickVoice(); if(!VO.v) return;
-  try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(String(t).replace(/(\d+)\/(\d+)/g,'$1 din $2')); u.lang='ro-RO'; u.voice=VO.v; u.rate=1.05; speechSynthesis.speak(u); }catch(e){} }
+function ttsSay(t,o){ o=o||{}; if(!VO.ok) return false; if(!VO.v) pickVoice(); if(!VO.v) return false;
+  try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(vxNorm(t).replace(/(\d+)f\b/g,'$1')); u.lang='ro-RO'; u.voice=VO.v;
+    u.rate=.85*(o.rate||1); u.pitch=.85; VO.end=Date.now()+Math.min(12000,900+String(t).length*95/u.rate);
+    const fin=()=>{ VO.end=0; if(o.end) o.end(); }; u.onend=fin; u.onerror=fin; speechSynthesis.speak(u); return true; }catch(e){ return false; } }
+
+/* vorbește acum (oprește ce se spunea) sau, cu o.queue, doar dacă vocea e liberă; o.end se apelează la final */
+function say(t,o){ o=Object.assign({},o,{text:t}); if(!S.voice||!S.sound||document.hidden||!t) return false;
+  if(o.queue&&voTalking()) return false;
+  vbStop(); try{ VO.ok&&speechSynthesis.cancel(); }catch(e){}
+  if(voxCfg().src==='emil'){
+    /* pe site, cât timp banca încă se descarcă (doar prima dată), vorbește vocea telefonului: nimic nu se aude cu întârziere */
+    if(typeof VOXB==='string') vbReady();
+    else { const p=vbPlan(t); if(p&&actxGet()){ vbSay(p,o,VB.gen); VO.end=Date.now()+4000; return true; }
+      VB.miss.push(String(t)); if(VB.miss.length>50) VB.miss.shift(); } }
+  return ttsSay(t,o); }
+/* pe site: banca se aduce în fundal la câteva secunde după pornire, ca să fie gata la primul antrenament */
+setTimeout(()=>{ if(S.voice&&voxCfg().src==='emil'&&typeof VOXB==='string') vbReady(); },4000);
+function voTalking(){ if(!VO.end) return false; if(Date.now()>VO.end){ VO.end=0; return false; } return true; }
+
+/* ---------- replicile motivante ---------- */
+const MOT={
+  go:['Start! Hai, poți!','Începem! Dă tot ce ai!','Hai! Arată ce poți!','Start! Concentrare și dă-i!'],
+  work:['Hai, poți!','Dă-i tare!','Concentrare, hai!','Ești pe drumul cel bun!','Fiecare secundă contează!','Hai, arată ce poți!'],
+  last:['Ultimul! Dă tot ce ai!','Ultimul! Termină puternic!','Ultimul, hai, încă puțin!','Ultimul! Totul acum!'],
+  rest:['Bravo! Respiră adânc.','Foarte bine! Respiră și recuperează-te.','Super treabă! Relaxează umerii.','Excelent! Ia-ți aer, urmează și mai bine.'],
+  restS:['Respiră!','Bine, respiră!','Bravo, aer!'],
+  half:['Jumătate! Ține ritmul!','Ai trecut de jumătate! Continuă!','Jumătate gata! Hai, poți!'],
+  min1:['Ultimul minut! Ține-te tare!','Încă un minut! Finalul e aproape!','Ultimul minut! Hai, termină frumos!'],
+  s10:['Zece secunde! Rezistă!','Încă zece secunde! Hai!','Zece secunde! Dă tot!'],
+  done:['Gata! Ai fost excelent. Bravo!','Ai terminat! Bravo, asta a fost muncă serioasă!','Gata! Încă un antrenament bifat. Felicitări!'],
+  calmDone:['Gata. Foarte bine.','Gata. Te-ai descurcat foarte bine.'],
+  fin:['Antrenament terminat! Ai muncit din greu azi. Bravo!','Gata antrenamentul! Felicitări, ești mai puternic decât ieri!','Antrenament terminat! Disciplina ta face diferența. Bravo!'],
+  rdone:['Gata pauza! Hai, următoarea serie!','Pauza s-a terminat. Încă o serie, poți!','Înapoi la treabă! Următoarea serie!'],
+  pr:['Record nou! Ești de neoprit!','Record nou! Bravo, asta e progres!','Record nou! Felicitări, muncă răsplătită!'],
+  tg:['Țintă atinsă! Bravo, ai reușit!','Țintă atinsă! Felicitări, asta e muncă!'],
+  on:['Vocea e pornită. Hai să ne antrenăm!'],
+  test:['Runda unu din trei. Gardă sus și dă-i!'],
+  /* kickboxing */
+  kbGo:['Gardă sus și dă-i!','Hai, la treabă!','Mâinile sus, hai!','Hai, arată ce poți!'],
+  kbLast:['Ultima rundă! Dă tot ce ai!','Ultima rundă! Termină puternic!','Ultima rundă, hai, totul acum!'],
+  kbRest:['Respiră adânc, ai avut o rundă bună.','Bravo! Bea apă și respiră.','Rundă bună! Relaxează umerii.','Excelent! Respiră pe nas, recuperează-te.'],
+  kbS10:['Zece secunde! Dă tot!','Ultimele zece secunde! Lovituri fără oprire!','Zece secunde! Accelerează!'],
+  kbEnc:['Bun! Mâinile sus!','Foarte bine! Respiră!','Așa! Continuă!','Bravo! Revino în gardă!','Bine! Mișcă-te din picioare!','Hai, ține ritmul!']
+};
+const MOT_LAST={};
+function mot(k){ const a=MOT[k]||[]; if(!a.length) return ''; let i=Math.floor(Math.random()*a.length); if(a.length>1&&a[i]===MOT_LAST[k]) i=(i+1)%a.length; return MOT_LAST[k]=a[i]; }
+const voxEnc=()=>voxCfg().enc!==false;
+/* cronometrele calme: respirație, stretching, mobilitate, foam rolling */
+const tmCalm=st=>!!st&&(/^(breath|stretch|mobility)$/.test(st.kind||'')||/foam roll|respira/i.test(st.title||''));
+
+/* ce spune vocea la începutul fiecărei bucăți din cronometru */
+function voxPhase(p,st){
+  if(!p) return '';
+  if(p.k==='breath') return p.l;
+  const sp=p.sp?'. Viteza '+spSay(p.sp):'', calm=tmCalm(st)||!voxEnc(), kb=st&&st.kb;
+  if(p.k==='rest'){ if(calm) return p.l+sp;
+    return p.l+'. '+((p.d||0)<15?mot('restS'):mot(kb?'kbRest':'rest'))+sp; }
+  /* eticheta + prima parte din descriere (fără numele activității repetat și fără „Ultima rundă — dă tot", spusă motivant mai jos) */
+  const s=p.s?p.s.split(' — ')[0]:'', base=p.l+(s&&!(kb&&s===(KB_A[kb.a]||{}).n)&&!/^Ultima rundă/.test(s)?'. '+s:'')+sp;
+  if(calm||p.k==='prep') return base;
+  const works=st.ph.filter(x=>x.k==='work'||x.k==='manual'), wi=works.indexOf(p), last=works.length>1&&wi===works.length-1;
+  return base+'. '+(kb?(last?mot('kbLast'):mot('kbGo')):last?mot('last'):wi===0?mot('go'):mot('work'));
+}
+
+/* încurajările din mijlocul bucății (jumătate, ultimul minut, ultimele 10 secunde): o dată pe bucată, doar dacă vocea e liberă */
+function voxTick(st){
+  if(!st||!st.started||st.done||st.pAt||st.kb||!voxEnc()||tmCalm(st)) return;
+  const ph=st.ph[st.i]; if(!ph||ph.k!=='work'||ph.d==null) return;
+  const el=tmEl(), left=ph.d-el, q=st.vq&&st.vq.i===st.i?st.vq:(st.vq={i:st.i});
+  if(ph.d>=120&&!q.h&&el>=ph.d/2&&left>20){ q.h=1; say(mot('half'),{queue:true}); return; }
+  if(ph.d>=300&&!q.m&&left<=60&&left>50){ q.m=1; say(mot('min1'),{queue:true}); return; }
+  if(ph.d>=45&&st.kind!=='emom'&&!q.s&&left<=10.5&&left>6){ q.s=1; say(mot('s10'),{queue:true}); }
+}
+
+/* ---------- Setări: vocea, încurajări, „Ascultă" ---------- */
+function voxSettingsHTML(){
+  if(!S.voice) return '';
+  const c=voxCfg();
+  return `<div class="vox-set"><div class="eyebrow" style="margin-top:4px">${ic('sound')} Vocea</div>
+    <div class="seg" style="margin-top:8px">${[['emil','Emil · antrenor'],['tel','Vocea telefonului']].map(([k,t])=>`<button class="${c.src===k?'on':''}" data-a="voxSrc" data-k="${k}">${t}</button>`).join('')}</div>
+    <div class="sm mu" style="margin-top:6px">${c.src==='emil'?'Voce gravă, înregistrată în aplicație: sună la fel pe orice telefon, vorbește rar și clar.':VO.ok?(voRo().length?'Vocea românească instalată pe acest dispozitiv, mai rar și pe un ton mai jos.':'Nu găsesc o voce românească pe acest dispozitiv.'):'Browserul nu are sinteză vocală.'}</div>
+    <div class="set-row"><span class="sp"><b>Încurajări</b><div class="sm mu">Vocea te motivează în runde, pauze, la final și la recorduri</div></span><button class="sw ${c.enc?'on':''}" data-a="voxEnc" role="switch" aria-checked="${!!c.enc}" aria-label="Încurajări"></button></div>
+    <button class="btn ghost sm" style="margin-top:4px" data-a="voxTest">${ic('sound')} Ascultă vocea</button></div>`;
+}
+ACT.voxSrc=async(el,{k})=>{ if(k!=='emil'&&k!=='tel') return; await voxSet({src:k}); render(); say(mot('go')); };
+ACT.voxEnc=async()=>{ await voxSet({enc:!voxCfg().enc}); render(); };
+ACT.voxTest=()=>{ actxGet(); if(!say(mot('test')+' '+kbFmtC('1-2-3, low kick').voice+'.')) toast('Vocea nu pornește','Verifică: Sunet și vibrații pornit, Voce pornită și volumul telefonului.','info'); };
 
 /* =====================================================================
    6 · STATISTICI ȘI SERIA DE SĂPTĂMÂNI
@@ -4304,7 +4477,8 @@ function viewSet(){
     <div class="note">Reprizele de prag au ${p.thr.m} min, cu ${p.thr.rest}s jog între ele. Exercițiile și zilele planului rămân aceleași.</div>
     <button class="btn ghost sm" style="margin-top:10px" data-a="rpReset" data-confirm="Sigur? Apasă iar">${ic('refresh')} Valorile din program</button></div>
   <div class="card">${sw('sound',S.sound,'Sunet și vibrații','Pauze, cronometru, recorduri')}
-    ${sw('voiceCues',S.voice,'Voce',VO.ok?'Anunță reprizele, pauzele și recordurile cu vocea românească a telefonului':'Browserul nu are sinteză vocală',VO.ok?'':'disabled')}
+    ${sw('voiceCues',S.voice,'Voce','Anunță rundele, pauzele, combinațiile și recordurile și te încurajează')}
+    ${voxSettingsHTML()}
     <div class="set-row"><span class="sp"><b>Ghidul de pornire</b><div class="sm mu">Reia pașii de la prima deschidere</div></span><button class="btn ghost sm" data-a="onbOpen">Deschide</button></div></div>
 
   <div class="set-h" id="sData">Date și copii</div>
@@ -4608,7 +4782,7 @@ async function finishSess(){
   S.summary=Object.assign({},rec,{hrS:hs,prList:s.prs,skipped,absN,absT:day.ex.filter(e=>e.opt).length});
   if(stOn()&&stCanWrite()){ const it=stItem(rec,s,day,hs); if(stCfg().auto!==false){ await stQueue(it); setTimeout(stFlush,50); } else ST.pend=it; }
   S.sess=null; stopRest(); S.fxOpen=false; await store.set(K.sess,null); keepAwake(false); keepAlive(false);
-  render(); burstAt(innerWidth/2,innerHeight*.28,44); flash(); say('Antrenament terminat. Bravo!'); buzz([80,50,80,50,200]); beep(660,.1); setTimeout(()=>beep(880,.1),120); setTimeout(()=>beep(1320,.18),240);
+  render(); burstAt(innerWidth/2,innerHeight*.28,44); flash(); say(voxEnc()?mot('fin'):'Antrenament terminat.'); buzz([80,50,80,50,200]); beep(660,.1); setTimeout(()=>beep(880,.1),120); setTimeout(()=>beep(1320,.18),240);
 }
 async function quitSess(){ S.sess=null; stopRest(); S.fxOpen=false; await store.set(K.sess,null); keepAwake(false); keepAlive(false); render(); toast('Sesiune închisă','Seriile notate au rămas salvate.','info'); }
 
@@ -4617,7 +4791,7 @@ function restSounds(left){ schedule('rest',[[left-3,880,.06],[left-2,880,.06],[l
 function startRest(sec,lbl){ if(!sec) return; S.rest={end:Date.now()+sec*1000,total:sec,lbl:lbl||'Pauză'}; restSounds(sec);
   if('mediaSession' in navigator&&window.MediaMetadata) try{ navigator.mediaSession.metadata=new MediaMetadata({title:(lbl||'Pauză')+' '+fmtClock(sec),artist:'ZECE'}); }catch(e){} }
 function stopRest(){ S.rest=null; cancelSched('rest'); }
-function restDone(){ S.rest=null; AU.sched.rest=[]; buzz([200,100,200]); if(!document.hidden) flash(); say('Gata pauza. Următoarea serie.'); renderFocus(); renderPill(); }
+function restDone(){ S.rest=null; AU.sched.rest=[]; buzz([200,100,200]); if(!document.hidden) flash(); say(voxEnc()?mot('rdone'):'Gata pauza. Următoarea serie.'); renderFocus(); renderPill(); }
 function tick(){
   if(TM.open) tmTick();
   if(!S.sess&&!S.rest) return;
@@ -4681,9 +4855,10 @@ function tmOpen(pr,from){
 }
 const tmPh=()=>TM.st.ph[TM.st.i];
 function tmEl(){ const st=TM.st; if(!st||!st.t0) return 0; return ((st.pAt||Date.now())-st.t0)/1000; }
-function tmGo(){ const st=TM.st; st.start=Date.now(); st.t0=Date.now(); st.started=true; actxGet(); keepAlive(true); tmSched(); tmRender(); say(tmPh().l); }
+function tmGo(){ const st=TM.st; st.start=Date.now(); st.t0=Date.now(); st.started=true; actxGet(); keepAlive(true); tmSched(); tmRender(); say(voxPhase(tmPh(),st)); }
 const spSay=v=>{ const r=Math.round(v*10)/10, i=Math.floor(r), d=Math.round((r-i)*10); return i+(d?' virgulă '+d:''); };
-const tmSay=p=>say((p.k==='breath'||p.k==='rest'||!p.s?p.l:p.l+'. '+p.s.split(' — ')[0])+(p.sp?'. Viteza '+spSay(p.sp):''));
+/* ce spune vocea la fiecare bucată: voxPhase (085-voice.js), cu încurajări unde nu e un cronometru calm */
+const tmSay=p=>say(voxPhase(p,TM.st));
 function tmSched(){
   if(TM.st&&TM.st.kb){ kbSched(); return; }
   cancelSched('tm'); const st=TM.st; if(!st||!st.started||st.done||st.pAt) return;
@@ -4711,7 +4886,7 @@ function tmAdvance(over,auto){
 function tmTick(){
   const st=TM.st; if(!st||!st.started||st.done||st.pAt) return;
   let g=0; while(!st.done&&tmPh().d!=null&&tmEl()>=tmPh().d&&g++<500) tmAdvance(tmEl()-tmPh().d,true);
-  if(st.kb&&!st.done) kbTick(st);
+  if(st.kb&&!st.done) kbTick(st); else voxTick(st);
   tmPaint();
 }
 function tmFinish(auto){
@@ -4720,7 +4895,7 @@ function tmFinish(auto){
   if(!S.sess) keepAlive(false);
   /* rezultatul intră în istoricul de conditioning (folosit de profilul atletului) */
   if(st.kind&&st.total>=20) save('tmlog',(S.tmlog||[]).concat([{date:todayKey(),kind:st.kind,title:st.title,total:Math.round(st.total),rounds:st.rounds||0,laps:(st.laps||[]).map(x=>Math.round(x)),hr:(h=>h?{avg:h.avg,max:h.max}:undefined)(hrSum(st.hr))}]));
-  burstAt(innerWidth/2,innerHeight*.35,40); buzz([100,60,100,60,250]); tmRender(); say('Gata! Bravo.');
+  burstAt(innerWidth/2,innerHeight*.35,40); buzz([100,60,100,60,250]); tmRender(); say(tmCalm(st)?mot('calmDone'):voxEnc()?mot('done'):'Gata!');
 }
 function tmPaint(){
   const st=TM.st; if(!st||!st.started||st.done) return; const ph=tmPh(), el=tmEl();
@@ -6419,7 +6594,7 @@ document.addEventListener('click',async ev=>{
     case 'rcShare': await rcShare(); return;
     case 'rcAsk': RC.open=false; rcRender(); aiSend(QUICK[0]); return;
     case 'sumShare': await sumShare(); return;
-    case 'voiceCues': await save('voice',!S.voice); render(); if(S.voice){ say('Vocea e pornită.'); if(VO.ok&&!VO.v) toast('Nu găsesc o voce românească','Instalează limba română în setările de text-to-speech ale telefonului.','info'); } return;
+    case 'voiceCues': await save('voice',!S.voice); render(); if(S.voice){ actxGet(); say(mot('on')); if(voxCfg().src==='tel'&&VO.ok&&!VO.v) toast('Nu găsesc o voce românească','Instalează limba română în setările de text-to-speech ale telefonului.','info'); } return;
     case 'onbOpen': onbOpen(); return;
     case 'obNext': await onbNext(); return;
     case 'obBack': if(OB&&OB.step>0){ OB.step--; onbRender(); } return;
@@ -7517,7 +7692,7 @@ function prMoment(o){
   const r=$('#ovRoot'); if(!r||r.firstChild) { toast(o.t,o.v+(o.p?' (înainte '+o.p+')':''),''); return; }
   r.innerHTML=`<div class="celeb" data-a="celebX"><div class="celeb-c pr-m"><div class="rays"><div class="core">${ic('trophy')}</div></div>
     <div class="eyebrow" style="justify-content:center">${esc(o.t)}</div><div class="pr-v">${esc(o.v)}</div>${o.p?`<div class="sm mu">înainte: ${esc(o.p)}</div>`:''}${o.s?`<div class="xs mu2" style="margin-top:6px">${esc(o.s)}</div>`:''}</div></div>`;
-  buzz([60,40,60,40,120]); beep(990,.08); setTimeout(()=>beep(1320,.12),110); say('Record nou!');
+  buzz([60,40,60,40,120]); beep(990,.08); setTimeout(()=>beep(1320,.12),110); say(voxEnc()?mot('pr'):'Record nou!');
   clearTimeout(prMoment.t); prMoment.t=setTimeout(()=>{ if(r.querySelector('.pr-m')) r.innerHTML=''; },3800);
 }
 ACT.celebX=()=>{ const r=$('#ovRoot'); if(r&&r.querySelector('.celeb')) r.innerHTML=''; };
@@ -8617,7 +8792,8 @@ document.addEventListener('change',async e=>{ const t=e.target; if(t.dataset&&t.
 
 /* =====================================================================
    v10 · KICKBOXING — filă separată: sac, palmare, sparring (plus shadowboxing ca unealtă).
-   Cronometru de runde cu clopot și bătăi la 10 secunde, strigătorul de combinații, temă pe rundă,
+   Cronometru de runde cu clopot și bătăi la 10 secunde, strigătorul de combinații (v11: pornit la sac, palmare și sparring,
+   ritm Lent / Mediu / Rapid, așteaptă să termine vocea înainte de următoarea combinație, încurajări), temă pe rundă,
    ținte ocazionale (stau doar în pagina activității, nu în antrenamentul zilei), istoric și unelte.
    Sesiunile stau în zece3:ext (tip „Kickboxing", src:'manual', detaliile în .kb), deci intră în încărcarea zilei,
    cronologie, export, sincronizare și, dacă vrei, pe Strava. Țintele, preferințele și geanta stau în zece3:kb.
@@ -8647,12 +8823,12 @@ const KB_A={
   pads:{n:'Palmare',t:'Pad work',ic:'pads',ph:'pads',sh:'Precizie, viteză, combinații',s:'Precizie, viteză și combinații, cu un partener care ține palmarele.',call:1,
     fmt:[['Tehnic',4,180,60],['Combinații',6,120,60],['Ritm de meci',3,180,60]],
     foc:['Viteză: lovituri scurte și rapide','Putere: fiecare lovitură cu intenție','Revenire în gardă după fiecare combinație','Combinații terminate cu lovitură de picior','Apărare: partenerul atacă, tu răspunzi','Combinații lungi, de 5–6 lovituri'],
-    tips:['Partenerul care ține palmarele dă ritmul: combinațiile vin de la el.','Lovește la înălțimea la care e ținut palmarul, fără să forțezi umărul.','După fiecare combinație: gardă sus, un pas, gata de următoarea.']},
-  spar:{n:'Sparring',t:'Sparring',ic:'spar',ph:'spar',sh:'Tehnică pe un adversar viu',s:'Tehnica aplicată pe un adversar viu. Control, nu bătaie.',foc1:1,
+    tips:['Cu strigătorul pornit, combinațiile le aude și partenerul: el ține palmarele unde trebuie, tu lovești. Fără strigător, combinațiile vin de la el.','Lovește la înălțimea la care e ținut palmarul, fără să forțezi umărul.','După fiecare combinație: gardă sus, un pas, gata de următoarea.']},
+  spar:{n:'Sparring',t:'Sparring',ic:'spar',ph:'spar',sh:'Tehnică pe un adversar viu',s:'Tehnica aplicată pe un adversar viu. Control, nu bătaie.',foc1:1,call:1,lvl:1,
     fmt:[['Tehnic ușor',3,120,60],['Amator',3,180,60],['Pro',5,180,60]],
     foc:['Jab-ul primul: deschizi fiecare atac cu el','Lucru la corp: coboară nivelul','Contre: răspunzi după fiecare lovitură primită','Mișcare: unghiuri, nu sta în linie','Low kick după combinație','Garda sus: mâna din spate la bărbie','Teep pentru distanță','Ritm: schimbi viteza, nu doar puterea','Apărare: blochezi sau eschivezi, apoi răspunzi'],
     tips:['Echipament obligatoriu: mănuși 14–16 oz, apărătoare de dinți, tibiere, cască și cochilie.','Sparring-ul nu e meci: puterea se stabilește dinainte (de obicei 30–50%) și rămâne așa.','Fără sparring cu durere de cap, amețeală sau după o lovitură puternică la cap: pauză și medic.','O singură temă pe rundă: e mai ușor de ținut minte și de corectat.']},
-  shadow:{n:'Shadowboxing',t:'Shadow',ic:'glove',ph:'band',sh:'Încălzire și tehnică',s:'Încălzire și tehnică fără partener. Strigătorul îți dă combinațiile.',call:1,call1:1,
+  shadow:{n:'Shadowboxing',t:'Shadow',ic:'glove',ph:'band',sh:'Încălzire și tehnică',s:'Încălzire și tehnică fără partener. Strigătorul îți dă combinațiile.',call:1,
     fmt:[['Încălzire',2,120,30],['Tehnică',3,180,60],['Lung',5,180,45]],
     foc:['Doar jab și mișcare','Combinații de 3','Lovituri de picior, lejer','Apărare: eschivă și răspuns','Viteză maximă, tehnică curată'],
     tips:['În fața unei oglinzi, ca să-ți vezi garda.','Lovituri complete, la viteză controlată: tehnica înainte de putere.']}
@@ -8700,9 +8876,12 @@ const kbNums=p=>/^[1-6](-[1-6])*$/.test(p);
 function kbFmtC(c){ const parts=String(c).split(', ');
   return {c,big:parts.join(' · '),names:parts.map(p=>kbNums(p)?p.split('-').map(n=>KB_P[n]).join(' · '):p).join(' · '),
     voice:parts.map(p=>kbNums(p)?p.split('-').map(n=>KB_NUMV[n]).join(', '):p).join(', ')}; }
-function kbCombo(lvl,kicks,last){ lvl=clamp(+lvl||2,1,3); const pool=KB_CMB[lvl].concat(kicks?KB_KCK[lvl]:[],lvl>=2?KB_DEF:[]);
+function kbCombo(lvl,kicks,last){ const pool=kbPool(lvl,kicks);
   let c=pool[Math.floor(Math.random()*pool.length)]; if(c===last&&pool.length>1) c=pool[(pool.indexOf(c)+1)%pool.length]; return kbFmtC(c); }
-const KB_GAP={1:[4.5,6.5],2:[3.5,5],3:[2.6,4]};
+const kbPool=(lvl,kicks)=>{ lvl=clamp(+lvl||2,1,3); return KB_CMB[lvl].concat(kicks?KB_KCK[lvl]:[],lvl>=2?KB_DEF:[]); };
+/* ritmul strigătorului: pauza după ce vocea termină combinația (secunde, min–max) */
+const KB_TEMPO={slow:[5.5,7.5],mid:[3.5,5],fast:[2,3]};
+const KB_TEMPO_L=[['slow','Lent','cam la 9 secunde'],['mid','Mediu','cam la 6 secunde'],['fast','Rapid','cam la 4 secunde']];
 const KB_LIB=[['1-2','Jab, cross','Combinația de bază: jab-ul măsoară distanța, cross-ul lovește.'],
   ['1-2-3','Jab, cross, croșeu','Croșeul din față vine după cross, cu rotația șoldului.'],
   ['1-2-3-2','Jab, cross, croșeu, cross','Combinația de 4 clasică, se termină pe mâna din spate.'],
@@ -8722,7 +8901,7 @@ const KB_WARM=[['Coardă sau sărituri pe loc',180,'Ritm ușor, pe vârfuri'],['
 
 /* ---------- preferințele fiecărei activități (formatul, combinațiile, tema pe rundă) ---------- */
 function kbPref(a){ const A=KB_A[a]||KB_A.bag, f=A.fmt[0];
-  return Object.assign({r:f[1],rs:f[2],rest:f[3],call:!!A.call1,lvl:2,kicks:true,foc:!!A.foc1},(((S.kb||{}).pref)||{})[a]||{}); }
+  return Object.assign({r:f[1],rs:f[2],rest:f[3],cl:!!A.call,lvl:A.lvl||2,tempo:'slow',kicks:true,foc:!!A.foc1},(((S.kb||{}).pref)||{})[a]||{}); }
 async function kbPrefSet(a,o){ const pref=Object.assign({},(S.kb||{}).pref); pref[a]=Object.assign({},kbPref(a),o); await save('kb',Object.assign({},S.kb,{pref})); }
 
 /* ---------- sesiunile (din zece3:ext): cele notate aici, plus cele venite din Strava cu nume de kickboxing ---------- */
@@ -8806,9 +8985,12 @@ function kbaHTML(){
     <div class="eyebrow" style="margin-top:16px">${ic('clock')} Format</div>
     <div class="chips" style="margin-top:8px">${A.fmt.map((f,i)=>`<button class="chip ${p.r===f[1]&&p.rs===f[2]&&p.rest===f[3]?'on':''}" data-a="kbFmt" data-i="${i}">${esc(f[0])} · ${f[1]}×${fmtClock(f[2])}</button>`).join('')}</div>
     <div class="kb-stps">${kbStep('r','Runde',p.r,p.r)}${kbStep('rs','Runda',p.rs,fmtClock(p.rs))}${kbStep('rest','Pauză',p.rest,p.rest?fmtClock(p.rest):'fără')}</div>
-    ${A.call?`<div class="set-row"><span class="sp"><b>Strigă combinații</b><div class="sm mu">Vocea spune combinația, o vezi și mare pe ecran</div></span><button class="sw ${p.call?'on':''}" data-a="kbOpt" data-k="call" role="switch" aria-checked="${p.call}" aria-label="Strigă combinații"></button></div>
-      ${p.call?`<div class="seg" style="margin-top:0">${[1,2,3].map(l=>`<button class="${p.lvl===l?'on':''}" data-a="kbLvl" data-i="${l}">${KB_LVL[l]}</button>`).join('')}</div>
-        <div class="set-row"><span class="sp"><b>Cu lovituri de picior</b><div class="sm mu">Low, middle, high kick, teep, genunchi</div></span><button class="sw ${p.kicks?'on':''}" data-a="kbOpt" data-k="kicks" role="switch" aria-checked="${p.kicks}" aria-label="Cu lovituri de picior"></button></div>`:''}`:''}
+    ${A.call?`<div class="set-row"><span class="sp"><b>Strigă combinații</b><div class="sm mu">${a==='spar'?'Vocea îți propune combinații de încercat pe partener':'Vocea spune combinația rar și clar, o vezi și mare pe ecran'}</div></span><button class="sw ${p.cl?'on':''}" data-a="kbOpt" data-k="cl" role="switch" aria-checked="${p.cl}" aria-label="Strigă combinații"></button></div>
+      ${p.cl?`<div class="kb-cfg"><span>Combinații</span><div class="seg">${[1,2,3].map(l=>`<button class="${p.lvl===l?'on':''}" data-a="kbLvl" data-i="${l}">${KB_LVL[l]}</button>`).join('')}</div>
+        <span>Ritm</span><div class="seg">${KB_TEMPO_L.map(([k,l])=>`<button class="${p.tempo===k?'on':''}" data-a="kbTempo" data-k="${k}">${l}</button>`).join('')}</div></div>
+        <div class="xs mu2" style="margin-top:6px">${KB_LVL[p.lvl]}: ${p.lvl===1?'1–3 lovituri':p.lvl===2?'3–4 lovituri, plus eschive':'5–6 lovituri, plus eschive'} · ritm ${KB_TEMPO_L.find(x=>x[0]===p.tempo)[1].toLowerCase()}: o combinație ${KB_TEMPO_L.find(x=>x[0]===p.tempo)[2]}, după ce vocea termină.</div>
+        <div class="set-row"><span class="sp"><b>Cu lovituri de picior</b><div class="sm mu">Low, middle, high kick, teep, genunchi</div></span><button class="sw ${p.kicks?'on':''}" data-a="kbOpt" data-k="kicks" role="switch" aria-checked="${p.kicks}" aria-label="Cu lovituri de picior"></button></div>
+        ${kbCmbList(p)}`:''}`:''}
     <div class="set-row"><span class="sp"><b>Temă pe rundă</b><div class="sm mu">Un singur lucru de urmărit în fiecare rundă${a==='spar'?' (de ex. jab-ul primul)':''}</div></span><button class="sw ${p.foc?'on':''}" data-a="kbOpt" data-k="foc" role="switch" aria-checked="${p.foc}" aria-label="Temă pe rundă"></button></div>
     <button class="btn pri xl wide glow" style="margin-top:12px" data-a="kbGo">${ic('play')} Pornește · ${p.r} × ${fmtClock(p.rs)}</button>
     <button class="btn ghost wide" style="margin-top:8px" data-a="kbLog" data-k="${a}">${ic('edit')} Notează o sesiune făcută la sală</button>
@@ -8819,6 +9001,11 @@ function kbaHTML(){
     ${ses.length?`<div class="eyebrow" style="margin-top:16px">${ic('history')} Ultimele sesiuni</div>${ses.map(kbRow).join('')}`:''}
     <details class="notes"><summary>${ic('info')} Sfaturi · ${esc(A.n)}</summary>${A.tips.map(x=>`<p>${esc(x)}</p>`).join('')}</details>`;
 }
+/* lista combinațiilor pe care le poate striga vocea, pentru nivelul și setările alese */
+function kbCmbList(p){ const pool=kbPool(p.lvl,p.kicks);
+  return `<details class="kb-tgs kb-cmbs" ${SH.cmbOpen?'open':''}><summary><span class="sp"><b>${ic('list')} Combinațiile · ${KB_LVL[p.lvl].toLowerCase()} · ${pool.length}</b><span class="xs mu">pe care le strigă vocea, în ordine aleatorie</span></span>${ic('down')}</summary>
+    ${pool.map(c=>{ const f=kbFmtC(c); return `<div class="kb-cmb"><b>${esc(f.big)}</b><span>${esc(f.names)}</span></div>`; }).join('')}
+    <button class="linkb" style="margin:4px 14px 12px" data-a="kbLib">${ic('info')} Ce înseamnă cifrele</button></details>`; }
 SHEETS.kba=()=>kbaHTML();
 ACT.kbOpen=(el,{k})=>{ if(!KB_A[k]) return; SH={kind:'kba',k}; shRender(); };
 ACT.kbRounds=()=>{ const last=kbSessions().find(s=>s.a); SH={kind:'kba',k:last?last.a:'bag',free:true}; shRender(); };
@@ -8830,6 +9017,7 @@ ACT.kbStep=async(el,{k,I})=>{ const a=SH&&SH.k; if(!KB_A[a]) return; const p=kbP
   await kbPrefSet(a,{[k]:v}); buzz(8); shRender(); };
 ACT.kbOpt=async(el,{k})=>{ const a=SH&&SH.k; if(!KB_A[a]) return; await kbPrefSet(a,{[k]:!kbPref(a)[k]}); shRender(); };
 ACT.kbLvl=async(el,{I})=>{ const a=SH&&SH.k; if(!KB_A[a]) return; await kbPrefSet(a,{lvl:I}); shRender(); };
+ACT.kbTempo=async(el,{k})=>{ const a=SH&&SH.k; if(!KB_A[a]||!KB_TEMPO[k]) return; await kbPrefSet(a,{tempo:k}); buzz(8); shRender(); };
 
 /* ---------- cronometrul de runde (motorul cronometrului de intervale, cu sunete de ring) ---------- */
 function kbFocusList(a,n){ const f=(KB_A[a]||KB_A.bag).foc.slice(); for(let i=f.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [f[i],f[j]]=[f[j],f[i]]; }
@@ -8839,7 +9027,7 @@ function kbPreset(a,o,tg){
   const ph=[{k:'prep',d:10,l:'Pregătește-te',s:T?T[2]:foc?'Runda 1: '+foc[0]:'Gardă sus, respiră'}];
   for(let i=1;i<=n;i++){ ph.push({k:'work',d:rs,l:n===1?A.n:'Runda '+i+'/'+n,s:foc?foc[i-1]:T?T[2]:i===n&&n>1?'Ultima rundă — dă tot':A.n});
     if(i<n&&rest>0) ph.push({k:'rest',d:rest,l:'Pauză',s:'Urmează runda '+(i+1)+(foc?': '+foc[i]:'')}); }
-  return {title:T?T[2]:A.n+' · '+n+' × '+fmtClock(rs),ph,kb:{a,r:n,rs,rest,call:o.call&&A.call?{lvl:o.lvl||2,kicks:o.kicks!==false}:null,tg:tg||null,cur:null,next:0,ph:-1}};
+  return {title:T?T[2]:A.n+' · '+n+' × '+fmtClock(rs),ph,kb:{a,r:n,rs,rest,call:o.cl&&A.call?{lvl:o.lvl||2,kicks:o.kicks!==false,tempo:KB_TEMPO[o.tempo]?o.tempo:'slow'}:null,tg:tg||null,cur:null,next:0,ph:-1,n:0}};
 }
 ACT.kbGo=()=>{ const a=SH&&SH.k; if(!KB_A[a]) return; if(TM.open&&TM.st&&TM.st.started&&!TM.st.done){ toast('Cronometrul rulează deja','','info'); return; }
   const pr=kbPreset(a,kbPref(a)); SH=null; shRender(); tmOpen(pr); };
@@ -8857,18 +9045,22 @@ function kbSched(){
     t+=nx.d; j++; if(L.length>900) break; }
   schedule('tm',L);
 }
-/* strigătorul: o combinație la câteva secunde, doar în rundă (nu în primele 2,5 s, ca să se audă anunțul, și nu în ultimele 2 s) */
-function kbTick(st){ const k=st.kb, c=k.call; if(!c) return; const ph=st.ph[st.i]; if(!ph||ph.k!=='work') return;
+/* strigătorul: o combinație, apoi așteaptă să termine vocea și încă o pauză după ritmul ales (Lent: ~9 s de la o combinație la alta).
+   După anunțul rundei, la fiecare 4 combinații o încurajare scurtă; în ultimele 10 secunde nu mai vin combinații: „Dă tot!" */
+function kbTick(st){ const k=st.kb, c=k.call, ph=st.ph[st.i]; if(!ph||ph.k!=='work') return;
   const el=tmEl(), left=ph.d-el, now=Date.now();
-  if(k.ph!==st.i){ k.ph=st.i; k.next=now+2500; k.cur=null; kbPaintCall(st); return; }
-  if(left<2||now<k.next) return;
-  k.cur=kbCombo(c.lvl,c.kicks,k.cur&&k.cur.c); const g=KB_GAP[c.lvl]||KB_GAP[2]; k.next=now+Math.round((g[0]+Math.random()*(g[1]-g[0]))*1000);
-  say(k.cur.voice); kbPaintCall(st); }
+  if(k.ph!==st.i){ k.ph=st.i; k.next=now+1500; k.cur=null; k.n=0; k.enc=0; k.s10=0; if(c) kbPaintCall(st); return; }
+  if(ph.d>=20&&left<=10.5&&!k.s10){ k.s10=1; if(voxEnc()) say(mot('kbS10')); if(c){ k.cur={fin:1}; kbPaintCall(st); } return; }
+  if(!c||left<(ph.d>=20?10.5:2)||now<k.next||voTalking()) return;
+  const g=KB_TEMPO[c.tempo]||KB_TEMPO.slow, gap=()=>Math.round((g[0]+Math.random()*(g[1]-g[0]))*1000);
+  if(voxEnc()&&k.n>0&&k.n%4===0&&!k.enc){ k.enc=1; say(mot('kbEnc'),{end:()=>{ k.next=Date.now()+1200; }}); k.next=now+1500; return; }
+  k.enc=0; k.n++; k.cur=kbCombo(c.lvl,c.kicks,k.cur&&k.cur.c);
+  const spoke=say(k.cur.voice+'.',{end:()=>{ k.next=Date.now()+gap(); }}); k.next=now+gap()+(spoke?3000:2000); kbPaintCall(st); }
 function kbPaintCall(st){ const el=$('#kbCall'); if(el) el.innerHTML=kbCallInner(st); }
-const kbCallInner=st=>st.kb.cur?`<b>${esc(st.kb.cur.big)}</b><span>${esc(st.kb.cur.names)}</span>`:`<span class="mu">Gardă sus · combinațiile vin imediat</span>`;
+const kbCallInner=st=>st.kb.cur&&st.kb.cur.fin?`<b>10 s</b><span>Dă tot, fără oprire</span>`:st.kb.cur?`<b>${esc(st.kb.cur.big)}</b><span>${esc(st.kb.cur.names)}</span>`:`<span class="mu">Gardă sus · combinațiile vin imediat</span>`;
 function kbLive(st,ph){ return st.kb.call&&ph.k==='work'?`<div class="kb-call" id="kbCall" aria-live="polite">${kbCallInner(st)}</div>`:''; }
 const kbCtl=st=>`<button class="btn ghost" style="grid-column:1/-1" data-a="kbEnd">${ic('check')} Termină și notează</button>`;
-const kbStartNote=st=>`<div class="kb-start">${ic('bell')} Clopot la începutul și la finalul rundei · două bătăi cu 10 secunde înainte de final${st.kb.call?' · combinații: '+KB_LVL[st.kb.call.lvl].toLowerCase()+(st.kb.call.kicks?', cu picioare':''):''}</div>`;
+const kbStartNote=st=>`<div class="kb-start">${ic('bell')} Clopot la începutul și la finalul rundei · două bătăi cu 10 secunde înainte de final${st.kb.call?' · combinații: '+KB_LVL[st.kb.call.lvl].toLowerCase()+', ritm '+KB_TEMPO_L.find(x=>x[0]===st.kb.call.tempo)[1].toLowerCase()+(st.kb.call.kicks?', cu picioare':''):''}</div>`;
 const kbWorks=st=>st.ph.filter(p=>p.k==='work').length;
 ACT.kbEnd=()=>{ const st=TM.st; if(!st||!st.kb||st.done) return; let r=0;
   st.ph.forEach((p,i)=>{ if(p.k==='work'&&i<st.i) r++; }); const cur=st.ph[st.i]; if(cur&&cur.k==='work'&&cur.d&&tmEl()>=cur.d*.5) r++;
@@ -8897,13 +9089,13 @@ function kbtHTML(){ const T=kbTgOf(SH.k); if(!T) return ''; const st=kbTgSt(T[0]
     ${(st.tries||[]).length?`<div class="eyebrow" style="margin-top:14px">${ic('history')} Încercări</div>${st.tries.slice().reverse().slice(0,6).map(t=>`<div class="list-row"><span class="sp">${fmtDay(t.d)}</span><span class="v">${t.v!=null?t.v+' '+esc(T[6]):''}${t.ok?' '+ic('check'):''}</span></div>`).join('')}`:''}`; }
 SHEETS.kbt=()=>kbtHTML();
 ACT.kbTgOpen=(el,{k})=>{ if(!kbTgOf(k)) return; SH={kind:'kbt',k}; shRender(); };
-ACT.kbTgGo=(el,{k})=>{ const T=kbTgOf(k); if(!T) return; const p=T[7]; SH=null; shRender(); tmOpen(kbPreset(T[1],{r:p[0],rs:p[1],rest:p[2],call:false,foc:false},k)); };
+ACT.kbTgGo=(el,{k})=>{ const T=kbTgOf(k); if(!T) return; const p=T[7]; SH=null; shRender(); tmOpen(kbPreset(T[1],{r:p[0],rs:p[1],rest:p[2],cl:false,foc:false},k)); };
 async function kbTgMark(id,v,okv,date){ const T=kbTgOf(id); if(!T) return null; const tg=Object.assign({},(S.kb||{}).tg), o=Object.assign({n:0,tries:[]},tg[id]||{});
   const ok=T[4]==='n'?(v!=null&&v>=T[5]):!!okv, first=ok&&!o.ok;
   o.n=(o.n||0)+1; o.last=date; if(v!=null&&(o.best==null||v>o.best)) o.best=v; if(ok&&!o.ok) o.ok=date;
   o.tries=(o.tries||[]).concat([v!=null?{d:date,v,ok}:{d:date,ok}]).slice(-12); tg[id]=o;
   await save('kb',Object.assign({},S.kb,{tg})); return {ok,first,T}; }
-function kbTgCelebrate(r){ if(!r) return; if(r.first){ burstAt(innerWidth/2,innerHeight*.3,40); buzz([60,40,60,40,160]); toast('Țintă atinsă',r.T[2]); say('Țintă atinsă. Bravo!'); }
+function kbTgCelebrate(r){ if(!r) return; if(r.first){ burstAt(innerWidth/2,innerHeight*.3,40); buzz([60,40,60,40,160]); toast('Țintă atinsă',r.T[2]); say(voxEnc()?mot('tg'):'Țintă atinsă.'); }
   else toast(r.ok?'Reușită notată':'Încercare notată',r.T[2],'info'); }
 ACT.kbTgRec=async(el,{k,I})=>{ const T=kbTgOf(k); if(!T) return; let v=null;
   if(T[4]==='n'){ v=parseInt(($('#kbTgV')||{}).value,10); if(!(v>=0&&v<10000)) return shake('#kbTgV'); }
@@ -9026,7 +9218,7 @@ function kbAiCtx(){ const tk=todayKey(), xs=kbSessions().filter(s=>s.x.date>=day
 /* ---------- fila în meniu: după Antrenament ---------- */
 NAV.splice(2,0,['kb','Kickboxing','glove']); VIEWS.kb=viewKb; VIEW_LAY.kb='lay-narrow';
 /* lista de ținte rămâne deschisă cât lucrezi în foaie (foaia se redesenează la fiecare setare) */
-document.addEventListener('toggle',e=>{ const t=e.target; if(t&&t.classList&&t.classList.contains('kb-tgs')&&SH&&SH.kind==='kba') SH.tgOpen=t.open; },true);
+document.addEventListener('toggle',e=>{ const t=e.target; if(t&&t.classList&&t.classList.contains('kb-tgs')&&SH&&SH.kind==='kba') SH[t.classList.contains('kb-cmbs')?'cmbOpen':'tgOpen']=t.open; },true);
 
 /* =====================================================================
    v8 · ANTRENORUL AI — unelte de citire. Modelul își cere singur datele exacte din aplicație
@@ -9118,7 +9310,7 @@ function aiReadCard(chat,b){ const t=(chat.tools||{})[b.id]||{}, L=AI_RT_LBL[b.n
 async function loadAll(){
   const keys=Object.keys(K), vals=await Promise.all(keys.map(k=>store.get(K[k]))), o=Object.fromEntries(keys.map((k,i)=>[k,vals[i]]));
   const obj=v=>v&&typeof v==='object'&&!Array.isArray(v)?v:{};
-  ['lifts','weights','wlog','cyc','runPlan','prof','mlog','water','body','journal','tech','mplan','shop','adj','strava','exNote','dash','notifCfg','kb'].forEach(k=>{ S[k]=obj(o[k]); });
+  ['lifts','weights','wlog','cyc','runPlan','prof','mlog','water','body','journal','tech','mplan','shop','adj','strava','exNote','dash','notifCfg','kb','vox'].forEach(k=>{ S[k]=obj(o[k]); });
   S.ach=o.ach&&typeof o.ach==='object'&&!Array.isArray(o.ach)?o.ach:null; S.notif=Array.isArray(o.notif)?o.notif:undefined;
   S.exFav=Array.isArray(o.exFav)?o.exFav:[]; S.exCustom=Array.isArray(o.exCustom)?o.exCustom:[];
   try{ const r=JSON.parse(localStorage.getItem('zece3:rng')||'"m"'); if(RANGES.some(x=>x[0]===r)) S.rng=r; }catch(e){}
