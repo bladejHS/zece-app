@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>ZECE — Hybrid365</title>
+<title>VULTUR — Hybrid365</title>
 <meta name="theme-color" content="#0E1013">
 <link rel="icon" type="image/svg+xml" href="icon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="ZECE">
+<meta name="apple-mobile-web-app-title" content="VULTUR">
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1943,6 +1943,10 @@ html[data-mode="light"] .kb-nums div{background:var(--s2)}
 /* sub nume, o linie fină în culorile tricolorului */
 .intro .in-bar{height:2px;opacity:.9;background:linear-gradient(90deg,transparent,#002B7F 16%,#002B7F 36%,#FCD116 36%,#FCD116 64%,#CE1126 64%,#CE1126 84%,transparent)}
 @media(max-height:700px){.intro .in-lw{width:124px;height:124px}.intro .in-ring{width:124px;height:124px;margin:-62px 0 0 -62px}}
+/* v13: numele VULTUR (6 litere) în animația de deschidere, ceva mai mic și cu ultimele litere la rând */
+.intro .in-word{font-size:44px;letter-spacing:.34em;padding-left:.34em}
+.intro .in-word span:nth-child(5){animation-delay:calc(var(--k) * 1.94s)}.intro .in-word span:nth-child(6){animation-delay:calc(var(--k) * 2.02s)}
+@media(max-width:380px){.intro .in-word{font-size:38px}}
 
 /* =====================================================================
    Mișcare · intrarea în ecran, apariția la derulare, grafice care se desenează.
@@ -2006,7 +2010,7 @@ try{ var m=JSON.parse(localStorage.getItem('zece3:mode')||'"dark"'); if(m==='aut
     <img class="in-logo in-badge" id="inLogo" alt="" width="128" height="128">
     <span class="in-sheen"></span>
     <span class="in-ring"></span><span class="in-ring r2"></span></div>
-    <div class="in-word"><span>Z</span><span>E</span><span>C</span><span>E</span></div>
+    <div class="in-word"><span>V</span><span>U</span><span>L</span><span>T</span><span>U</span><span>R</span></div>
     <div class="in-bar"></div>
     <div class="in-sub" id="inSub">Hybrid365</div>
   </div>
@@ -2015,8 +2019,8 @@ try{ var m=JSON.parse(localStorage.getItem('zece3:mode')||'"dark"'); if(m==='aut
 
 <aside class="side" id="side" aria-label="Meniu"></aside>
 <header class="top"><div class="top-in">
-  <svg class="logo wait" viewBox="0 0 48 48" aria-hidden="true"><rect x="1" y="1" width="46" height="46" rx="12" fill="#191D23" stroke="rgba(255,255,255,.14)"/><circle cx="24" cy="24" r="17" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="1.8"/><circle cx="24" cy="24" r="17" fill="none" stroke="currentColor" style="color:var(--ac)" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="85.5 107" transform="rotate(-90 24 24)"/><g transform="translate(9.42 9.22) scale(.6)"><path d="M13.2 12.4H19V26.8H23.4V31.4H8.6V26.8H13.2V18.6L10.2 21.4L8.9 16.6Z" fill="#F2F4F7"/><path d="M33 12.4H33.4A6.6 6.6 0 0 1 40 19V24.8A6.6 6.6 0 0 1 33.4 31.4H33A6.6 6.6 0 0 1 26.4 24.8V19A6.6 6.6 0 0 1 33 12.4ZM33.1 16.4H33.3A2.6 2.6 0 0 1 35.9 19V24.8A2.6 2.6 0 0 1 33.3 27.4H33.1A2.6 2.6 0 0 1 30.5 24.8V19A2.6 2.6 0 0 1 33.1 16.4Z" fill="#F2F4F7" fill-rule="evenodd"/><path d="M13.2 35.4H34.8V38.2H13.2Z" fill="currentColor" style="color:var(--ac)"/></g></svg>
-  <div class="brand-w"><div class="brand">ZECE<small>Hybrid365</small></div></div>
+  <svg class="logo wait" viewBox="0 0 48 48" aria-hidden="true"><rect x="1" y="1" width="46" height="46" rx="12" fill="#191D23" stroke="rgba(255,255,255,.14)"/><circle cx="24" cy="24" r="18.6" fill="none" stroke="rgba(232,236,241,.42)" stroke-width="1.2" stroke-dasharray="1.7 1.3"/><g transform="translate(11.64 10.1) scale(.6)"><path d="M33.5 5.2C26 2.6 17.8 4.2 13 9.2L5.6 12.2C2.6 13.4 1.4 16.4 2.6 19L5.6 23.2L6.6 19.4L13.4 18.2L11 22.8C14.8 26.2 17.4 30.6 18 37H30.4L27.2 32.6L33.6 31.4L29.4 26.8L36.4 24.8L31.8 21L38.6 17.4C39.6 12 37.6 7.4 33.5 5.2Z M15.4 11.6L22.4 10L19.8 13.6Z M13.1 9.2L14 9L14.6 18.1L13.6 18.2Z" fill="#F2F4F7" fill-rule="evenodd"/></g><g transform="translate(20.4 40.4)"><rect width="2.4" height="3.2" fill="#002B7F"/><rect x="2.4" width="2.4" height="3.2" fill="#FCD116"/><rect x="4.8" width="2.4" height="3.2" fill="#CE1126"/></g></svg>
+  <div class="brand-w"><div class="brand">VULTUR<small>Hybrid365</small></div></div>
   <button class="search-t" id="srchT" data-a="palOpen" aria-label="Caută sau scrie o comandă (Ctrl+K)"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><span>Caută sau scrie o comandă</span><kbd>Ctrl K</kbd></button>
   <button class="hr-live hrc off" id="hrTop" data-a="hrOpen" aria-label="Puls"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21.2l8.8-8.8a5.5 5.5 0 0 0 0-7.8z"/></svg><span class="v">—</span><span class="z"></span></button>
   <button class="ib" id="bell" data-a="notifOpen" aria-label="Notificări"></button>
@@ -2957,7 +2961,7 @@ const ADJ_SCHEMA={type:'object',additionalProperties:false,required:['summary','
   changes:{type:'array',items:{type:'object',additionalProperties:false,required:['x','type','value','text','why'],properties:{
     x:{type:'integer'},type:{type:'string',enum:['sets','load','hold','rest','run','iv','swap','note']},value:{type:'number'},text:{type:'string'},why:{type:'string'}}}}}};
 function adjPrompt(w,d,rule){ const day=dayFor(w,d,true);
-  return 'Ești antrenorul adaptiv din aplicația ZECE. Propune ajustări DOAR pentru antrenamentul de azi; planul de bază nu se schimbă. '+
+  return 'Ești antrenorul adaptiv din aplicația VULTUR. Propune ajustări DOAR pentru antrenamentul de azi; planul de bază nu se schimbă. '+
     'Folosește numai datele de mai jos, nu inventa valori, și explică fiecare schimbare cu cifre concrete din date (readiness, somn, febră musculară, puls, încărcare, volum pe mușchi, recorduri). '+
     'Dacă datele nu justifică schimbări, întoarce lista goală și spune de ce în summary. Scrie în română, concis.\n\n'+
     'Tipuri permise (pune value 0 și text "" acolo unde nu se folosesc):\n- sets: value = noul număr de serii (cel mult cu 1 peste plan)\n- load: value = factor aplicat greutății recomandate (0.6–1.1)\n- hold: fără creșteri de greutate azi\n- rest: value = secunde de pauză (30–240)\n- run: value = minute pentru alergarea ușoară sau lungă\n- iv: value = numărul de reprize la Threshold\n- swap: text = un exercițiu din lista de alternative a exercițiului\n- note: text = o indicație scurtă\n\n'+
@@ -3073,12 +3077,12 @@ async function hrMeasureStop(save_){ clearInterval(HR.mi); const m=HR.m; HR.m=nu
 function hrHTML(){
   const head=`<div class="eyebrow">${ic('heart')} Puls live · senzor Bluetooth</div>`;
   if(!hrOK()) return `${head}<div class="h2" style="margin-top:6px">Conectează Polar-ul</div>
-    <div class="sm" style="margin-top:8px">Browserul în care ai deschis ZECE nu poate folosi Bluetooth.</div>
+    <div class="sm" style="margin-top:8px">Browserul în care ai deschis VULTUR nu poate folosi Bluetooth.</div>
     <div class="dsec"><h4>Pe iPhone</h4><div class="cue"><b>1</b><span>Safari nu permite Bluetooth paginilor web (limită Apple).</span></div>
       <div class="cue"><b>2</b><span>Instalează aplicația gratuită <b>Bluefy – Web BLE Browser</b> din App Store.</span></div>
-      <div class="cue"><b>3</b><span>Deschide ZECE în Bluefy, de pe adresa web a aplicației (după ce o punem online).</span></div></div>
+      <div class="cue"><b>3</b><span>Deschide VULTUR în Bluefy, de pe adresa web a aplicației (după ce o punem online).</span></div></div>
     <div class="dsec"><h4>Pe Android sau PC</h4><div class="cue"><b>✓</b><span>Merge direct în Chrome sau Edge.</span></div></div>
-    <div class="note">ZECE folosește serviciul standard de puls prin Bluetooth: merge cu Polar H10, H9, Verity Sense, OH1 și cu ceasurile Polar care își partajează pulsul.</div>
+    <div class="note">VULTUR folosește serviciul standard de puls prin Bluetooth: merge cu Polar H10, H9, Verity Sense, OH1 și cu ceasurile Polar care își partajează pulsul.</div>
     <div class="inrow"><button class="btn" style="flex:1" data-a="shClose">Închide</button></div>`;
   if(!HR.on&&!HR.busy) return `${head}<div class="h2" style="margin-top:6px">${HR.dev?esc(HR.name)+' · deconectat':'Conectează Polar-ul'}</div>
     ${HR.err?`<div class="err">${ic('alert')}<span>${esc(HR.err)}</span></div>`:''}
@@ -3449,7 +3453,7 @@ function keepAlive(on){
         for(let i=0;i<n;i++) v.setUint8(44+i,128);
         AU.keep=new Audio(URL.createObjectURL(new Blob([buf],{type:'audio/wav'}))); AU.keep.loop=true; AU.keep.volume=.01; }
       const p=AU.keep.play(); if(p&&p.catch) p.catch(()=>{});
-      if('mediaSession' in navigator&&window.MediaMetadata) navigator.mediaSession.metadata=new MediaMetadata({title:'Antrenament în desfășurare',artist:'ZECE'});
+      if('mediaSession' in navigator&&window.MediaMetadata) navigator.mediaSession.metadata=new MediaMetadata({title:'Antrenament în desfășurare',artist:'VULTUR'});
     } else if(AU.keep) AU.keep.pause();
   }catch(e){}
 }
@@ -3670,10 +3674,10 @@ function connCard(){
   return `<div class="card conn">
     ${row('scale','Apple Health / Google Fit',need('necesită aplicație nativă'),'O pagină web nu poate citi direct datele de sănătate ale telefonului. Până atunci: check-in manual sau import CSV (mai jos).')}
     <div class="int"><span class="ic2" style="color:${stOn()?'var(--ok)':'var(--mu)'}">${ic('refresh')}</span><div class="sp"><b>Strava · Polar Beat · Garmin</b> ${stOn()?'<span class="tag rest">conectat</span>':stOnline()?'<span class="tag need">neconectat</span>':'<span class="tag need">doar în versiunea online</span>'}
-      <p>${stOn()?'Alergările și celelalte antrenamente vin din Strava; Polar Beat ajunge acolo prin Polar Flow.'+(stCfg().last?' Ultima sincronizare: '+stAgo(stCfg().last)+'.':''):'Conectezi Strava o dată și primești alergările și antrenamentele din Polar Beat, Garmin sau Coros. ZECE poate trimite și antrenamentele lui pe Strava.'}</p>
+      <p>${stOn()?'Alergările și celelalte antrenamente vin din Strava; Polar Beat ajunge acolo prin Polar Flow.'+(stCfg().last?' Ultima sincronizare: '+stAgo(stCfg().last)+'.':''):'Conectezi Strava o dată și primești alergările și antrenamentele din Polar Beat, Garmin sau Coros. VULTUR poate trimite și antrenamentele lui pe Strava.'}</p>
       <button class="btn sm" style="margin-top:8px" data-a="stGo">${ic('refresh')} ${stOn()?'Setări Strava':'Conectează Strava'}</button></div></div>
     <div class="int"><span class="ic2" style="color:${hrLive()?'var(--ok)':'var(--mu)'}">${ic('heart')}</span><div class="sp"><b>Polar și alți senzori de puls</b> ${hrOK()?'<span class="tag rest">funcționează</span>':'<span class="tag need">pe iPhone: prin Bluefy</span>'}
-      <p>${hrLive()?'Conectat: '+esc(HR.name)+' · '+HR.bpm+' bpm.':hrOK()?'Puls live în antrenament, zone, puls mediu salvat și HRV dimineața. Merge cu Polar H10, H9, Verity Sense, OH1 și ceasurile Polar care își partajează pulsul.':'Safari pe iPhone nu permite Bluetooth paginilor web. Cu aplicația gratuită Bluefy merge, după ce punem ZECE online.'}</p>
+      <p>${hrLive()?'Conectat: '+esc(HR.name)+' · '+HR.bpm+' bpm.':hrOK()?'Puls live în antrenament, zone, puls mediu salvat și HRV dimineața. Merge cu Polar H10, H9, Verity Sense, OH1 și ceasurile Polar care își partajează pulsul.':'Safari pe iPhone nu permite Bluetooth paginilor web. Cu aplicația gratuită Bluefy merge, după ce punem VULTUR online.'}</p>
       <button class="btn sm" style="margin-top:8px" data-a="hrOpen">${ic('heart')} ${hrLive()?'Vezi pulsul':'Conectează senzorul'}</button></div></div>
     <div class="int"><span class="ic2" style="color:var(--ok)">${ic('upload')}</span><div class="sp"><b>Import CSV</b> <span class="tag rest">funcționează</span>
       <p>Un fișier cu coloanele <b>data, somn, pasi, rhr, hrv</b> (de exemplu exportat cu aplicația Scurtături sau Health Auto Export pe iPhone). Datele intră în jurnal și în check-in.</p>
@@ -4002,7 +4006,7 @@ function shoesCard(){
       <div class="fld"><label for="shK">Km deja făcuți</label><input class="inp" id="shK" type="number" inputmode="decimal" placeholder="0"></div>
       <div class="fld full"><label for="shM">Schimbi la (km)</label><input class="inp" id="shM" type="number" inputmode="numeric" value="700"></div></div>
       <div class="inrow"><button class="btn ghost" data-a="shoeForm">Renunță</button><button class="btn pri" style="flex:1" data-a="shoeAdd">${ic('check')} Salvează</button></div>`:''}
-    ${rows||(S.shoeForm?'':`<div class="empty sm">Adaugă pantofii cu care alergi: ZECE adună singur kilometrii din alergări și îți spune când e timpul să-i schimbi.</div>`)}
+    ${rows||(S.shoeForm?'':`<div class="empty sm">Adaugă pantofii cu care alergi: VULTUR adună singur kilometrii din alergări și îți spune când e timpul să-i schimbi.</div>`)}
     ${rows?`<div class="note">Spuma din talpă își pierde amortizarea în timp; reperul uzual e 500–800 km, după greutate, suprafață și model. La ${num(curW(),0)} kg, spre capătul de jos al intervalului. Fiecare alergare intră la pantoful folosit atunci.</div>`:''}</div>`;
 }
 /* încărcarea pe 12 săptămâni: suma încărcării zilnice pe săptămână și raportul față de media ultimelor 4 */
@@ -4406,14 +4410,14 @@ function icsText(time,alarm){
   const esc_=s=>String(s).replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\n/g,'\\n');
   const fold=l=>{ const out=[]; let s=l; while(s.length>72){ out.push(s.slice(0,72)); s=' '+s.slice(72); } out.push(s); return out.join('\r\n'); };
   const stamp=new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d+Z$/,'Z');
-  const w0=nx?nx.w:0, m0=mondayOf(tk), L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//ZECE//Hybrid365//RO','CALSCALE:GREGORIAN','METHOD:PUBLISH','X-WR-CALNAME:ZECE · antrenamente'];
+  const w0=nx?nx.w:0, m0=mondayOf(tk), L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//ZECE//Hybrid365//RO','CALSCALE:GREGORIAN','METHOD:PUBLISH','X-WR-CALNAME:VULTUR · antrenamente'];
   for(let i=0;i<28;i++){ const k=dayShift(tk,i), d=(parseKey(k).getDay()+6)%7, wk=(w0+Math.floor(daysBetween(m0,k)/7))%WEEKS, day=dayFor(wk,d,true);
     const st=new Date(k+'T00:00'); st.setHours(h,mi,0,0); const en=new Date(st.getTime()+(+day.min||60)*6e4);
     const f=x=>keyOf(x).replace(/-/g,'')+'T'+pad(x.getHours())+pad(x.getMinutes())+'00';
     L.push('BEGIN:VEVENT','UID:zece-'+k+'@hybrid365','DTSTAMP:'+stamp,'DTSTART:'+f(st),'DTEND:'+f(en),
-      fold('SUMMARY:'+esc_('ZECE · '+day.t)),
+      fold('SUMMARY:'+esc_('VULTUR · '+day.t)),
       fold('DESCRIPTION:'+esc_('Săptămâna '+(wk+1)+' · '+DAYN[d]+' · '+day.min+' min\n'+day.ex.map(e=>'• '+e.n+(short(e)?' · '+short(e):'')).join('\n'))));
-    if(alarm>0) L.push('BEGIN:VALARM','ACTION:DISPLAY','TRIGGER:-PT'+alarm+'M',fold('DESCRIPTION:'+esc_('ZECE în '+alarm+' de minute: '+day.t)),'END:VALARM');
+    if(alarm>0) L.push('BEGIN:VALARM','ACTION:DISPLAY','TRIGGER:-PT'+alarm+'M',fold('DESCRIPTION:'+esc_('VULTUR în '+alarm+' de minute: '+day.t)),'END:VALARM');
     L.push('END:VEVENT'); }
   L.push('END:VCALENDAR'); return L.join('\r\n')+'\r\n';
 }
@@ -4421,13 +4425,13 @@ async function icsExport(){
   const t=($('#icsT')||{}).value||'18:00', al=+(($('#icsA')||{}).value||30);
   await save('prof',Object.assign({},S.prof||{},{icsT:t,icsA:al}));
   const blob=new Blob([icsText(t,al)],{type:'text/calendar'}), file=new File([blob],'zece-antrenamente.ics',{type:'text/calendar'});
-  try{ if(navigator.canShare&&navigator.canShare({files:[file]})&&matchMedia('(pointer:coarse)').matches){ await navigator.share({files:[file],title:'ZECE · antrenamente'}); return; } }catch(e){ if(e&&e.name==='AbortError') return; }
+  try{ if(navigator.canShare&&navigator.canShare({files:[file]})&&matchMedia('(pointer:coarse)').matches){ await navigator.share({files:[file],title:'VULTUR · antrenamente'}); return; } }catch(e){ if(e&&e.name==='AbortError') return; }
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=file.name; document.body.appendChild(a); a.click();
   setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },1000); toast('Calendar exportat','Deschide fișierul ca să adaugi antrenamentele cu alarmă.','info');
 }
 function icsCard(){ const P=prof();
   return `<div class="card"><div class="eyebrow">${ic('clock')} Memento-uri în calendar</div>
-    <div class="sm mu" style="margin-top:8px">Pune următoarele 4 săptămâni din plan în calendarul telefonului, cu alarmă înainte. Așa îți amintește chiar și când ZECE e închis.</div>
+    <div class="sm mu" style="margin-top:8px">Pune următoarele 4 săptămâni din plan în calendarul telefonului, cu alarmă înainte. Așa îți amintește chiar și când VULTUR e închis.</div>
     <div class="form"><div class="fld"><label for="icsT">Ora antrenamentului</label><input class="inp" id="icsT" type="time" value="${esc(P.icsT||'18:00')}"></div>
       <div class="fld"><label for="icsA">Alarmă înainte</label><select class="inp" id="icsA">${[[0,'Fără'],[15,'15 min'],[30,'30 min'],[60,'1 oră'],[120,'2 ore']].map(([v,l])=>`<option value="${v}" ${+(P.icsA==null?30:P.icsA)===v?'selected':''}>${l}</option>`).join('')}</select></div></div>
     <button class="btn wide" style="margin-top:12px" data-a="icsExport">${ic('download')} Adaugă în calendar (.ics)</button>
@@ -4492,7 +4496,7 @@ function viewSet(){
     <div class="note">„Maxime" adaugă particule și strălucire mai puternică. „Minime" oprește animațiile de fundal (economisește bateria).</div>
     <div class="sm" style="margin-top:14px;font-weight:600">Mișcare</div>
     <div class="seg">${[['auto','Automat'],['on','Mereu animat'],['off','Redusă']].map(e=>`<button class="${S.motion===e[0]?'on':''}" data-a="motionSet" data-k="${e[0]}">${e[1]}</button>`).join('')}</div>
-    <div class="note">${MQ_RM.matches?'Sistemul tău cere <b>mișcare redusă</b>. „Automat" respectă asta; „Mereu animat" pornește animațiile doar în ZECE.':'Sistemul tău permite animațiile.'}</div>
+    <div class="note">${MQ_RM.matches?'Sistemul tău cere <b>mișcare redusă</b>. „Automat" respectă asta; „Mereu animat" pornește animațiile doar în VULTUR.':'Sistemul tău permite animațiile.'}</div>
     <div class="sm" style="margin-top:14px;font-weight:600">Animația de deschidere</div>
     <div class="seg">${[['full','Completă'],['short','Scurtă'],['off','Oprită']].map(e=>`<button class="${S.intro===e[0]?'on':''}" data-a="introMode" data-k="${e[0]}">${e[1]}</button>`).join('')}</div></div>
 
@@ -4552,7 +4556,7 @@ function viewSet(){
   ${ioCard()}
   ${syncCard()}
   ${errCard()}
-  <div class="xs mu2" style="text-align:center;margin-top:18px">ZECE v8 · planul Hybrid365</div>`;
+  <div class="xs mu2" style="text-align:center;margin-top:18px">VULTUR · planul Hybrid365</div>`;
 }
 ACT.barSet=async(el,{I})=>{ await save('prof',Object.assign({},S.prof||{},{bar:I})); render(); };
 ACT.notifT=async(el,{k})=>{ const c=notifCfg(); c[k]=!c[k]; await save('notifCfg',c); render(); };
@@ -4846,7 +4850,7 @@ async function quitSess(){ S.sess=null; stopRest(); S.fxOpen=false; await store.
 /* pauza dintre serii — sunetele de final sunt programate dinainte */
 function restSounds(left){ schedule('rest',[[left-3,880,.06],[left-2,880,.06],[left-1,880,.06],[left,1320,.18],[left+.25,1320,.18]]); }
 function startRest(sec,lbl){ if(!sec) return; S.rest={end:Date.now()+sec*1000,total:sec,lbl:lbl||'Pauză'}; restSounds(sec);
-  if('mediaSession' in navigator&&window.MediaMetadata) try{ navigator.mediaSession.metadata=new MediaMetadata({title:(lbl||'Pauză')+' '+fmtClock(sec),artist:'ZECE'}); }catch(e){} }
+  if('mediaSession' in navigator&&window.MediaMetadata) try{ navigator.mediaSession.metadata=new MediaMetadata({title:(lbl||'Pauză')+' '+fmtClock(sec),artist:'VULTUR'}); }catch(e){} }
 function stopRest(){ S.rest=null; cancelSched('rest'); }
 function restDone(){ S.rest=null; AU.sched.rest=[]; buzz([200,100,200]); if(!document.hidden) flash(); say(voxEnc()?mot('rdone'):'Gata pauza. Următoarea serie.'); renderFocus(); renderPill(); }
 function tick(){
@@ -5111,7 +5115,7 @@ function toolOut(k){
     return box(`<div class="row" style="align-items:flex-end"><div><div class="xs mu">VDOT</div><div class="big">${num(vd,1)}</div></div><span class="sp"></span><div class="xs mu" style="text-align:right">${num(D,2)} km în ${fmtClock(sec)}<br>${fmtClock(sec/D)} /km</div></div>
       <div class="zones">${rows.map(([b,l,v,h])=>`<div class="zn ${b==='T'?'hl':''}"><b>${b}</b><span>${l}<span class="xs mu" style="display:block">${h}</span></span><span class="v">${v}</span></div>`).join('')}</div>
       <div class="dsec"><h4>Curse echivalente</h4>${RACE_D.map(([x,l])=>{ const s=raceAtV(vd,x); return `<div class="list-row"><span class="sp">${l}</span><span class="xs mu">${fmtClock(s/x)} /km</span><span class="v">${fmtClock(s)}</span></div>`; }).join('')}</div>
-      <button class="btn ghost sm wide" style="margin-top:10px" data-a="vdotThr" data-i="${Math.round(thr*600)}">${ic('check')} Folosește ${mmss(thr)} /km ca ritm de prag în ZECE</button>
+      <button class="btn ghost sm wide" style="margin-top:10px" data-a="vdotThr" data-i="${Math.round(thr*600)}">${ic('check')} Folosește ${mmss(thr)} /km ca ritm de prag în VULTUR</button>
       <div class="xs mu2" style="margin-top:8px">Formulele Daniels–Gilbert din „Daniels' Running Formula”. Ritmurile sunt pe teren plat, pe vreme răcoroasă; pe căldură sau deal, mergi după efort și puls. Ritmul de prag setat aici schimbă zonele de ritm, nu planul.</div>`); }
   if(k==='tread'){ const v=tlN('ts'), inc=+TL.ti||0;
     if(!(v>=3&&v<=30)) return box(`<div class="sm mu">Scrie viteza benzii în km/h.</div>`);
@@ -5351,6 +5355,7 @@ function toolInfo(name,inp){
 function snapshot(){
   const out=[], tk=todayKey(), P=prof();
   const sec=(t,f)=>{ try{ const v=f(); if(v) out.push('## '+t+'\n'+v); }catch(e){} };
+  sec('Numele aplicației',()=>'Aplicația se numește acum VULTUR (înainte se numea ZECE). Când o pomenești, spune-i VULTUR.');
   sec('Data de azi',()=>tk+', '+DAYN[(parseKey(tk).getDay()+6)%7]);
   sec('Profil',()=>`${P.sex==='f'?'Femeie':'Bărbat'}, ${P.age} ani, ${P.h} cm. Greutate la start ${P.startW} kg, țintă ${P.goalW} kg.`);
   sec('Greutate',()=>{ const a=wList(); if(!a.length) return 'Nicio cântărire notată.'; const ws=wStats();
@@ -5388,7 +5393,7 @@ function snapshot(){
   sec('Abdomen adăugat în plan (la cererea utilizatorului)',()=>'La finalul zilelor de upper: luni Hanging Leg Raise 3×8–12 și Plank 3 × 45–60 s; miercuri Dragon Flag 4×3–6 (negative lente până la repetări complete) și Pallof Press 3×10–12 pe parte; vineri Dragon Flag 3×3–6 și Ab Wheel Rollout 3×8–10. Sunt opționale: le face când vrea, iar o zi fără ele e tot completă (bifele numără doar exercițiile de dinainte). Nu trata sărirea lor ca pe o abatere de la plan.');
   sec('Kickboxing (în afara planului)',()=>kbAiCtx());
   sec('Alte antrenamente, importate din Strava (ex. Polar Beat) sau notate manual (ultimele 14 zile)',()=>(S.ext||[]).filter(x=>x.date>=dayShift(tk,-13)).sort((a,b)=>a.start-b.start)
-    .map(x=>`- ${x.date} ${stName(x.type)}${x.name?' „'+x.name+'”':''}: ${num(x.min,0)} min`+(x.km?`, ${num(x.km,1)} km`:'')+(x.hr?`, puls mediu ${x.hr}`+(x.hrMax?` (max ${x.hrMax})`:''):'')+(x.rpe?`, efort ${x.rpe}/10`:'')+(x.dup?' — același antrenament ca o sesiune ZECE, numărat o singură dată':'')).join('\n'));
+    .map(x=>`- ${x.date} ${stName(x.type)}${x.name?' „'+x.name+'”':''}: ${num(x.min,0)} min`+(x.km?`, ${num(x.km,1)} km`:'')+(x.hr?`, puls mediu ${x.hr}`+(x.hrMax?` (max ${x.hrMax})`:''):'')+(x.rpe?`, efort ${x.rpe}/10`:'')+(x.dup?' — același antrenament ca o sesiune VULTUR, numărat o singură dată':'')).join('\n'));
   sec('Readiness și profilul atletului (indicatori de antrenament, nu medicali)',()=>{ const R=readiness(), tw=twinNow();
     let s=R.v!=null?`Readiness azi: ${R.v}/100 (recuperare ${R.rec.v}, echilibru încărcare ${R.ls!=null?R.ls:'—'}). Factori: `+R.f.map(([v,t])=>(v>0?'+':'')+v+' '+t).join('; ')+'.':'Fără check-in azi.';
     s+='\nAtribute (0–100): '+ATTR.concat([['cons','Consecvență']]).map(([id,l])=>{ const a=tw.now[id]; return l+' '+(a?a.v:'—'); }).join(', ')+'.';
@@ -5637,7 +5642,7 @@ function onbRender(){
   const P=prof(), ws=wStats(), N=4, dots=`<div class="onb-dots">${Array.from({length:N},(_,i)=>`<i class="${i===OB.step?'on':''}"></i>`).join('')}</div>`, f=OB.focus;
   let body='';
   if(OB.step===0) body=`<div class="onb-hero"><div class="in-ph" style="animation:none;opacity:1;transform:none"></div></div>
-    <div class="onb-big">ZECE</div><p class="mu" style="text-align:center;margin-top:6px">Antrenament hibrid, forță și alergare, cu datele tale reale.</p>
+    <div class="onb-big">VULTUR</div><p class="mu" style="text-align:center;margin-top:6px">Antrenament hibrid, forță și alergare, cu datele tale reale.</p>
     <div class="feat"><div>${ic('play')} Antrenament live: serii, pauze, cronometru</div><div>${ic('chart')} Performanță pe orice perioadă, cu grafice interactive</div>
       <div>${ic('stopwatch')} 1 KM Lab, Running Lab, recorduri și obiective</div><div>${ic('shield')} Totul rămâne pe dispozitivul tău</div></div>
     <label class="linkb file-l" style="margin:16px auto 0;display:flex;justify-content:center">${ic('upload')} Am deja o copie: restaurează<input type="file" id="impFile" accept="application/json,.json"></label>`;
@@ -5896,9 +5901,9 @@ function cmpHTML(){
 }
 function motionHTML(){
   return `<div class="eyebrow">${ic('bolt')} Animații</div><div class="h2" style="margin-top:6px">Animațiile sunt reduse</div>
-    <p class="mu">Dispozitivul tău are setată <b>mișcarea redusă</b> (pe Windows: „Efecte de animație” oprite; pe iPhone: „Reducere mișcare”), așa că ZECE a oprit animațiile, inclusiv cea de deschidere.
+    <p class="mu">Dispozitivul tău are setată <b>mișcarea redusă</b> (pe Windows: „Efecte de animație” oprite; pe iPhone: „Reducere mișcare”), așa că VULTUR a oprit animațiile, inclusiv cea de deschidere.
     Poți să le pornești doar în aplicație, fără să schimbi setarea sistemului.</p>
-    <div class="inrow" style="flex-direction:column"><button class="btn pri xl wide" data-a="motionSet" data-k="on">${ic('bolt')} Pornește animațiile în ZECE</button>
+    <div class="inrow" style="flex-direction:column"><button class="btn pri xl wide" data-a="motionSet" data-k="on">${ic('bolt')} Pornește animațiile în VULTUR</button>
       <button class="btn ghost wide" data-a="motionSet" data-k="auto">Las-o după sistem</button></div>
     <div class="note">Poți schimba oricând din Setări → Aspect → Mișcare.</div>`;
 }
@@ -5992,7 +5997,7 @@ async function shareImg(o){
   g.fillStyle='#09090B'; g.fillRect(0,0,W,H);
   let gr=g.createRadialGradient(180,160,0,180,160,950); gr.addColorStop(0,glowA(t.ac,.55)); gr.addColorStop(1,'rgba(9,9,11,0)'); g.fillStyle=gr; g.fillRect(0,0,W,H);
   gr=g.createRadialGradient(980,1250,0,980,1250,760); gr.addColorStop(0,'rgba(77,163,255,.28)'); gr.addColorStop(1,'rgba(9,9,11,0)'); g.fillStyle=gr; g.fillRect(0,0,W,H);
-  g.fillStyle='#fff'; g.font='800 70px '+fd; g.fillText('ZECE',80,140); g.fillStyle=t.ac; g.fillRect(80,160,130,8);
+  g.fillStyle='#fff'; g.font='800 70px '+fd; g.fillText('VULTUR',80,140); g.fillStyle=t.ac; g.fillRect(80,160,130,8);
   g.fillStyle='rgba(255,255,255,.72)'; g.font='600 34px '+fb; g.fillText(String(o.k).toUpperCase(),80,280);
   g.fillStyle='#fff'; g.font='800 112px '+fd; let y=400; const words=String(o.t).toUpperCase().split(' '); let line='';
   words.forEach(wd=>{ const tst=line?line+' '+wd:wd; if(g.measureText(tst).width>W-160&&line){ g.fillText(line,80,y); y+=110; line=wd; } else line=tst; }); g.fillText(line,80,y);
@@ -6005,7 +6010,7 @@ async function shareImg(o){
   g.fillStyle='rgba(255,255,255,.55)'; g.font='600 28px '+fb; g.fillText('Hybrid365 · forță + alergare',80,H-80); g.textAlign='right'; g.fillText(fmtDay(todayKey()),W-80,H-80); g.textAlign='left';
   const blob=await new Promise(res=>c.toBlob(res,'image/png')); if(!blob){ toast('Nu am putut crea imaginea','','info'); return; }
   const file=new File([blob],'zece-'+todayKey()+'.png',{type:'image/png'});
-  try{ if(navigator.canShare&&navigator.canShare({files:[file]})){ await navigator.share({files:[file],title:'ZECE'}); return; } }catch(e){ if(e&&e.name==='AbortError') return; }
+  try{ if(navigator.canShare&&navigator.canShare({files:[file]})){ await navigator.share({files:[file],title:'VULTUR'}); return; } }catch(e){ if(e&&e.name==='AbortError') return; }
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=file.name; document.body.appendChild(a); a.click();
   setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },1000); toast('Imagine salvată',file.name,'info');
 }
@@ -6064,8 +6069,8 @@ function renderSide(){
   const sd=$('#side'); if(!sd) return;
   const it=([k,l,icn],kb)=>`<button class="sb ${S.tab===k?'on':''}" data-a="tab" data-k="${k}" ${S.tab===k?'aria-current="page"':''}>${ic(icn)}<span>${l}</span>${k==='coach'&&AI.busy&&S.tab!=='coach'?'<span class="cnt">·</span>':kb?`<span class="kb">${kb}</span>`:''}</button>`;
   const lt=modeNow()==='light';
-  sd.innerHTML=`<button class="side-br" data-a="tab" data-k="azi" aria-label="Acasă"><svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><rect x="1" y="1" width="46" height="46" rx="12" fill="#191D23" stroke="rgba(255,255,255,.14)"/><circle cx="24" cy="24" r="17" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="1.8"/><circle cx="24" cy="24" r="17" fill="none" stroke="currentColor" style="color:var(--ac)" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="85.5 107" transform="rotate(-90 24 24)"/><g transform="translate(9.42 9.22) scale(.6)"><path d="M13.2 12.4H19V26.8H23.4V31.4H8.6V26.8H13.2V18.6L10.2 21.4L8.9 16.6Z" fill="#F2F4F7"/><path d="M33 12.4H33.4A6.6 6.6 0 0 1 40 19V24.8A6.6 6.6 0 0 1 33.4 31.4H33A6.6 6.6 0 0 1 26.4 24.8V19A6.6 6.6 0 0 1 33 12.4ZM33.1 16.4H33.3A2.6 2.6 0 0 1 35.9 19V24.8A2.6 2.6 0 0 1 33.3 27.4H33.1A2.6 2.6 0 0 1 30.5 24.8V19A2.6 2.6 0 0 1 33.1 16.4Z" fill="#F2F4F7" fill-rule="evenodd"/><path d="M13.2 35.4H34.8V38.2H13.2Z" fill="currentColor" style="color:var(--ac)"/></g></svg>
-      <div class="brand">ZECE<small>Hybrid365</small></div></button>
+  sd.innerHTML=`<button class="side-br" data-a="tab" data-k="azi" aria-label="Acasă"><svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><rect x="1" y="1" width="46" height="46" rx="12" fill="#191D23" stroke="rgba(255,255,255,.14)"/><circle cx="24" cy="24" r="18.6" fill="none" stroke="rgba(232,236,241,.42)" stroke-width="1.2" stroke-dasharray="1.7 1.3"/><g transform="translate(11.64 10.1) scale(.6)"><path d="M33.5 5.2C26 2.6 17.8 4.2 13 9.2L5.6 12.2C2.6 13.4 1.4 16.4 2.6 19L5.6 23.2L6.6 19.4L13.4 18.2L11 22.8C14.8 26.2 17.4 30.6 18 37H30.4L27.2 32.6L33.6 31.4L29.4 26.8L36.4 24.8L31.8 21L38.6 17.4C39.6 12 37.6 7.4 33.5 5.2Z M15.4 11.6L22.4 10L19.8 13.6Z M13.1 9.2L14 9L14.6 18.1L13.6 18.2Z" fill="#F2F4F7" fill-rule="evenodd"/></g><g transform="translate(20.4 40.4)"><rect width="2.4" height="3.2" fill="#002B7F"/><rect x="2.4" width="2.4" height="3.2" fill="#FCD116"/><rect x="4.8" width="2.4" height="3.2" fill="#CE1126"/></g></svg>
+      <div class="brand">VULTUR<small>Hybrid365</small></div></button>
     <button class="side-search" data-a="palOpen">${ic('search')}<span>Caută sau comandă</span><kbd>Ctrl K</kbd></button>
     ${NAV.map((n,i)=>it(n,'Alt '+(i+1))).join('')}
     <div class="side-h">Mai mult</div>
@@ -6125,7 +6130,7 @@ function arm(el){
 
 /* =====================================================================
    14b · STRAVA — și Polar Beat prin Strava
-   Polar Beat → Polar Flow → Strava → ZECE, iar sesiunile ZECE → Strava.
+   Polar Beat → Polar Flow → Strava → VULTUR, iar sesiunile VULTUR → Strava.
    API-ul Strava acceptă apeluri direct din browser (CORS). Folosim aplicația API
    a utilizatorului: Client ID și Client Secret stau doar pe dispozitiv, nu în cod.
    ===================================================================== */
@@ -6273,8 +6278,8 @@ function stItem(rec,s,day,hs){
     const r=s.runs[x]; return [r&&+r.km>0?'• '+e.n+': '+num(r.km,2)+' km în '+num(r.min)+' min':null]; }).filter(Boolean);
   const sport=rec.km>0&&!rec.sets?'Run':rec.km>0?'Workout':'WeightTraining';
   const head=`S${rec.w+1} · ${DAYN[rec.d]} · ciclul ${rec.cyc}\n${rec.sets} serii · ${Math.round(rec.vol)} kg volum`+(rec.km?` · ${num(rec.km,2)} km`:'')+(rec.prs?` · ${rec.prs} ${rec.prs===1?'record':'recorduri'}`:'');
-  return {key:String(rec.end),start:s.start,end:rec.end,dur:rec.dur,km:rec.km||0,sport,name:'ZECE · '+rec.t,
-    desc:(head+(lines.length?'\n\n'+lines.join('\n'):'')+'\n\nÎnregistrat cu ZECE · Hybrid365').slice(0,3000),
+  return {key:String(rec.end),start:s.start,end:rec.end,dur:rec.dur,km:rec.km||0,sport,name:'VULTUR · '+rec.t,
+    desc:(head+(lines.length?'\n\n'+lines.join('\n'):'')+'\n\nÎnregistrat cu VULTUR · Hybrid365').slice(0,3000),
     hr:hs?{avg:hs.avg,max:hs.max}:null,pts:hs&&hs.pts?hs.pts.slice():[],t0:(s.hr&&s.hr.t0)||s.start};
 }
 async function stQueue(it){ await save('stq',(S.stq||[]).filter(x=>x.key!==it.key).concat([it]).slice(-20)); }
@@ -6327,17 +6332,17 @@ function stSumTxt(m){
 function stSumPaint(key){ const el=$('#stSum'); if(el&&S.summary&&String(S.summary.end)===key) el.innerHTML=stSumTxt(S.summary); }
 function stCard(){
   const c=stCfg(), head=`<div class="eyebrow">${ic('refresh')} Strava · Polar Beat</div>`;
-  if(!stOnline()) return `<div class="card" id="stSet">${head}<div class="note">Strava se poate conecta doar când ZECE e deschis de la adresa online (https://…), nu din fișierul salvat pe telefon sau pe calculator.</div></div>`;
+  if(!stOnline()) return `<div class="card" id="stSet">${head}<div class="note">Strava se poate conecta doar când VULTUR e deschis de la adresa online (https://…), nu din fișierul salvat pe telefon sau pe calculator.</div></div>`;
   const cp=(lbl,v)=>`<div class="set-row"><span class="sp"><span class="xs mu">${lbl}</span><div style="font-family:ui-monospace,Consolas,monospace;font-size:13px;word-break:break-all">${esc(v)}</div></span><button class="btn ghost sm" data-a="stCopy" data-k="${esc(v)}">${ic('copy')} Copiază</button></div>`;
-  const polar=`<div class="dsec"><h4>Polar Beat → Strava → ZECE</h4>
+  const polar=`<div class="dsec"><h4>Polar Beat → Strava → VULTUR</h4>
       <div class="cue"><b>1</b><span>Pe <a href="https://flow.polar.com" target="_blank" rel="noopener"><b>flow.polar.com</b></a>: numele tău (dreapta sus) → <b>Setări → Parteneri → Strava → Conectează</b>, apoi „Authorize” în Strava. Se face o singură dată.</span></div>
       <div class="cue"><b>2</b><span>Antrenamentele înregistrate cu <b>Polar Beat</b> urcă în Polar Flow, iar de acolo automat pe Strava. Merg doar cele cu puls sau GPS; cele adăugate manual în Flow nu se trimit.</span></div>
-      <div class="cue"><b>3</b><span>ZECE le preia la deschidere sau cu „Sincronizează”, cu tot cu puls. Dacă același antrenament e și sesiune ZECE, se numără o singură dată.</span></div></div>
-    <div class="note">Același drum îl au Garmin, Coros, Suunto sau Apple Watch: tot ce ajunge pe Strava intră și în ZECE.</div>`;
+      <div class="cue"><b>3</b><span>VULTUR le preia la deschidere sau cu „Sincronizează”, cu tot cu puls. Dacă același antrenament e și sesiune VULTUR, se numără o singură dată.</span></div></div>
+    <div class="note">Același drum îl au Garmin, Coros, Suunto sau Apple Watch: tot ce ajunge pe Strava intră și în VULTUR.</div>`;
   if(!c.cid||!c.sec) return `<div class="card" id="stSet">${head}
-    <div class="sm" style="margin-top:8px">ZECE vorbește cu Strava prin aplicația ta Strava. O creezi o singură dată, în două minute:</div>
+    <div class="sm" style="margin-top:8px">VULTUR vorbește cu Strava prin aplicația ta Strava. O creezi o singură dată, în două minute:</div>
     <div class="dsec"><div class="cue"><b>1</b><span>Deschide <a href="https://www.strava.com/settings/api" target="_blank" rel="noopener"><b>strava.com/settings/api</b></a>, creează o aplicație (categoria <b>Training</b>) și completează:</span></div></div>
-    ${cp('Application Name','ZECE')}${cp('Website',stRedirect())}${cp('Authorization Callback Domain',location.hostname)}
+    ${cp('Application Name','VULTUR')}${cp('Website',stRedirect())}${cp('Authorization Callback Domain',location.hostname)}
     <div class="dsec"><div class="cue"><b>2</b><span>Copiază aici <b>Client ID</b> și <b>Client Secret</b> din pagina aplicației.</span></div></div>
     <div class="form"><div class="fld"><label for="stCid">Client ID</label><input class="inp" id="stCid" inputmode="numeric" autocomplete="off" value="${esc(c.cid||'')}" placeholder="ex: 123456"></div>
       <div class="fld"><label for="stSec">Client Secret</label><input class="inp" id="stSec" type="password" autocomplete="off" placeholder="40 de caractere"></div></div>
@@ -6353,8 +6358,8 @@ function stCard(){
   return `<div class="card" id="stSet">${head}
     <div class="row" style="margin-top:8px"><span class="sp"><b>${esc((c.ath&&c.ath.name)||'Cont Strava')}</b><div class="xs mu">${ST.busy?'se sincronizează…':c.last?'sincronizat '+stAgo(c.last):'încă nesincronizat'}</div></span>
       <button class="btn sm" id="stSyncBtn" data-a="stSync" ${ST.busy?'disabled':''}>${ic('refresh')} ${ST.busy?'Sincronizez…':'Sincronizează'}</button></div>
-    <div class="kpis"><div class="kpi"><div class="k">Alergări din Strava</div><div class="v">${nr}</div></div><div class="kpi"><div class="k">Alte antrenamente</div><div class="v">${ne}</div></div><div class="kpi"><div class="k">Trimise din ZECE</div><div class="v">${no}</div></div></div>
-    <div class="set-row"><span class="sp"><b>Trimite automat antrenamentele ZECE</b><div class="sm mu">${w?'La final, cu durata, seriile și pulsul de la senzor':'Strava nu a primit permisiunea de upload. Conectează din nou și las-o bifată.'}</div></span>
+    <div class="kpis"><div class="kpi"><div class="k">Alergări din Strava</div><div class="v">${nr}</div></div><div class="kpi"><div class="k">Alte antrenamente</div><div class="v">${ne}</div></div><div class="kpi"><div class="k">Trimise din VULTUR</div><div class="v">${no}</div></div></div>
+    <div class="set-row"><span class="sp"><b>Trimite automat antrenamentele VULTUR</b><div class="sm mu">${w?'La final, cu durata, seriile și pulsul de la senzor':'Strava nu a primit permisiunea de upload. Conectează din nou și las-o bifată.'}</div></span>
       <button class="sw ${auto?'on':''}" data-a="stAuto" role="switch" aria-checked="${auto}" aria-label="Trimite automat pe Strava" ${w?'':'disabled'}></button></div>
     ${q.length?`<div class="set-row"><span class="sp"><b>${q.length===1?'1 antrenament':q.length+' antrenamente'} de trimis</b><div class="sm mu">${esc(q.map(x=>x.name).join(', '))}</div></span>
       <button class="btn sm" data-a="stFlush">Trimite</button><button class="xb" data-a="stQDrop" data-confirm="?" aria-label="Renunță la trimitere">${ic('trash')}</button></div>`:''}
@@ -6366,7 +6371,7 @@ function stCard(){
 function extCard(){
   const xs=(S.ext||[]).filter(x=>x.src!=='manual').sort((a,b)=>(b.start||0)-(a.start||0)).slice(0,8); if(!xs.length) return '';
   return `<div class="card"><div class="eyebrow">${ic('refresh')} Alte antrenamente · din Strava</div><div style="margin-top:4px">
-    ${xs.map(x=>`<div class="list-row"><span class="tag ${x.dup?'':'rest'}">${esc(stName(x.type))}</span><span class="sp"><b>${esc(x.name||stName(x.type))}</b> <span class="mu sm">· ${num(x.min,0)} min${x.km?' · '+num(x.km,1)+' km':''}${x.hr?' · '+x.hr+' bpm':''} · ${relDay(x.date)}</span>${x.dup?'<div class="xs mu">Același antrenament ca sesiunea ZECE: numărat o singură dată.</div>':''}</span>
+    ${xs.map(x=>`<div class="list-row"><span class="tag ${x.dup?'':'rest'}">${esc(stName(x.type))}</span><span class="sp"><b>${esc(x.name||stName(x.type))}</b> <span class="mu sm">· ${num(x.min,0)} min${x.km?' · '+num(x.km,1)+' km':''}${x.hr?' · '+x.hr+' bpm':''} · ${relDay(x.date)}</span>${x.dup?'<div class="xs mu">Același antrenament ca sesiunea VULTUR: numărat o singură dată.</div>':''}</span>
       <button class="xb" data-a="extDel" data-k="${esc(x.sid)}" data-confirm="?" aria-label="Șterge">${ic('trash')}</button></div>`).join('')}</div>
     <div class="note">Intră în încărcarea zilei ca minute × efort: efortul notat pe Strava, altfel estimat din pulsul mediu (zona 1 = 3/10 … zona 5 = 8/10), altfel 5/10.</div></div>`;
 }
@@ -6519,7 +6524,7 @@ document.addEventListener('click',async ev=>{
     case 'stSendPend': if(ST.pend){ const it=ST.pend; ST.pend=null; await stQueue(it); stSumPaint(it.key); await stFlush(); } return;
     case 'stQDrop': await save('stq',[]); ST.msg=''; render(); return;
     case 'stOff': { const c=stCfg(); try{ if(c.tok) await fetch('https://www.strava.com/oauth/deauthorize',{method:'POST',body:new URLSearchParams({access_token:c.tok})}); }catch(e){}
-      await save('strava',{cid:c.cid,sec:c.sec,own:c.own||[],del:c.del||[]}); ST.msg=''; render(); toast('Strava deconectat','Antrenamentele importate rămân în ZECE.','info'); return; }
+      await save('strava',{cid:c.cid,sec:c.sec,own:c.own||[],del:c.del||[]}); ST.msg=''; render(); toast('Strava deconectat','Antrenamentele importate rămân în VULTUR.','info'); return; }
     case 'stReset': await save('strava',{own:stCfg().own||[],del:stCfg().del||[]}); ST.msg=''; render(); return;
     case 'stCopy': try{ await navigator.clipboard.writeText(k); toast('Copiat',k,'info'); }catch(e){ toast('Nu pot copia aici','Selectează textul și copiază-l manual.','info'); } return;
     case 'extDel': await stPatch({del:(stCfg().del||[]).concat([String(k)]).slice(-500)}); await save('ext',(S.ext||[]).filter(x=>String(x.sid)!==String(k))); render(); return;
@@ -6748,7 +6753,7 @@ async function doImport(file){
     await loadAll(); applyTheme(); applyFx(); syncMark('lifts');
     const np=Array.isArray(data.photos)?await phImport(data.photos):0;
     render(); toast('Copie importată',n+' seturi de date restaurate'+(np?' · '+np+' poze':'')+'.','info');
-  }catch(e){ toast('Import eșuat','Fișierul nu pare o copie ZECE.','info'); }
+  }catch(e){ toast('Import eșuat','Fișierul nu pare o copie VULTUR.','info'); }
 }
 
 /* =====================================================================
@@ -6864,7 +6869,7 @@ function syncCard(){
     <div class="dsec"><h4>Cum o pornești (o singură dată)</h4>
       <div class="cue"><b>1</b><span>Creează un token GitHub cu permisiunea <b>gist</b> (butonul de mai jos deschide pagina gata completată). Copiază-l.</span></div>
       <div class="cue"><b>2</b><span>Lipește-l aici și alege o <b>parolă de criptare</b>. Pe celălalt dispozitiv folosești același token și aceeași parolă.</span></div></div>
-    <a class="btn ghost wide" href="https://github.com/settings/tokens/new?scopes=gist&description=ZECE%20sync" target="_blank" rel="noopener">${ic('key')} Creează tokenul pe GitHub</a>
+    <a class="btn ghost wide" href="https://github.com/settings/tokens/new?scopes=gist&description=VULTUR%20sync" target="_blank" rel="noopener">${ic('key')} Creează tokenul pe GitHub</a>
     <div class="form"><div class="fld full"><label for="syTok">Token GitHub</label><input class="inp" id="syTok" type="password" autocomplete="off" placeholder="ghp_… sau github_pat_…"></div>
       <div class="fld"><label for="syPass">Parolă de criptare</label><input class="inp" id="syPass" type="password" autocomplete="new-password" placeholder="minim 8 caractere"></div>
       <div class="fld"><label for="syName">Numele dispozitivului</label><input class="inp" id="syName" value="${esc(syDevName())}"></div></div>${msg}
@@ -7064,7 +7069,7 @@ function achAll(){
   const firstRunAtLeast=D=>{ const r=runs.find(r=>+r.km>=D); return r?r.date:null; };
   const k1Under=s=>{ const r=k1.find(x=>x.sec<s); return r?r.date:null; };
   const A=[
-    ['first','Primul antrenament','Primul antrenament notat în ZECE',days[0]||null,null],
+    ['first','Primul antrenament','Primul antrenament notat în VULTUR',days[0]||null,null],
     ['w10','10 antrenamente','10 zile de antrenament notate',nth(days,10),[days.length,10]],
     ['w50','50 de antrenamente','50 de zile de antrenament notate',nth(days,50),[days.length,50]],
     ['w100','100 de antrenamente','100 de zile de antrenament notate',nth(days,100),[days.length,100]],
@@ -7481,7 +7486,7 @@ function perfRec(){
       <div class="rs">${rows.map(r=>`<div class="rs-r"><span class="sp"><b>${r.l}</b><span class="xs mu2">${esc(r.src)}</span></span><span class="rs-d">${Array.from({length:14},(_,i)=>{ const v=jOf(dayShift(tk,-13+i))[r.k]; return `<i class="${v!=null&&v!==''&&+v>0?'on':''}"></i>`; }).join('')}</span>
         <span class="v ${r.n?'':'mu2'}">${r.n?r.n+'/14':'lipsește'}</span></div>`).join('')}
         <div class="rs-r"><span class="sp"><b>Încărcare de antrenament</b><span class="xs mu2">calculată din serii, alergări, cronometru și Strava</span></span><span class="v ${lr?'':'mu2'}">${lr?num(lr.r,2)+'×':'lipsește'}</span></div></div>
-      ${miss.length?`<div class="note"><b>Lipsesc:</b> ${miss.map(r=>r.l.toLowerCase()).join(', ')}. ZECE nu le estimează și nu le inventează: readiness folosește doar ce există. ${miss.some(r=>r.k==='hrv'||r.k==='rhr')?'HRV și pulsul în repaus vin din măsurarea cu senzorul (Setări → Conexiuni) sau dintr-un CSV exportat din ceas.':''}</div>`
+      ${miss.length?`<div class="note"><b>Lipsesc:</b> ${miss.map(r=>r.l.toLowerCase()).join(', ')}. VULTUR nu le estimează și nu le inventează: readiness folosește doar ce există. ${miss.some(r=>r.k==='hrv'||r.k==='rhr')?'HRV și pulsul în repaus vin din măsurarea cu senzorul (Setări → Conexiuni) sau dintr-un CSV exportat din ceas.':''}</div>`
         :'<div class="note">Toate sursele au date în ultimele 14 zile.</div>'}
       <div class="inrow"><button class="btn sm" data-a="ciOpen">${ic('sun')} Check-in acum</button><button class="btn ghost sm" data-a="hrOpen">${ic('heart')} Măsoară cu senzorul</button></div></div>`;
 }
@@ -8089,7 +8094,7 @@ const BANDS={
   plan:()=>{ const nx=nextDay(), full=cycleDaysDone(); return {e:'Ciclul '+cyc()+' · Hybrid365',t:'Antrenament',s:full+' din '+WEEKS*7+' zile complete'+(nx?' · următorul: S'+(nx.w+1)+' · '+DAYN[nx.d]:' · ciclu complet'),p:full/(WEEKS*7)}; },
   prog:()=>{ const tk=todayKey(), o=ixSum(dayShift(tk,-29),tk); return {e:'Ultimele 30 de zile',t:'Performanță',s:[o.days+(o.days===1?' zi activă':' zile active'),o.vol>0?num(o.vol/1000,1)+' t ridicate':'',o.km>0?num(o.km,1)+' km alergați':''].filter(Boolean).join(' · ')}; },
   nutri:()=>{ const tk=todayKey(), tg=targets(), d=dayTotals(tk); return {e:'Azi',t:'Nutriție',s:Math.round(d.k)+' / '+tg.kcal+' kcal · '+Math.round(d.p)+' / '+tg.p+' g proteină',p:tg.kcal>0?clamp(d.k/tg.kcal,0,1):0}; },
-  set:()=>({e:'ZECE · Hybrid365',t:'Setări',s:'Profil, aspect, conexiuni și datele tale'})
+  set:()=>({e:'VULTUR · Hybrid365',t:'Setări',s:'Profil, aspect, conexiuni și datele tale'})
 };
 function bandHTML(k){ let b=null; try{ b=BANDS[k](); }catch(e){ errLog((e&&e.message)||e,'band '+k); return ''; }
   return `<div class="band" data-b="${k}"><div class="band-ph" aria-hidden="true"></div><div class="band-fd" aria-hidden="true"></div>
@@ -8482,7 +8487,7 @@ ACT.treadSave=async()=>{ const st=TM.st; if(!st||st.kind!=='tread'||st.saved) re
 /* =====================================================================
    v9 · PULS MAXIM MĂSURAT ȘI TESTUL DE PRAG (30 MIN)
    Pulsul maxim: cel scris în profil; altfel estimat din vârstă (Tanaka), cu propunerea de a folosi cel mai mare puls
-   înregistrat în ultimul an (alergări și activități din Strava, antrenamente ZECE, cronometre), dacă e mai mare.
+   înregistrat în ultimul an (alergări și activități din Strava, antrenamente VULTUR, cronometre), dacă e mai mare.
    Testul de prag (Friel): 15 min încălzire, apoi 30 min cât de tare poți ține egal; pulsul mediu din ultimele 20 de minute
    = pulsul la prag (LTHR), iar ritmul mediu pe 30 de minute = ritmul de prag. Ambele intră în profil, zone și viteze.
    ===================================================================== */
@@ -8655,7 +8660,7 @@ ACT.afSave=async()=>{
   await save('ext',ext);
   if(!A.id&&A.st&&stOn()&&stCanWrite()){
     await stQueue({key:x.sid,start:x.start,end:x.start+min*60000,dur:Math.round(min*60),km,sport:ACT_UP[x.type]||x.type,name:x.name||actT(x.type)[1],
-      desc:(actT(x.type)[1]+' · '+num(min,0)+' min'+(km?' · '+num(km,2)+' km':'')+(hr?' · puls mediu '+hr:'')+'\n\nNotat în ZECE · Hybrid365'),hr:null,pts:[]});
+      desc:(actT(x.type)[1]+' · '+num(min,0)+' min'+(km?' · '+num(km,2)+' km':'')+(hr?' · puls mediu '+hr:'')+'\n\nNotat în VULTUR · Hybrid365'),hr:null,pts:[]});
     setTimeout(stFlush,50); }
   AF=null; SH=null; shRender(); render();
   toast(A.id?'Activitate salvată':'Activitate adăugată',actName(x)+' · '+num(min,0)+' min'+(km?' · '+num(km,1)+' km':''),'info');
@@ -8669,7 +8674,7 @@ function actRow(x){ const man=x.src==='manual';
   return `<div class="list-row act-r"><span class="ic-s ${man?'man':''}">${ic(actIcon(x.type))}</span>
     <button class="sp linkb2" ${man?`data-a="actEdit" data-k="${esc(x.sid)}"`:'disabled'} style="text-align:left"><b>${esc(actName(x))}</b>
       <span class="xs mu" style="display:block">${fmtDay(x.date)} · ${num(x.min,0)} min${x.km?' · '+num(x.km,x.km<10?2:1)+' km':''}${x.hr?' · '+x.hr+' bpm':''}${x.rpe?' · '+((ACT_RPE.find(r=>r[0]===x.rpe)||[0,'efort '+x.rpe])[1]).toLowerCase():''}</span>
-      ${x.dup?'<span class="xs mu2" style="display:block">Același antrenament ca sesiunea ZECE: numărat o singură dată.</span>':''}</button>
+      ${x.dup?'<span class="xs mu2" style="display:block">Același antrenament ca sesiunea VULTUR: numărat o singură dată.</span>':''}</button>
     <span class="tag ${man?'':'rest'}">${man?'notat':'Strava'}</span>
     ${man?'':`<button class="xb" data-a="extDel" data-k="${esc(x.sid)}" data-confirm="?" aria-label="Șterge">${ic('trash')}</button>`}</div>`; }
 function viewActs(){
@@ -9223,7 +9228,7 @@ ACT.kfSave=async()=>{
   if(!F.id&&F.st&&stOn()&&stCanWrite()){
     const sp=F.a==='spar'?[kb.ok?'Ce a mers: '+kb.ok:'',kb.fix?'De lucrat: '+kb.fix:''].filter(Boolean).join('\n'):x.note||'';
     await stQueue({key:x.sid,start:x.start,end:x.start+min*60000,dur:Math.round(min*60),km:0,sport:'Workout',name:x.name,
-      desc:(A.n+(r?' · '+r+(r===1?' rundă':' runde')+' × '+fmtClock(kb.rs)+(kb.rest&&r>1?' · pauză '+fmtClock(kb.rest):''):'')+' · '+num(min,0)+' min'+(hr?' · puls mediu '+hr:'')+(sp?'\n\n'+sp:'')+'\n\nNotat în ZECE · Hybrid365'),hr:null,pts:[]});
+      desc:(A.n+(r?' · '+r+(r===1?' rundă':' runde')+' × '+fmtClock(kb.rs)+(kb.rest&&r>1?' · pauză '+fmtClock(kb.rest):''):'')+' · '+num(min,0)+' min'+(hr?' · puls mediu '+hr:'')+(sp?'\n\n'+sp:'')+'\n\nNotat în VULTUR · Hybrid365'),hr:null,pts:[]});
     setTimeout(stFlush,50); }
   KF=null; SH=null; shRender(); render();
   if(tr&&tr.first) kbTgCelebrate(tr); else toast(F.id?'Sesiune salvată':'Sesiune notată',A.n+(r?' · '+r+(r===1?' rundă':' runde'):'')+' · '+num(min,0)+' min','info');
