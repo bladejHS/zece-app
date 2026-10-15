@@ -2,8 +2,8 @@
    Fișierele aplicației: întâi rețeaua (ca să vină actualizările), iar fără semnal din cache.
    Fonturile și SDK-ul antrenorului AI: din cache, actualizate în fundal.
    Cererile către API-ul Anthropic nu trec niciodată prin cache. */
-const V='zece-7cc11a1324';
-const SHELL=['./','index.html','manifest.webmanifest','icon.svg','apple-touch-icon.png','icon-192.png','icon-512.png','cover.jpg','vox.json','kb-bag.jpg','kb-band.jpg','kb-pads.jpg','kb-spar.jpg','kb-wraps.jpg','band-nutri.jpg','band-plan.jpg','band-prog.jpg'];
+const V='zece-711c5382e4';
+const SHELL=['./','index.html','manifest.webmanifest','icon.svg','apple-touch-icon.png','icon-192.png','icon-512.png','cover.jpg','vox.json','kb-bag.jpg','kb-band.jpg','kb-pads.jpg','kb-spar.jpg','kb-wraps.jpg','band-nutri.jpg','band-plan.jpg','band-prog.jpg','day-d0.jpg','day-d1.jpg','day-d2.jpg','day-d3.jpg','day-d4.jpg','day-d5.jpg','day-d6.jpg','intro-sri.jpg'];
 self.addEventListener('install',e=>{ e.waitUntil(caches.open(V).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting())); });
 self.addEventListener('activate',e=>{ e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==V).map(k=>caches.delete(k)))).then(()=>self.clients.claim())); });
 self.addEventListener('fetch',e=>{

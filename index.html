@@ -1885,6 +1885,66 @@ html[data-mode="light"] .kb-nums div{background:var(--s2)}
 .vox-set{margin-top:8px;padding-top:12px;border-top:1px solid var(--ln)}
 
 /* =====================================================================
+   v12 · insignele zilelor (operatorul SRI) și animația de deschidere
+   ===================================================================== */
+.dbg{--bs:46px;position:relative;flex:none;display:block;width:var(--bs);height:var(--bs);border-radius:50%;overflow:hidden;isolation:isolate;
+  box-shadow:0 0 0 1px rgba(255,255,255,.08),0 8px 20px -10px rgba(0,0,0,.9);opacity:.6;filter:saturate(.6) brightness(.82);
+  transition:opacity .3s ease,filter .3s ease,box-shadow .3s ease}
+.dbg img{display:block;width:100%;height:100%;object-fit:cover;transform:scale(1.03)}
+.dbg.next,.dbg.done,.day.open .dbg{opacity:1;filter:none}
+.dbg.next{box-shadow:0 0 0 1.5px var(--c,var(--ac)),0 0 20px -4px var(--c,var(--acg))}
+.dbg.done{box-shadow:0 0 0 1.5px rgba(232,238,245,.7),0 0 18px -6px rgba(232,238,245,.55)}
+/* luciul metalic: o bandă de lumină care trece din când în când peste insigna zilei următoare */
+.dbg::after{content:'';position:absolute;inset:-25%;pointer-events:none;mix-blend-mode:screen;transform:translateX(-130%);
+  background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.55) 50%,transparent 60%)}
+.dbg.next::after{animation:dbgSheen 5s ease-in-out 1.2s infinite}
+.dbg.stamp{animation:dbgStamp .7s cubic-bezier(.3,1.6,.5,1) both}
+.dbg.stamp::after{animation:dbgSheen 1s ease-out .15s 1}
+@keyframes dbgSheen{0%{transform:translateX(-130%)}30%,100%{transform:translateX(130%)}}
+@keyframes dbgStamp{0%{transform:none}30%{transform:scale(1.28) rotate(-6deg)}62%{transform:scale(.95) rotate(2deg)}100%{transform:none}}
+.rm .dbg::after,.rm .dbg.stamp,.rm .dbg.stamp::after{animation:none}
+.day-h .dbg{margin-left:2px}
+.cv-bdg{float:right;margin:2px 0 8px 14px}
+.cv-bdg .dbg{box-shadow:0 0 0 1.5px rgba(255,255,255,.55),0 10px 30px -8px rgba(0,0,0,.95)}
+.wd image{opacity:.9}
+.wd.next image{opacity:1}
+
+/* animația de deschidere: portretul operatorului iese din întuneric, apoi insigna zilei se „coase" și primește luciul */
+.intro{background:#000}
+.intro .in-ph{background:#000 var(--intro-sri,var(--cover,none)) 50% 0/cover no-repeat;transform-origin:50% 22%;
+  animation:inPhS calc(var(--k) * 3.2s) cubic-bezier(.16,.7,.2,1) calc(var(--k) * .1s) both}
+@media(orientation:landscape){.intro .in-ph{background-size:auto 100%}}
+@keyframes inPhS{0%{opacity:0;transform:scale(1.14);filter:brightness(.15) contrast(1.4)}45%{opacity:1;filter:brightness(1) contrast(1.06)}100%{opacity:1;transform:scale(1.02);filter:none}}
+.intro .in-ph::after{background:radial-gradient(120% 70% at 50% 28%,transparent 38%,rgba(0,0,0,.72) 100%),
+  linear-gradient(180deg,rgba(0,0,0,.35) 0,transparent 22%,transparent 46%,rgba(0,0,0,.86) 68%,#000 92%)}
+.intro .in-light{animation-delay:calc(var(--k) * 1.6s)}
+.intro .in-flash{background:radial-gradient(50% 30% at 50% 64%,rgba(255,255,255,.22),transparent 70%);animation-delay:calc(var(--k) * 1.45s)}
+.intro .in-lw{width:150px;height:150px}
+.in-stitch{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.in-st-bk{fill:rgba(0,0,0,.6);opacity:0;animation:inCntIn calc(var(--k) * .6s) ease calc(var(--k) * .3s) forwards}
+.in-st{fill:none;stroke:#E6EAF0;stroke-width:3.2;stroke-dasharray:3.4 2.6;stroke-linecap:round;filter:drop-shadow(0 0 3px rgba(255,255,255,.4))}
+.in-st-m{fill:none;stroke:#fff;stroke-width:16;stroke-dasharray:100 100;stroke-dashoffset:100;
+  animation:inStitch calc(var(--k) * 1.1s) cubic-bezier(.65,0,.35,1) calc(var(--k) * .35s) forwards}
+@keyframes inStitch{to{stroke-dashoffset:0}}
+.intro .in-logo.in-badge{position:absolute;left:11px;top:11px;width:calc(100% - 22px);height:calc(100% - 22px);margin:0;border-radius:50%;
+  overflow:hidden;object-fit:cover;opacity:0;
+  animation:inBadge calc(var(--k) * .9s) cubic-bezier(.2,.8,.2,1) calc(var(--k) * 1.45s) both}
+@keyframes inBadge{0%{opacity:0;transform:scale(1.35);filter:blur(8px) brightness(2.2)}
+  40%{opacity:1;filter:blur(0) brightness(1.6) drop-shadow(0 0 22px rgba(255,255,255,.6))}
+  100%{opacity:1;transform:none;filter:drop-shadow(0 0 14px rgba(255,255,255,.18))}}
+.in-sheen{position:absolute;inset:11px;border-radius:50%;overflow:hidden;pointer-events:none}
+.in-sheen::after{content:'';position:absolute;inset:-30%;mix-blend-mode:screen;transform:translateX(-130%);
+  background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.6) 50%,transparent 60%);
+  animation:inSheen calc(var(--k) * 1s) ease-in-out calc(var(--k) * 2.05s) both}
+@keyframes inSheen{to{transform:translateX(130%)}}
+.intro .in-ring{width:150px;height:150px;margin:-75px 0 0 -75px;border-color:rgba(255,255,255,.75)}
+.intro .in-ring.r2{border-color:rgba(255,255,255,.35)}
+.intro .in-word span{background:linear-gradient(180deg,#fff 30%,#B9C0C9);-webkit-background-clip:text;background-clip:text}
+/* sub nume, o linie fină în culorile tricolorului */
+.intro .in-bar{height:2px;opacity:.9;background:linear-gradient(90deg,transparent,#002B7F 16%,#002B7F 36%,#FCD116 36%,#FCD116 64%,#CE1126 64%,#CE1126 84%,transparent)}
+@media(max-height:700px){.intro .in-lw{width:124px;height:124px}.intro .in-ring{width:124px;height:124px;margin:-62px 0 0 -62px}}
+
+/* =====================================================================
    Mișcare · intrarea în ecran, apariția la derulare, grafice care se desenează.
    Mișcare redusă: după setarea sistemului („Automat") sau aleasă explicit în Setări.
    ===================================================================== */
@@ -1938,16 +1998,13 @@ try{ var m=JSON.parse(localStorage.getItem('zece3:mode')||'"dark"'); if(m==='aut
   <div class="in-ph"></div><div class="in-light"></div>
   <canvas id="introCv"></canvas><div class="in-flash"></div>
   <div class="in-c"><div class="in-lw">
-    <svg class="in-dial" id="inDial" viewBox="0 0 200 200">
-      <defs><linearGradient id="inRingG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E2EEF9"/><stop offset=".4" stop-color="#9CC0E4"/><stop offset=".75" stop-color="#6E9BC7"/><stop offset="1" stop-color="#3C6690"/></linearGradient>
-        <linearGradient id="inMetal" x1="0" y1="12" x2="0" y2="32" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".42" stop-color="#E4EBF3"/><stop offset=".5" stop-color="#B9C7D6"/><stop offset="1" stop-color="#8396AC"/></linearGradient></defs>
-      <g class="in-ticks" id="inTicks"></g>
-      <circle class="in-track" cx="100" cy="100" r="74"/>
-      <circle class="in-arc" cx="100" cy="100" r="74" pathLength="1" transform="rotate(-90 100 100)"/>
-      <g class="in-hand"><circle class="in-headg" cx="100" cy="26" r="10"/><circle class="in-head" cx="100" cy="26" r="3.6"/></g>
+    <svg class="in-stitch" viewBox="0 0 200 200">
+      <defs><mask id="inStM" maskUnits="userSpaceOnUse" x="-10" y="-10" width="220" height="220"><circle class="in-st-m" cx="100" cy="100" r="94" pathLength="100" transform="rotate(-90 100 100)"/></mask></defs>
+      <circle class="in-st-bk" cx="100" cy="100" r="97"/>
+      <circle class="in-st" cx="100" cy="100" r="94" mask="url(#inStM)"/>
     </svg>
-    <div class="in-cnt" id="inCnt">01</div>
-    <svg class="in-logo" id="inLogo" viewBox="8 11 33 28"><path d="M13.2 12.4H19V26.8H23.4V31.4H8.6V26.8H13.2V18.6L10.2 21.4L8.9 16.6Z" fill="url(#inMetal)"/><path d="M33 12.4H33.4A6.6 6.6 0 0 1 40 19V24.8A6.6 6.6 0 0 1 33.4 31.4H33A6.6 6.6 0 0 1 26.4 24.8V19A6.6 6.6 0 0 1 33 12.4ZM33.1 16.4H33.3A2.6 2.6 0 0 1 35.9 19V24.8A2.6 2.6 0 0 1 33.3 27.4H33.1A2.6 2.6 0 0 1 30.5 24.8V19A2.6 2.6 0 0 1 33.1 16.4Z" fill="url(#inMetal)" fill-rule="evenodd"/><path class="in-lbar" d="M13.2 35.4H34.8V38.2H13.2Z" fill="#9CC0E4"/></svg>
+    <img class="in-logo in-badge" id="inLogo" alt="" width="128" height="128">
+    <span class="in-sheen"></span>
     <span class="in-ring"></span><span class="in-ring r2"></span></div>
     <div class="in-word"><span>Z</span><span>E</span><span>C</span><span>E</span></div>
     <div class="in-bar"></div>
@@ -3470,7 +3527,7 @@ function viewPlan(){
   const days=PLAN.map((_,d)=>{ const day=dayFor(w,d), dn=doneCount(w,d), tot=absFrom(d), optN=PLAN[d].ex.length-tot, od=optDone(w,d), open=S.openDay===d, isN=nx&&nx.w===w&&nx.d===d, c=CAT[day.cat], col=catCol(day.cat);
     return `<div class="card day ${open?'open':''} ${isN?'next':''}" id="day${d}" style="--c:${col}">
       <button class="day-h" data-a="toggleDay" data-d="${d}" aria-expanded="${open}">
-        <span class="day-bar"></span>
+        <span class="day-bar"></span>${dayBadge(d,dn===tot?'done':isN?'next':'')}
         <span class="sp"><span class="day-k">${DAYN[d]}${isN?' · următorul':''}</span><span class="day-t" style="display:block">${esc(day.t)}</span>
           <span class="day-m" style="display:block">${c[0]} · ${day.min} min · ${dn}/${tot} bifate${optN?od===optN?' · + abdomen':' · abdomen opțional':''}</span></span>
         ${dn===tot?`<span class="tag pr">${ic('check')}</span>`:ring(dn/tot,{s:34,sw:3,c:col})}
@@ -6345,7 +6402,7 @@ document.addEventListener('click',async ev=>{
         c.classList.toggle('open',S.openDay===D); c.querySelector('.day-h').setAttribute('aria-expanded',S.openDay===D); } } return;
     case 'planW': S.planW=I; render(); return;
     case 'tick': { const on=!isDone(W,D,X); await setDone(W,D,X,on); render(); if(on){ const t=document.querySelector(`.tick[data-w="${W}"][data-d="${D}"][data-x="${X}"]`); if(t) t.classList.add('pop'); buzz(15);
-        if(!optX(D,X)&&dayFull(W,D)){ const c=$('#day'+D); if(c){ const r=c.getBoundingClientRect(); burstAt(r.left+r.width/2,r.top+30,26); } toast('Zi completă',DAYN[D]+' · '+PLAN[D].t); } } return; }
+        if(!optX(D,X)&&dayFull(W,D)){ const c=$('#day'+D); if(c){ const r=c.getBoundingClientRect(); burstAt(r.left+r.width/2,r.top+30,26); dbgStamp(c); } toast('Zi completă',DAYN[D]+' · '+PLAN[D].t); } } return; }
     case 'start': if(S.sess){ await startSess(W,D); return; } rdOpen(W,D); return;
     case 'rd': RD[k]=I; buzz(8); rdRender(); return;
     case 'rdGo': { const r=RD, sc=rdScore(r), rd={sleep:r.sleep,energy:r.energy,sore:r.sore,score:sc}; RD=null; rdRender(); await jSet(tk,{sleepQ:r.sleep,energy:r.energy,sore:r.sore});
@@ -7100,7 +7157,7 @@ function viewHome(){
 function coverHero(){
   const nx=nextDay();
   if(S.sess){ const day=sessDay(S.sess), rq=absFrom(S.sess.d), dn=day.ex.filter((e,x)=>!e.opt&&sessIsDone(S.sess,x)).length;
-    return `<div class="cv-k"><span class="dot"></span> În desfășurare · ${DAYN[S.sess.d]} · S${S.sess.w+1}</div><div class="cv-h">${esc(day.t)}</div>
+    return `<span class="cv-bdg">${dayBadge(S.sess.d,'next',60)}</span><div class="cv-k"><span class="dot"></span> În desfășurare · ${DAYN[S.sess.d]} · S${S.sess.w+1}</div><div class="cv-h">${esc(day.t)}</div>
       <div class="cv-m"><span class="big sm" id="heroClock">${fmtClock(sessSec())}</span><span>${dn}/${rq} exerciții</span></div>
       <div class="cv-pb"><i style="width:${(dn/rq*100).toFixed(1)}%"></i></div>
       <div class="cv-b"><button class="btn pri xl glow" data-a="fxOpen">${ic('play')} Continuă antrenamentul</button></div>`; }
@@ -7111,7 +7168,7 @@ function coverHero(){
   const run=day.run==='thr'?(p.thr.r[nx.w]||0)+' × '+mmss(p.thr.m)+' la prag':day.run==='lng'?(p.lng.w[nx.w]||0)+' min long run':day.run?'Easy run '+((p[day.run]||{w:[]}).w[nx.w]||0)+' min':'';
   const what=[run,lifts?lifts+' exerciții de forță':'',!run&&!lifts?tot+' exerciții':''].filter(Boolean).join(' + ');
   const today=(new Date().getDay()+6)%7===nx.d;
-  return `<div class="cv-k">${today?'Azi':'Următorul'} · ${DAYN[nx.d]} · S${nx.w+1} · Ciclul ${cyc()}</div>
+  return `<span class="cv-bdg">${dayBadge(nx.d,'next',60)}</span><div class="cv-k">${today?'Azi':'Următorul'} · ${DAYN[nx.d]} · S${nx.w+1} · Ciclul ${cyc()}</div>
     <div class="cv-h">${esc(day.t)}</div>
     <div class="cv-m"><span>${esc(what)}</span><span>${ic('clock')} ${day.min} min</span></div>
     ${day.adj?`<div class="adjb">${ic('coach')} Cu ajustările antrenorului adaptiv</div>`:''}
@@ -7152,10 +7209,10 @@ function weekHTML(){
     return `<button class="wd ${isN?'next':''}" data-a="openDay" data-w="${w}" data-d="${d}" aria-label="${DAYN[d]}: ${esc(p.t)}">
       ${ring(dn/tot,{s:40,sw:3.5,c:full?TH().ac:col,fill:full?TH().ac:'none',track:isN?TH().ac+'88':'var(--track)',
         inner:full?`<path d="M13 20.5l4.5 4.5L27 15.5" fill="none" style="stroke:var(--on)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`
-          :`<circle cx="20" cy="20" r="3.5" style="fill:${col}"/>`})}${DAYS[d]}</button>`; }).join('');
+          :(dayBadgeSvg(d,40)||`<circle cx="20" cy="20" r="3.5" style="fill:${col}"/>`)})}${DAYS[d]}</button>`; }).join('');
   return `<div class="card"><div class="row"><div class="eyebrow sp">Săptămâna ${w+1} · ciclul ${cyc()}</div>
     <button class="btn ghost sm" data-a="tab" data-k="plan">Planul ${ic('right')}</button></div>
-    <div class="week">${week}</div></div>`;
+    <div class="week">${DBG_CLIP}${week}</div></div>`;
 }
 const wHead=(icn,t,link)=>`<div class="card-h"><div class="eyebrow">${ic(icn)} ${t}</div>${link?`<button class="btn ghost xs" ${link}>${ic('right')}</button>`:''}</div>`;
 /* insights: primele trei, fiecare cu datele din care rezultă */
@@ -9221,6 +9278,24 @@ NAV.splice(2,0,['kb','Kickboxing','glove']); VIEWS.kb=viewKb; VIEW_LAY.kb='lay-n
 document.addEventListener('toggle',e=>{ const t=e.target; if(t&&t.classList&&t.classList.contains('kb-tgs')&&SH&&SH.kind==='kba') SH[t.classList.contains('kb-cmbs')?'cmbOpen':'tgOpen']=t.open; },true);
 
 /* =====================================================================
+   v12 · insignele zilelor și animația de deschidere cu operatorul SRI
+   ===================================================================== */
+/* insignele (src/assets/days/d0…d6.jpg) și portretul de la deschidere (src/assets/intro), făcute în Canva:
+   build.js pune aici fotografiile, build_site.js le face fișiere */
+const DAY_PH={"d0":"day-d0.jpg","d1":"day-d1.jpg","d2":"day-d2.jpg","d3":"day-d3.jpg","d4":"day-d4.jpg","d5":"day-d5.jpg","d6":"day-d6.jpg"};
+const INTRO_PH={"sri":"intro-sri.jpg"};
+Object.keys(INTRO_PH).forEach(k=>{ try{ document.documentElement.style.setProperty('--intro-'+k,`url("${INTRO_PH[k]}")`); }catch(e){} });
+/* insigna zilei d (0 = luni): st = 'done' (ziua completă) sau 'next' (următoarea); decorativă, rândul are deja textul */
+function dayBadge(d,st='',sz=46){ const src=DAY_PH['d'+d]; if(!src) return '';
+  return `<span class="dbg ${st}" style="--bs:${sz}px" aria-hidden="true"><img src="${src}" alt="" decoding="async" width="${sz}" height="${sz}"></span>`; }
+/* aceeași insignă în interiorul inelului din săptămâna de pe Acasă (decupată rotund) */
+const DBG_CLIP='<svg width="0" height="0" style="position:absolute" aria-hidden="true"><clipPath id="dbgClip" clipPathUnits="objectBoundingBox"><circle cx=".5" cy=".5" r=".5"/></clipPath></svg>';
+function dayBadgeSvg(d,s){ const src=DAY_PH['d'+d]; if(!src) return ''; const z=Math.round(s*.66), o=(s-z)/2;
+  return `<image href="${src}" x="${o}" y="${o}" width="${z}" height="${z}" clip-path="url(#dbgClip)"/>`; }
+/* „ștampila": când ziua devine completă, insigna ei sare și o străbate luciul metalic */
+function dbgStamp(card){ const b=card&&card.querySelector('.dbg'); if(!b) return; b.classList.remove('stamp'); void b.offsetWidth; b.classList.add('stamp','done'); }
+
+/* =====================================================================
    v8 · ANTRENORUL AI — unelte de citire. Modelul își cere singur datele exacte din aplicație
    (istoric, alergări, recorduri, rezumatul unei perioade, corp, obiective, insights) în loc să
    ghicească dintr-un rezumat. Rulează automat, fără confirmare (doar citesc); uneltele care scriu
@@ -9348,21 +9423,21 @@ async function migrate(){
 }
 /* ---------- animația de deschidere ---------- */
 const INTRO={on:false,leaving:false,done:null,mode:'full'};
-/* v9: praf fin în lumina de studio, iar la finalul numărătorii o explozie de scântei din cadran (albe și albastru-oțel) */
-const IN_T1=1.45; /* secunda (× k) la care inelul se închide și „10" devine logo */
+/* v12: praf fin în lumina de studio, iar când cusătura inelului se închide, scântei argintii din jurul insignei */
+const IN_T1=1.45; /* secunda (× k) la care cusătura se închide și apare insigna zilei */
 function introParticles(mode){
   const cv=$('#introCv'); if(!cv||!cv.getContext) return;
   const ctx=cv.getContext('2d'), dpr=Math.min(2,devicePixelRatio||1), W=cv.width=innerWidth*dpr, H=cv.height=innerHeight*dpr;
-  const cols=['#ffffff','#9CC0E4',TH().ac], N=mode==='full'?80:44, k=mode==='full'?1:.42;
+  const cols=['#ffffff','#C9D1DA','#8E99A6'], N=mode==='full'?80:44, k=mode==='full'?1:.42;
   const ps=Array.from({length:N},(_,i)=>({x:Math.random()*W,y:Math.random()*H,r:(.4+Math.random()*1.2)*dpr,vx:(Math.random()-.5)*14*dpr,vy:-(6+Math.random()*24)*dpr,
     a:.2+Math.random()*.5,tw:Math.random()*6.283,c:cols[i%3],d:Math.random()*.8}));
   const sp=[]; let burst=false;
   const t0=performance.now(); let last=t0;
   const frame=now=>{ if(!INTRO.on) return; const t=(now-t0)/1000, dt=Math.min(.05,(now-last)/1000); last=now;
     const out=INTRO.leaving?clamp(1-(now-INTRO.leftAt)/350,0,1):1;
-    if(!burst&&t>=IN_T1*k){ burst=true; const dl=$('#inDial'); if(dl){ const r=dl.getBoundingClientRect(), cx=(r.left+r.width/2)*dpr, cy=(r.top+r.height/2)*dpr, R0=r.width*.37*dpr;
+    if(!burst&&t>=IN_T1*k){ burst=true; const dl=$('.intro .in-lw'); if(dl){ const r=dl.getBoundingClientRect(), cx=(r.left+r.width/2)*dpr, cy=(r.top+r.height/2)*dpr, R0=r.width*.37*dpr;
       for(let i=0;i<(mode==='full'?64:36);i++){ const an=Math.random()*6.283, v=(170+Math.random()*380)*dpr;
-        sp.push({x:cx+Math.cos(an)*R0,y:cy+Math.sin(an)*R0,vx:Math.cos(an)*v,vy:Math.sin(an)*v,l:0,L:.55+Math.random()*.6,w:(.8+Math.random()*1.4)*dpr,c:i%3?'#CFE2F5':'#ffffff'}); } } }
+        sp.push({x:cx+Math.cos(an)*R0,y:cy+Math.sin(an)*R0,vx:Math.cos(an)*v,vy:Math.sin(an)*v,l:0,L:.55+Math.random()*.6,w:(.8+Math.random()*1.4)*dpr,c:i%3?'#E4E8EE':'#ffffff'}); } } }
     ctx.clearRect(0,0,W,H); ctx.globalCompositeOperation='lighter';
     ps.forEach(p=>{ p.x+=p.vx*dt; p.y+=p.vy*dt; p.tw+=dt*2.2; if(p.y<-10){ p.y=H+10; p.x=Math.random()*W; }
       const cone=1-Math.min(1,Math.abs(p.x/W-.5)*1.6), al=p.a*clamp((t-p.d)/1.2,0,1)*out*(.55+.45*Math.sin(p.tw))*(.35+.65*cone);
@@ -9373,17 +9448,6 @@ function introParticles(mode){
     requestAnimationFrame(frame); };
   requestAnimationFrame(frame);
 }
-/* cadranul: 60 de gradații care apar pe rând, în sensul acelor de ceasornic */
-function introDial(){ const g=$('#inTicks'); if(!g) return; let h='';
-  for(let i=0;i<60;i++){ const a=(i*6-90)*Math.PI/180, big=i%5===0, r1=big?83:86, r2=92;
-    h+='<line style="--i:'+i+'" class="'+(big?'b':'')+'" x1="'+(100+r1*Math.cos(a)).toFixed(2)+'" y1="'+(100+r1*Math.sin(a)).toFixed(2)+'" x2="'+(100+r2*Math.cos(a)).toFixed(2)+'" y2="'+(100+r2*Math.sin(a)).toFixed(2)+'"/>'; }
-  g.innerHTML=h; }
-/* numărătoarea 01 → 10, sincronizată cu inelul (aceeași curbă ca animația CSS a inelului) */
-function introCount(k){ const el=$('#inCnt'); if(!el) return; const t0=performance.now(), a=.35*k, d=1.1*k;
-  const ease=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
-  const step=now=>{ if(!INTRO.on||INTRO.leaving) return; const p=clamp(((now-t0)/1000-a)/d,0,1), n=p>=1?10:1+Math.floor(ease(p)*9.999);
-    const s=(n<10?'0':'')+n; if(el.textContent!==s) el.textContent=s; if(p<1) requestAnimationFrame(step); };
-  requestAnimationFrame(step); }
 function introStart(){
   const intro=$('#intro'); let mode='full';
   try{ const m=JSON.parse(localStorage.getItem(K.intro)||'"full"'); if(['full','short','off'].indexOf(m)>=0) mode=m; }catch(e){}
@@ -9397,12 +9461,14 @@ function introStart(){
   INTRO.done=new Promise(res=>{ INTRO.resolve=res; });
   if(mode==='off'||motionOff()){ intro.remove(); $('.top .logo').classList.remove('wait'); INTRO.resolve(); return; }
   if(mode==='short') intro.classList.add('short');
-  INTRO.on=true; introDial(); introParticles(mode); introCount(mode==='full'?1:.42);
+  /* insigna zilei de azi (luni = 0), în centrul animației */
+  { const ib=$('#inLogo'), src=DAY_PH['d'+((new Date().getDay()+6)%7)]; if(ib&&src) ib.src=src; }
+  INTRO.on=true; introParticles(mode);
   setTimeout(()=>buzz([18,40,30]),Math.round(IN_T1*(mode==='full'?1000:420)));
   intro.addEventListener('click',introExit);
   setTimeout(introExit,mode==='full'?3700:1500);
 }
-/* ieșirea: logo-ul zboară în antet, poza se apropie, iar ecranul se strânge ca un iris în jurul logo-ului */
+/* ieșirea: insigna zboară în antet, poza se apropie, iar ecranul se strânge ca un iris în jurul logo-ului */
 function introExit(){
   if(INTRO.leaving) return; INTRO.leaving=true; INTRO.leftAt=performance.now();
   const intro=$('#intro'), il=$('#inLogo'), hl=$('.top .logo');
@@ -9412,7 +9478,7 @@ function introExit(){
     const r1=il.getBoundingClientRect(), r2=hl.getBoundingClientRect(), cx=r2.left+r2.width/2, cy=r2.top+r2.height/2;
     const dx=cx-(r1.left+r1.width/2), dy=cy-(r1.top+r1.height/2), sc=r2.width/r1.width;
     il.animate([{transform:'translate(0,0) scale(1)',opacity:1},{transform:`translate(${dx}px,${dy}px) scale(${sc})`,opacity:1}],{duration:560,easing:'cubic-bezier(.6,0,.2,1)',fill:'forwards'});
-    intro.querySelectorAll('.in-word,.in-bar,.in-sub,.in-skip,.in-ring,.in-dial,.in-cnt').forEach(el=>el.animate([{opacity:1},{opacity:0,transform:'translateY(14px)'}],{duration:240,fill:'forwards'}));
+    intro.querySelectorAll('.in-word,.in-bar,.in-sub,.in-skip,.in-ring,.in-stitch,.in-sheen').forEach(el=>el.animate([{opacity:1},{opacity:0,transform:'translateY(14px)'}],{duration:240,fill:'forwards'}));
     const ph=intro.querySelector('.in-ph'); if(ph) ph.animate([{transform:'scale(1.03)'},{transform:'scale(1.12)'}],{duration:700,easing:'cubic-bezier(.6,0,.2,1)',fill:'forwards'});
     const a=intro.animate([{clipPath:`circle(${Math.hypot(innerWidth,innerHeight)}px at ${cx}px ${cy}px)`},{clipPath:`circle(${r2.width/2}px at ${cx}px ${cy}px)`}],
       {duration:640,delay:60,easing:'cubic-bezier(.7,0,.25,1)',fill:'forwards'});
