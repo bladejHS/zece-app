@@ -1,0 +1,136 @@
+---
+/**
+ * PreCheckIn — Formular rapid înainte de sesiune
+ * Readiness, sleep, energy, soreness — thumb-zone friendly
+ */
+export interface Props {
+  onSubmit?: string; // ID formă sau data attribute pentru JS handler
+}
+const { onSubmit } = Astro.props;
+---
+
+<form class="precheck" data-a={onSubmit}>
+  <h2 class="precheck-title">Check-in Sesiune</h2>
+  <p class="precheck-sub">Răspunde sincer — adaptăm antrenamentul la starea ta.</p>
+
+  <fieldset class="field-group">
+    <legend>Energie</legend>
+    <div class="scale-row">
+      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((v) => (
+        <label class="scale-opt">
+          <input type="radio" name="energy" value={v} required />
+          <span class="scale-btn">{v}</span>
+        </label>
+      ))}
+    </div>
+    <span class="scale-labels"><span>Scăzută</span><span>Ridicată</span></span>
+  </fieldset>
+
+  <fieldset class="field-group">
+    <legend>Somn (ore)</legend>
+    <div class="scale-row">
+      {[4, 5, 6, 7, 8, 9, 10].map((v) => (
+        <label class="scale-opt">
+          <input type="radio" name="sleep" value={v} required />
+          <span class="scale-btn">{v}</span>
+        </label>
+      ))}
+    </div>
+  </fieldset>
+
+  <fieldset class="field-group">
+    <legend>DOMS / Durere musculară</legend>
+    <div class="scale-row">
+      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((v) => (
+        <label class="scale-opt">
+          <input type="radio" name="soreness" value={v} required />
+          <span class="scale-btn">{v}</span>
+        </label>
+      ))}
+    </div>
+    <span class="scale-labels"><span>Deloc</span><span>Severă</span></span>
+  </fieldset>
+
+  <button type="submit" class="btn btn-pri btn-lg precheck-submit">Începe Antrenamentul</button>
+</form>
+
+<style>
+  .precheck {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s6x);
+    padding: var(--s6x);
+  }
+  .precheck-title {
+    font-family: var(--fd);
+    font-size: var(--t-2xl);
+    color: var(--tx);
+  }
+  .precheck-sub {
+    color: var(--mu);
+    font-size: var(--t-sm);
+    margin-top: calc(-1 * var(--s3x));
+  }
+  .field-group {
+    border: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--s2x);
+  }
+  .field-group legend {
+    font-family: var(--fd);
+    font-size: var(--t-md);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--mu);
+    margin-bottom: var(--s1x);
+  }
+  .scale-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(44px, 1fr));
+    gap: var(--s1x);
+  }
+  .scale-opt input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .scale-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    min-width: 44px;
+    border-radius: var(--r-xs);
+    background: var(--s2);
+    border: 1px solid var(--ln);
+    color: var(--mu);
+    font-family: var(--fm);
+    font-size: var(--t-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--dur-interact) var(--e-snap);
+  }
+  .scale-opt input:checked + .scale-btn {
+    background: var(--ac);
+    color: var(--bg);
+    border-color: var(--ac);
+    box-shadow: var(--sh-btn);
+  }
+  .scale-opt input:focus-visible + .scale-btn {
+    outline: 2px solid var(--amber);
+    outline-offset: 2px;
+  }
+  .scale-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--t-xs);
+    color: var(--mu2);
+    padding: 0 var(--s1x);
+  }
+  .precheck-submit {
+    margin-top: var(--s4x);
+    width: 100%;
+  }
+</style>

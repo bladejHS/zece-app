@@ -1,0 +1,28 @@
+node_modules/
+dist/
+.astro/
+*.log
+.env
+.env.*
+!.env.example
+
+# Legacy monolith files (not part of Astro v9)
+index.html
+umbra-intro-spike.html
+vox.json
+sw.js
+gen-icons.js
+cover.jpg
+intro-sri.jpg
+band-*.jpg
+day-d*.jpg
+kb-*.jpg
+apple-touch-icon.png
+icon-192.png
+icon-512.png
+icon.svg
+manifest.webmanifest
+
+# Tool-specific directories
+.claude/
+.impeccable/

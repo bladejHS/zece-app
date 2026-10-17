@@ -1,0 +1,89 @@
+---
+/**
+ * BaseLayout — Shell PWA cu meta tags, font preconnect, theme-color
+ * Importă tokens.css global + setează viewport-fit cover pentru iOS safe area
+ */
+import '@/styles/tokens.css';
+
+export interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'ZECE',
+  description = 'Sistem holistic de pregătire pentru luptători',
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta name="theme-color" content="#0A0A0C" />
+
+  <!-- PWA -->
+  <link rel="icon" type="image/svg+xml" href="/zece-app/icon.svg" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/zece-app/apple-touch-icon.png" />
+  <link rel="manifest" href="/zece-app/manifest.webmanifest" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="ZECE" />
+  <meta name="mobile-web-app-capable" content="yes" />
+
+  <!-- Font preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
+</head>
+<body>
+  <slot />
+
+  <!-- Wake Lock & Haptic utility (client-side only) -->
+  <script define:vars={{}}>
+    // Wake Lock API wrapper
+    window.ZeceWakeLock = {
+      lock: null,
+      async request() {
+        if (!('wakeLock' in navigator)) return;
+        try {
+          this.lock = await navigator.wakeLock.request('screen');
+          this.lock.addEventListener('release', () => { this.lock = null; });
+        } catch (e) { /* user denied or not supported */ }
+      },
+      release() {
+        if (this.lock) { this.lock.release(); this.lock = null; }
+      }
+    };
+
+    // Haptic feedback wrapper
+    window.ZeceHaptic = {
+      tap() { navigator.vibrate?.(10); },
+      success() { navigator.vibrate?.([10, 30, 10]); },
+      warning() { navigator.vibrate?.([30, 50, 30]); },
+      error() { navigator.vibrate?.([50, 80, 50, 80, 50]); }
+    };
+  </script>
+</body>
+</html>
+
+<style is:global>
+  /* Ambient grain overlay — texture industrială subtilă */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 256px 256px;
+  }
+</style>

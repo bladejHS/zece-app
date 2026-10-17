@@ -1,0 +1,144 @@
+---
+/**
+ * RoundCard — Afișează o rundă/fază de antrenament cu timer, instrucțiuni și progres
+ * Thumb-zone friendly: acțiuni în jumătatea inferioară, info critică centru-sus
+ */
+import TimerSegmented from '@/components/ui/TimerSegmented.astro';
+import ProgressBar from '@/components/ui/ProgressBar.astro';
+
+export interface Props {
+  label: string;
+  phase: 'warmup' | 'work' | 'rest' | 'cooldown' | 'stretch' | 'breath';
+  durationSeconds: number;
+  instructions?: string;
+  currentRound?: number;
+  totalRounds?: number;
+  isActive?: boolean;
+  isCompleted?: boolean;
+}
+
+const {
+  label,
+  phase,
+  durationSeconds,
+  instructions,
+  currentRound,
+  totalRounds,
+  isActive = false,
+  isCompleted = false,
+} = Astro.props;
+
+const roundLabel = totalRounds && currentRound
+  ? `Runda ${currentRound}/${totalRounds}`
+  : null;
+---
+
+<div
+  class:list={[
+    'round-card',
+    `phase-${phase}`,
+    { 'is-active': isActive, 'is-completed': isCompleted },
+  ]}
+  data-phase={phase}
+>
+  <header class="round-header">
+    <span class="round-badge">{phase.toUpperCase()}</span>
+    {roundLabel && <span class="round-count">{roundLabel}</span>}
+  </header>
+
+  <div class="round-timer">
+    <TimerSegmented
+      seconds={durationSeconds}
+      phase={phase === 'warmup' ? 'prep' : phase === 'cooldown' || phase === 'stretch' ? 'cooldown' : phase}
+      label={label}
+    />
+  </div>
+
+  {instructions && (
+    <p class="round-instructions">{instructions}</p>
+  )}
+
+  {isActive && (
+    <div class="round-progress">
+      <ProgressBar value={0} variant={phase === 'rest' ? 'rest' : 'work'} label="Progres rundă" />
+    </div>
+  )}
+
+  <slot name="actions" />
+</div>
+
+<style>
+  .round-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--s4x);
+    padding: var(--s6x) var(--s4x);
+    border-radius: var(--r-md);
+    background: var(--glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--ln);
+    transition: border-color var(--dur-transition) var(--e-snap),
+                background var(--dur-transition) var(--e-snap);
+  }
+
+  .round-card.is-active {
+    border-color: var(--ac);
+    background: var(--glass2);
+    box-shadow: var(--sh-pop);
+  }
+
+  .round-card.is-completed {
+    opacity: 0.5;
+    border-color: var(--ok);
+  }
+
+  .round-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .round-badge {
+    font-family: var(--fd);
+    font-size: var(--t-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: var(--s1x) var(--s3x);
+    border-radius: var(--r-xs);
+    background: var(--a14);
+    color: var(--ac);
+  }
+
+  .phase-work .round-badge { background: color-mix(in srgb, var(--amber) 14%, transparent); color: var(--amber); }
+  .phase-rest .round-badge { background: color-mix(in srgb, var(--cyan) 14%, transparent); color: var(--cyan); }
+  .phase-cooldown .round-badge,
+  .phase-stretch .round-badge { background: color-mix(in srgb, var(--ok) 14%, transparent); color: var(--ok); }
+
+  .round-count {
+    font-family: var(--fm);
+    font-size: var(--t-sm);
+    font-variant-numeric: tabular-nums;
+    color: var(--mu);
+  }
+
+  .round-timer {
+    padding: var(--s4x) 0;
+  }
+
+  .round-instructions {
+    text-align: center;
+    font-size: var(--t-md);
+    color: var(--mu);
+    line-height: 1.6;
+    max-width: 48ch;
+  }
+
+  .round-progress {
+    width: 100%;
+    max-width: 320px;
+  }
+</style>
