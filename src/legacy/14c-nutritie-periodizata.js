@@ -11,9 +11,11 @@ function nutriDay(k){
   if(dl&&type!=='rest') type='deload';
   return {type,label:NUTRI.DAY_LABEL[type],t:day.t,minutes:type==='rest'?0:(+day.min||60),intensity:type==='high'?'high':type==='rest'?'low':'moderate'}; }
 /* semnalele de azi pentru adaptare: energia din check-in-ul de kickboxing, readiness, RPE-ul ultimei sesiuni (2 zile) */
+/* readiness() → recoveryAt() poate cere la rândul ei targets(): fără reintrare, altfel ar fi o buclă */
+let NCI_BUSY=false;
 function nutriCi(k){ const kc=(S.kb||{}).ci, o={};
   if(kc&&kc.date===k) o.energy=kc.energy;
-  try{ const r=readiness(k); if(r&&r.v!=null) o.readiness=r.v; }catch(e){}
+  if(!NCI_BUSY){ NCI_BUSY=true; try{ const r=readiness(k); if(r&&r.v!=null) o.readiness=r.v; }catch(e){} finally{ NCI_BUSY=false; } }
   const since=dayShift(k,-2), h=(S.hist||[]).filter(x=>x.date>=since&&x.rpe).pop(), x=(S.ext||[]).filter(e=>e.date>=since&&e.rpe&&!e.dup).pop();
   const rpe=Math.max(h?+h.rpe:0,x?+x.rpe:0); if(rpe) o.lastRpe=rpe;
   return o; }
