@@ -158,15 +158,18 @@ async function techLoad(n,force){
   if(S.tech[n]&&!force){ shRender(); return; }
   if(!S.aiKey){ SH.err='nokey'; shRender(); return; }
   SH.busy=true; shRender(); let A=null;
-  try{ A=await loadSdk(); const client=new A({apiKey:S.aiKey,dangerouslyAllowBrowser:true});
-    const msg=await client.beta.messages.create({model:AI_MODEL,max_tokens:16000,betas:['server-side-fallback-2026-07-01'],fallbacks:'default',
-      output_config:{effort:'low',format:{type:'json_schema',schema:TECH_SCHEMA}},messages:[{role:'user',content:techPrompt(n)}]});
+  try{ COACH.preflight(); A=await loadSdk(); const client=COACH.client(A,S.aiKey);
+    const msg=await client.beta.messages.stream({model:AI_MODEL,max_tokens:16000,betas:['server-side-fallback-2026-07-01'],fallbacks:'default',
+      output_config:{effort:'low',format:{type:'json_schema',schema:TECH_SCHEMA}},messages:[{role:'user',content:techPrompt(n)}]}).finalMessage();
     if(msg.stop_reason==='refusal') throw new Error('__refuz');
     const r=JSON.parse(msg.content.filter(b=>b.type==='text').map(b=>b.text).join(''));
+    /* indicațiile de tehnică trec prin filtru fără accidentări: descriu exercițiul cerut, nu îl recomandă */
+    const v=COACH.verify('tehnică',[].concat(r.muscles||[],r.cues||[],r.mistakes||[],[r.safety||'']).join('. '),Object.assign(aiCtx(),{injuries:[]}));
+    if(!v.ok) throw new Error('__filtru:'+v.message);
     const t=Object.assign({},S.tech); t[n]={muscles:(r.muscles||[]).slice(0,5),cues:(r.cues||[]).slice(0,7),mistakes:(r.mistakes||[]).slice(0,5),safety:r.safety||'',at:todayKey()};
     await save('tech',t); await save('aiUsed',(S.aiUsed||0)+1);
     if(SH&&SH.kind==='tech'&&SH.n===n){ SH.busy=false; SH.err=null; }
-  }catch(e){ if(SH&&SH.kind==='tech'&&SH.n===n){ SH.busy=false; SH.err=e&&e.message==='__refuz'?'Modelul a refuzat cererea.':e instanceof SyntaxError?'Răspunsul nu a putut fi citit. Mai încearcă.':aiErrText(e,A); } }
+  }catch(e){ if(SH&&SH.kind==='tech'&&SH.n===n){ SH.busy=false; SH.err=e&&e.message==='__refuz'?'Modelul a refuzat cererea.':e&&/^__filtru:/.test(e.message)?e.message.slice(9):e instanceof SyntaxError?'Răspunsul nu a putut fi citit. Mai încearcă.':aiErrText(e,A); } }
   if(SH&&SH.kind==='tech'&&SH.n===n) shRender();
   STC=null;
 }

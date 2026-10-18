@@ -19,7 +19,7 @@ let SFAIL=0;
 function storeFail(e){ const now=Date.now(); if(now-SFAIL<60000) return; SFAIL=now;
   setTimeout(()=>toast('Nu s-a putut salva',/quota/i.test(String(e&&(e.name+' '+e.message)))?'Spațiul browserului e plin. Exportă o copie din Setări → Datele tale.':'Browserul a refuzat salvarea (poate e modul privat). Exportă o copie din Setări.','info'),0); }
 const K={lifts:'zece:lifts',weights:'zece:weights',runs:'zece:runs',wlog:'zece:wlog',cyc:'zece:cyc',runPlan:'zece:runPlan',prof:'zece:nutri',mlog:'zece:mlog',
-  hist:'zece3:hist',sess:'zece3:sess',sound:'zece3:sound',aiKey:'zece3:aiKey',aiChat:'zece3:aiChat',aiEffort:'zece3:aiEffort',aiUsed:'zece3:aiUsed',
+  hist:'zece3:hist',sess:'zece3:sess',sound:'zece3:sound',aiChat:'zece3:aiChat',aiEffort:'zece3:aiEffort',aiUsed:'zece3:aiUsed',
   water:'zece3:water',body:'zece3:body',theme:'zece3:theme',fx:'zece3:fx',onb:'zece3:onb',seenAch:'zece3:seenAch',seenLvl:'zece3:lvl',
   journal:'zece3:journal',tech:'zece3:tech',voice:'zece3:voice',recapSeen:'zece3:recap',
   mplan:'zece3:mplan',shop:'zece3:shop',mf:'zece3:mf',intro:'zece3:intro',motion:'zece3:motion',motionAsked:'zece3:motionAsked',

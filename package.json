@@ -1,5 +1,5 @@
 {
-  "name": "garda",
+  "name": "zece",
   "version": "15.0.0",
   "private": true,
   "type": "module",
@@ -10,9 +10,11 @@
     "dev": "astro dev",
     "build": "npm run check && astro build",
     "preview": "astro preview",
-    "check": "astro check && tsc -p src/sw"
+    "check": "astro check && tsc -p src/sw",
+    "test": "node --test \"src/**/*.test.ts\""
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "0.131.0",
     "astro": "^7.4.0"
   },
   "devDependencies": {

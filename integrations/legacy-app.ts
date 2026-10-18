@@ -15,7 +15,7 @@ const DIR = join(process.cwd(), 'src/legacy');
 export default function legacyApp(): Plugin {
   const files = (): string[] => readdirSync(DIR).filter((f) => f.endsWith('.js')).sort();
   return {
-    name: 'garda:legacy-app',
+    name: 'zece:legacy-app',
     resolveId: (id) => (id === ID ? RESOLVED : null),
     load(id) {
       if (id !== RESOLVED) return null;
@@ -24,7 +24,11 @@ export default function legacyApp(): Plugin {
         this.addWatchFile(path);
         return `/* ── ${f} ── */\n${readFileSync(path, 'utf8')}`;
       });
-      return `import VOX_INDEX from '/src/data/vox-index.json';\n${parts.join('\n')}`;
+      const imports = [
+        `import VOX_INDEX from '/src/data/vox-index.json';`,
+        `import * as COACH from '/src/lib/coach/index.ts';`,
+      ];
+      return `${imports.join('\n')}\n${parts.join('\n')}`;
     },
     handleHotUpdate({ file, server }) {
       if (!file.startsWith(DIR)) return;

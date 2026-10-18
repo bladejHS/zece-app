@@ -85,10 +85,11 @@ function viewSet(){
     ${key?`<div class="set-row" style="margin-top:6px"><span class="sp">Cheie API salvată <span class="mu sm">· ${esc(key.slice(0,10))}…${esc(key.slice(-4))}</span></span>
         <button class="btn ghost sm danger" data-a="aiKeyDel" data-confirm="Sigur? Apasă iar">${ic('trash')} Șterge</button></div>`
       :`<div class="keybox"><input class="inp" id="aiKeyIn" type="password" autocomplete="off" placeholder="sk-ant-…" aria-label="Cheia API Anthropic"><button class="btn pri" data-a="aiKeySave">Salvează</button></div>`}
-    <div class="note">Cheia rămâne doar în browserul acesta și pleacă numai spre api.anthropic.com. O creezi în <b>console.anthropic.com → API Keys</b>; contul are nevoie de credit.</div>
+    <div class="note">Cheia stă criptată (AES-GCM) doar pe acest dispozitiv, nu intră în export sau în sincronizare și pleacă numai spre api.anthropic.com. O creezi în <b>console.anthropic.com → API Keys</b>; contul are nevoie de credit.</div>
     <div class="sm" style="margin-top:14px;font-weight:600">Cât de mult gândește</div>
     <div class="seg">${[['low','Rapid'],['medium','Echilibrat'],['high','Profund']].map(e=>`<button class="${S.aiEffort===e[0]?'on':''}" data-a="aiEffort" data-k="${e[0]}">${e[1]}</button>`).join('')}</div>
     <div class="note">„Echilibrat" e potrivit pentru aproape orice. „Profund" răspunde mai încet și costă mai mult. Fără cheie, căutarea (Ctrl+K) răspunde oricum la întrebările simple din datele tale.</div></div>
+  ${aiSafetyCard()}
 
   <div class="set-h" id="sTrain">Antrenament</div>
   ${icsCard()}

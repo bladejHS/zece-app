@@ -1,11 +1,12 @@
 /* =====================================================================
-   12 · ANTRENORUL AI — Claude prin SDK-ul oficial Anthropic, direct din browser
+   12 · ANTRENORUL AI — Claude prin SDK-ul oficial Anthropic (inclus în aplicație), direct din browser, cu cheia utilizatorului.
+   Tot ce ține de siguranță e în src/lib/coach (COACH): cheia criptată, limita de cereri, filtrul pe răspunsuri, modul offline.
    ===================================================================== */
-const SDK_URL='https://cdn.jsdelivr.net/npm/@anthropic-ai/sdk@0.131.0/+esm';
 const AI_MODEL='claude-opus-5-5';
-const AI={busy:false,stream:null,live:'',err:null,draft:'',usage:null,usageModel:null,retry:false,note:null,rec:null};
-let sdkP=null;
-function loadSdk(){ return sdkP||(sdkP=import(SDK_URL).then(m=>m.default||m.Anthropic).catch(e=>{ sdkP=null; throw e; })); }
+const AI={busy:false,stream:null,live:'',err:null,draft:'',usage:null,usageModel:null,retry:false,note:null,rec:null,offline:null};
+const loadSdk=COACH.sdk;
+/* contextul filtrului: sexul (pragul de calorii) și accidentările declarate */
+const aiCtx=()=>{ const P=prof(); return {sex:P.sex==='f'?'f':'m',injuries:(Array.isArray(P.inj)?P.inj:[]).filter(COACH.isInjury)}; };
 const AI_SYS=`Ești antrenorul personal din aplicația ZECE, care urmează programul hibrid Hybrid365 (forță + alergare).
 Programul are cicluri de 4 săptămâni cu aceeași săptămână-tip:
 - Luni: Easy run Z2 + Upper (Bench Press, Pull Up / Lat Pulldown, Incline Dumbbell Press, Chest Supported Row, Lateral Raise, Tricep Pushdown, Bicep Curl)
@@ -26,6 +27,7 @@ Cum răspunzi:
 - Țintele de calorii și proteină din aplicație sunt estimări; judecă după trendul greutății pe mai multe săptămâni.
 - Dacă îți lipsesc date ca să răspunzi bine, spune exact ce să noteze în aplicație. Nu inventa valori.
 - Siguranță: la durere ascuțită, durere în piept, amețeală sau o posibilă accidentare, recomanzi să se oprească și să meargă la medic sau kinetoterapeut; nu pui diagnostice. Nu recomanda deficite calorice extreme sau o scădere în greutate mai rapidă de aproximativ 1% din greutatea corporală pe săptămână.
+- Limite fixe (aplicația oprește răspunsurile care le încalcă): nu pomeni deloc test boosters, arzătoare de grăsimi, prohormoni, SARMs, steroizi sau diuretice, nici măcar ca să le descurajezi; nu propune un aport sub 1600 kcal pe zi pentru femei sau 2000 kcal pe zi pentru bărbați; nu propune mai mult de 7 zile de antrenament la rând fără o zi de odihnă; nu recomanda exerciții care solicită zonele declarate accidentate (le găsești în profil) și nici nu le numi, propune direct alternativa.
 - Ai unelte de citire (get_workouts, get_exercise_history, get_runs, get_records, get_period_summary, get_body, get_goals, get_insights) care întorc date exacte din aplicație. Folosește-le ori de câte ori întrebarea cere mai mult decât rezumatul de mai jos: istoric complet, comparații între antrenamente sau alergări, recorduri, perioade anume. Răspunde doar din ce întorc; dacă o unealtă nu găsește date, spune ce lipsește.
 - Ai unelte prin care notezi date în aplicație (greutate, alergare, masă, apă, măsurători) și schimbi progresia alergărilor. Folosește-le doar când utilizatorul îți dă valorile și vrea să le notezi (de exemplu „am 131,4 kg azi" sau „notează-mi alergarea de 8 km în 55 de minute"); nu inventa valori pentru unelte. Utilizatorul confirmă fiecare acțiune în aplicație; după rezultat, confirmă pe scurt ce s-a notat.
 - Format: răspunsuri scurte (de regulă sub 180 de cuvinte), paragrafe scurte și liste cu liniuță, **bold** pentru cifrele-cheie. Fără tabele.`;
@@ -77,9 +79,10 @@ function toolInfo(name,inp){
 function snapshot(){
   const out=[], tk=todayKey(), P=prof();
   const sec=(t,f)=>{ try{ const v=f(); if(v) out.push('## '+t+'\n'+v); }catch(e){} };
-  sec('Numele aplicației',()=>'Aplicația se numește acum UMBRA (înainte se numea ZECE, apoi VULTUR). Când o pomenești, spune-i UMBRA.');
+  sec('Numele aplicației',()=>'Aplicația se numește ZECE (a purtat o vreme numele VULTUR și UMBRA). Când o pomenești, spune-i ZECE.');
   sec('Data de azi',()=>tk+', '+DAYN[(parseKey(tk).getDay()+6)%7]);
   sec('Profil',()=>`${P.sex==='f'?'Femeie':'Bărbat'}, ${P.age} ani, ${P.h} cm. Greutate la start ${P.startW} kg, țintă ${P.goalW} kg.`);
+  sec('Accidentări declarate (evită exercițiile care solicită aceste zone)',()=>aiCtx().injuries.map(i=>COACH.INJURIES[i]).join(', '));
   sec('Greutate',()=>{ const a=wList(); if(!a.length) return 'Nicio cântărire notată.'; const ws=wStats();
     return `Ultima cântărire: ${num(ws.last.w)} kg (${ws.last.d}). Media pe 7 zile: ${num(ws.a7)} kg.`+(ws.wk!=null?` Ritm: ${ws.wk>0?'+':''}${num(ws.wk,2)} kg/săptămână.`:'')+
       `\nCântăriri recente: ${a.slice(-14).map(x=>x.d.slice(5)+' '+num(x.w)).join(', ')}.`; });
@@ -115,7 +118,7 @@ function snapshot(){
   sec('Abdomen adăugat în plan (la cererea utilizatorului)',()=>'La finalul zilelor de upper: luni Hanging Leg Raise 3×8–12 și Plank 3 × 45–60 s; miercuri Dragon Flag 4×3–6 (negative lente până la repetări complete) și Pallof Press 3×10–12 pe parte; vineri Dragon Flag 3×3–6 și Ab Wheel Rollout 3×8–10. Sunt opționale: le face când vrea, iar o zi fără ele e tot completă (bifele numără doar exercițiile de dinainte). Nu trata sărirea lor ca pe o abatere de la plan.');
   sec('Kickboxing (în afara planului)',()=>kbAiCtx());
   sec('Alte antrenamente, importate din Strava (ex. Polar Beat) sau notate manual (ultimele 14 zile)',()=>(S.ext||[]).filter(x=>x.date>=dayShift(tk,-13)).sort((a,b)=>a.start-b.start)
-    .map(x=>`- ${x.date} ${stName(x.type)}${x.name?' „'+x.name+'”':''}: ${num(x.min,0)} min`+(x.km?`, ${num(x.km,1)} km`:'')+(x.hr?`, puls mediu ${x.hr}`+(x.hrMax?` (max ${x.hrMax})`:''):'')+(x.rpe?`, efort ${x.rpe}/10`:'')+(x.dup?' — același antrenament ca o sesiune UMBRA, numărat o singură dată':'')).join('\n'));
+    .map(x=>`- ${x.date} ${stName(x.type)}${x.name?' „'+x.name+'”':''}: ${num(x.min,0)} min`+(x.km?`, ${num(x.km,1)} km`:'')+(x.hr?`, puls mediu ${x.hr}`+(x.hrMax?` (max ${x.hrMax})`:''):'')+(x.rpe?`, efort ${x.rpe}/10`:'')+(x.dup?' — același antrenament ca o sesiune ZECE, numărat o singură dată':'')).join('\n'));
   sec('Readiness și profilul atletului (indicatori de antrenament, nu medicali)',()=>{ const R=readiness(), tw=twinNow();
     let s=R.v!=null?`Readiness azi: ${R.v}/100 (recuperare ${R.rec.v}, echilibru încărcare ${R.ls!=null?R.ls:'—'}). Factori: `+R.f.map(([v,t])=>(v>0?'+':'')+v+' '+t).join('; ')+'.':'Fără check-in azi.';
     s+='\nAtribute (0–100): '+ATTR.concat([['cons','Consecvență']]).map(([id,l])=>{ const a=tw.now[id]; return l+' '+(a?a.v:'—'); }).join(', ')+'.';
@@ -142,6 +145,7 @@ function echoable(c){ const a=Array.isArray(c)?c:[]; let lf=-1; a.forEach((b,i)=
   return a.filter((b,i)=>!(i<lf&&/^(thinking|redacted_thinking|tool_use)$/.test(b.type))); }
 const msgText=m=>typeof m.content==='string'?m.content:(m.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('\n\n');
 function aiErrText(e,A){
+  const own=COACH.errText(e,A); if(own) return own;
   if(!A) return 'Nu am putut încărca SDK-ul Anthropic. Verifică conexiunea la internet și încearcă din nou.';
   if(e instanceof A.AuthenticationError) return 'Cheia API nu e validă. Verific-o în Setări → Antrenor AI.';
   if(e instanceof A.PermissionDeniedError) return 'Cheia nu are acces la acest model. Verifică organizația din console.anthropic.com.';
@@ -163,6 +167,7 @@ function toolResults(chat,refuseMsg){ return lastToolIds(chat).map(id=>{ const t
 async function aiSend(text){
   text=(text||'').trim(); if(!text||AI.busy) return;
   S.tab='coach';
+  const ci=COACH.checkInput(text); if(!ci.ok){ AI.err=ci.reason; AI.draft=text; render(); return; } text=ci.text;
   if(!S.aiKey){ AI.err='Adaugă mai întâi cheia API (mai jos), apoi trimite din nou.'; AI.draft=text; render(); return; }
   if(AI.rec) try{ AI.rec.stop(); }catch(e){}
   let chat=S.aiChat&&S.aiChat.msgs&&S.aiChat.msgs.length?S.aiChat:null;
@@ -181,8 +186,9 @@ async function runTurn(rb){
   render(); scrollEnd(true);
   let A=null;
   try{
+    COACH.preflight();
     A=await loadSdk();
-    const client=new A({apiKey:S.aiKey,dangerouslyAllowBrowser:true});
+    const client=COACH.client(A,S.aiKey);
     const stream=client.beta.messages.stream({
       model:AI_MODEL, max_tokens:64000,
       betas:['server-side-fallback-2026-07-01'], fallbacks:'default',
@@ -192,15 +198,21 @@ async function runTurn(rb){
       tools:AI_TOOLS.concat(AI_RTOOLS),
       messages:chat.msgs
     });
-    AI.stream=stream;
-    stream.on('text',d=>{ AI.live+=d; paintLive(); });
+    AI.stream=stream; AI.shown=''; AI.blocked=null;
+    /* pe ecran ajung doar propozițiile întregi care au trecut de filtru; la prima problemă stream-ul se oprește */
+    stream.on('text',d=>{ AI.live+=d; if(AI.blocked) return; const g=COACH.gate('chat',AI.live,aiCtx()); AI.shown=g.shown;
+      if(g.blocked&&!AI.blocked){ AI.blocked=g.blocked.message; try{ stream.abort(); }catch(e){} } paintLive(); });
     const msg=await stream.finalMessage();
     AI.stream=null;
     if(msg.stop_reason==='refusal'){
       if(rb) rollback(chat,rb); else AI.retry=true;
       AI.err='Modelul a refuzat cererea (filtrele de siguranță). Reformulează întrebarea.';
     } else {
-      const content=echoable(msg.content); chat.msgs.push({role:'assistant',content});
+      let content=echoable(msg.content);
+      const v=COACH.verify('chat',content.filter(b=>b.type==='text').map(b=>b.text).join('\n\n'),aiCtx());
+      /* răspuns oprit: în istoric rămâne doar mesajul sigur (fără uneltele propuse în același răspuns) */
+      if(!v.ok) content=[{type:'text',text:v.message}];
+      chat.msgs.push({role:'assistant',content});
       AI.usage=msg.usage; AI.usageModel=msg.model; await save('aiUsed',(S.aiUsed||0)+1);
       const tus=content.filter(b=>b.type==='tool_use');
       if(tus.length&&msg.stop_reason==='max_tokens'){ tus.forEach(b=>{ chat.tools[b.id]={status:'err',res:'Intrarea uneltei a fost tăiată la limita de lungime; nu am executat-o.'}; });
@@ -219,20 +231,67 @@ async function runTurn(rb){
     }
   }catch(err){
     AI.stream=null;
+    if(AI.blocked){ chat.msgs.push({role:'assistant',content:[{type:'text',text:AI.blocked}]}); AI.blocked=null; AI.busy=false; AI.live=''; AI.shown='';
+      await saveChat(); if(S.tab==='coach'){ render(); scrollEnd(); } else renderNav(); return; }
+    if(rb&&COACH.isOffline(err,A)){ AI.busy=false; AI.live=''; AI.shown=''; await aiOffline(chat,rb); return; }
     const aborted=!!(A&&err instanceof A.APIUserAbortError);
     /* intrarea unei unelte n-a putut fi citită deloc (JSON invalid): reiau pasul, de cel mult două ori; erorile API merg mai departe */
     if(A&&!aborted&&!(err instanceof A.APIError)&&(AI.jsonRetry||0)<2){ AI.jsonRetry=(AI.jsonRetry||0)+1; AI.busy=false; AI.live=''; return runTurn(rb); }
-    if(aborted&&AI.live.trim()) chat.msgs.push({role:'assistant',content:[{type:'text',text:AI.live.trim()+' […]'}]});
+    if(aborted&&(AI.shown||'').trim()) chat.msgs.push({role:'assistant',content:[{type:'text',text:AI.shown.trim()+' […]'}]});
     else if(rb) rollback(chat,rb);
     else if(!aborted) AI.retry=true;
     if(!aborted) AI.err=aiErrText(err,A);
   }
-  AI.busy=false; AI.live='';
+  AI.busy=false; AI.live=''; AI.shown='';
   if(S.aiChat&&!S.aiChat.msgs.length) S.aiChat=null;
   await saveChat();
   if(again&&S.aiChat) return runTurn(null);
   if(S.tab==='coach'){ render(); scrollEnd(); } else renderNav();
 }
+/* ---------- Setări: filtrul de siguranță ---------- */
+function aiSafetyCard(){
+  const inj=aiCtx().injuries, inc=COACH.incidents.list().slice().reverse(), use=COACH.limits.usage();
+  const SRC={tier3:'suplimente nesigure',kcal:'calorii sub prag',streak:'prea multe zile la rând',injury:'zonă accidentată'};
+  return `<div class="card"><div class="eyebrow">${ic('alert')} Filtrul de siguranță</div>
+    <div class="sm" style="margin-top:6px;font-weight:600">Accidentări declarate</div>
+    <div class="chips" style="margin-top:6px">${Object.keys(COACH.INJURIES).map(k=>`<button class="chip ${inj.indexOf(k)>=0?'on':''}" data-a="aiInj" data-k="${k}" aria-pressed="${inj.indexOf(k)>=0}">${esc(COACH.INJURIES[k])}</button>`).join('')}</div>
+    <div class="note">Antrenorul AI nu recomandă exerciții care solicită zonele bifate; răspunsurile care o fac sunt oprite.</div>
+    <div class="note">Orice răspuns e verificat înainte să apară: fără suplimente nesigure (test boosters, arzătoare de grăsimi, prohormoni), fără sub ${COACH.KCAL_FLOOR[aiCtx().sex]} kcal pe zi, fără mai mult de 7 zile de antrenament la rând. Cereri: ${use.map(u=>`${u.used}/${u.max} în ${u.label}`).join(' · ')}.</div>
+    ${inc.length?`<details class="notes" style="border:0;padding:0;margin-top:8px"><summary class="sm">${inc.length} ${inc.length===1?'răspuns oprit':'răspunsuri oprite'} · de verificat</summary>
+      ${inc.slice(0,20).map(x=>`<div class="note"><b>${esc(fmtDay(x.t.slice(0,10)))} · ${esc(x.src)} · ${esc(SRC[x.code]||x.code)}</b> („${esc(x.match)}")<div class="xs mu" style="margin-top:4px;white-space:pre-wrap">${esc(x.text.slice(0,600))}</div></div>`).join('')}
+      <button class="btn ghost sm" data-a="aiIncClear" data-confirm="Sigur? Apasă iar">${ic('trash')} Șterge lista</button></details>`:''}</div>`;
+}
+/* ---------- Offline Coach: fără conexiune răspund regulile locale; întrebarea așteaptă în IndexedDB ---------- */
+function offlineAnswer(q){
+  try{ const a=palAnswer(q); if(a) return '<b>'+esc(a.t)+'</b><div>'+a.ans+'</div>'; }catch(e){}
+  try{ const nx=nextDay(), P=nx&&(adjFor(nx.w,nx.d)||adaptFor(nx.w,nx.d));
+    if(P) return '<b>Următorul antrenament · '+esc(P.title||'')+'</b><div>'+esc((P.groups||[]).map(g=>g.why).join(' ')||P.calm||'Planul rămâne neschimbat.')+'</div>'; }catch(e){}
+  return 'Fără conexiune nu pot răspunde la întrebare. Planul de azi rămâne valabil; ajustările după check-in se fac în continuare după reguli.';
+}
+async function aiOffline(chat,rb){
+  rollback(chat,rb); AI.draft=''; AI.err=null;
+  const html=offlineAnswer(rb.text), tmp=document.createElement('div'); tmp.innerHTML=html;
+  AI.offline={q:rb.text,html};
+  try{ await COACH.queue.add({kind:'chat',t:new Date().toISOString(),question:rb.text,localAnswer:tmp.textContent.trim().slice(0,600)}); }catch(e){}
+  if(S.aiChat&&!S.aiChat.msgs.length) S.aiChat=null;
+  await saveChat(); if(S.tab==='coach'){ render(); scrollEnd(); } else renderNav();
+}
+/* la revenirea online: întrebările puse offline pleacă împreună la antrenorul AI, cu răspunsurile locale, ca să le verifice;
+   adaptările de azi făcute după reguli sunt verificate de AI (adjAI) */
+let aiSyncing=false;
+async function aiSyncQueue(){
+  if(aiSyncing||!S.aiKey||!navigator.onLine||AI.busy) return; aiSyncing=true;
+  try{ const items=await COACH.queue.all(), chats=items.filter(x=>x.item.kind==='chat'), adjs=items.filter(x=>x.item.kind==='adj');
+    for(const x of adjs){ await COACH.queue.remove(x.id); if(x.item.day===todayKey()) await adjAI(x.item.w,x.item.d); }
+    if(chats.length){ for(const x of chats) await COACH.queue.remove(x.id);
+      const hm=t=>new Date(t).toLocaleTimeString('ro-RO',{hour:'2-digit',minute:'2-digit'});
+      AI.offline=null;
+      const list=chats.map(x=>'- ('+hm(x.item.t)+') '+x.item.question+'\n  Răspunsul local, după reguli: '+x.item.localAnswer).join('\n').slice(0,3600);
+      await aiSend('Cât am fost offline am întrebat:\n'+list+'\nVerifică răspunsurile locale și corectează-le dacă e cazul.'); }
+  }catch(e){ errLog('sincronizare antrenor: '+((e&&e.message)||e),'coach'); }
+  aiSyncing=false;
+}
+addEventListener('online',()=>setTimeout(aiSyncQueue,1500));
 function rollback(chat,rb){ chat.msgs=chat.msgs.slice(0,rb.before); chat.last=rb.before?rb.prevLast:null; rb.reopen.forEach(id=>{ chat.tools[id]={status:'pending'}; }); AI.draft=rb.text; }
 async function toolDecide(id,ok){
   const chat=S.aiChat; if(!chat||AI.busy) return; const t=chat.tools[id]; if(!t||t.status!=='pending') return;
@@ -248,7 +307,7 @@ async function toolDecide(id,ok){
 }
 let liveRaf=0;
 function paintLive(){ if(liveRaf) return; liveRaf=requestAnimationFrame(()=>{ liveRaf=0; const el=$('#aiLive');
-  if(el){ const near=innerHeight+scrollY>=document.documentElement.scrollHeight-160; el.innerHTML=AI.live?md(AI.live):typingDots; if(near) scrollEnd(); } }); }
+  if(el){ const near=innerHeight+scrollY>=document.documentElement.scrollHeight-160; el.innerHTML=AI.shown?md(AI.shown):typingDots; if(near) scrollEnd(); } }); }
 const typingDots='<span class="typing"><i></i><i></i><i></i></span>';
 function scrollEnd(smooth){ requestAnimationFrame(()=>window.scrollTo({top:document.documentElement.scrollHeight,behavior:smooth?'smooth':'auto'})); }
 function md(src){
@@ -293,7 +352,10 @@ function viewCoach(){
       (Array.isArray(m.content)?m.content:[]).filter(b=>b.type==='tool_use').forEach(b=>{ log+=toolCard(chat,b); });
       if(m===lastA&&AI.usage&&!AI.busy) log+=`<div class="msg-meta">${AI.usageModel===AI_MODEL?'':'răspuns de la '+esc(AI.usageModel)+' · '}${AI.usage.input_tokens+(AI.usage.cache_read_input_tokens||0)+(AI.usage.cache_creation_input_tokens||0)} tokeni intrare${AI.usage.cache_read_input_tokens?' ('+AI.usage.cache_read_input_tokens+' din cache)':''} · ${AI.usage.output_tokens} ieșire${cost!=null?' · ~$'+cost.toFixed(3):''}</div>`; }
   });
-  if(AI.busy) log+=`<div class="msg ai" id="aiLive">${AI.live?md(AI.live):typingDots}</div>`;
+  if(AI.busy) log+=`<div class="msg ai" id="aiLive">${AI.shown?md(AI.shown):typingDots}</div>`;
+  const off=AI.offline?`<div class="card" role="status" style="border-color:var(--a40)"><div class="eyebrow">${ic('alert')} Mod offline activ. Adaptări bazate pe reguli predefinite.</div>
+    <div class="msg me" style="margin-top:8px">${esc(AI.offline.q)}</div><div class="msg ai">${AI.offline.html}</div>
+    <div class="note">Întrebarea e salvată pe dispozitiv. O trimit antrenorului AI când revine conexiunea, ca să verifice răspunsul de mai sus.</div></div>`:'';
   const setup=key?'':`<div class="card" style="border-color:var(--a40)"><div class="eyebrow">${ic('key')} Pornește antrenorul</div>
     <ol class="ai-steps"><li>Intră pe <b>console.anthropic.com</b> → <b>API Keys</b> și creează o cheie (contul are nevoie de credit; un răspuns costă de regulă câțiva cenți).</li>
       <li>Lipește cheia aici. Rămâne doar pe acest dispozitiv.</li></ol>
@@ -307,6 +369,7 @@ function viewCoach(){
   ${setup}
   ${empty}
   <div class="msgs">${log}</div>
+  ${off}
   ${AI.err?`<div class="err" role="alert">${ic('alert')}<span>${esc(AI.err)}</span>${AI.retry?`<button class="btn sm" data-a="aiRetry">${ic('refresh')} Reîncearcă</button>`:''}</div>`:''}
   <div class="composer">${SR?`<button class="btn send ghost mic ${AI.rec?'rec':''}" data-a="voice" aria-label="Dictează">${ic('mic')}</button>`:''}
     <textarea id="aiIn" rows="1" placeholder="Întreabă antrenorul…" aria-label="Mesaj pentru antrenor">${esc(AI.draft)}</textarea>
@@ -337,14 +400,17 @@ async function scanRun(){
   if(SC.busy||!SC.data) return;
   const h=$('#scHint'); if(h) SC.hint=h.value.trim().slice(0,200);
   if(!S.aiKey){ SC.err='Ai nevoie de cheia API (Setări → Antrenor AI) ca să analizez poza.'; render(); return; }
+  const ci=COACH.checkImage(SC.data,'image/jpeg'); if(!ci.ok){ SC.err=ci.reason; render(); return; }
   SC.busy=true; SC.err=null; SC.res=null; render(); let A=null;
   try{
-    A=await loadSdk(); const client=new A({apiKey:S.aiKey,dangerouslyAllowBrowser:true});
-    const msg=await client.beta.messages.create({model:AI_MODEL,max_tokens:16000,betas:['server-side-fallback-2026-07-01'],fallbacks:'default',
+    COACH.preflight(); A=await loadSdk(); const client=COACH.client(A,S.aiKey);
+    const msg=await client.beta.messages.stream({model:AI_MODEL,max_tokens:16000,betas:['server-side-fallback-2026-07-01'],fallbacks:'default',
       output_config:{effort:'low',format:{type:'json_schema',schema:MEAL_SCHEMA}},
-      messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:SC.data}},{type:'text',text:MEAL_PROMPT+(SC.hint?'\n\nDetalii de la utilizator: '+SC.hint:'')}]}]});
+      messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:SC.data}},{type:'text',text:MEAL_PROMPT+(SC.hint?'\n\nDetalii de la utilizator: '+SC.hint:'')}]}]}).finalMessage();
     if(msg.stop_reason==='refusal') throw new Error('__refuz');
     const r=JSON.parse(msg.content.filter(b=>b.type==='text').map(b=>b.text).join(''));
+    const v=COACH.verify('poză masă',[r.name,r.note].concat(Array.isArray(r.items)?r.items.map(i=>typeof i==='string'?i:JSON.stringify(i)):[]).filter(Boolean).join('. '),aiCtx());
+    if(!v.ok){ SC.err=v.message; SC.busy=false; if(S.tab==='nutri') render(); return; }
     SC.res={name:r.name||'Masă',kcal:Math.round(+r.kcal||0),p:Math.round(+r.protein_g||0),c:Math.round(+r.carbs_g||0),g:Math.round(+r.fat_g||0),items:Array.isArray(r.items)?r.items:[],conf:r.confidence,note:r.note,cost:costOf(msg.usage,msg.model)};
     await save('aiUsed',(S.aiUsed||0)+1);
   }catch(e){ SC.err=e&&e.message==='__refuz'?'Modelul a refuzat analiza pozei.':e instanceof SyntaxError?'Răspunsul nu a putut fi citit. Mai încearcă o dată.':aiErrText(e,A); }

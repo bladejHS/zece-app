@@ -11,9 +11,9 @@ declare const self: ServiceWorkerGlobalScope;
 declare const __MANIFEST__: SwManifest;
 
 const MANIFEST = __MANIFEST__;
-const CACHE = 'garda-res';
-const FONTS = 'garda-fonts';
-const META = 'garda-meta';
+const CACHE = 'zece-res';
+const FONTS = 'zece-fonts';
+const META = 'zece-meta';
 const META_KEY = 'meta.json';
 const KEEP = new Set([CACHE, FONTS, META]);
 const NAV_TIMEOUT_MS = 3000;

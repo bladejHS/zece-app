@@ -15,7 +15,7 @@ async function loadAll(){
   S.runs=Array.isArray(o.runs)?o.runs:[]; S.hist=Array.isArray(o.hist)?o.hist:[];
   S.ptests=Array.isArray(o.ptests)?o.ptests:[]; S.tmlog=Array.isArray(o.tmlog)?o.tmlog:[];
   S.sess=o.sess&&o.sess.start&&o.sess.sets?Object.assign({tmMin:{},tasks:{},runs:{},prs:[],best:{},kg:{},rp:{}},o.sess):null;
-  S.sound=o.sound!==false; S.aiKey=typeof o.aiKey==='string'?o.aiKey:''; S.aiUsed=+o.aiUsed||0;
+  S.sound=o.sound!==false; S.aiKey=await COACH.vault.loadKey(); S.aiUsed=+o.aiUsed||0;
   S.aiEffort=['low','medium','high'].indexOf(o.aiEffort)>=0?o.aiEffort:'medium';
   S.theme=THEMES[o.theme]?o.theme:'otel'; S.mode=['dark','light','auto'].indexOf(o.mode)>=0?o.mode:'dark'; S.bg=o.bg==='black'?'black':'anthr';
   /* designul v9 pornește o singură dată pe tema Oțel (antracit + albastru oțel); după aceea tema aleasă în Setări rămâne */
@@ -121,6 +121,7 @@ function introExit(){
   stAuto(); syAuto();
   document.addEventListener('visibilitychange',()=>{ if(!document.hidden){ stAuto(); syAuto(); } else if(syOn()&&syCfg().dirty&&!SY.busy){ clearTimeout(SY.timer); syncNow(false); } });
   addEventListener('online',()=>{ if(syOn()&&syCfg().dirty) syncNow(false); });
+  setTimeout(aiSyncQueue,5000);
   if(!S.onb) setTimeout(onbOpen,200);
   else if(MQ_RM.matches&&S.motion==='auto'&&!S.motionAsked) setTimeout(()=>{ if(!SH&&!OB){ SH={kind:'motion'}; shRender(); } },600);
 })();

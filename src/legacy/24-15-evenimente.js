@@ -205,9 +205,13 @@ document.addEventListener('click',async ev=>{
     case 'toolOk': await toolDecide(k,true); return;
     case 'toolNo': await toolDecide(k,false); return;
     case 'voice': voice(); return;
-    case 'aiKeySave': { const v=($('#aiKeyIn').value||'').trim(); if(v.length<20){ shake('#aiKeyIn'); return; }
-      await save('aiKey',v); AI.err=null; render(); toast('Cheie salvată',v.indexOf('sk-ant-')===0?'Antrenorul AI e gata.':'Cheia nu începe cu „sk-ant-" — verific-o dacă primești erori.','info'); return; }
-    case 'aiKeyDel': await save('aiKey',''); render(); return;
+    case 'aiKeySave': { const v=($('#aiKeyIn').value||'').trim(); if(!COACH.vault.isApiKey(v)){ shake('#aiKeyIn'); toast('Cheia nu pare validă','O cheie Anthropic începe cu „sk-ant-". O copiezi din console.anthropic.com → API Keys.','info'); return; }
+      try{ await COACH.vault.saveKey(v); }catch(e){ toast('Cheia nu s-a putut salva criptat','Browserul nu permite stocarea (poate e modul privat). Cheia merge doar până închizi aplicația.','info'); }
+      S.aiKey=v; AI.err=null; render(); toast('Cheie salvată','Criptată pe acest dispozitiv. Antrenorul AI e gata.','info'); setTimeout(aiSyncQueue,500); return; }
+    case 'aiKeyDel': try{ await COACH.vault.deleteKey(); }catch(e){} S.aiKey=''; render(); return;
+    case 'aiInj': { const P=Object.assign({},S.prof||{}), cur=(Array.isArray(P.inj)?P.inj:[]).filter(COACH.isInjury);
+      P.inj=cur.indexOf(k)>=0?cur.filter(x=>x!==k):cur.concat([k]); await save('prof',P); render(); return; }
+    case 'aiIncClear': COACH.incidents.clear(); render(); return;
     case 'aiEffort': await save('aiEffort',k); render(); return;
     case 'theme': await save('theme',k); applyTheme(); render(); burstAt(innerWidth/2,innerHeight/3,20); return;
     case 'fxLevel': await save('fx',k); applyFx(); render(); return;

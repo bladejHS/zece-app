@@ -135,13 +135,23 @@ function adjValidate(w,d,res){
 }
 async function adjAI(w,d){
   const key=dKey(w,d); if(ADJ.busy) return; ADJ.busy=key; ADJ.err=null; render(); let A=null;
-  try{ A=await loadSdk(); const client=new A({apiKey:S.aiKey,dangerouslyAllowBrowser:true});
-    const msg=await client.beta.messages.create({model:AI_MODEL,max_tokens:16000,betas:['server-side-fallback-2026-07-01'],fallbacks:'default',
-      output_config:{effort:'medium',format:{type:'json_schema',schema:ADJ_SCHEMA}},messages:[{role:'user',content:adjPrompt(w,d,adaptFor(w,d))}]});
+  try{ COACH.preflight(); A=await loadSdk(); const client=COACH.client(A,S.aiKey);
+    const msg=await client.beta.messages.stream({model:AI_MODEL,max_tokens:16000,betas:['server-side-fallback-2026-07-01'],fallbacks:'default',
+      output_config:{effort:'medium',format:{type:'json_schema',schema:ADJ_SCHEMA}},messages:[{role:'user',content:adjPrompt(w,d,adaptFor(w,d))}]}).finalMessage();
     if(msg.stop_reason==='refusal') throw new Error('__refuz');
     if(msg.stop_reason==='max_tokens') throw new SyntaxError('trunchiat');
-    ADJ.ai[key]=adjValidate(w,d,JSON.parse(msg.content.filter(b=>b.type==='text').map(b=>b.text).join('')));
+    const P=adjValidate(w,d,JSON.parse(msg.content.filter(b=>b.type==='text').map(b=>b.text).join(''))), ctx=aiCtx();
+    /* propunerea trece prin același filtru ca restul antrenorului: textul, notele și exercițiile de înlocuire */
+    const bad=(P.ch||[]).find(c=>c.t==='swap'&&COACH.exerciseConflict(c.to,ctx.injuries));
+    const v=bad?{ok:false,message:'Am oprit propunerea: înlocuia un exercițiu cu '+bad.to+', care solicită o zonă declarată accidentată.'}
+      :COACH.verify('adaptare',[P.summary].concat((P.groups||[]).map(g=>g.why),(P.ch||[]).filter(c=>c.t==='note').map(c=>c.to)).join('. '),ctx);
+    if(!v.ok) throw new Error('__filtru:'+v.message);
+    ADJ.ai[key]=P;
     await save('aiUsed',(S.aiUsed||0)+1);
-  }catch(e){ ADJ.err={key,t:e&&e.message==='__refuz'?'Modelul a refuzat cererea.':e instanceof SyntaxError?'Răspunsul nu a putut fi citit. Mai încearcă.':aiErrText(e,A)}; }
+  }catch(e){
+    /* fără conexiune rămâne propunerea după reguli; AI-ul o verifică la revenirea online (aiSyncQueue) */
+    if(COACH.isOffline(e,A)){ try{ const R=adaptFor(w,d); await COACH.queue.add({kind:'adj',t:new Date().toISOString(),day:todayKey(),w,d,rules:R?String(R.title||''):''}); }catch(x){}
+      ADJ.err={key,t:'Mod offline activ. Adaptări bazate pe reguli predefinite. Antrenorul AI le verifică când revine conexiunea.'}; }
+    else ADJ.err={key,t:e&&e.message==='__refuz'?'Modelul a refuzat cererea.':e&&/^__filtru:/.test(e.message)?e.message.slice(9):e instanceof SyntaxError?'Răspunsul nu a putut fi citit. Mai încearcă.':aiErrText(e,A)}; }
   ADJ.busy=null; render();
 }
