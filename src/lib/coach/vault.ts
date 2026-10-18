@@ -1,7 +1,7 @@
 /* Cheia API Anthropic: criptată (AES-GCM 256) în IndexedDB, cu o cheie de criptare generată pe dispozitiv
    și marcată „neextractibilă" — browserul o folosește, dar nu o dă nimănui, nici paginii.
    Cheia API nu e în cod, în build, în export sau în sincronizare; în clar există doar în memorie, cât e deschisă aplicația. */
-import { idbDel, idbGet, idbPut } from './idb';
+import { idbDel, idbGet, idbPut } from './idb.ts';
 
 const LEGACY_KEY = 'zece3:aiKey';
 const WRAP = 'wrap';

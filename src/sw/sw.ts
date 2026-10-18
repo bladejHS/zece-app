@@ -113,15 +113,17 @@ self.addEventListener('fetch', (e) => {
   if (isFont(url)) e.respondWith(cacheFirst(req, FONTS, req.url));
 });
 
-/* aplicația cere, în fundal, tot un grup (de ex. vocea), ca să fie disponibil fără internet */
+/* aplicația cere, în fundal, tot un grup (de ex. vocea) sau câteva fișiere (frazele unei faze), ca să fie disponibile fără internet */
 self.addEventListener('message', (e) => {
-  const data = e.data as { type?: string; group?: string } | null;
-  if (data?.type !== 'warm' || !data.group) return;
-  const group = data.group;
+  const data = e.data as { type?: string; group?: string; files?: unknown } | null;
+  const files = data?.type === 'warm-files' && Array.isArray(data.files)
+    ? new Set(data.files.filter((f): f is string => typeof f === 'string' && Object.hasOwn(MANIFEST, f))) : null;
+  if (!files && (data?.type !== 'warm' || !data.group)) return;
+  const group = data?.group;
   e.waitUntil((async () => {
     const cache = await caches.open(CACHE);
     const have = new Set((await cache.keys()).map((r) => r.url));
-    const todo = Object.entries(MANIFEST).filter(([p, r]) => r.group === group && !have.has(abs(p))).map(([p]) => p);
+    const todo = Object.entries(MANIFEST).filter(([p, r]) => (files ? files.has(p) : r.group === group) && !have.has(abs(p))).map(([p]) => p);
     for (let i = 0; i < todo.length; i += WARM_PARALLEL) {
       await Promise.allSettled(todo.slice(i, i + WARM_PARALLEL).map((p) => fetchInto(cache, p)));
     }

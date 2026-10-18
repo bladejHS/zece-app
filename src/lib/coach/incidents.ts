@@ -1,5 +1,5 @@
 /* Răspunsurile oprite de filtru: păstrate doar pe acest dispozitiv, pentru verificare manuală (Setări → Antrenor AI). */
-import type { GuardCode } from './guardrails';
+import type { GuardCode } from './guardrails.ts';
 
 const KEY = 'zece3:aiIncidents';
 const MAX = 50;

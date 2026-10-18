@@ -25,7 +25,7 @@ ACT_T.splice(ACT_T.length-1,0,['Kickboxing','Kickboxing','glove',0]); ST_TYPES.K
 /* ---------- activitățile: [nume, eticheta mică, iconiță, poză, descriere, strigă combinații, formate [nume, runde, sec/rundă, pauză]] ---------- */
 const KB_A={
   bag:{n:'Sac',t:'Heavy bag',ic:'bag',ph:'bag',sh:'Putere, volum și condiție',s:'Putere, volum și condiție, pe runde. Lucrezi singur, în ritmul tău.',call:1,
-    fmt:[['Clasic',5,180,60],['Putere',6,120,60],['Volum',8,180,60],['Sprinturi',10,30,30]],
+    fmt:[['Clasic',5,180,60],['Putere',6,120,60],['Volum',8,180,60],['Sprinturi',10,50,10]],
     foc:['Putere: fiecare lovitură cu intenție','Viteză: lovituri scurte, revenire rapidă','Lovituri de picior: low și middle kick','Combinații de 4, apoi ieși din linie','Mișcare: lucrezi din unghiuri, nu pe loc','Lucru la corp și la cap, schimbă nivelul'],
     tips:['Bandajează mâinile de fiecare dată: încheieturile și articulațiile degetelor cedează primele la sac.','Lovește prin sac, nu doar în el, și revino în gardă după fiecare combinație.','Mișcă-te în jurul sacului: unghiuri, nu doar lovituri pe loc.','Expiră scurt la fiecare lovitură, pe nas sau printre dinți.']},
   pads:{n:'Palmare',t:'Pad work',ic:'pads',ph:'pads',sh:'Precizie, viteză, combinații',s:'Precizie, viteză și combinații, cu un partener care ține palmarele.',call:1,
@@ -37,7 +37,7 @@ const KB_A={
     foc:['Jab-ul primul: deschizi fiecare atac cu el','Lucru la corp: coboară nivelul','Contre: răspunzi după fiecare lovitură primită','Mișcare: unghiuri, nu sta în linie','Low kick după combinație','Garda sus: mâna din spate la bărbie','Teep pentru distanță','Ritm: schimbi viteza, nu doar puterea','Apărare: blochezi sau eschivezi, apoi răspunzi'],
     tips:['Echipament obligatoriu: mănuși 14–16 oz, apărătoare de dinți, tibiere, cască și cochilie.','Sparring-ul nu e meci: puterea se stabilește dinainte (de obicei 30–50%) și rămâne așa.','Fără sparring cu durere de cap, amețeală sau după o lovitură puternică la cap: pauză și medic.','O singură temă pe rundă: e mai ușor de ținut minte și de corectat.']},
   shadow:{n:'Shadowboxing',t:'Shadow',ic:'glove',ph:'band',sh:'Încălzire și tehnică',s:'Încălzire și tehnică fără partener. Strigătorul îți dă combinațiile.',call:1,
-    fmt:[['Încălzire',2,120,30],['Tehnică',3,180,60],['Lung',5,180,45]],
+    fmt:[['Încălzire',2,120,40],['Tehnică',3,180,60],['Lung',5,180,60]],
     foc:['Doar jab și mișcare','Combinații de 3','Lovituri de picior, lejer','Apărare: eschivă și răspuns','Viteză maximă, tehnică curată'],
     tips:['În fața unei oglinzi, ca să-ți vezi garda.','Lovituri complete, la viteză controlată: tehnica înainte de putere.']}
 };
@@ -50,13 +50,13 @@ const KB_TG=[
   ['bag100','bag','100 de lovituri în 60 de secunde','Doar 1-2 (jab, cross) continuu, cu pumnul strâns la impact și brațul care revine în gardă. Numără perechile: 50 de 1-2.','n',100,'lovituri',[1,60,0]],
   ['baglk','bag','50 de low kick-uri pe fiecare picior','Câte o rundă de 3 minute pe picior, cu rotație din șold și revenire în gardă după fiecare lovitură.','ok',0,'',[2,180,60]],
   ['bag3m','bag','3 minute fără oprire, doar combinații de 4','Nicio pauză mai lungă de 2 secunde. Fiecare combinație se termină cu revenirea în gardă sau cu un pas lateral.','ok',0,'',[1,180,0]],
-  ['bagtab','bag','Tabata la sac: 8 × 20 de secunde','20 de secunde la maxim, 10 secunde pauză. Ritmul din ultima rundă cât mai aproape de cel din prima.','ok',0,'',[8,20,10]],
+  ['bagspr','bag','Sprinturi la sac: 10 × 50 de secunde','50 de secunde la maxim, 10 secunde pauză (raport 5:1). Ritmul din ultima rundă cât mai aproape de cel din prima.','ok',0,'',[10,50,10]],
   ['bag10','bag','10 runde × 2 min','Testul de anduranță: ritm de antrenament, pauză 1 min, tehnică curată până la capăt.','ok',0,'',[10,120,60]],
   ['padcl','pads','10 combinații 1-2-3-2 curate, la rând','Jab, cross, croșeu, cross. Dacă una iese neclară sau scade garda, numărătoarea pornește de la zero.','ok',0,'',[1,180,0]],
   ['pad6','pads','Combinația de 6 × 10 pe fiecare parte','Jab, cross, croșeu, cross, low kick, high kick, cu echilibru la final, fără să cazi după lovitura de picior.','ok',0,'',[2,180,60]],
   ['padrx','pads','20 de contre într-o rundă','Partenerul atacă ușor cu palmarul; blochezi sau eschivezi și răspunzi imediat cu 1-2. Numără răspunsurile corecte.','n',20,'contre',[1,180,0]],
   ['padfp','pads','3 runde × 3 min la ritm de meci','Partenerul strigă combinațiile, tu nu te oprești. Pauză 1 min. Garda revine după fiecare combinație.','ok',0,'',[3,180,60]],
-  ['padtp','pads','20 de teep-uri pe fiecare picior','Lovitura frontală de distanță: împingi cu talpa prin palmar și revii în gardă fără să-ți pierzi echilibrul.','ok',0,'',[2,120,45]],
+  ['padtp','pads','20 de teep-uri pe fiecare picior','Lovitura frontală de distanță: împingi cu talpa prin palmar și revii în gardă fără să-ți pierzi echilibrul.','ok',0,'',[2,120,60]],
   ['padsp','pads','30 de lovituri în 15 secunde','Viteză pură: 1-2 scurte și rapide la palmare. Partenerul numără.','n',30,'lovituri',[1,15,0]],
   ['sp3','spar','3 runde × 2 min cu garda sus','Sparring tehnic, la 30–50% putere. Partenerul sau antrenorul îți spune la final dacă garda a rămas sus.','ok',0,'',[3,120,60]],
   ['spjab','spar','O rundă cu jab-ul primul','Deschizi fiecare atac cu jab-ul, o rundă întreagă de 3 minute.','ok',0,'',[1,180,0]],
@@ -193,6 +193,7 @@ function kbaHTML(){
     <div class="eyebrow" style="margin-top:16px">${ic('clock')} Format</div>
     <div class="chips" style="margin-top:8px">${A.fmt.map((f,i)=>`<button class="chip ${p.r===f[1]&&p.rs===f[2]&&p.rest===f[3]?'on':''}" data-a="kbFmt" data-i="${i}">${esc(f[0])} · ${f[1]}×${fmtClock(f[2])}</button>`).join('')}</div>
     <div class="kb-stps">${kbStep('r','Runde',p.r,p.r)}${kbStep('rs','Runda',p.rs,fmtClock(p.rs))}${kbStep('rest','Pauză',p.rest,p.rest?fmtClock(p.rest):'fără')}</div>
+    ${(()=>{ const r=TRAINING.combatRatio(p.rs,p.rest); return p.r>1&&p.rest>0?`<div class="kb-ratio ${r?'ok':''}">${r?ic('check')+' Raport '+r+':1, ca în ring':ic('alert')+' Raport nestandard: la pornire, pauza se ajustează la '+TRAINING.snapRest(p.rs,p.rest).ratio+':1'}</div>`:''; })()}
     ${A.call?`<div class="set-row"><span class="sp"><b>Strigă combinații</b><div class="sm mu">${a==='spar'?'Vocea îți propune combinații de încercat pe partener':'Vocea spune combinația rar și clar, o vezi și mare pe ecran'}</div></span><button class="sw ${p.cl?'on':''}" data-a="kbOpt" data-k="cl" role="switch" aria-checked="${p.cl}" aria-label="Strigă combinații"></button></div>
       ${p.cl?`<div class="kb-cfg"><span>Combinații</span><div class="seg">${[1,2,3].map(l=>`<button class="${p.lvl===l?'on':''}" data-a="kbLvl" data-i="${l}">${KB_LVL[l]}</button>`).join('')}</div>
         <span>Ritm</span><div class="seg">${KB_TEMPO_L.map(([k,l])=>`<button class="${p.tempo===k?'on':''}" data-a="kbTempo" data-k="${k}">${l}</button>`).join('')}</div></div>
@@ -200,7 +201,9 @@ function kbaHTML(){
         <div class="set-row"><span class="sp"><b>Cu lovituri de picior</b><div class="sm mu">Low, middle, high kick, teep, genunchi</div></span><button class="sw ${p.kicks?'on':''}" data-a="kbOpt" data-k="kicks" role="switch" aria-checked="${p.kicks}" aria-label="Cu lovituri de picior"></button></div>
         ${kbCmbList(p)}`:''}`:''}
     <div class="set-row"><span class="sp"><b>Temă pe rundă</b><div class="sm mu">Un singur lucru de urmărit în fiecare rundă${a==='spar'?' (de ex. jab-ul primul)':''}</div></span><button class="sw ${p.foc?'on':''}" data-a="kbOpt" data-k="foc" role="switch" aria-checked="${p.foc}" aria-label="Temă pe rundă"></button></div>
-    <button class="btn pri xl wide glow" style="margin-top:12px" data-a="kbGo">${ic('play')} Pornește · ${p.r} × ${fmtClock(p.rs)}</button>
+    <button class="btn pri xl wide glow" style="margin-top:12px" data-a="kbFull">${ic('list')} Sesiune completă · 4 faze</button>
+    <div class="xs mu2" style="margin-top:6px;text-align:center">Activare, tehnică, ${p.r} × ${fmtClock(p.rs)}, revenire · check-in înainte, feedback după fiecare rundă</div>
+    <button class="btn xl wide" style="margin-top:10px" data-a="kbGo">${ic('play')} Doar rundele · ${p.r} × ${fmtClock(p.rs)}</button>
     <button class="btn ghost wide" style="margin-top:8px" data-a="kbLog" data-k="${a}">${ic('edit')} Notează o sesiune făcută la sală</button>
     <details class="kb-tgs" ${SH.tgOpen?'open':''}><summary><span class="sp"><b>${ic('target')} Ținte · ${dn} din ${tgs.length} atinse</b><span class="xs mu">ocazionale, le încerci când ai chef</span></span>${ic('down')}</summary>
       ${tgs.map(t=>{ const st=kbTgSt(t[0]); return `<button class="kb-tg ${st.ok?'ok':''}" data-a="kbTgOpen" data-k="${t[0]}"><span class="ic-s ${st.ok?'ok':''}">${ic(st.ok?'check':'target')}</span>
@@ -237,7 +240,9 @@ function kbPreset(a,o,tg){
     if(i<n&&rest>0) ph.push({k:'rest',d:rest,l:'Pauză',s:'Urmează runda '+(i+1)+(foc?': '+foc[i]:'')}); }
   return {title:T?T[2]:A.n+' · '+n+' × '+fmtClock(rs),ph,kb:{a,r:n,rs,rest,call:o.cl&&A.call?{lvl:o.lvl||2,kicks:o.kicks!==false,tempo:KB_TEMPO[o.tempo]?o.tempo:'slow'}:null,tg:tg||null,cur:null,next:0,ph:-1,n:0}};
 }
-ACT.kbGo=()=>{ const a=SH&&SH.k; if(!KB_A[a]) return; if(TM.open&&TM.st&&TM.st.started&&!TM.st.done){ toast('Cronometrul rulează deja','','info'); return; }
+ACT.kbGo=async()=>{ const a=SH&&SH.k; if(!KB_A[a]) return; if(TM.open&&TM.st&&TM.st.started&&!TM.st.done){ toast('Cronometrul rulează deja','','info'); return; }
+  /* doar rapoarte de contact (3:1, 2:1, 5:1), nu Tabata sau 1:1: pauza se ajustează și se salvează */
+  const p=kbPref(a); if(!TRAINING.isCombatFormat(p.r,p.rs,p.rest)){ const s=TRAINING.snapRest(p.rs,p.rest); await kbPrefSet(a,{rest:s.rest}); toast('Pauza: '+fmtClock(s.rest),'Raport '+s.ratio+':1, ca în sporturile de contact.','info'); }
   const pr=kbPreset(a,kbPref(a)); SH=null; shRender(); tmOpen(pr); };
 /* clopotul: câteva parțiale care se sting lent; bătăile de la 10 secunde: două lovituri scurte, înalte */
 function kbSched(){
@@ -255,7 +260,7 @@ function kbSched(){
 }
 /* strigătorul: o combinație, apoi așteaptă să termine vocea și încă o pauză după ritmul ales (Lent: ~9 s de la o combinație la alta).
    După anunțul rundei, la fiecare 4 combinații o încurajare scurtă; în ultimele 10 secunde nu mai vin combinații: „Dă tot!" */
-function kbTick(st){ const k=st.kb, c=k.call, ph=st.ph[st.i]; if(!ph||ph.k!=='work') return;
+function kbTick(st){ const k=st.kb, ph=st.ph[st.i]; if(!ph||ph.k!=='work') return; if(ph.cog==='reaction'){ kbReact(st,ph); return; } const c=kbCallFor(k,ph);
   const el=tmEl(), left=ph.d-el, now=Date.now();
   if(k.ph!==st.i){ k.ph=st.i; k.next=now+1500; k.cur=null; k.n=0; k.enc=0; k.s10=0; if(c) kbPaintCall(st); return; }
   if(ph.d>=20&&left<=10.5&&!k.s10){ k.s10=1; if(voxEnc()) say(mot('kbS10')); if(c){ k.cur={fin:1}; kbPaintCall(st); } return; }
@@ -266,12 +271,13 @@ function kbTick(st){ const k=st.kb, c=k.call, ph=st.ph[st.i]; if(!ph||ph.k!=='wo
   const spoke=say(k.cur.voice+'.',{end:()=>{ k.next=Date.now()+gap(); }}); k.next=now+gap()+(spoke?3000:2000); kbPaintCall(st); }
 function kbPaintCall(st){ const el=$('#kbCall'); if(el) el.innerHTML=kbCallInner(st); }
 const kbCallInner=st=>st.kb.cur&&st.kb.cur.fin?`<b>10 s</b><span>Dă tot, fără oprire</span>`:st.kb.cur?`<b>${esc(st.kb.cur.big)}</b><span>${esc(st.kb.cur.names)}</span>`:`<span class="mu">Gardă sus · combinațiile vin imediat</span>`;
-function kbLive(st,ph){ return st.kb.call&&ph.k==='work'?`<div class="kb-call" id="kbCall" aria-live="polite">${kbCallInner(st)}</div>`:''; }
+function kbLive(st,ph){ return ph.k==='work'&&(ph.cog==='reaction'||kbCallFor(st.kb,ph))?`<div class="kb-call" id="kbCall" aria-live="polite">${kbCallInner(st)}</div>`:''; }
 const kbCtl=st=>`<button class="btn ghost" style="grid-column:1/-1" data-a="kbEnd">${ic('check')} Termină și notează</button>`;
 const kbStartNote=st=>`<div class="kb-start">${ic('bell')} Clopot la începutul și la finalul rundei · două bătăi cu 10 secunde înainte de final${st.kb.call?' · combinații: '+KB_LVL[st.kb.call.lvl].toLowerCase()+', ritm '+KB_TEMPO_L.find(x=>x[0]===st.kb.call.tempo)[1].toLowerCase()+(st.kb.call.kicks?', cu picioare':''):''}</div>`;
-const kbWorks=st=>st.ph.filter(p=>p.k==='work').length;
+const kbWorks=st=>st.ph.filter(p=>p.k==='work'&&(!p.phase||p.phase==='conditioning')).length;
 ACT.kbEnd=()=>{ const st=TM.st; if(!st||!st.kb||st.done) return; let r=0;
-  st.ph.forEach((p,i)=>{ if(p.k==='work'&&i<st.i) r++; }); const cur=st.ph[st.i]; if(cur&&cur.k==='work'&&cur.d&&tmEl()>=cur.d*.5) r++;
+  const cnt=p=>p.k==='work'&&(!p.phase||p.phase==='conditioning');
+  st.ph.forEach((p,i)=>{ if(cnt(p)&&i<st.i) r++; }); const cur=st.ph[st.i]; if(cur&&cnt(cur)&&cur.d&&tmEl()>=cur.d*.5) r++;
   st.kb.rounds=r; if(st.pAt){ const pd=Date.now()-st.pAt; st.t0+=pd; st.pausedMs+=pd; st.pAt=null; } tmFinish(false); };
 function kbDoneHTML(st){ const r=st.kb.rounds!=null?st.kb.rounds:kbWorks(st), T=st.kb.tg?kbTgOf(st.kb.tg):null;
   return `<div class="kpis c2"><div class="kpi"><div class="k">Runde</div><div class="v">${r}<small>/ ${kbWorks(st)}</small></div></div><div class="kpi"><div class="k">${esc(kbAName(st.kb.a))}</div><div class="v">${fmtClock(st.kb.rs)}<small>/ rundă</small></div></div></div>

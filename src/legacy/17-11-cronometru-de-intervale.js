@@ -132,7 +132,7 @@ function tmRender(){
     <div class="tm-flash" id="tmFlash" aria-hidden="true"></div>
     <div class="tm-ring">${UI.gauge()}
       <div class="c"><div><div class="tm-lbl">${esc(ph.l)}</div><div class="tm-time" id="tmTime">0:00</div><div class="tm-sub">${esc(ph.s||'')}</div></div></div></div>
-    ${st.kb?kbLive(st,ph):''}${ph.sp?`<div class="tm-spd"><b>${num(ph.sp,1)}</b><small>km/h</small><span>${mmss(60/ph.sp)} /km</span></div>`:''}${ph.hr?`<div class="tm-hrz" id="tmHrz">țintă puls ${ph.hr[0]}–${ph.hr[1]}</div>`:''}
+    ${st.kb?kbLive(st,ph)+kbFbHTML(st,ph):''}${ph.sp?`<div class="tm-spd"><b>${num(ph.sp,1)}</b><small>km/h</small><span>${mmss(60/ph.sp)} /km</span></div>`:''}${ph.hr?`<div class="tm-hrz" id="tmHrz">țintă puls ${ph.hr[0]}–${ph.hr[1]}</div>`:''}
     ${st.amrap&&ph.k==='work'?`<div class="tm-next">Runde: <b id="tmRounds">${st.rounds}</b></div>`:''}
     ${next?`<div class="tm-next">Urmează: <b>${esc(next.l)}</b>${next.d?' · '+fmtClock(next.d):''}${next.sp?' · <b>'+num(next.sp,1)+' km/h</b>':''}</div>`:`<div class="tm-next">Ultimul bloc</div>`}
     ${dots}

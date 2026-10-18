@@ -69,6 +69,7 @@ function toolInfo(name,inp){
         apply:async()=>{ const b=Object.assign({},S.body); b[date]=Object.assign({},b[date]||{},o); await save('body',b); return 'Notat pe '+date+': '+JSON.stringify(o)+' (cm).'; }}; }
     case 'set_run_progression': { const lim={ez1:[5,180],ez2:[5,180],lng:[10,240],thr:[1,10]}[inp.row];
       if(!lim||!Number.isInteger(inp.week)||inp.week<1||inp.week>4||!Number.isInteger(inp.value)||inp.value<lim[0]||inp.value>lim[1]) return {err:'Valoare de progresie invalidă.'};
+      { const f0=inp.row==='thr'?'r':'w', prev=inp.week>1?runPlan()[inp.row][f0][inp.week-2]:0; if(!TRAINING.progressionAllowed(prev,inp.value)) return {err:'Creștere nesigură: cel mult +20% față de săptămâna '+(inp.week-1)+' ('+prev+').'}; }
       const lbl={ez1:'Easy luni',ez2:'Easy joi',lng:'Long run',thr:'Prag'}[inp.row], f=inp.row==='thr'?'r':'w', unit=inp.row==='thr'?' reprize':' min';
       return {icon:'run',title:'Schimb progresia alergării',desc:lbl+' · săptămâna '+inp.week+' → '+inp.value+unit,apply:async()=>{
         const rp=Object.assign({},S.runPlan||{}), h=JSON.parse(JSON.stringify(rp.h||{})), cur=runPlan(); h[inp.row]=h[inp.row]||{}; h[inp.row][f]=(h[inp.row][f]||cur[inp.row][f]).slice(); h[inp.row][f][inp.week-1]=inp.value; rp.h=h; await save('runPlan',rp);
@@ -283,11 +284,14 @@ async function aiSyncQueue(){
   if(aiSyncing||!S.aiKey||!navigator.onLine||AI.busy) return; aiSyncing=true;
   try{ const items=await COACH.queue.all(), chats=items.filter(x=>x.item.kind==='chat'), adjs=items.filter(x=>x.item.kind==='adj');
     for(const x of adjs){ await COACH.queue.remove(x.id); if(x.item.day===todayKey()) await adjAI(x.item.w,x.item.d); }
-    if(chats.length){ for(const x of chats) await COACH.queue.remove(x.id);
+    const fbs=items.filter(x=>x.item.kind==='feedback');
+    if(chats.length||fbs.length){ for(const x of chats.concat(fbs)) await COACH.queue.remove(x.id);
       const hm=t=>new Date(t).toLocaleTimeString('ro-RO',{hour:'2-digit',minute:'2-digit'});
       AI.offline=null;
-      const list=chats.map(x=>'- ('+hm(x.item.t)+') '+x.item.question+'\n  Răspunsul local, după reguli: '+x.item.localAnswer).join('\n').slice(0,3600);
-      await aiSend('Cât am fost offline am întrebat:\n'+list+'\nVerifică răspunsurile locale și corectează-le dacă e cazul.'); }
+      const FEEL={easy:'ușor',ok:'potrivit',hard:'greu',max:'la limită'};
+      const qs=chats.map(x=>'- ('+hm(x.item.t)+') '+x.item.question+'\n  Răspunsul local, după reguli: '+x.item.localAnswer).join('\n');
+      const fs=fbs.map(x=>{ const d=x.item.data||{}; return '- ('+hm(x.item.t)+') '+(d.round||'rundă')+': '+(FEEL[d.feel]||d.feel)+(d.pain?', durere: '+(COACH.INJURIES[d.pain]||d.pain):'')+' → '+(d.change||''); }).join('\n');
+      await aiSend(((qs?'Cât am fost offline am întrebat:\n'+qs+'\n':'')+(fs?'Cât am fost offline, sesiunea de kickboxing s-a adaptat după reguli:\n'+fs+'\n':'')+'Verifică răspunsurile și adaptările locale și corectează-le dacă e cazul.').slice(0,3900)); }
   }catch(e){ errLog('sincronizare antrenor: '+((e&&e.message)||e),'coach'); }
   aiSyncing=false;
 }

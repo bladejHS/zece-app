@@ -208,6 +208,7 @@ document.addEventListener('click',async ev=>{
     case 'aiKeySave': { const v=($('#aiKeyIn').value||'').trim(); if(!COACH.vault.isApiKey(v)){ shake('#aiKeyIn'); toast('Cheia nu pare validă','O cheie Anthropic începe cu „sk-ant-". O copiezi din console.anthropic.com → API Keys.','info'); return; }
       try{ await COACH.vault.saveKey(v); }catch(e){ toast('Cheia nu s-a putut salva criptat','Browserul nu permite stocarea (poate e modul privat). Cheia merge doar până închizi aplicația.','info'); }
       S.aiKey=v; AI.err=null; render(); toast('Cheie salvată','Criptată pe acest dispozitiv. Antrenorul AI e gata.','info'); setTimeout(aiSyncQueue,500); return; }
+    case 'deloadToggle': await save('deload',S.deload===false); STC=null; render(); return;
     case 'aiKeyDel': try{ await COACH.vault.deleteKey(); }catch(e){} S.aiKey=''; render(); return;
     case 'aiInj': { const P=Object.assign({},S.prof||{}), cur=(Array.isArray(P.inj)?P.inj:[]).filter(COACH.isInjury);
       P.inj=cur.indexOf(k)>=0?cur.filter(x=>x!==k):cur.concat([k]); await save('prof',P); render(); return; }
@@ -321,6 +322,7 @@ document.addEventListener('change',async ev=>{
     await save('prof',Object.assign({},S.prof||{},o)); STC=null; toast('Salvat','','info'); return; }
   if(t.dataset.rp){ const [k,f,w]=t.dataset.rp.split('|'), v=parseInt(t.value,10); if(!(v>=0&&v<=300)) return;
     const rp=Object.assign({},S.runPlan||{}), h=JSON.parse(JSON.stringify(rp.h||{})), cur=runPlan();
+    const prev=+w>0?cur[k][f][+w-1]:0; if(f!=='m'&&f!=='rest'&&!TRAINING.progressionAllowed(prev,v)){ t.value=cur[k][f][+w]; toast('Creștere prea mare','Cel mult +20% față de săptămâna dinainte ('+prev+' → cel mult '+Math.floor(prev*1.2)+').','info'); return; }
     h[k]=h[k]||{}; h[k][f]=(h[k][f]||cur[k][f]).slice(); h[k][f][+w]=v; rp.h=h; await save('runPlan',rp); toast('Progresie salvată','','info'); return; }
   if(t.dataset.scan&&t.files&&t.files[0]){ await scanPick(t.files[0]); t.value=''; return; }
   if(t.dataset.pace){ const raw=t.value.trim(), m=/^(\d{1,2}):(\d{2})$/.exec(raw); if(raw&&!m){ toast('Format greșit','Scrie ritmul ca 5:10 (minute:secunde pe km).','info'); return; }

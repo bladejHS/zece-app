@@ -1,18 +1,18 @@
 /* Antrenorul AI — tot ce stă între aplicație și API-ul Anthropic:
    cheia criptată, limita de cereri, filtrul de siguranță pe intrare și ieșire, modul offline și coada de sincronizare.
    Codul vechi (src/legacy) îl folosește prin `COACH`. */
-import { checkOutput, gateStream, SAFE_MESSAGE, type GuardContext } from './guardrails';
-import * as incidents from './incidents';
-import * as limits from './limits';
-import { CoachOffline, type AnthropicCtor } from './net';
+import { checkOutput, gateStream, SAFE_MESSAGE, type GuardContext } from './guardrails.ts';
+import * as incidents from './incidents.ts';
+import * as limits from './limits.ts';
+import { CoachOffline, type AnthropicCtor } from './net.ts';
 
-export { checkImage, checkInput, exerciseConflict, INJURIES, isInjury, KCAL_FLOOR } from './guardrails';
-export type { GuardContext, Injury } from './guardrails';
-export { client, CoachOffline, isOffline, sdk } from './net';
-export * as incidents from './incidents';
-export * as limits from './limits';
-export * as queue from './queue';
-export * as vault from './vault';
+export { checkImage, checkInput, exerciseConflict, INJURIES, isInjury, KCAL_FLOOR } from './guardrails.ts';
+export type { GuardContext, Injury } from './guardrails.ts';
+export { client, CoachOffline, isOffline, sdk } from './net.ts';
+export * as incidents from './incidents.ts';
+export * as limits from './limits.ts';
+export * as queue from './queue.ts';
+export * as vault from './vault.ts';
 
 /** Cererea nu pleacă: limita de cereri sau o intrare invalidă. */
 export class CoachBlocked extends Error {

@@ -11,7 +11,7 @@ async function loadAll(){
   S.ext=Array.isArray(o.ext)?o.ext:[]; S.stq=Array.isArray(o.stq)?o.stq:[]; S.goals=Array.isArray(o.goals)?o.goals:[]; S.foods=Array.isArray(o.foods)?o.foods:[]; S.shoes=Array.isArray(o.shoes)?o.shoes:[]; S.sync=obj(o.sync); S.supp=Object.assign({on:{},log:{}},obj(o.supp)); S.bk=obj(o.bk);
   S.mf=Object.assign({port:false,cold:false},obj(o.mf)); S.intro=['full','short','off'].indexOf(o.intro)>=0?o.intro:'full';
   S.motion=['auto','on','off'].indexOf(o.motion)>=0?o.motion:'auto'; S.motionAsked=!!o.motionAsked;
-  S.voice=o.voice!==false; S.recapSeen=+o.recapSeen||0;
+  S.voice=o.voice!==false; S.recapSeen=+o.recapSeen||0; S.deload=o.deload!==false;
   S.runs=Array.isArray(o.runs)?o.runs:[]; S.hist=Array.isArray(o.hist)?o.hist:[];
   S.ptests=Array.isArray(o.ptests)?o.ptests:[]; S.tmlog=Array.isArray(o.tmlog)?o.tmlog:[];
   S.sess=o.sess&&o.sess.start&&o.sess.sets?Object.assign({tmMin:{},tasks:{},runs:{},prs:[],best:{},kg:{},rp:{}},o.sess):null;

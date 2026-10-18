@@ -145,3 +145,28 @@ html[data-mode="light"] .card{background:var(--glass)}
 .onb-big{font-family:var(--fd);letter-spacing:.32em;padding-left:.32em}
 .nav-ind::before{display:none}
 .nav-ind::after{border-radius:var(--r-md);background:linear-gradient(180deg,rgba(var(--w),.09),rgba(var(--w),.03));box-shadow:inset 0 1px 0 rgba(var(--w),.1)}
+
+/* ---------- sesiunea structurată (check-in, plan, feedback pe rundă) ---------- */
+.kbci-l{margin-top:14px;font:600 11.5px/1 var(--fd);letter-spacing:.18em;text-transform:uppercase;color:var(--mu)}
+.kbci-seg{margin-top:8px}
+.kbci-seg button{min-height:var(--touch);font:700 17px/1 var(--fd)}
+.kbp{margin-top:12px;border:1px solid var(--ln);border-radius:var(--r-md);overflow:hidden}
+.kbp-r{display:flex;justify-content:space-between;gap:12px;padding:12px 14px;border-top:1px solid var(--ln)}
+.kbp-r:first-child{border-top:0}
+.kbp-r b{font:600 14px/1.2 var(--fd);letter-spacing:.12em;text-transform:uppercase}
+.kbp-r span{color:var(--mu);font-size:13px;font-variant-numeric:tabular-nums}
+.kbp-n{margin-top:12px}
+.kbp-n p{display:flex;gap:8px;align-items:flex-start;margin:6px 0;font-size:13px;color:var(--mu)}
+.kbp-n .i{width:15px;height:15px;flex:none;margin-top:2px;color:var(--ac2)}
+.kb-ratio{margin-top:8px;display:flex;gap:6px;align-items:center;font-size:12.5px;color:var(--warn-t)}
+.kb-ratio.ok{color:var(--ok-t)}
+.kb-ratio .i{width:14px;height:14px}
+.kbfb{margin-top:14px}
+.kbfb-q{text-align:center;font:600 12px/1 var(--fd);letter-spacing:.2em;text-transform:uppercase;color:var(--c-rest)}
+.kbfb-b{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.kbfb-b .btn{min-height:var(--touch);padding:6px 4px;font:700 14px/1.1 var(--fd);letter-spacing:.04em}
+.kbfb-p{margin-top:8px}
+.kbfb-p summary{cursor:pointer;color:var(--mu);font-size:13px;text-align:center;list-style:none;padding:8px}
+.kbfb-p .chips{justify-content:center}
+.kbfb.done{display:flex;gap:8px;align-items:center;justify-content:center;color:var(--mu);font-size:13px;text-align:center}
+.kbfb.done .i{width:15px;height:15px;color:var(--ok)}

@@ -4,6 +4,7 @@
   "exclude": ["dist", "src/legacy", "src/sw"],
   "compilerOptions": {
     "lib": ["ES2023", "DOM", "DOM.Iterable"],
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "allowImportingTsExtensions": true
   }
 }

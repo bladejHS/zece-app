@@ -134,8 +134,17 @@ function dayBase(w,d){
     return Object.assign({x,n,p:txt,planMin,opt:optX(d,x)},parseEx(n,txt,base));
   });
   const liftMin=(base.lift||[]).reduce((a,s)=>a+s[1],0);
-  const min=base.run?Math.round(runTotal(base.run,w)+liftMin):base.min;
-  return {w,d,t:base.t,cat:base.cat,run:base.run,min,ex,notes:NOTES[d]};
+  let min=base.run?Math.round(runTotal(base.run,w)+liftMin):base.min;
+  const dl=deloadOn(w);
+  if(dl){ ex.forEach(deloadEx); min=TRAINING.deloadMinutes(min); }
+  return {w,d,t:base.t,cat:base.cat,run:base.run,min,ex,notes:NOTES[d],deload:dl};
+}
+/* deload automat (src/lib/training): săptămâna a 4-a din ciclu are volum −40%, aceleași zile; se poate opri din Setări */
+const deloadOn=w=>S.deload!==false&&TRAINING.isDeloadWeek(w+1);
+function deloadEx(e){
+  if(e.kind==='lift'&&e.sets){ const n=TRAINING.deloadCount(e.sets); e.p=e.p.replace(/^\d+×/,n+'×')+' · deload'; e.sets=n; }
+  else if(e.n==='Threshold'){ const r=+((/^(\d+) ×/.exec(e.p)||[])[1])||0; if(r){ const n=TRAINING.deloadCount(r); e.iv=n; e.p=e.p.replace(/^\d+ ×/,n+' ×')+' · deload'; e.planMin=TRAINING.deloadMinutes(e.planMin||0); } }
+  else if(e.planMin){ const m=TRAINING.deloadMinutes(e.planMin); e.p=e.p.replace(/^\d+ min/,m+' min')+' · deload'; e.planMin=m; }
 }
 const cyc=()=>((S.cyc||{}).h)||1;
 const dKeyC=(c,w,d)=>'hc'+c+'w'+w+'d'+d;
