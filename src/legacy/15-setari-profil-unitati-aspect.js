@@ -56,7 +56,7 @@ function viewSet(){
     <div class="note">„Maxime" adaugă particule și strălucire mai puternică. „Minime" oprește animațiile de fundal (economisește bateria).</div>
     <div class="sm" style="margin-top:14px;font-weight:600">Mișcare</div>
     <div class="seg">${[['auto','Automat'],['on','Mereu animat'],['off','Redusă']].map(e=>`<button class="${S.motion===e[0]?'on':''}" data-a="motionSet" data-k="${e[0]}">${e[1]}</button>`).join('')}</div>
-    <div class="note">${MQ_RM.matches?'Sistemul tău cere <b>mișcare redusă</b>. „Automat" respectă asta; „Mereu animat" pornește animațiile doar în UMBRA.':'Sistemul tău permite animațiile.'}</div>
+    <div class="note">${MQ_RM.matches?'Sistemul tău cere <b>mișcare redusă</b>. „Automat" respectă asta; „Mereu animat" pornește animațiile doar în ZECE.':'Sistemul tău permite animațiile.'}</div>
     <div class="sm" style="margin-top:14px;font-weight:600">Animația de deschidere</div>
     <div class="seg">${[['full','Completă'],['short','Scurtă'],['off','Oprită']].map(e=>`<button class="${S.intro===e[0]?'on':''}" data-a="introMode" data-k="${e[0]}">${e[1]}</button>`).join('')}</div></div>
 
@@ -117,7 +117,7 @@ function viewSet(){
   ${ioCard()}
   ${syncCard()}
   ${errCard()}
-  <div class="xs mu2" style="text-align:center;margin-top:18px">UMBRA · planul Hybrid365</div>`;
+  <div class="xs mu2" style="text-align:center;margin-top:18px">ZECE · planul Hybrid365</div>`;
 }
 ACT.barSet=async(el,{I})=>{ await save('prof',Object.assign({},S.prof||{},{bar:I})); render(); };
 ACT.notifT=async(el,{k})=>{ const c=notifCfg(); c[k]=!c[k]; await save('notifCfg',c); render(); };

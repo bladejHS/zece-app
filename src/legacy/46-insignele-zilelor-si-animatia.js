@@ -1,11 +1,9 @@
 /* =====================================================================
-   v12 · insignele zilelor și animația de deschidere cu operatorul SRI
+   v12 · insignele zilelor (animația de deschidere e acum în src/components/Intro.astro)
    ===================================================================== */
-/* insignele (src/assets/days/d0…d6.jpg) și portretul de la deschidere (src/assets/intro), făcute în Canva:
+/* insignele (src/assets/days/d0…d6.jpg), făcute în Canva:
    build.js pune aici fotografiile, build_site.js le face fișiere */
 const DAY_PH={"d0":"day-d0.jpg","d1":"day-d1.jpg","d2":"day-d2.jpg","d3":"day-d3.jpg","d4":"day-d4.jpg","d5":"day-d5.jpg","d6":"day-d6.jpg"};
-const INTRO_PH={"sri":"intro-sri.jpg"};
-Object.keys(INTRO_PH).forEach(k=>{ try{ document.documentElement.style.setProperty('--intro-'+k,cssUrl(INTRO_PH[k])); }catch(e){} });
 /* insigna zilei d (0 = luni): st = 'done' (ziua completă) sau 'next' (următoarea); decorativă, rândul are deja textul */
 function dayBadge(d,st='',sz=46){ const src=DAY_PH['d'+d]; if(!src) return '';
   return `<span class="dbg ${st}" style="--bs:${sz}px" aria-hidden="true"><img src="${src}" alt="" decoding="async" width="${sz}" height="${sz}"></span>`; }

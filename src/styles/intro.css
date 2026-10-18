@@ -1,0 +1,65 @@
+/* =====================================================================
+   ZECE · deschiderea (src/components/Intro.astro)
+   Placa se aprinde, rama se trasează, barele X intră ca niște obturatoare, cele 10 segmente
+   se aprind ca un indicator de turație (al 10-lea, amber, cu vibrație), apoi cuvântul ZECE.
+   --k scalează timpul: 1 = complet, .45 = scurt.
+   ===================================================================== */
+.intro{--k:1;position:fixed;inset:0;z-index:300;display:grid;place-items:center;cursor:pointer;overflow:hidden;
+  background:radial-gradient(120% 80% at 50% 38%,#1A1D22 0%,#0B0D10 55%,#050607 100%);color:#D5DAE0;
+  -webkit-tap-highlight-color:transparent}
+.intro.short{--k:.45}
+.in-grid{position:absolute;inset:-2px;pointer-events:none;opacity:0;
+  background:linear-gradient(rgba(213,218,224,.035) 1px,transparent 1px) 0 0/100% 32px,linear-gradient(90deg,rgba(213,218,224,.035) 1px,transparent 1px) 0 0/32px 100%;
+  -webkit-mask:radial-gradient(70% 60% at 50% 42%,#000 30%,transparent 80%);mask:radial-gradient(70% 60% at 50% 42%,#000 30%,transparent 80%);
+  animation:inFade calc(.6s*var(--k)) var(--ease) forwards}
+.in-scan{position:absolute;left:0;right:0;top:0;height:30%;pointer-events:none;opacity:0;
+  background:linear-gradient(180deg,transparent,rgba(213,218,224,.06) 70%,rgba(213,218,224,.14) 99%,transparent);
+  animation:inScan calc(1.4s*var(--k)) var(--ease) calc(.15s*var(--k)) forwards}
+.in-c{position:relative;display:flex;flex-direction:column;align-items:center;gap:22px;margin-top:-6vh}
+.in-logo{width:clamp(128px,36vw,168px);aspect-ratio:1}
+.in-logo svg{width:100%;height:100%;display:block;overflow:visible}
+
+/* părțile semnului */
+.in-mark .lg-plate{opacity:0;transform-origin:50% 50%;animation:inPlate calc(.45s*var(--k)) var(--ease) forwards}
+.in-mark .lg-rim{stroke-dasharray:100;stroke-dashoffset:100;animation:inRim calc(.7s*var(--k)) var(--ease) calc(.2s*var(--k)) forwards}
+.in-mark .lg-a{transform:translate(-60px,-80px);opacity:0;animation:inBar calc(.42s*var(--k)) var(--ease) calc(.5s*var(--k)) forwards}
+.in-mark .lg-b1{transform:translate(60px,-80px);opacity:0;animation:inBar calc(.42s*var(--k)) var(--ease) calc(.6s*var(--k)) forwards}
+.in-mark .lg-b2{transform:translate(-60px,80px);opacity:0;animation:inBar calc(.42s*var(--k)) var(--ease) calc(.6s*var(--k)) forwards}
+.in-mark .lg-tk{opacity:.15;animation:inTick calc(.12s*var(--k)) linear calc((1s + var(--i)*.07s)*var(--k)) forwards}
+
+.in-word{display:flex;gap:.42em;font:700 clamp(34px,10vw,46px)/1 var(--fd);letter-spacing:0;padding-left:.42em}
+.in-word span{display:block;opacity:0;clip-path:inset(0 100% 0 0);
+  background:linear-gradient(180deg,#F1F4F7,#D5DAE0 45%,#9AA1AA 60%,#6B727B);-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:inWipe calc(.32s*var(--k)) var(--ease) calc((1.75s + var(--i)*.06s)*var(--k)) forwards}
+.in-sub{font:600 11px/1 var(--fd);letter-spacing:.42em;text-transform:uppercase;color:#9AA1AA;opacity:0;padding-left:.42em;
+  animation:inFade calc(.4s*var(--k)) var(--ease) calc(2.05s*var(--k)) forwards}
+.in-sub::before,.in-sub::after{content:'';display:inline-block;width:18px;height:1px;background:#5A6069;vertical-align:middle;margin:0 10px}
+.in-skip{position:absolute;bottom:calc(28px + env(safe-area-inset-bottom));font:500 11px/1 var(--fb);letter-spacing:.24em;text-transform:uppercase;color:#6B727B;opacity:0;
+  animation:inFade .4s var(--ease) calc(1.2s*var(--k)) forwards}
+
+/* ieșirea: două lame care se deschid (obturator), semnul zboară în antet */
+.intro.out{background:transparent}
+.intro.out .in-grid,.intro.out .in-scan,.intro.out .in-word,.intro.out .in-sub,.intro.out .in-skip{transition:opacity .2s var(--ease);opacity:0!important}
+.in-blade{position:absolute;left:0;right:0;height:50.5%;background:linear-gradient(180deg,#121418,#050607);z-index:-1}
+.in-blade.t{top:0;border-bottom:1px solid transparent}
+.in-blade.b{bottom:0;border-top:1px solid transparent;background:linear-gradient(0deg,#121418,#050607)}
+.intro.out .in-blade{border-color:rgba(213,218,224,.14)}
+.intro.out .in-blade.t{animation:inOpenT .5s var(--ease) .08s forwards}
+.intro.out .in-blade.b{animation:inOpenB .5s var(--ease) .08s forwards}
+
+@keyframes inFade{to{opacity:1}}
+@keyframes inScan{0%{opacity:1;transform:translateY(-100%)}100%{opacity:0;transform:translateY(360%)}}
+@keyframes inPlate{0%{opacity:0;transform:scale(.92)}100%{opacity:1;transform:scale(1)}}
+@keyframes inRim{to{stroke-dashoffset:0}}
+@keyframes inBar{to{transform:translate(0,0);opacity:1}}
+@keyframes inTick{to{opacity:1}}
+@keyframes inWipe{0%{opacity:1;clip-path:inset(0 100% 0 0)}100%{opacity:1;clip-path:inset(0 0 0 0)}}
+@keyframes inOpenT{to{transform:translateY(-101%)}}
+@keyframes inOpenB{to{transform:translateY(101%)}}
+
+/* logo-ul din antet și din meniul lateral */
+.top .logo,.side .logo{display:block;width:36px;height:36px;flex:none}
+.top .logo svg,.side .logo svg,svg.logo{width:100%;height:100%;display:block}
+.top .logo.wait,.side .logo.wait{opacity:0}
+.top .logo.land,.side .logo.land{animation:logoLand .42s var(--ease)}
+@keyframes logoLand{0%{transform:scale(1.15)}100%{transform:scale(1)}}

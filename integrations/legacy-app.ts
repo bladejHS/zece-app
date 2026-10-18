@@ -27,6 +27,7 @@ export default function legacyApp(): Plugin {
       const imports = [
         `import VOX_INDEX from '/src/data/vox-index.json';`,
         `import * as COACH from '/src/lib/coach/index.ts';`,
+        `import * as UI from '/src/ui/index.ts';`,
       ];
       return `${imports.join('\n')}\n${parts.join('\n')}`;
     },

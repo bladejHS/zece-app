@@ -79,12 +79,12 @@ async function hrMeasureStop(save_){ clearInterval(HR.mi); const m=HR.m; HR.m=nu
 function hrHTML(){
   const head=`<div class="eyebrow">${ic('heart')} Puls live · senzor Bluetooth</div>`;
   if(!hrOK()) return `${head}<div class="h2" style="margin-top:6px">Conectează Polar-ul</div>
-    <div class="sm" style="margin-top:8px">Browserul în care ai deschis UMBRA nu poate folosi Bluetooth.</div>
+    <div class="sm" style="margin-top:8px">Browserul în care ai deschis ZECE nu poate folosi Bluetooth.</div>
     <div class="dsec"><h4>Pe iPhone</h4><div class="cue"><b>1</b><span>Safari nu permite Bluetooth paginilor web (limită Apple).</span></div>
       <div class="cue"><b>2</b><span>Instalează aplicația gratuită <b>Bluefy – Web BLE Browser</b> din App Store.</span></div>
-      <div class="cue"><b>3</b><span>Deschide UMBRA în Bluefy, de pe adresa web a aplicației (după ce o punem online).</span></div></div>
+      <div class="cue"><b>3</b><span>Deschide ZECE în Bluefy, de pe adresa web a aplicației (după ce o punem online).</span></div></div>
     <div class="dsec"><h4>Pe Android sau PC</h4><div class="cue"><b>✓</b><span>Merge direct în Chrome sau Edge.</span></div></div>
-    <div class="note">UMBRA folosește serviciul standard de puls prin Bluetooth: merge cu Polar H10, H9, Verity Sense, OH1 și cu ceasurile Polar care își partajează pulsul.</div>
+    <div class="note">ZECE folosește serviciul standard de puls prin Bluetooth: merge cu Polar H10, H9, Verity Sense, OH1 și cu ceasurile Polar care își partajează pulsul.</div>
     <div class="inrow"><button class="btn" style="flex:1" data-a="shClose">Închide</button></div>`;
   if(!HR.on&&!HR.busy) return `${head}<div class="h2" style="margin-top:6px">${HR.dev?esc(HR.name)+' · deconectat':'Conectează Polar-ul'}</div>
     ${HR.err?`<div class="err">${ic('alert')}<span>${esc(HR.err)}</span></div>`:''}

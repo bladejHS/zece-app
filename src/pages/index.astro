@@ -1,25 +1,30 @@
 ---
-/* Pagina unică a aplicației. Markup-ul de pornire (intro, containere) e cel din monolit;
-   restul interfeței e desenat de aplicație (src/legacy, unite de vite-plugin-legacy). */
+/* Pagina unică a aplicației: antetul, deschiderea și containerele în care desenează aplicația
+   (src/legacy, unite de integrations/legacy-app.ts, plus modulele TypeScript din src/ui și src/lib). */
+import '../styles/fonts.css';
 import '../styles/legacy.css';
+import '../styles/tokens.css';
+import '../styles/tactical.css';
+import '../styles/intro.css';
+import Intro from '../components/Intro.astro';
+import TopBar from '../components/TopBar.astro';
+import { BRAND } from '../ui/brand';
 ---
 <!DOCTYPE html>
 <html lang="ro">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>UMBRA — Hybrid365</title>
-<meta name="theme-color" content="#000000">
+<title>{BRAND.name} — {BRAND.sub}</title>
+<meta name="description" content={BRAND.tagline}>
+<meta name="theme-color" content="#050607">
 <link rel="icon" type="image/svg+xml" href="icon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="UMBRA">
+<meta name="apple-mobile-web-app-title" content={BRAND.name}>
 <meta name="mobile-web-app-capable" content="yes">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script is:inline>/* tema (întunecată / luminoasă) se aplică înainte de prima randare, ca să nu clipească */
 try{ var m=JSON.parse(localStorage.getItem('zece3:mode')||'"dark"'); if(m==='auto') m=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'; if(m==='light') document.documentElement.setAttribute('data-mode','light'); if(JSON.parse(localStorage.getItem('zece3:bg')||'"anthr"')==='black') document.documentElement.classList.add('bg-black'); }catch(e){}</script>
 </head>
@@ -27,34 +32,14 @@ try{ var m=JSON.parse(localStorage.getItem('zece3:mode')||'"dark"'); if(m==='aut
 <canvas id="pt" aria-hidden="true"></canvas>
 <div id="amb" aria-hidden="true"></div><div id="grain" aria-hidden="true"></div>
 
-<div class="intro" id="intro" aria-hidden="true">
-  <div class="in-ph"></div><div class="in-light"></div>
-  <canvas id="introCv"></canvas><div class="in-flash"></div>
-  <div class="in-c"><div class="in-lw">
-    <svg class="in-stitch" viewBox="0 0 200 200">
-      <defs><mask id="inStM" maskUnits="userSpaceOnUse" x="-10" y="-10" width="220" height="220"><circle class="in-st-m" cx="100" cy="100" r="94" pathLength="100" transform="rotate(-90 100 100)"/></mask></defs>
-      <circle class="in-st-bk" cx="100" cy="100" r="97"/>
-      <circle class="in-st" cx="100" cy="100" r="94" mask="url(#inStM)"/>
-    </svg>
-    <img class="in-logo in-badge" id="inLogo" alt="" width="128" height="128">
-    <span class="in-sheen"></span>
-    <span class="in-ring"></span><span class="in-ring r2"></span></div>
-    <div class="in-word"><span>U</span><span>M</span><span>B</span><span>R</span><span>A</span></div>
-    <div class="in-bar"></div>
-    <div class="in-sub" id="inSub">Hybrid365</div>
-  </div>
-  <div class="in-skip">atinge pentru a intra</div>
-</div>
+<Intro />
 
 <aside class="side" id="side" aria-label="Meniu"></aside>
-<header class="top"><div class="top-in">
-  <svg class="logo wait" viewBox="0 0 48 48" aria-hidden="true"><rect x="1" y="1" width="46" height="46" rx="12" fill="#191D23" stroke="rgba(255,255,255,.14)"/><circle cx="24" cy="24" r="18.6" fill="none" stroke="rgba(232,236,241,.42)" stroke-width="1.2" stroke-dasharray="1.7 1.3"/><g transform="translate(11.64 10.1) scale(.6)"><path d="M33.5 5.2C26 2.6 17.8 4.2 13 9.2L5.6 12.2C2.6 13.4 1.4 16.4 2.6 19L5.6 23.2L6.6 19.4L13.4 18.2L11 22.8C14.8 26.2 17.4 30.6 18 37H30.4L27.2 32.6L33.6 31.4L29.4 26.8L36.4 24.8L31.8 21L38.6 17.4C39.6 12 37.6 7.4 33.5 5.2Z M15.4 11.6L22.4 10L19.8 13.6Z M13.1 9.2L14 9L14.6 18.1L13.6 18.2Z" fill="#F2F4F7" fill-rule="evenodd"/></g><g transform="translate(20.4 40.4)"><rect width="2.4" height="3.2" fill="#002B7F"/><rect x="2.4" width="2.4" height="3.2" fill="#FCD116"/><rect x="4.8" width="2.4" height="3.2" fill="#CE1126"/></g></svg>
-  <div class="brand-w"><div class="brand">UMBRA<small>Hybrid365</small></div></div>
-  <button class="search-t" id="srchT" data-a="palOpen" aria-label="Caută sau scrie o comandă (Ctrl+K)"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><span>Caută sau scrie o comandă</span><kbd>Ctrl K</kbd></button>
+<TopBar>
   <button class="hr-live hrc off" id="hrTop" data-a="hrOpen" aria-label="Puls"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21.2l8.8-8.8a5.5 5.5 0 0 0 0-7.8z"/></svg><span class="v">—</span><span class="z"></span></button>
   <button class="ib" id="bell" data-a="notifOpen" aria-label="Notificări"></button>
   <button class="ib" id="gear" data-a="tab" data-k="set" aria-label="Setări"></button>
-</div></header>
+</TopBar>
 
 <main class="view" id="view"></main>
 <div id="pillRoot"></div>

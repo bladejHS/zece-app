@@ -219,9 +219,9 @@ function cmpHTML(){
 }
 function motionHTML(){
   return `<div class="eyebrow">${ic('bolt')} Animații</div><div class="h2" style="margin-top:6px">Animațiile sunt reduse</div>
-    <p class="mu">Dispozitivul tău are setată <b>mișcarea redusă</b> (pe Windows: „Efecte de animație” oprite; pe iPhone: „Reducere mișcare”), așa că UMBRA a oprit animațiile, inclusiv cea de deschidere.
+    <p class="mu">Dispozitivul tău are setată <b>mișcarea redusă</b> (pe Windows: „Efecte de animație” oprite; pe iPhone: „Reducere mișcare”), așa că ZECE a oprit animațiile, inclusiv cea de deschidere.
     Poți să le pornești doar în aplicație, fără să schimbi setarea sistemului.</p>
-    <div class="inrow" style="flex-direction:column"><button class="btn pri xl wide" data-a="motionSet" data-k="on">${ic('bolt')} Pornește animațiile în UMBRA</button>
+    <div class="inrow" style="flex-direction:column"><button class="btn pri xl wide" data-a="motionSet" data-k="on">${ic('bolt')} Pornește animațiile în ZECE</button>
       <button class="btn ghost wide" data-a="motionSet" data-k="auto">Las-o după sistem</button></div>
     <div class="note">Poți schimba oricând din Setări → Aspect → Mișcare.</div>`;
 }
@@ -263,29 +263,29 @@ function recapData(off){
 function recapSlides(d){
   const A=TH().ac, A2=TH().ac2, sl=[], range=fmtDay(d.m0)+' – '+fmtDay(d.m1), N=(v,dec=0)=>`<span data-cnt="${(+v).toFixed(dec)}" data-dec="${dec}">${num(v,dec)}</span>`;
   const st=stats();
-  sl.push({c1:A,c2:'#4DA3FF',h:`<div class="rc-k">Recapitularea săptămânii</div><div class="rc-t">${esc(range)}</div><div class="rc-n">${N(d.active)}<small> din 7 zile active</small></div>
+  sl.push({c1:A,c2:'#6BB8C9',h:`<div class="rc-k">Recapitularea săptămânii</div><div class="rc-t">${esc(range)}</div><div class="rc-n">${N(d.active)}<small> din 7 zile active</small></div>
     <div class="rc-p">${d.active>=5?'O săptămână plină. Hai să vedem cifrele.':d.active>=3?'Ritm bun. Hai să vedem cifrele.':'Fiecare zi contează. Hai să vedem ce a ieșit.'}</div>`});
   sl.push({c1:A2,c2:A,h:`<div class="rc-k">Antrenamente terminate</div><div class="rc-n">${N(d.ses.length)}</div>
     <div class="rc-p">${d.ses.length?d.ses.map(h=>'<b>'+esc(DAYN[h.d])+'</b> · '+esc(h.t)).join('<br>'):'Niciun antrenament terminat în modul ghidat. Data viitoare apasă „Începe antrenamentul” pe ecranul Azi.'}</div>`});
-  sl.push({c1:A,c2:'#8B5CF6',h:`<div class="rc-k">Forță</div><div class="rc-n">${N(d.sets)}<small> serii</small></div>
+  sl.push({c1:A,c2:'#9A94B8',h:`<div class="rc-k">Forță</div><div class="rc-n">${N(d.sets)}<small> serii</small></div>
     <div class="rc-grid"><div class="rc-c"><b>${N(d.vol/1000,1)} t</b><span>volum ridicat</span></div><div class="rc-c"><b>${Object.keys(d.ex).length}</b><span>exerciții</span></div>
       <div class="rc-c"><b>${d.prs.length}</b><span>recorduri</span></div><div class="rc-c"><b class="t">${esc(d.topEx||'—')}</b><span>cel mai lucrat</span></div></div>`});
-  if(d.prs.length) sl.push({c1:'#FFB020',c2:A,h:`<div class="rc-k">Recorduri noi</div><div class="rc-n">${N(d.prs.length)}</div>
+  if(d.prs.length) sl.push({c1:'#E8A84C',c2:A,h:`<div class="rc-k">Recorduri noi</div><div class="rc-n">${N(d.prs.length)}</div>
     <div class="rc-p">${d.prs.slice(0,5).map(p=>`<b>${esc(p.n)}</b>: ${p.prev} → ${p.b} kg (1RM estimat)`).join('<br>')}</div>`});
-  sl.push({c1:'#4DA3FF',c2:'#22D3EE',h:`<div class="rc-k">Alergare</div><div class="rc-n">${N(d.km,1)}<small> km</small></div>
+  sl.push({c1:'#6BB8C9',c2:'#6BB8C9',h:`<div class="rc-k">Alergare</div><div class="rc-n">${N(d.km,1)}<small> km</small></div>
     <div class="rc-grid"><div class="rc-c"><b>${d.runs.length}</b><span>ieșiri</span></div><div class="rc-c"><b>${num(d.longest,1)} km</b><span>cea mai lungă</span></div>
       <div class="rc-c"><b>${d.bestPace?mmss(d.bestPace):'—'}</b><span>cel mai bun ritm /km</span></div><div class="rc-c"><b>${num(d.runs.reduce((a,r)=>a+(+r.min||0),0),0)}</b><span>minute în mișcare</span></div></div>`});
   if(d.wNow!=null){ const dl=d.wPrev!=null?d.wNow-d.wPrev:null;
-    sl.push({c1:'#3DDC97',c2:'#4DA3FF',h:`<div class="rc-k">Corp</div><div class="rc-n">${dl!=null?(dl>0?'+':'')+num(dl,1):num(d.wNow,1)}<small> kg</small></div>
+    sl.push({c1:'#8FBFA0',c2:'#6BB8C9',h:`<div class="rc-k">Corp</div><div class="rc-n">${dl!=null?(dl>0?'+':'')+num(dl,1):num(d.wNow,1)}<small> kg</small></div>
       <div class="rc-p">${dl!=null?'Media săptămânii: <b>'+num(d.wNow,1)+' kg</b>, față de '+num(d.wPrev,1)+' kg săptămâna dinainte. '+(dl<=0?'Merge în direcția bună.':'Greutatea fluctuează normal; contează trendul pe mai multe săptămâni.'):'Media săptămânii: <b>'+num(d.wNow,1)+' kg</b>.'}</div>`}); }
-  if(d.kd||d.wAvg) sl.push({c1:'#3DDC97',c2:A2,h:`<div class="rc-k">Nutriție</div><div class="rc-n">${d.kAvg?N(d.kAvg):'—'}<small> kcal pe zi</small></div>
+  if(d.kd||d.wAvg) sl.push({c1:'#8FBFA0',c2:A2,h:`<div class="rc-k">Nutriție</div><div class="rc-n">${d.kAvg?N(d.kAvg):'—'}<small> kcal pe zi</small></div>
     <div class="rc-grid"><div class="rc-c"><b>${d.kd}</b><span>zile notate</span></div><div class="rc-c"><b>${d.pd}</b><span>zile cu proteina atinsă</span></div>
       <div class="rc-c"><b>${d.wAvg?num(d.wAvg/1000,1)+' L':'—'}</b><span>apă pe zi</span></div><div class="rc-c"><b>${d.tg.kcal}</b><span>ținta de kcal</span></div></div>`});
-  sl.push({c1:A,c2:'#8B5CF6',h:`<div class="rc-k">Mușchii săptămânii</div><div class="rc-t">${d.topM&&d.topM.v?esc(d.topM.l)+' a dus greul':'Mușchii s-au odihnit'}</div>
+  sl.push({c1:A,c2:'#9A94B8',h:`<div class="rc-k">Mușchii săptămânii</div><div class="rc-t">${d.topM&&d.topM.v?esc(d.topM.l)+' a dus greul':'Mușchii s-au odihnit'}</div>
     <div class="body-wrap rc-body">${bodySVG('f',d.ms,null,true)}${bodySVG('b',d.ms,null,true)}</div>`});
-  sl.push({c1:'#8B5CF6',c2:A,h:`<div class="rc-k">Consecvența ta</div><div class="rc-n">${N(st.streak)}<small> ${st.streak===1?'săptămână activă':'săptămâni active'} la rând</small></div>
+  sl.push({c1:'#9A94B8',c2:A,h:`<div class="rc-k">Consecvența ta</div><div class="rc-n">${N(st.streak)}<small> ${st.streak===1?'săptămână activă':'săptămâni active'} la rând</small></div>
     <div class="rc-p">O săptămână activă înseamnă cel puțin 3 zile cu antrenament sau alergare.</div>`});
-  sl.push({c1:A,c2:'#4DA3FF',d:900,h:`<div class="rc-k">${esc(range)}</div><div class="rc-t">Săptămâna ta în cifre</div>
+  sl.push({c1:A,c2:'#6BB8C9',d:900,h:`<div class="rc-k">${esc(range)}</div><div class="rc-t">Săptămâna ta în cifre</div>
     <div class="rc-grid"><div class="rc-c"><b>${d.active}</b><span>zile active</span></div><div class="rc-c"><b>${d.sets}</b><span>serii</span></div>
       <div class="rc-c"><b>${num(d.km,1)}</b><span>km</span></div><div class="rc-c"><b>${d.prs.length}</b><span>recorduri</span></div></div>
     <div class="rc-acts"><button class="btn pri xl" data-a="rcShare">${ic('upload')} Distribuie ca imagine</button><button class="btn" data-a="rcAsk">${ic('coach')} Ce zice antrenorul?</button>
@@ -314,8 +314,8 @@ async function shareImg(o){
   const W=1080,H=1350,c=document.createElement('canvas'); c.width=W; c.height=H; const g=c.getContext('2d'), t=TH();
   g.fillStyle='#09090B'; g.fillRect(0,0,W,H);
   let gr=g.createRadialGradient(180,160,0,180,160,950); gr.addColorStop(0,glowA(t.ac,.55)); gr.addColorStop(1,'rgba(9,9,11,0)'); g.fillStyle=gr; g.fillRect(0,0,W,H);
-  gr=g.createRadialGradient(980,1250,0,980,1250,760); gr.addColorStop(0,'rgba(77,163,255,.28)'); gr.addColorStop(1,'rgba(9,9,11,0)'); g.fillStyle=gr; g.fillRect(0,0,W,H);
-  g.fillStyle='#fff'; g.font='800 70px '+fd; g.fillText('UMBRA',80,140); g.fillStyle=t.ac; g.fillRect(80,160,130,8);
+  gr=g.createRadialGradient(980,1250,0,980,1250,760); gr.addColorStop(0,'rgba(107,184,201,.28)'); gr.addColorStop(1,'rgba(9,9,11,0)'); g.fillStyle=gr; g.fillRect(0,0,W,H);
+  g.fillStyle='#fff'; g.font='800 70px '+fd; g.fillText('ZECE',80,140); g.fillStyle=t.ac; g.fillRect(80,160,130,8);
   g.fillStyle='rgba(255,255,255,.72)'; g.font='600 34px '+fb; g.fillText(String(o.k).toUpperCase(),80,280);
   g.fillStyle='#fff'; g.font='800 112px '+fd; let y=400; const words=String(o.t).toUpperCase().split(' '); let line='';
   words.forEach(wd=>{ const tst=line?line+' '+wd:wd; if(g.measureText(tst).width>W-160&&line){ g.fillText(line,80,y); y+=110; line=wd; } else line=tst; }); g.fillText(line,80,y);
@@ -325,10 +325,10 @@ async function shareImg(o){
     g.fillStyle='#fff'; g.font='800 96px '+fd; g.fillText(String(s[0]),x+30,yy+120); g.fillStyle='rgba(255,255,255,.7)'; g.font='600 30px '+fb; g.fillText(String(s[1]),x+32,yy+172); });
   y+=2*(bh+30)+30; g.font='600 32px '+fb;
   (o.lines||[]).slice(0,3).forEach(l=>{ g.fillStyle=t.ac; rr(g,80,y-30,14,36,6); g.fill(); g.fillStyle='#fff'; g.fillText(String(l).slice(0,48),112,y); y+=56; });
-  g.fillStyle='rgba(255,255,255,.55)'; g.font='600 28px '+fb; g.fillText('UMBRA · Hybrid365',80,H-80); g.textAlign='right'; g.fillText(fmtDay(todayKey()),W-80,H-80); g.textAlign='left';
+  g.fillStyle='rgba(255,255,255,.55)'; g.font='600 28px '+fb; g.fillText('ZECE · Hybrid365',80,H-80); g.textAlign='right'; g.fillText(fmtDay(todayKey()),W-80,H-80); g.textAlign='left';
   const blob=await new Promise(res=>c.toBlob(res,'image/png')); if(!blob){ toast('Nu am putut crea imaginea','','info'); return; }
   const file=new File([blob],'zece-'+todayKey()+'.png',{type:'image/png'});
-  try{ if(navigator.canShare&&navigator.canShare({files:[file]})){ await navigator.share({files:[file],title:'UMBRA'}); return; } }catch(e){ if(e&&e.name==='AbortError') return; }
+  try{ if(navigator.canShare&&navigator.canShare({files:[file]})){ await navigator.share({files:[file],title:'ZECE'}); return; } }catch(e){ if(e&&e.name==='AbortError') return; }
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=file.name; document.body.appendChild(a); a.click();
   setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },1000); toast('Imagine salvată',file.name,'info');
 }

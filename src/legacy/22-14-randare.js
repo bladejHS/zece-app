@@ -47,8 +47,8 @@ function renderSide(){
   const sd=$('#side'); if(!sd) return;
   const it=([k,l,icn],kb)=>`<button class="sb ${S.tab===k?'on':''}" data-a="tab" data-k="${k}" ${S.tab===k?'aria-current="page"':''}>${ic(icn)}<span>${l}</span>${k==='coach'&&AI.busy&&S.tab!=='coach'?'<span class="cnt">·</span>':kb?`<span class="kb">${kb}</span>`:''}</button>`;
   const lt=modeNow()==='light';
-  sd.innerHTML=`<button class="side-br" data-a="tab" data-k="azi" aria-label="Acasă"><svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><rect x="1" y="1" width="46" height="46" rx="12" fill="#191D23" stroke="rgba(255,255,255,.14)"/><circle cx="24" cy="24" r="18.6" fill="none" stroke="rgba(232,236,241,.42)" stroke-width="1.2" stroke-dasharray="1.7 1.3"/><g transform="translate(11.64 10.1) scale(.6)"><path d="M33.5 5.2C26 2.6 17.8 4.2 13 9.2L5.6 12.2C2.6 13.4 1.4 16.4 2.6 19L5.6 23.2L6.6 19.4L13.4 18.2L11 22.8C14.8 26.2 17.4 30.6 18 37H30.4L27.2 32.6L33.6 31.4L29.4 26.8L36.4 24.8L31.8 21L38.6 17.4C39.6 12 37.6 7.4 33.5 5.2Z M15.4 11.6L22.4 10L19.8 13.6Z M13.1 9.2L14 9L14.6 18.1L13.6 18.2Z" fill="#F2F4F7" fill-rule="evenodd"/></g><g transform="translate(20.4 40.4)"><rect width="2.4" height="3.2" fill="#002B7F"/><rect x="2.4" width="2.4" height="3.2" fill="#FCD116"/><rect x="4.8" width="2.4" height="3.2" fill="#CE1126"/></g></svg>
-      <div class="brand">UMBRA<small>Hybrid365</small></div></button>
+  sd.innerHTML=`<button class="side-br" data-a="tab" data-k="azi" aria-label="Acasă">${UI.logoSvg({cls:'logo',ticks:false})}
+      <div class="brand">ZECE<small>Hybrid365</small></div></button>
     <button class="side-search" data-a="palOpen">${ic('search')}<span>Caută sau comandă</span><kbd>Ctrl K</kbd></button>
     ${NAV.map((n,i)=>it(n,'Alt '+(i+1))).join('')}
     <div class="side-h">Mai mult</div>

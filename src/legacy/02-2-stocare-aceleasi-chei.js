@@ -26,7 +26,7 @@ const K={lifts:'zece:lifts',weights:'zece:weights',runs:'zece:runs',wlog:'zece:w
   ptests:'zece3:ptests',tmlog:'zece3:tmlog',adj:'zece3:adj',strava:'zece3:strava',ext:'zece3:ext',stq:'zece3:stq',look:'zece3:look',goals:'zece3:goals',supp:'zece3:supp',bk:'zece3:bk',exNote:'zece3:exnote',foods:'zece3:foods',shoes:'zece3:shoes',sync:'zece3:sync',mode:'zece3:mode',
   dash:'zece3:dash',bg:'zece3:bg',planV:'zece3:planv',ach:'zece3:ach',notif:'zece3:notif',notifCfg:'zece3:notifCfg',exFav:'zece3:exfav',exCustom:'zece3:excustom'};
 const S={tab:'azi',lifts:{},weights:{},runs:[],wlog:{},cyc:{},runPlan:{},prof:{},mlog:{},hist:[],sess:null,sound:true,
-  aiKey:'',aiChat:null,aiEffort:'medium',aiUsed:0,water:{},body:{},theme:'otel',bg:'anthr',mode:'dark',fx:'normal',onb:false,seenAch:null,seenLvl:null,
+  aiKey:'',aiChat:null,aiEffort:'medium',aiUsed:0,water:{},body:{},theme:'tactical',bg:'anthr',mode:'dark',fx:'normal',onb:false,seenAch:null,seenLvl:null,
   journal:{},tech:{},voice:true,recapSeen:0,photos:undefined,mSel:null,phPose:'fata',
   mplan:{},shop:{},mf:{port:false,cold:false},intro:'full',nTab:'azi',planDay:0,shopDays:7,motion:'auto',motionAsked:false,
   ptests:[],tmlog:[],twAttr:'str',twRange:90,ciOpen:null,adj:{},strava:{},ext:[],stq:[],mWin:7,shotN:1,shotF:'all',shotOpen:null,

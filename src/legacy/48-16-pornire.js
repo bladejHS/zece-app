@@ -17,9 +17,9 @@ async function loadAll(){
   S.sess=o.sess&&o.sess.start&&o.sess.sets?Object.assign({tmMin:{},tasks:{},runs:{},prs:[],best:{},kg:{},rp:{}},o.sess):null;
   S.sound=o.sound!==false; S.aiKey=await COACH.vault.loadKey(); S.aiUsed=+o.aiUsed||0;
   S.aiEffort=['low','medium','high'].indexOf(o.aiEffort)>=0?o.aiEffort:'medium';
-  S.theme=THEMES[o.theme]?o.theme:'otel'; S.mode=['dark','light','auto'].indexOf(o.mode)>=0?o.mode:'dark'; S.bg=o.bg==='black'?'black':'anthr';
-  /* designul v9 pornește o singură dată pe tema Oțel (antracit + albastru oțel); după aceea tema aleasă în Setări rămâne */
-  if((+o.look||0)<9){ S.theme='otel'; await store.set(K.theme,'otel'); await store.set(K.look,9); }
+  S.theme=THEMES[o.theme]?o.theme:'tactical'; S.mode=['dark','light','auto'].indexOf(o.mode)>=0?o.mode:'dark'; S.bg=o.bg==='black'?'black':'anthr';
+  /* designul ZECE (v15) pornește o singură dată pe tema Tactical; după aceea tema aleasă în Setări rămâne */
+  if((+o.look||0)<15){ S.theme='tactical'; await store.set(K.theme,'tactical'); await store.set(K.look,15); }
   S.fx=['min','normal','max'].indexOf(o.fx)>=0?o.fx:'normal'; S.onb=!!o.onb;
   S.seenAch=Array.isArray(o.seenAch)?o.seenAch:null; S.seenLvl=typeof o.seenLvl==='number'?o.seenLvl:null;
   /* conversațiile din v3 au alt set de unelte și alt prompt: le închidem, altfel istoricul nu mai corespunde */
@@ -40,37 +40,14 @@ async function migrate(){
     Object.keys(S.sess.sets).forEach(x=>{ ss[x]=(S.sess.sets[x]||[]).map(s=>{ if(Array.isArray(s)&&s.length>2&&typeof s[2]!=='string'){ sc=true; return [s[0],s[1]]; } return s; }); });
     if(sc||S.sess.rir){ S.sess=Object.assign({},S.sess,{sets:ss}); delete S.sess.rir; await store.set(K.sess,S.sess); } }
 }
-/* ---------- animația de deschidere ---------- */
+/* ---------- animația de deschidere (src/components/Intro.astro, src/styles/intro.css) ---------- */
 const INTRO={on:false,leaving:false,done:null,mode:'full'};
-/* v12: praf fin în lumina de studio, iar când cusătura inelului se închide, scântei argintii din jurul insignei */
-const IN_T1=1.45; /* secunda (× k) la care cusătura se închide și apare insigna zilei */
-function introParticles(mode){
-  const cv=$('#introCv'); if(!cv||!cv.getContext) return;
-  const ctx=cv.getContext('2d'), dpr=Math.min(2,devicePixelRatio||1), W=cv.width=innerWidth*dpr, H=cv.height=innerHeight*dpr;
-  const cols=['#ffffff','#C9D1DA','#8E99A6'], N=mode==='full'?80:44, k=mode==='full'?1:.42;
-  const ps=Array.from({length:N},(_,i)=>({x:Math.random()*W,y:Math.random()*H,r:(.4+Math.random()*1.2)*dpr,vx:(Math.random()-.5)*14*dpr,vy:-(6+Math.random()*24)*dpr,
-    a:.2+Math.random()*.5,tw:Math.random()*6.283,c:cols[i%3],d:Math.random()*.8}));
-  const sp=[]; let burst=false;
-  const t0=performance.now(); let last=t0;
-  const frame=now=>{ if(!INTRO.on) return; const t=(now-t0)/1000, dt=Math.min(.05,(now-last)/1000); last=now;
-    const out=INTRO.leaving?clamp(1-(now-INTRO.leftAt)/350,0,1):1;
-    if(!burst&&t>=IN_T1*k){ burst=true; const dl=$('.intro .in-lw'); if(dl){ const r=dl.getBoundingClientRect(), cx=(r.left+r.width/2)*dpr, cy=(r.top+r.height/2)*dpr, R0=r.width*.37*dpr;
-      for(let i=0;i<(mode==='full'?64:36);i++){ const an=Math.random()*6.283, v=(170+Math.random()*380)*dpr;
-        sp.push({x:cx+Math.cos(an)*R0,y:cy+Math.sin(an)*R0,vx:Math.cos(an)*v,vy:Math.sin(an)*v,l:0,L:.55+Math.random()*.6,w:(.8+Math.random()*1.4)*dpr,c:i%3?'#E4E8EE':'#ffffff'}); } } }
-    ctx.clearRect(0,0,W,H); ctx.globalCompositeOperation='lighter';
-    ps.forEach(p=>{ p.x+=p.vx*dt; p.y+=p.vy*dt; p.tw+=dt*2.2; if(p.y<-10){ p.y=H+10; p.x=Math.random()*W; }
-      const cone=1-Math.min(1,Math.abs(p.x/W-.5)*1.6), al=p.a*clamp((t-p.d)/1.2,0,1)*out*(.55+.45*Math.sin(p.tw))*(.35+.65*cone);
-      if(al<.01) return; ctx.globalAlpha=al; ctx.fillStyle=p.c; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,6.283); ctx.fill(); });
-    ctx.lineCap='round';
-    sp.forEach(p=>{ if(p.l>=p.L) return; p.l+=dt; const f=Math.pow(.06,dt); p.vx*=f; p.vy*=f; p.vy+=60*dpr*dt; const x0=p.x, y0=p.y; p.x+=p.vx*dt; p.y+=p.vy*dt;
-      const al=(1-p.l/p.L)*out; if(al<.02) return; ctx.globalAlpha=al; ctx.strokeStyle=p.c; ctx.lineWidth=p.w; ctx.beginPath(); ctx.moveTo(x0-(p.x-x0)*2.2,y0-(p.y-y0)*2.2); ctx.lineTo(p.x,p.y); ctx.stroke(); });
-    requestAnimationFrame(frame); };
-  requestAnimationFrame(frame);
-}
+/* secunda (× k) la care se aprinde al 10-lea segment: vibrația scurtă cade pe el */
+const IN_T10=1.75;
 function introStart(){
   const intro=$('#intro'); let mode='full';
   try{ const m=JSON.parse(localStorage.getItem(K.intro)||'"full"'); if(['full','short','off'].indexOf(m)>=0) mode=m; }catch(e){}
-  try{ const lk=+JSON.parse(localStorage.getItem(K.look)||'0')||0, t=lk>=9?JSON.parse(localStorage.getItem(K.theme)||'null'):'otel'; if(THEMES[t]) S.theme=t; }catch(e){}
+  try{ const lk=+JSON.parse(localStorage.getItem(K.look)||'0')||0, t=lk>=15?JSON.parse(localStorage.getItem(K.theme)||'null'):'tactical'; S.theme=THEMES[t]?t:'tactical'; }catch(e){}
   try{ S.bg=JSON.parse(localStorage.getItem(K.bg)||'"anthr"')==='black'?'black':'anthr'; }catch(e){}
   try{ const md=JSON.parse(localStorage.getItem(K.mode)||'"dark"'); if(['dark','light','auto'].indexOf(md)>=0) S.mode=md; }catch(e){}
   applyTheme();
@@ -80,28 +57,26 @@ function introStart(){
   INTRO.done=new Promise(res=>{ INTRO.resolve=res; });
   if(mode==='off'||motionOff()){ intro.remove(); $('.top .logo').classList.remove('wait'); INTRO.resolve(); return; }
   if(mode==='short') intro.classList.add('short');
-  /* insigna zilei de azi (luni = 0), în centrul animației */
-  { const ib=$('#inLogo'), src=DAY_PH['d'+((new Date().getDay()+6)%7)]; if(ib&&src) ib.src=src; }
-  INTRO.on=true; introParticles(mode);
-  setTimeout(()=>buzz([18,40,30]),Math.round(IN_T1*(mode==='full'?1000:420)));
+  INTRO.on=true;
+  const k=mode==='full'?1:.45;
+  setTimeout(()=>{ if(INTRO.on) buzz([22]); },Math.round(IN_T10*k*1000));
   intro.addEventListener('click',introExit);
-  setTimeout(introExit,mode==='full'?3700:1500);
+  setTimeout(introExit,Math.round((mode==='full'?2.9:1.35)*1000));
 }
-/* ieșirea: insigna zboară în antet, poza se apropie, iar ecranul se strânge ca un iris în jurul logo-ului */
+/* ieșirea: semnul zboară în antet, iar cele două lame se deschid ca un obturator */
 function introExit(){
-  if(INTRO.leaving) return; INTRO.leaving=true; INTRO.leftAt=performance.now();
+  if(INTRO.leaving) return; INTRO.leaving=true;
   const intro=$('#intro'), il=$('#inLogo'), hl=$('.top .logo');
-  const finish=()=>{ INTRO.on=false; if(intro.isConnected) intro.remove(); hl.classList.remove('wait'); hl.classList.add('land'); setTimeout(()=>hl.classList.remove('land'),520);
+  const finish=()=>{ INTRO.on=false; if(intro.isConnected) intro.remove(); hl.classList.remove('wait'); hl.classList.add('land'); setTimeout(()=>hl.classList.remove('land'),460);
     const v=$('#view'); v.classList.remove('anim'); void v.offsetWidth; v.classList.add('anim'); countUp(v); INTRO.resolve(); };
   try{
+    /* animațiile de intrare încă în curs sar direct la final, ca semnul să plece întreg */
+    intro.getAnimations({subtree:true}).forEach(a=>{ try{ a.finish(); }catch(e){} });
     const r1=il.getBoundingClientRect(), r2=hl.getBoundingClientRect(), cx=r2.left+r2.width/2, cy=r2.top+r2.height/2;
     const dx=cx-(r1.left+r1.width/2), dy=cy-(r1.top+r1.height/2), sc=r2.width/r1.width;
-    il.animate([{transform:'translate(0,0) scale(1)',opacity:1},{transform:`translate(${dx}px,${dy}px) scale(${sc})`,opacity:1}],{duration:560,easing:'cubic-bezier(.6,0,.2,1)',fill:'forwards'});
-    intro.querySelectorAll('.in-word,.in-bar,.in-sub,.in-skip,.in-ring,.in-stitch,.in-sheen').forEach(el=>el.animate([{opacity:1},{opacity:0,transform:'translateY(14px)'}],{duration:240,fill:'forwards'}));
-    const ph=intro.querySelector('.in-ph'); if(ph) ph.animate([{transform:'scale(1.03)'},{transform:'scale(1.12)'}],{duration:700,easing:'cubic-bezier(.6,0,.2,1)',fill:'forwards'});
-    const a=intro.animate([{clipPath:`circle(${Math.hypot(innerWidth,innerHeight)}px at ${cx}px ${cy}px)`},{clipPath:`circle(${r2.width/2}px at ${cx}px ${cy}px)`}],
-      {duration:640,delay:60,easing:'cubic-bezier(.7,0,.25,1)',fill:'forwards'});
-    a.onfinish=finish; setTimeout(()=>{ if(intro.isConnected) finish(); },1100);
+    intro.classList.add('out');
+    const a=il.animate([{transform:'translate(0,0) scale(1)'},{transform:`translate(${dx}px,${dy}px) scale(${sc})`}],{duration:520,easing:'cubic-bezier(.25,.46,.45,.94)',fill:'forwards'});
+    a.onfinish=finish; setTimeout(()=>{ if(intro.isConnected) finish(); },900);
   }catch(e){ finish(); }
 }
 (async function init(){

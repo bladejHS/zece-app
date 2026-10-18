@@ -1,6 +1,6 @@
 /* =====================================================================
    14b · STRAVA — și Polar Beat prin Strava
-   Polar Beat → Polar Flow → Strava → UMBRA, iar sesiunile UMBRA → Strava.
+   Polar Beat → Polar Flow → Strava → ZECE, iar sesiunile ZECE → Strava.
    API-ul Strava acceptă apeluri direct din browser (CORS). Folosim aplicația API
    a utilizatorului: Client ID și Client Secret stau doar pe dispozitiv, nu în cod.
    ===================================================================== */
@@ -148,8 +148,8 @@ function stItem(rec,s,day,hs){
     const r=s.runs[x]; return [r&&+r.km>0?'• '+e.n+': '+num(r.km,2)+' km în '+num(r.min)+' min':null]; }).filter(Boolean);
   const sport=rec.km>0&&!rec.sets?'Run':rec.km>0?'Workout':'WeightTraining';
   const head=`S${rec.w+1} · ${DAYN[rec.d]} · ciclul ${rec.cyc}\n${rec.sets} serii · ${Math.round(rec.vol)} kg volum`+(rec.km?` · ${num(rec.km,2)} km`:'')+(rec.prs?` · ${rec.prs} ${rec.prs===1?'record':'recorduri'}`:'');
-  return {key:String(rec.end),start:s.start,end:rec.end,dur:rec.dur,km:rec.km||0,sport,name:'UMBRA · '+rec.t,
-    desc:(head+(lines.length?'\n\n'+lines.join('\n'):'')+'\n\nÎnregistrat cu UMBRA · Hybrid365').slice(0,3000),
+  return {key:String(rec.end),start:s.start,end:rec.end,dur:rec.dur,km:rec.km||0,sport,name:'ZECE · '+rec.t,
+    desc:(head+(lines.length?'\n\n'+lines.join('\n'):'')+'\n\nÎnregistrat cu ZECE · Hybrid365').slice(0,3000),
     hr:hs?{avg:hs.avg,max:hs.max}:null,pts:hs&&hs.pts?hs.pts.slice():[],t0:(s.hr&&s.hr.t0)||s.start};
 }
 async function stQueue(it){ await save('stq',(S.stq||[]).filter(x=>x.key!==it.key).concat([it]).slice(-20)); }
@@ -202,17 +202,17 @@ function stSumTxt(m){
 function stSumPaint(key){ const el=$('#stSum'); if(el&&S.summary&&String(S.summary.end)===key) el.innerHTML=stSumTxt(S.summary); }
 function stCard(){
   const c=stCfg(), head=`<div class="eyebrow">${ic('refresh')} Strava · Polar Beat</div>`;
-  if(!stOnline()) return `<div class="card" id="stSet">${head}<div class="note">Strava se poate conecta doar când UMBRA e deschis de la adresa online (https://…), nu din fișierul salvat pe telefon sau pe calculator.</div></div>`;
+  if(!stOnline()) return `<div class="card" id="stSet">${head}<div class="note">Strava se poate conecta doar când ZECE e deschis de la adresa online (https://…), nu din fișierul salvat pe telefon sau pe calculator.</div></div>`;
   const cp=(lbl,v)=>`<div class="set-row"><span class="sp"><span class="xs mu">${lbl}</span><div style="font-family:ui-monospace,Consolas,monospace;font-size:13px;word-break:break-all">${esc(v)}</div></span><button class="btn ghost sm" data-a="stCopy" data-k="${esc(v)}">${ic('copy')} Copiază</button></div>`;
-  const polar=`<div class="dsec"><h4>Polar Beat → Strava → UMBRA</h4>
+  const polar=`<div class="dsec"><h4>Polar Beat → Strava → ZECE</h4>
       <div class="cue"><b>1</b><span>Pe <a href="https://flow.polar.com" target="_blank" rel="noopener"><b>flow.polar.com</b></a>: numele tău (dreapta sus) → <b>Setări → Parteneri → Strava → Conectează</b>, apoi „Authorize” în Strava. Se face o singură dată.</span></div>
       <div class="cue"><b>2</b><span>Antrenamentele înregistrate cu <b>Polar Beat</b> urcă în Polar Flow, iar de acolo automat pe Strava. Merg doar cele cu puls sau GPS; cele adăugate manual în Flow nu se trimit.</span></div>
-      <div class="cue"><b>3</b><span>UMBRA le preia la deschidere sau cu „Sincronizează”, cu tot cu puls. Dacă același antrenament e și sesiune UMBRA, se numără o singură dată.</span></div></div>
-    <div class="note">Același drum îl au Garmin, Coros, Suunto sau Apple Watch: tot ce ajunge pe Strava intră și în UMBRA.</div>`;
+      <div class="cue"><b>3</b><span>ZECE le preia la deschidere sau cu „Sincronizează”, cu tot cu puls. Dacă același antrenament e și sesiune ZECE, se numără o singură dată.</span></div></div>
+    <div class="note">Același drum îl au Garmin, Coros, Suunto sau Apple Watch: tot ce ajunge pe Strava intră și în ZECE.</div>`;
   if(!c.cid||!c.sec) return `<div class="card" id="stSet">${head}
-    <div class="sm" style="margin-top:8px">UMBRA vorbește cu Strava prin aplicația ta Strava. O creezi o singură dată, în două minute:</div>
+    <div class="sm" style="margin-top:8px">ZECE vorbește cu Strava prin aplicația ta Strava. O creezi o singură dată, în două minute:</div>
     <div class="dsec"><div class="cue"><b>1</b><span>Deschide <a href="https://www.strava.com/settings/api" target="_blank" rel="noopener"><b>strava.com/settings/api</b></a>, creează o aplicație (categoria <b>Training</b>) și completează:</span></div></div>
-    ${cp('Application Name','UMBRA')}${cp('Website',stRedirect())}${cp('Authorization Callback Domain',location.hostname)}
+    ${cp('Application Name','ZECE')}${cp('Website',stRedirect())}${cp('Authorization Callback Domain',location.hostname)}
     <div class="dsec"><div class="cue"><b>2</b><span>Copiază aici <b>Client ID</b> și <b>Client Secret</b> din pagina aplicației.</span></div></div>
     <div class="form"><div class="fld"><label for="stCid">Client ID</label><input class="inp" id="stCid" inputmode="numeric" autocomplete="off" value="${esc(c.cid||'')}" placeholder="ex: 123456"></div>
       <div class="fld"><label for="stSec">Client Secret</label><input class="inp" id="stSec" type="password" autocomplete="off" placeholder="40 de caractere"></div></div>
@@ -228,8 +228,8 @@ function stCard(){
   return `<div class="card" id="stSet">${head}
     <div class="row" style="margin-top:8px"><span class="sp"><b>${esc((c.ath&&c.ath.name)||'Cont Strava')}</b><div class="xs mu">${ST.busy?'se sincronizează…':c.last?'sincronizat '+stAgo(c.last):'încă nesincronizat'}</div></span>
       <button class="btn sm" id="stSyncBtn" data-a="stSync" ${ST.busy?'disabled':''}>${ic('refresh')} ${ST.busy?'Sincronizez…':'Sincronizează'}</button></div>
-    <div class="kpis"><div class="kpi"><div class="k">Alergări din Strava</div><div class="v">${nr}</div></div><div class="kpi"><div class="k">Alte antrenamente</div><div class="v">${ne}</div></div><div class="kpi"><div class="k">Trimise din UMBRA</div><div class="v">${no}</div></div></div>
-    <div class="set-row"><span class="sp"><b>Trimite automat antrenamentele UMBRA</b><div class="sm mu">${w?'La final, cu durata, seriile și pulsul de la senzor':'Strava nu a primit permisiunea de upload. Conectează din nou și las-o bifată.'}</div></span>
+    <div class="kpis"><div class="kpi"><div class="k">Alergări din Strava</div><div class="v">${nr}</div></div><div class="kpi"><div class="k">Alte antrenamente</div><div class="v">${ne}</div></div><div class="kpi"><div class="k">Trimise din ZECE</div><div class="v">${no}</div></div></div>
+    <div class="set-row"><span class="sp"><b>Trimite automat antrenamentele ZECE</b><div class="sm mu">${w?'La final, cu durata, seriile și pulsul de la senzor':'Strava nu a primit permisiunea de upload. Conectează din nou și las-o bifată.'}</div></span>
       <button class="sw ${auto?'on':''}" data-a="stAuto" role="switch" aria-checked="${auto}" aria-label="Trimite automat pe Strava" ${w?'':'disabled'}></button></div>
     ${q.length?`<div class="set-row"><span class="sp"><b>${q.length===1?'1 antrenament':q.length+' antrenamente'} de trimis</b><div class="sm mu">${esc(q.map(x=>x.name).join(', '))}</div></span>
       <button class="btn sm" data-a="stFlush">Trimite</button><button class="xb" data-a="stQDrop" data-confirm="?" aria-label="Renunță la trimitere">${ic('trash')}</button></div>`:''}
@@ -241,7 +241,7 @@ function stCard(){
 function extCard(){
   const xs=(S.ext||[]).filter(x=>x.src!=='manual').sort((a,b)=>(b.start||0)-(a.start||0)).slice(0,8); if(!xs.length) return '';
   return `<div class="card"><div class="eyebrow">${ic('refresh')} Alte antrenamente · din Strava</div><div style="margin-top:4px">
-    ${xs.map(x=>`<div class="list-row"><span class="tag ${x.dup?'':'rest'}">${esc(stName(x.type))}</span><span class="sp"><b>${esc(x.name||stName(x.type))}</b> <span class="mu sm">· ${num(x.min,0)} min${x.km?' · '+num(x.km,1)+' km':''}${x.hr?' · '+x.hr+' bpm':''} · ${relDay(x.date)}</span>${x.dup?'<div class="xs mu">Același antrenament ca sesiunea UMBRA: numărat o singură dată.</div>':''}</span>
+    ${xs.map(x=>`<div class="list-row"><span class="tag ${x.dup?'':'rest'}">${esc(stName(x.type))}</span><span class="sp"><b>${esc(x.name||stName(x.type))}</b> <span class="mu sm">· ${num(x.min,0)} min${x.km?' · '+num(x.km,1)+' km':''}${x.hr?' · '+x.hr+' bpm':''} · ${relDay(x.date)}</span>${x.dup?'<div class="xs mu">Același antrenament ca sesiunea ZECE: numărat o singură dată.</div>':''}</span>
       <button class="xb" data-a="extDel" data-k="${esc(x.sid)}" data-confirm="?" aria-label="Șterge">${ic('trash')}</button></div>`).join('')}</div>
     <div class="note">Intră în încărcarea zilei ca minute × efort: efortul notat pe Strava, altfel estimat din pulsul mediu (zona 1 = 3/10 … zona 5 = 8/10), altfel 5/10.</div></div>`;
 }

@@ -125,7 +125,7 @@ function perfRec(){
       <div class="rs">${rows.map(r=>`<div class="rs-r"><span class="sp"><b>${r.l}</b><span class="xs mu2">${esc(r.src)}</span></span><span class="rs-d">${Array.from({length:14},(_,i)=>{ const v=jOf(dayShift(tk,-13+i))[r.k]; return `<i class="${v!=null&&v!==''&&+v>0?'on':''}"></i>`; }).join('')}</span>
         <span class="v ${r.n?'':'mu2'}">${r.n?r.n+'/14':'lipsește'}</span></div>`).join('')}
         <div class="rs-r"><span class="sp"><b>Încărcare de antrenament</b><span class="xs mu2">calculată din serii, alergări, cronometru și Strava</span></span><span class="v ${lr?'':'mu2'}">${lr?num(lr.r,2)+'×':'lipsește'}</span></div></div>
-      ${miss.length?`<div class="note"><b>Lipsesc:</b> ${miss.map(r=>r.l.toLowerCase()).join(', ')}. UMBRA nu le estimează și nu le inventează: readiness folosește doar ce există. ${miss.some(r=>r.k==='hrv'||r.k==='rhr')?'HRV și pulsul în repaus vin din măsurarea cu senzorul (Setări → Conexiuni) sau dintr-un CSV exportat din ceas.':''}</div>`
+      ${miss.length?`<div class="note"><b>Lipsesc:</b> ${miss.map(r=>r.l.toLowerCase()).join(', ')}. ZECE nu le estimează și nu le inventează: readiness folosește doar ce există. ${miss.some(r=>r.k==='hrv'||r.k==='rhr')?'HRV și pulsul în repaus vin din măsurarea cu senzorul (Setări → Conexiuni) sau dintr-un CSV exportat din ceas.':''}</div>`
         :'<div class="note">Toate sursele au date în ultimele 14 zile.</div>'}
       <div class="inrow"><button class="btn sm" data-a="ciOpen">${ic('sun')} Check-in acum</button><button class="btn ghost sm" data-a="hrOpen">${ic('heart')} Măsoară cu senzorul</button></div></div>`;
 }

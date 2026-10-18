@@ -146,7 +146,7 @@ document.addEventListener('click',async ev=>{
     case 'stSendPend': if(ST.pend){ const it=ST.pend; ST.pend=null; await stQueue(it); stSumPaint(it.key); await stFlush(); } return;
     case 'stQDrop': await save('stq',[]); ST.msg=''; render(); return;
     case 'stOff': { const c=stCfg(); try{ if(c.tok) await fetch('https://www.strava.com/oauth/deauthorize',{method:'POST',body:new URLSearchParams({access_token:c.tok})}); }catch(e){}
-      await save('strava',{cid:c.cid,sec:c.sec,own:c.own||[],del:c.del||[]}); ST.msg=''; render(); toast('Strava deconectat','Antrenamentele importate rămân în UMBRA.','info'); return; }
+      await save('strava',{cid:c.cid,sec:c.sec,own:c.own||[],del:c.del||[]}); ST.msg=''; render(); toast('Strava deconectat','Antrenamentele importate rămân în ZECE.','info'); return; }
     case 'stReset': await save('strava',{own:stCfg().own||[],del:stCfg().del||[]}); ST.msg=''; render(); return;
     case 'stCopy': try{ await navigator.clipboard.writeText(k); toast('Copiat',k,'info'); }catch(e){ toast('Nu pot copia aici','Selectează textul și copiază-l manual.','info'); } return;
     case 'extDel': await stPatch({del:(stCfg().del||[]).concat([String(k)]).slice(-500)}); await save('ext',(S.ext||[]).filter(x=>String(x.sid)!==String(k))); render(); return;
@@ -190,7 +190,7 @@ document.addEventListener('click',async ev=>{
     case 'tmFor': if(!s) return; { const day=sessDay(s), pr=tmPresetFor(day.ex[X],day,s.w); if(pr) tmOpen(pr,X); } return;
     case 'tmPick': { const from=TM.choose?TM.choose.from:null, f=k==='engine'?P_ENGINE:k==='amrap'?P_AMRAP:(TM_LIST().find(t=>t[0]===k)||[])[4]; if(f) tmOpen(f(),from); } return;
     case 'tmGo': tmGo(); return;
-    case 'tmPause': { const st=TM.st; if(!st) return; if(st.pAt){ const pd=Date.now()-st.pAt; st.t0+=pd; st.pausedMs+=pd; st.pAt=null; tmSched(); } else { st.pAt=Date.now(); cancelSched('tm'); } tmRender(); return; }
+    case 'tmPause': { const st=TM.st; if(!st) return; if(st.pAt){ const pd=Date.now()-st.pAt; st.t0+=pd; st.pausedMs+=pd; st.pAt=null; tmSched(); keepAwake(true); } else { st.pAt=Date.now(); cancelSched('tm'); if(!S.sess) keepAwake(false); } buzz([40]); tmRender(); return; }
     case 'tmSkip': if(TM.st&&!TM.st.pAt) tmAdvance(0,false); return;
     case 'tmLap': if(TM.st) tmAdvance(0,false); return;
     case 'tmRound': if(TM.st){ TM.st.rounds++; const r=$('#tmRounds'); if(r) r.textContent=TM.st.rounds; beep(990,.06); buzz(30); floatText(el,'+1'); } return;
@@ -379,5 +379,5 @@ async function doImport(file){
     await loadAll(); applyTheme(); applyFx(); syncMark('lifts');
     const np=Array.isArray(data.photos)?await phImport(data.photos):0;
     render(); toast('Copie importată',n+' seturi de date restaurate'+(np?' · '+np+' poze':'')+'.','info');
-  }catch(e){ toast('Import eșuat','Fișierul nu pare o copie UMBRA.','info'); }
+  }catch(e){ toast('Import eșuat','Fișierul nu pare o copie ZECE.','info'); }
 }

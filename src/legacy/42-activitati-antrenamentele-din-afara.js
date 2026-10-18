@@ -71,7 +71,7 @@ ACT.afSave=async()=>{
   await save('ext',ext);
   if(!A.id&&A.st&&stOn()&&stCanWrite()){
     await stQueue({key:x.sid,start:x.start,end:x.start+min*60000,dur:Math.round(min*60),km,sport:ACT_UP[x.type]||x.type,name:x.name||actT(x.type)[1],
-      desc:(actT(x.type)[1]+' · '+num(min,0)+' min'+(km?' · '+num(km,2)+' km':'')+(hr?' · puls mediu '+hr:'')+'\n\nNotat în UMBRA · Hybrid365'),hr:null,pts:[]});
+      desc:(actT(x.type)[1]+' · '+num(min,0)+' min'+(km?' · '+num(km,2)+' km':'')+(hr?' · puls mediu '+hr:'')+'\n\nNotat în ZECE · Hybrid365'),hr:null,pts:[]});
     setTimeout(stFlush,50); }
   AF=null; SH=null; shRender(); render();
   toast(A.id?'Activitate salvată':'Activitate adăugată',actName(x)+' · '+num(min,0)+' min'+(km?' · '+num(km,1)+' km':''),'info');
@@ -85,7 +85,7 @@ function actRow(x){ const man=x.src==='manual';
   return `<div class="list-row act-r"><span class="ic-s ${man?'man':''}">${ic(actIcon(x.type))}</span>
     <button class="sp linkb2" ${man?`data-a="actEdit" data-k="${esc(x.sid)}"`:'disabled'} style="text-align:left"><b>${esc(actName(x))}</b>
       <span class="xs mu" style="display:block">${fmtDay(x.date)} · ${num(x.min,0)} min${x.km?' · '+num(x.km,x.km<10?2:1)+' km':''}${x.hr?' · '+x.hr+' bpm':''}${x.rpe?' · '+((ACT_RPE.find(r=>r[0]===x.rpe)||[0,'efort '+x.rpe])[1]).toLowerCase():''}</span>
-      ${x.dup?'<span class="xs mu2" style="display:block">Același antrenament ca sesiunea UMBRA: numărat o singură dată.</span>':''}</button>
+      ${x.dup?'<span class="xs mu2" style="display:block">Același antrenament ca sesiunea ZECE: numărat o singură dată.</span>':''}</button>
     <span class="tag ${man?'':'rest'}">${man?'notat':'Strava'}</span>
     ${man?'':`<button class="xb" data-a="extDel" data-k="${esc(x.sid)}" data-confirm="?" aria-label="Șterge">${ic('trash')}</button>`}</div>`; }
 function viewActs(){

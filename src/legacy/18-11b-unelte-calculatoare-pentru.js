@@ -100,7 +100,7 @@ function toolOut(k){
     return box(`<div class="row" style="align-items:flex-end"><div><div class="xs mu">VDOT</div><div class="big">${num(vd,1)}</div></div><span class="sp"></span><div class="xs mu" style="text-align:right">${num(D,2)} km în ${fmtClock(sec)}<br>${fmtClock(sec/D)} /km</div></div>
       <div class="zones">${rows.map(([b,l,v,h])=>`<div class="zn ${b==='T'?'hl':''}"><b>${b}</b><span>${l}<span class="xs mu" style="display:block">${h}</span></span><span class="v">${v}</span></div>`).join('')}</div>
       <div class="dsec"><h4>Curse echivalente</h4>${RACE_D.map(([x,l])=>{ const s=raceAtV(vd,x); return `<div class="list-row"><span class="sp">${l}</span><span class="xs mu">${fmtClock(s/x)} /km</span><span class="v">${fmtClock(s)}</span></div>`; }).join('')}</div>
-      <button class="btn ghost sm wide" style="margin-top:10px" data-a="vdotThr" data-i="${Math.round(thr*600)}">${ic('check')} Folosește ${mmss(thr)} /km ca ritm de prag în UMBRA</button>
+      <button class="btn ghost sm wide" style="margin-top:10px" data-a="vdotThr" data-i="${Math.round(thr*600)}">${ic('check')} Folosește ${mmss(thr)} /km ca ritm de prag în ZECE</button>
       <div class="xs mu2" style="margin-top:8px">Formulele Daniels–Gilbert din „Daniels' Running Formula”. Ritmurile sunt pe teren plat, pe vreme răcoroasă; pe căldură sau deal, mergi după efort și puls. Ritmul de prag setat aici schimbă zonele de ritm, nu planul.</div>`); }
   if(k==='tread'){ const v=tlN('ts'), inc=+TL.ti||0;
     if(!(v>=3&&v<=30)) return box(`<div class="sm mu">Scrie viteza benzii în km/h.</div>`);

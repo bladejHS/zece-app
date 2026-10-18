@@ -191,7 +191,7 @@ function achAll(){
   const firstRunAtLeast=D=>{ const r=runs.find(r=>+r.km>=D); return r?r.date:null; };
   const k1Under=s=>{ const r=k1.find(x=>x.sec<s); return r?r.date:null; };
   const A=[
-    ['first','Primul antrenament','Primul antrenament notat în UMBRA',days[0]||null,null],
+    ['first','Primul antrenament','Primul antrenament notat în ZECE',days[0]||null,null],
     ['w10','10 antrenamente','10 zile de antrenament notate',nth(days,10),[days.length,10]],
     ['w50','50 de antrenamente','50 de zile de antrenament notate',nth(days,50),[days.length,50]],
     ['w100','100 de antrenamente','100 de zile de antrenament notate',nth(days,100),[days.length,100]],

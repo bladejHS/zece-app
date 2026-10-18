@@ -6,9 +6,10 @@
 let gid=0;
 const isLight=()=>document.documentElement.getAttribute('data-mode')==='light';
 /* culorile semantice ca valori (atributele SVG și canvas-ul nu înțeleg var()) */
-const COL=()=>{ const c=COL0(); if(S.theme==='otel'||!THEMES[S.theme]) c.run=isLight()?'#0E8C80':'#3CCBBB'; if(!isLight()&&S.bg!=='black'){ c.bg='#0E1013'; c.card='#15181D'; } return c; };
-const COL0=()=>isLight()?{run:'#1F78DC',ok:'#12966A',warn:'#C27800',bad:'#D23A3A',z1:'#8A8A93',vio:'#7C4DE8',tx:'#0D0D10',mu:'#55555E',bg:'#F2F2EF',card:'#FFFFFF'}
-  :{run:'#4DA3FF',ok:'#3DDC97',warn:'#FFB020',bad:'#FF5C5C',z1:'#9AA0A8',vio:'#8B5CF6',tx:'#F4F4F5',mu:'#A1A1AA',bg:'#050506',card:'#0E0E10'};
+const COL=()=>{ const c=COL0(); if(!isLight()&&S.bg!=='black'){ c.bg='#0D0F12'; c.card='#15181D'; } return c; };
+/* paleta graficelor: aceleași culori desaturate ca interfața (src/styles/tokens.css) */
+const COL0=()=>isLight()?{run:'#3D8597',ok:'#4E8A63',warn:'#A8721F',bad:'#A55848',z1:'#7A818A',vio:'#6E6894',tx:'#121418',mu:'#4A5058',bg:'#E9EBEE',card:'#F7F8F9'}
+  :{run:'#6BB8C9',ok:'#8FBFA0',warn:'#E8A84C',bad:'#C98375',z1:'#9AA1AA',vio:'#9A94B8',tx:'#D5DAE0',mu:'#9AA1AA',bg:'#050607',card:'#0D0F12'};
 function ring(f,o={}){
   const s=o.s||44, sw=o.sw||4, r=s/2-sw/2-1, C=2*Math.PI*r, ff=clamp(f||0,0,1), c=s/2;
   return `<svg class="ring" viewBox="0 0 ${s} ${s}" width="${s}" height="${s}" aria-hidden="true">

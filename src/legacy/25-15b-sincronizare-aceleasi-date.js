@@ -111,7 +111,7 @@ function syncCard(){
     <div class="dsec"><h4>Cum o pornești (o singură dată)</h4>
       <div class="cue"><b>1</b><span>Creează un token GitHub cu permisiunea <b>gist</b> (butonul de mai jos deschide pagina gata completată). Copiază-l.</span></div>
       <div class="cue"><b>2</b><span>Lipește-l aici și alege o <b>parolă de criptare</b>. Pe celălalt dispozitiv folosești același token și aceeași parolă.</span></div></div>
-    <a class="btn ghost wide" href="https://github.com/settings/tokens/new?scopes=gist&description=UMBRA%20sync" target="_blank" rel="noopener">${ic('key')} Creează tokenul pe GitHub</a>
+    <a class="btn ghost wide" href="https://github.com/settings/tokens/new?scopes=gist&description=ZECE%20sync" target="_blank" rel="noopener">${ic('key')} Creează tokenul pe GitHub</a>
     <div class="form"><div class="fld full"><label for="syTok">Token GitHub</label><input class="inp" id="syTok" type="password" autocomplete="off" placeholder="ghp_… sau github_pat_…"></div>
       <div class="fld"><label for="syPass">Parolă de criptare</label><input class="inp" id="syPass" type="password" autocomplete="new-password" placeholder="minim 8 caractere"></div>
       <div class="fld"><label for="syName">Numele dispozitivului</label><input class="inp" id="syName" value="${esc(syDevName())}"></div></div>${msg}

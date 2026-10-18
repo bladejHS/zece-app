@@ -2,27 +2,22 @@
    3 · TEME ȘI EFECTE
    ===================================================================== */
 /* fiecare culoare de accent are o variantă pentru tema luminoasă (L): mai închisă, ca textul și liniile să rămână lizibile pe alb */
+/* paletele ZECE (Industrial Tactical Premium): doar culori desaturate. Tactical: efort amber, repaus cyan */
 const THEMES={
-  otel:{n:'Oțel',ac:'#6E9BC7',ac2:'#A9C6E4',hi:'#86AFD8',lo:'#5584B3',on:'#08111B',L:{ac:'#2F6496',ac2:'#4C82B8',hi:'#3A72A8',lo:'#265583',on:'#FFFFFF'}},
-  onix:{n:'Onix',ac:'#F4F4F5',ac2:'#A1A1AA',hi:'#F4F4F5',lo:'#C9C9CE',on:'#0A0A0B',L:{ac:'#0D0D10',ac2:'#55555E',hi:'#2A2A30',lo:'#0D0D10',on:'#FFFFFF'}},
-  jar:{n:'Jar',ac:'#FF4D2E',ac2:'#FF8A3D',hi:'#FF5C3D',lo:'#E5391D',on:'#FFFFFF',L:{ac:'#E23E1C',ac2:'#F07A2E',hi:'#EF4C2A',lo:'#CC3416',on:'#FFFFFF'}},
-  neon:{n:'Neon',ac:'#A3E635',ac2:'#D9F99D',hi:'#B5F24A',lo:'#7CC21A',on:'#0B0F05',L:{ac:'#4F8F0E',ac2:'#78B81C',hi:'#5DA314',lo:'#43790B',on:'#FFFFFF'}},
-  violet:{n:'Violet',ac:'#8B5CF6',ac2:'#C084FC',hi:'#9B6DFF',lo:'#7337E8',on:'#FFFFFF',L:{ac:'#7646E6',ac2:'#A66BF2',hi:'#8455F0',lo:'#6533D6',on:'#FFFFFF'}},
-  aur:{n:'Aur',ac:'#F5A524',ac2:'#FFD166',hi:'#FFB53D',lo:'#DC8A0A',on:'#151005',L:{ac:'#BF7A00',ac2:'#DB9C1C',hi:'#CC8608',lo:'#A56A00',on:'#FFFFFF'}},
-  roz:{n:'Roz',ac:'#FF2D78',ac2:'#FF7AB0',hi:'#FF4A8C',lo:'#DB1260',on:'#FFFFFF',L:{ac:'#DE1664',ac2:'#F2609A',hi:'#EA2A72',lo:'#C20E55',on:'#FFFFFF'}},
-  gheata:{n:'Gheață',ac:'#22D3EE',ac2:'#A5F3FC',hi:'#3ADCF2',lo:'#0EA5C6',on:'#04161A',L:{ac:'#0A8CAD',ac2:'#1FB3D2',hi:'#0C9BBE',lo:'#087894',on:'#FFFFFF'}},
-  nightops:{n:'Night Ops',ac:'#39FF14',ac2:'#2BD90E',hi:'#4FFF2A',lo:'#1FA80A',on:'#000000'}
+  tactical:{n:'Tactical',ac:'#E8A84C',ac2:'#6BB8C9',hi:'#EDB765',lo:'#C98D35',on:'#0B0C0E',L:{ac:'#A8721F',ac2:'#3D8597',hi:'#B57D27',lo:'#8F5F17',on:'#FFFFFF'}},
+  otel:{n:'Oțel',ac:'#8FAFC9',ac2:'#B9CCDC',hi:'#A0BCD3',lo:'#7095B5',on:'#0A1118',L:{ac:'#3F6788',ac2:'#5A80A0',hi:'#4A7394',lo:'#355A78',on:'#FFFFFF'}},
+  onix:{n:'Onix',ac:'#D5DAE0',ac2:'#9AA1AA',hi:'#E4E8EC',lo:'#B5BCC4',on:'#0B0C0E',L:{ac:'#121418',ac2:'#4A5058',hi:'#2A2E34',lo:'#121418',on:'#FFFFFF'}}
 };
 /* tema: întunecată (implicit), luminoasă sau automată (după sistem) */
 const MQ_LIGHT=matchMedia('(prefers-color-scheme: light)');
 const modeNow=()=>S.mode==='light'||(S.mode==='auto'&&MQ_LIGHT.matches)?'light':'dark';
-const TH=()=>{ const b=THEMES[S.theme]||THEMES.otel; return modeNow()==='light'&&b.L?Object.assign({},b,b.L):b; };
+const TH=()=>{ const b=THEMES[S.theme]||THEMES.tactical; return modeNow()==='light'&&b.L?Object.assign({},b,b.L):b; };
 function applyTheme(){ const m=modeNow(), t=TH(), h=document.documentElement, r=h.style;
   if(m==='light') h.setAttribute('data-mode','light'); else h.removeAttribute('data-mode');
   r.setProperty('--ac',t.ac); r.setProperty('--ac2',t.ac2); r.setProperty('--hi',t.hi); r.setProperty('--lo',t.lo); r.setProperty('--on',t.on);
-  Object.keys(THEMES).forEach(k=>h.classList.toggle('th-'+k,k===(THEMES[S.theme]?S.theme:'otel')));
+  Object.keys(THEMES).forEach(k=>h.classList.toggle('th-'+k,k===(THEMES[S.theme]?S.theme:'tactical')));
   h.classList.toggle('bg-black',S.bg==='black');
-  const mt=document.querySelector('meta[name="theme-color"]'); if(mt) mt.setAttribute('content',m==='light'?'#F2F2EF':S.bg==='black'?'#050506':'#0E1013'); }
+  const mt=document.querySelector('meta[name="theme-color"]'); if(mt) mt.setAttribute('content',m==='light'?'#E9EBEE':'#050607'); }
 try{ MQ_LIGHT.addEventListener('change',()=>{ if(S.mode==='auto'){ applyTheme(); render(); } }); }catch(e){}
 /* schimbarea temei, cu o tranziție scurtă doar pe culori */
 async function setMode(m){ if(['dark','light','auto'].indexOf(m)<0) return; const h=document.documentElement; h.classList.add('mode-tr');

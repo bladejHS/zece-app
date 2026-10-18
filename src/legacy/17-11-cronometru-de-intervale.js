@@ -71,7 +71,8 @@ function tmAdvance(over,auto){
   const st=TM.st; if(tmPh().k==='manual') st.laps.push(tmEl());
   if(st.i>=st.ph.length-1){ tmFinish(auto); return; }
   st.i++; st.t0=Date.now()-(over||0)*1000; if(!auto) tmSched();
-  buzz(tmPh().k==='rest'?[80]:[150,60,150]); tmRender(); tmSay(tmPh());
+  const np=tmPh(); if(np.k!=='breath'&&!tmCalm(st)) UI.shutter(np.k==='rest'?'Pauză':np.l,np.k==='rest');
+  buzz(np.k==='rest'?[80]:[150,60,150]); tmRender(); tmSay(np);
 }
 function tmTick(){
   const st=TM.st; if(!st||!st.started||st.done||st.pAt) return;
@@ -82,7 +83,7 @@ function tmTick(){
 function tmFinish(auto){
   const st=TM.st; st.done=true; st.total=(Date.now()-st.start-st.pausedMs)/1000; cancelSched('tm');
   if(!auto){ beep(660,.12); setTimeout(()=>beep(880,.12),150); setTimeout(()=>beep(1320,.25),300); }
-  if(!S.sess) keepAlive(false);
+  if(!S.sess){ keepAlive(false); keepAwake(false); }
   /* rezultatul intră în istoricul de conditioning (folosit de profilul atletului) */
   if(st.kind&&st.total>=20) save('tmlog',(S.tmlog||[]).concat([{date:todayKey(),kind:st.kind,title:st.title,total:Math.round(st.total),rounds:st.rounds||0,laps:(st.laps||[]).map(x=>Math.round(x)),hr:(h=>h?{avg:h.avg,max:h.max}:undefined)(hrSum(st.hr))}]));
   burstAt(innerWidth/2,innerHeight*.35,40); buzz([100,60,100,60,250]); tmRender(); say(tmCalm(st)?mot('calmDone'):voxEnc()?mot('done'):'Gata!');
@@ -90,7 +91,9 @@ function tmFinish(auto){
 function tmPaint(){
   const st=TM.st; if(!st||!st.started||st.done) return; const ph=tmPh(), el=tmEl();
   const tEl=$('#tmTime'); if(tEl) tEl.textContent=fmtClock(ph.d!=null?Math.ceil(Math.max(0,ph.d-el)):el);
-  const rr=$('#tmRing'); if(rr){ const C=2*Math.PI*130, f=ph.d!=null?clamp(el/ph.d,0,1):(el%60)/60; rr.setAttribute('stroke-dashoffset',(C*(1-f)).toFixed(1)); }
+  const left=ph.d!=null?ph.d-el:null, f=ph.d!=null?clamp(el/ph.d,0,1):(el%60)/60;
+  UI.setGauge($('#tmGauge'),f,left!=null&&left<=3);
+  if(left!=null&&ph.k!=='breath'&&ph.d>=6) UI.countdownCue(tEl,$('#tmFlash'),left,buzz);
   const tot=$('#tmTot'); if(tot) tot.textContent=fmtClock(((st.pAt||Date.now())-st.start-st.pausedMs)/1000);
   const hz=$('#tmHrz'); if(hz&&ph.hr){ const lv=hrLive(), b=HR.bpm, c=!lv?'':b<ph.hr[0]?'lo':b>ph.hr[1]?'hi':'ok';
     hz.className='tm-hrz '+c; hz.textContent=lv?b+' bpm · '+(c==='ok'?'în țintă':c==='hi'?'peste țintă: scade 0,3 km/h':'sub țintă'):'țintă puls '+ph.hr[0]+'–'+ph.hr[1]; }
@@ -104,11 +107,11 @@ function tmRender(){
   if(TM.choose){ r.innerHTML=`<div class="tm"><div class="tm-in">${top('Conditioning')}<div class="tm-list">
       <button class="tm-pick" data-a="tmPick" data-k="engine"><span class="ic">${ic('refresh')}</span><span><b>A · Engine Builder</b><span>8 runde pentru timp: 250 m Ski/Row, 45s pauză</span></span></button>
       <button class="tm-pick" data-a="tmPick" data-k="amrap"><span class="ic">${ic('flame')}</span><span><b>B · Hybrid Circuit</b><span>AMRAP 10 min: Wall Balls, Burpee Broad Jumps, KB Swings, Push Ups</span></span></button></div></div></div>`; return; }
-  const st=TM.st, ph=tmPh(), C=2*Math.PI*130;
+  const st=TM.st, ph=tmPh();
   const totalD=st.ph.reduce((a,p)=>a+(p.d||0),0), works=st.ph.filter(p=>p.k==='work'||p.k==='manual');
   if(!st.started){
     r.innerHTML=`<div class="tm"><div class="tm-in">${top(st.title)}
-      <div class="tm-ring"><svg viewBox="0 0 300 300"><circle cx="150" cy="150" r="130" fill="none" style="stroke:rgba(var(--w),.07)" stroke-width="14"/></svg>
+      <div class="tm-ring">${UI.gauge()}
         <div class="c"><div><div class="tm-lbl">Gata?</div><div class="tm-time">${totalD?fmtClock(totalD):'∞'}</div><div class="tm-sub">${st.kb?works.length+(works.length===1?' rundă':' runde')+' × '+fmtClock(st.kb.rs):works.length+' '+(works.length===1?'bloc':'blocuri')+' de lucru'}${st.ph.some(p=>p.k==='manual')?' · rundele se termină când apeși tu':''}</div></div></div></div>
       ${st.ph.some(p=>p.sp)?`<div class="tm-spl">${st.ph.filter(p=>p.sp&&p.k!=='prep').filter((p,i,a)=>i===0||p.l.replace(/\d+\/\d+/,'')!==a[i-1].l.replace(/\d+\/\d+/,'')).slice(0,6).map(p=>`<span><b>${num(p.sp,1)}</b> km/h · ${esc(p.l.replace(/ \d+\/\d+/,''))}</span>`).join('')}</div>`:''}
       ${st.kb?kbStartNote(st):''}<div class="note" style="text-align:center">Sunetele te anunță la fiecare schimbare, inclusiv cu telefonul blocat (lasă volumul pornit).${st.ph.some(p=>p.sp)?' Vocea îți spune viteza la fiecare bucată.':''}</div>
@@ -126,9 +129,8 @@ function tmRender(){
   const next=st.ph[st.i+1], cls=ph.k==='rest'?'rest':ph.k==='prep'?'prep':'';
   const dots=st.ph.length<=40?`<div class="tm-dots">${st.ph.filter(p=>p.k!=='prep').map((p,i)=>{ const idx=st.ph.indexOf(p); return `<i class="${idx<st.i?'ok':idx===st.i?'cur':''}"></i>`; }).join('')}</div>`:'';
   r.innerHTML=`<div class="tm ${cls} ${st.kb?'kbt':''}" ${st.kb?`style="--ph:${kbPh((KB_A[st.kb.a]||KB_A.bag).ph)}"`:''}><div class="tm-in">${top(st.title)}
-    <div class="tm-ring"><svg viewBox="0 0 300 300"><circle cx="150" cy="150" r="130" fill="none" style="stroke:rgba(var(--w),.07)" stroke-width="14"/>
-      <circle id="tmRing" cx="150" cy="150" r="130" fill="none" stroke="${ph.k==='rest'?COL().run:ph.k==='prep'?COL().warn:TH().ac}" stroke-width="14" stroke-linecap="round"
-        stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${C.toFixed(1)}" transform="rotate(-90 150 150)" style="transition:stroke-dashoffset .25s linear;filter:drop-shadow(0 0 10px ${ph.k==='rest'?'rgba(77,163,255,.6)':ph.k==='prep'?'rgba(255,176,32,.5)':'var(--acg)'})"/></svg>
+    <div class="tm-flash" id="tmFlash" aria-hidden="true"></div>
+    <div class="tm-ring">${UI.gauge()}
       <div class="c"><div><div class="tm-lbl">${esc(ph.l)}</div><div class="tm-time" id="tmTime">0:00</div><div class="tm-sub">${esc(ph.s||'')}</div></div></div></div>
     ${st.kb?kbLive(st,ph):''}${ph.sp?`<div class="tm-spd"><b>${num(ph.sp,1)}</b><small>km/h</small><span>${mmss(60/ph.sp)} /km</span></div>`:''}${ph.hr?`<div class="tm-hrz" id="tmHrz">țintă puls ${ph.hr[0]}–${ph.hr[1]}</div>`:''}
     ${st.amrap&&ph.k==='work'?`<div class="tm-next">Runde: <b id="tmRounds">${st.rounds}</b></div>`:''}

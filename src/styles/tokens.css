@@ -1,0 +1,76 @@
+/* =====================================================================
+   ZECE · Industrial Tactical Premium — tokenuri
+   Paleta vine din semn: carbon → gunmetal, argint metalic, amber pentru efort, cyan pentru repaus.
+   Fără culori saturate. Se încarcă după legacy.css și îi înlocuiește tokenurile.
+   ===================================================================== */
+:root{
+  /* paleta de bază */
+  --c-carbon:#050607; --c-graphite:#121418; --c-gunmetal:#2A2E34;
+  --c-silver:#D5DAE0; --c-steel:#9AA1AA; --c-iron:#5A6069;
+  --c-effort:#E8A84C; --c-effort-hi:#EDB765; --c-effort-lo:#C98D35;
+  --c-rest:#6BB8C9;   --c-rest-hi:#86C6D4;   --c-rest-lo:#4E9AAB;
+
+  /* fundal: degradeul carbon → gunmetal */
+  --bg-grad:linear-gradient(180deg,#050607 0%,#0B0D10 38%,#121418 70%,#1A1D22 100%);
+  /* bordura metalică subtilă, ca pe marginea semnului */
+  --metal-b:linear-gradient(160deg,rgba(213,218,224,.34),rgba(90,96,105,.14) 38%,rgba(154,161,170,.08) 62%,rgba(213,218,224,.26));
+  --metal-face:linear-gradient(180deg,#F1F4F7 0%,#D5DAE0 42%,#9AA1AA 58%,#5A6069 100%);
+
+  /* tipografie: Chakra Petch pentru titluri și cronometru, Inter pentru text */
+  --fd:'Chakra Petch','Arial Narrow',system-ui,sans-serif;
+  --fb:'Inter Variable','Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+
+  /* raze mici: echipament, nu jucărie */
+  --r-xs:2px; --r-sm:3px; --r-md:4px; --r-lg:4px; --r2:6px; --r-xl:6px;
+  --cut:10px;            /* colțul tăiat al butoanelor mari */
+
+  /* mișcare: rapidă și fermă, fără arc */
+  --ease:cubic-bezier(.25,.46,.45,.94);
+  --e1:var(--ease); --sp:var(--ease);
+  --fast:.15s; --med:.22s; --major:.36s;
+
+  /* ținte de atingere (cu mănuși) */
+  --touch:64px; --touch-xl:76px;
+
+  /* culori — întunecat */
+  --w:213,218,224;
+  --bg:#050607; --bg-rgb:5,6,7;
+  --s1:#0D0F12; --s2:#121418; --s3:#1C1F24; --s4:#2A2E34;
+  --ln:rgba(255,255,255,.08); --ln2:rgba(255,255,255,.12); --ln3:rgba(255,255,255,.2);
+  --tx:#D5DAE0; --mu:#9AA1AA; --mu2:#6B727B;
+  --run:var(--c-rest); --run-t:#9CCFDB; --rung:rgba(107,184,201,.38); --run-bg:rgba(107,184,201,.12);
+  --ok:#8FBFA0; --ok-t:#B4D6C0; --ok-bg:rgba(143,191,160,.12);
+  --warn:var(--c-effort); --warn-t:#F0C483; --warn-bg:rgba(232,168,76,.12);
+  --bad:#C98375; --bad-t:#DDA79C; --bad-bg:rgba(201,131,117,.12);
+  --vio:#9A94B8;
+  --glass:rgba(18,20,24,.7); --glass2:rgba(18,20,24,.94); --scrim:rgba(3,4,5,.7);
+  --track:rgba(255,255,255,.07);
+  /* fără umbre groase: linii interioare și margini */
+  --sh-card:inset 0 1px 0 rgba(255,255,255,.04),inset 0 -1px 0 rgba(0,0,0,.4);
+  --sh-pop:inset 0 1px 0 rgba(255,255,255,.06),0 0 0 1px rgba(255,255,255,.06),0 18px 40px -24px rgba(0,0,0,.9);
+  --sh-btn:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(0,0,0,.35);
+  --sh-press:inset 0 2px 6px rgba(0,0,0,.55),inset 0 0 0 1px rgba(0,0,0,.3);
+  --plate-bar:linear-gradient(180deg,#9AA1AA,#5A6069);
+
+  /* accent (temă): efort = amber, al doilea = cyan */
+  --ac:var(--c-effort); --ac2:var(--c-rest); --hi:var(--c-effort-hi); --lo:var(--c-effort-lo); --on:#0B0C0E;
+  color-scheme:dark;
+}
+html[data-mode="light"]{
+  --w:18,20,24;
+  --bg:#E9EBEE; --bg-rgb:233,235,238;
+  --bg-grad:linear-gradient(180deg,#F2F3F5 0%,#E6E8EB 60%,#D9DCE0 100%);
+  --s1:#F7F8F9; --s2:#EFF1F3; --s3:#E1E4E8; --s4:#CDD1D6;
+  --ln:rgba(18,20,24,.1); --ln2:rgba(18,20,24,.16); --ln3:rgba(18,20,24,.28);
+  --tx:#121418; --mu:#4A5058; --mu2:#7A818A;
+  --run:#3D8597; --run-t:#2E6A79; --run-bg:rgba(61,133,151,.1);
+  --ok:#4E8A63; --ok-t:#3B6C4C; --ok-bg:rgba(78,138,99,.1);
+  --warn:#A8721F; --warn-t:#80561A; --warn-bg:rgba(168,114,31,.1);
+  --bad:#A55848; --bad-t:#83443A; --bad-bg:rgba(165,88,72,.1);
+  --glass:rgba(247,248,249,.78); --glass2:rgba(247,248,249,.96); --scrim:rgba(18,20,24,.34);
+  --metal-b:linear-gradient(160deg,rgba(18,20,24,.22),rgba(18,20,24,.08) 50%,rgba(18,20,24,.18));
+  --sh-card:inset 0 1px 0 rgba(255,255,255,.8),0 1px 2px rgba(0,0,0,.05);
+  --sh-btn:inset 0 1px 0 rgba(255,255,255,.5),inset 0 -1px 0 rgba(0,0,0,.12);
+  --sh-press:inset 0 2px 5px rgba(0,0,0,.18);
+  color-scheme:light;
+}

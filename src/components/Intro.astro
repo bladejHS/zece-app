@@ -1,0 +1,15 @@
+---
+/* Deschiderea aplicației: stilurile în src/styles/intro.css, pornirea și ieșirea în src/legacy/48-16-pornire.js (introStart/introExit). */
+import { BRAND, logoSvg } from '../ui/brand';
+const letters = [...BRAND.name];
+---
+<div class="intro" id="intro" aria-hidden="true">
+  <div class="in-blade t"></div><div class="in-blade b"></div>
+  <div class="in-grid"></div><div class="in-scan"></div>
+  <div class="in-c">
+    <div class="in-logo" id="inLogo" set:html={logoSvg({ parts: true, cls: 'in-mark' })} />
+    <div class="in-word">{letters.map((ch, i) => <span style={`--i:${i}`}>{ch}</span>)}</div>
+    <div class="in-sub" id="inSub">{BRAND.sub}</div>
+  </div>
+  <div class="in-skip">atinge pentru a intra</div>
+</div>

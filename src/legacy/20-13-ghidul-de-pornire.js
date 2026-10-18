@@ -10,8 +10,8 @@ function onbRender(){
   document.body.classList.add('lock');
   const P=prof(), ws=wStats(), N=4, dots=`<div class="onb-dots">${Array.from({length:N},(_,i)=>`<i class="${i===OB.step?'on':''}"></i>`).join('')}</div>`, f=OB.focus;
   let body='';
-  if(OB.step===0) body=`<div class="onb-hero"><div class="in-ph" style="animation:none;opacity:1;transform:none"></div></div>
-    <div class="onb-big">UMBRA</div><p class="mu" style="text-align:center;margin-top:6px">Antrenament hibrid, forță și alergare, cu datele tale reale.</p>
+  if(OB.step===0) body=`<div class="onb-hero"><div class="onb-ph"></div><div class="onb-mark">${UI.logoSvg({})}</div></div>
+    <div class="onb-big">ZECE</div><p class="mu" style="text-align:center;margin-top:6px">${esc(UI.BRAND.tagline)}</p>
     <div class="feat"><div>${ic('play')} Antrenament live: serii, pauze, cronometru</div><div>${ic('chart')} Performanță pe orice perioadă, cu grafice interactive</div>
       <div>${ic('stopwatch')} 1 KM Lab, Running Lab, recorduri și obiective</div><div>${ic('shield')} Totul rămâne pe dispozitivul tău</div></div>
     <label class="linkb file-l" style="margin:16px auto 0;display:flex;justify-content:center">${ic('upload')} Am deja o copie: restaurează<input type="file" id="impFile" accept="application/json,.json"></label>`;
