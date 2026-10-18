@@ -6,4 +6,5 @@ export { deloadCount, deloadMinutes, deloadRounds, isDeloadWeek } from './deload
 export { allChunks, buildCombatSession, checkStructure, isIntense, sessionMinutes, type BuildOptions } from './session.ts';
 export { adjustNextRound, applyCheckIn, AREA_LOADS, protectArea, type NextRoundChange } from './adapt.ts';
 export { intenseStreak, mondayOf, progressionAllowed, referenceMinutes, validateSession, weekMinutes, type DayLoad } from './validator.ts';
+export { nextVolSet, VOLUME_RULES, volumeTarget, type NextVolSet, type VolSession, type VolumeRule } from './sets.ts';
 export { coverage, phaseKeys, preloadFiles, REQUIRED, sessionPhases, type VoxIndex } from './vox.ts';

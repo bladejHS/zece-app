@@ -50,7 +50,7 @@ const PLAN=[
   ['Close Grip Bench Press','3×8–10 · pauză 90s'],
   ['Barbell Curl','3×8–10 · pauză 90s'],
   ['Tricep Overhead Extension','3×10–12 · pauză 90s'],
-  ['Power finisher — EMOM 10 min','minutele impare: 6 Med Ball Chest Throws · minutele pare: 8 Plyo Push Ups'],
+  ['Power finisher — A: EMOM 10 min · B: Bodyweight','A: EMOM 10 min — minutele impare 6 Med Ball Chest Throws, pare 8 Plyo Push Ups · B: Bodyweight — 60 de tracțiuni + 150 de flotări, în câte serii ai nevoie (ținta crește după fiecare reușită)'],
   ['Dragon Flag','3×3–6 · pauză 90s — negative lente sau repetări complete'],
   ['Ab Wheel Rollout','3×8–10 · pauză 60s']]},
  {t:'Long run',cat:'run',min:65,run:'lng',lift:[],ex:[

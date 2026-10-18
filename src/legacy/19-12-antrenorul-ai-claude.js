@@ -13,7 +13,7 @@ Programul are cicluri de 4 săptămâni cu aceeași săptămână-tip:
 - Marți: Threshold run (încălzire, reprize la ritm de prag, răcire)
 - Miercuri: Upper + Conditioning (Weighted Pull Up, Flat Dumbbell Press, Chest Supported Row, Seated Overhead Press, Cable Face Pull, Dumbbell Lateral Raise, Tricep Rope Pushdown, Alternating Dumbbell Curl, conditioning A sau B)
 - Joi: Easy run Z2 (flush) + Lower (Hack Squat în loc de Back Squat, Romanian Deadlift, Walking Lunge, Hip Thrust, Leg Press, Hamstring Curl, Calf Raise)
-- Vineri: Upper Strength + Power (Bench Press 5×3–5, Weighted Pull Up, Incline Dumbbell Press, Chest Supported Row, Push Press, Close Grip Bench Press, Barbell Curl, Tricep Overhead Extension, EMOM de putere)
+- Vineri: Upper Strength + Power (Bench Press 5×3–5, Weighted Pull Up, Incline Dumbbell Press, Chest Supported Row, Push Press, Close Grip Bench Press, Barbell Curl, Tricep Overhead Extension; la final, la alegere: A — EMOM de putere 10 min, sau B — Bodyweight: 60 de tracțiuni + 150 de flotări în câte serii e nevoie, cu ținta care crește după fiecare reușită)
 - Sâmbătă: Long run Z2
 - Duminică: recuperare și mobilitate
 Alergările cresc de la o săptămână la alta (minute la easy și long run, reprize la prag).
