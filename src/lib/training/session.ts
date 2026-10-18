@@ -20,6 +20,8 @@ export interface BuildOptions {
   week: number;
   /** Deload automat în săptămâna a 4-a. */
   deloadAuto: boolean;
+  /** Deload cerut din altă parte (HRV sub 90% din media pe 7 zile). */
+  forceDeload?: boolean;
   injuries: readonly Injury[];
 }
 
@@ -43,7 +45,8 @@ const DISCIPLINE_NAME: Record<Discipline, string> = { bag: 'Sac', pads: 'Palmare
 export function buildCombatSession(o: BuildOptions): WorkoutSession {
   let n = 0;
   const id = (): string => `c${++n}`;
-  const deload = o.deloadAuto && isDeloadWeek(o.week);
+  const weekDeload = o.deloadAuto && isDeloadWeek(o.week);
+  const deload = weekDeload || !!o.forceDeload;
   const lvl = o.level;
   const notes: string[] = [];
   const meta = { discipline: o.discipline };
@@ -79,7 +82,9 @@ export function buildCombatSession(o: BuildOptions): WorkoutSession {
   let rounds = Math.max(1, Math.round(o.rounds));
   if (deload) {
     const r = deloadRounds(rounds);
-    notes.push(`Săptămâna ${o.week} e de deload: ${r} runde în loc de ${rounds} (volum −${Math.round(PROGRESSION.deloadVolumeCut * 100)}%), aceeași frecvență.`);
+    notes.push(weekDeload
+      ? `Săptămâna ${o.week} e de deload: ${r} runde în loc de ${rounds} (volum −${Math.round(PROGRESSION.deloadVolumeCut * 100)}%), aceeași frecvență.`
+      : `HRV-ul de azi e sub 90% din media ta pe 7 zile: deload forțat, ${r} runde în loc de ${rounds}.`);
     rounds = r;
   }
   const conditioning: PhaseBlock = { phase: 'conditioning', chunks: [] };

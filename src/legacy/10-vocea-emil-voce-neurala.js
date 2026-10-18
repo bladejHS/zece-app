@@ -69,9 +69,11 @@ async function vbSay(plan,o,gen){
   const bufs=await Promise.all(plan.map(p=>vbBuf(p[0]))); if(gen!==VB.gen) return;
   if(bufs.some(b=>!b)) return ttsSay(o.text,o);
   const c=actxGet(); if(!c) return; let t=c.currentTime+.04; const g=c.createGain(); g.gain.value=1; g.connect(c.destination);
-  bufs.forEach((b,i)=>{ const s=c.createBufferSource(); s.buffer=b; s.connect(g); s.start(t); VB.src.push(s);
+  /* vocea dinamică: tempo și ton după fază, intensitate și RPE (VOXCTX, 46b) */
+  const rate=VOXCTX.rate||1;
+  bufs.forEach((b,i)=>{ const s=c.createBufferSource(); s.buffer=b; s.playbackRate.value=rate; if(s.detune) s.detune.value=VOXCTX.detune||0; s.connect(g); s.start(t); VB.src.push(s);
     if(i===bufs.length-1) s.onended=()=>{ if(gen===VB.gen){ VO.end=0; VB.src=[]; if(o.end) o.end(); } };
-    t+=b.duration+(i<bufs.length-1?plan[i][1]:0); });
+    t+=b.duration/rate+(i<bufs.length-1?plan[i][1]:0); });
   VO.end=Date.now()+Math.round((t-c.currentTime)*1000)+300; }
 
 /* ---------- vocea telefonului (rezerva): o voce românească, mai lentă și mai gravă ---------- */
@@ -82,7 +84,7 @@ function pickVoice(){ const l=voRo(); VO.list=l; VO.v=l.slice().sort((a,b)=>voSc
 if(VO.ok){ pickVoice(); try{ speechSynthesis.addEventListener('voiceschanged',pickVoice); }catch(e){} }
 function ttsSay(t,o){ o=o||{}; if(!VO.ok) return false; if(!VO.v) pickVoice(); if(!VO.v) return false;
   try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(vxNorm(t).replace(/(\d+)f\b/g,'$1')); u.lang='ro-RO'; u.voice=VO.v;
-    u.rate=.85*(o.rate||1); u.pitch=.85; VO.end=Date.now()+Math.min(12000,900+String(t).length*95/u.rate);
+    u.rate=.85*(o.rate||1)*(VOXCTX.rate||1); u.pitch=.85*(1+(VOXCTX.detune||0)/1200); VO.end=Date.now()+Math.min(12000,900+String(t).length*95/u.rate);
     const fin=()=>{ VO.end=0; if(o.end) o.end(); }; u.onend=fin; u.onerror=fin; speechSynthesis.speak(u); return true; }catch(e){ return false; } }
 
 /* vorbește acum (oprește ce se spunea) sau, cu o.queue, doar dacă vocea e liberă; o.end se apelează la final */
@@ -159,6 +161,7 @@ function voxSettingsHTML(){
   return `<div class="vox-set"><div class="eyebrow" style="margin-top:4px">${ic('sound')} Vocea</div>
     <div class="seg" style="margin-top:8px">${[['emil','Emil · antrenor'],['tel','Vocea telefonului']].map(([k,t])=>`<button class="${c.src===k?'on':''}" data-a="voxSrc" data-k="${k}">${t}</button>`).join('')}</div>
     <div class="sm mu" style="margin-top:6px">${c.src==='emil'?'Voce gravă, înregistrată în aplicație: sună la fel pe orice telefon, vorbește rar și clar.':VO.ok?(voRo().length?'Vocea românească instalată pe acest dispozitiv, mai rar și pe un ton mai jos.':'Nu găsesc o voce românească pe acest dispozitiv.'):'Browserul nu are sinteză vocală.'}</div>
+    <div class="set-row"><span class="sp"><b>Semnale fără cuvinte</b><div class="sm mu">În sesiunile în 4 faze: ton la intrarea în fază, ritm discret la tehnică, tonuri de respirație la revenire</div></span><button class="sw ${S.cues!==false?'on':''}" data-a="cuesToggle" role="switch" aria-checked="${S.cues!==false}" aria-label="Semnale fără cuvinte"></button></div>
     <div class="set-row"><span class="sp"><b>Încurajări</b><div class="sm mu">Vocea te motivează în runde, pauze, la final și la recorduri</div></span><button class="sw ${c.enc?'on':''}" data-a="voxEnc" role="switch" aria-checked="${!!c.enc}" aria-label="Încurajări"></button></div>
     <button class="btn ghost sm" style="margin-top:4px" data-a="voxTest">${ic('sound')} Ascultă vocea</button></div>`;
 }

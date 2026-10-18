@@ -284,7 +284,10 @@ function kbDoneHTML(st){ const r=st.kb.rounds!=null?st.kb.rounds:kbWorks(st), T=
     ${T?`<div class="note" style="text-align:center">${ic('target')} La pasul următor notezi rezultatul la ținta „${esc(T[2])}".</div>`:''}
     <button class="btn pri xl wide glow" style="margin-top:14px" data-a="kbLogTm">${ic('edit')} Notează sesiunea</button>`; }
 ACT.kbLogTm=()=>{ const st=TM.st; if(!st||!st.kb) return; const hs=hrSum(st.hr), r=st.kb.rounds!=null?st.kb.rounds:kbWorks(st), d=new Date(st.start||Date.now());
-  KF=kfNew({a:st.kb.a,r,rs:st.kb.rs,rest:st.kb.rest,min:Math.max(1,Math.round((st.total||0)/60)),hr:hs?hs.avg:'',tg:st.kb.tg,time:pad(d.getHours())+':'+pad(d.getMinutes())});
+  const P=st.kb.plan, ws=P?P.chunks.filter(c=>c.kind==='work'&&/^(technique|conditioning)$/.test(c.phase)):[];
+  const plan=P?{feels:Object.values(P.fb).map(f=>f.feel),cx:ws.length?Math.round(ws.reduce((a,c)=>a+c.complexity,0)/ws.length*10)/10:2,
+    cog:st.ph.filter((p,i)=>p.cog&&i<st.i).length+(st.done&&st.ph.some(p=>p.cog==='memory')?1:0),deload:!!P.deload,week:P.week,planned:kbWorks(st),kicks:P.chunks.some(c=>c.kicks)}:null;
+  KF=kfNew({a:st.kb.a,r,rs:st.kb.rs,rest:st.kb.rest,min:Math.max(1,Math.round((st.total||0)/60)),hr:hs?hs.avg:'',tg:st.kb.tg,time:pad(d.getHours())+':'+pad(d.getMinutes()),plan});
   TM.open=false; TM.st=null; cancelSched('tm'); if(!S.sess){ keepAlive(false); keepAwake(false); } tmRender(); SH={kind:'kbf'}; shRender(); };
 /* încălzirea ghidată (fără notare: e doar pregătire) */
 ACT.kbWarm=()=>{ const ph=[{k:'prep',d:5,l:'Pregătește-te',s:'Încălzire pentru kickboxing'}]; KB_WARM.forEach(([l,d,s])=>ph.push({k:'work',d,l,s})); tmOpen({title:'Încălzire · kickboxing',ph}); };
@@ -369,7 +372,7 @@ ACT.kfSave=async()=>{
   if(T&&T[4]==='n'&&String(F.tgv).trim()!==''&&!(tv>=0&&tv<10000)) return shake('#kf_tgv');
   const A=KB_A[F.a]||KB_A.bag, st=parseKey(F.date); if(/^\d{1,2}:\d{2}$/.test(F.time||'')){ const [h,m]=F.time.split(':').map(Number); st.setHours(h,m,0,0); } else st.setHours(18,0,0,0);
   const old=F.id?(S.ext||[]).find(x=>String(x.sid)===String(F.id)):null;
-  const kb=Object.assign({},(old&&old.kb)||{},{a:F.a,rs:+F.rs||180,rest:+F.rest||0}); if(r) kb.r=r; else delete kb.r;
+  const kb=Object.assign({},(old&&old.kb)||{},{a:F.a,rs:+F.rs||180,rest:+F.rest||0}); if(r) kb.r=r; else delete kb.r; if(F.plan) kb.plan=F.plan;
   ['ok','fix','who'].forEach(k=>{ const v=String(F[k]||'').trim(); if(F.a==='spar'&&v) kb[k]=v.slice(0,200); else delete kb[k]; });
   let tr=null; if(T&&(tv!=null||F.tgok!=null)){ tr=await kbTgMark(T[0],tv,F.tgok,F.date); kb.tg={id:T[0],ok:tr.ok}; if(tv!=null) kb.tg.v=tv; }
   const x=Object.assign({},old||{},{sid:F.id||'k'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),src:'manual',date:F.date,start:st.getTime(),type:'Kickboxing',name:'Kickboxing · '+A.n,

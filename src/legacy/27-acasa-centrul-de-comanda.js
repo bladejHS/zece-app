@@ -45,7 +45,7 @@ function viewHome(){
   const hello=hr<5?'Noapte bună':hr<12?'Bună dimineața':hr<18?'Bună ziua':'Bună seara';
   const dstr=now.toLocaleDateString('ro-RO',{weekday:'long',day:'numeric',month:'long'});
   const rc=dow===6?0:dow<2?1:-1, cfg=dashCfg();
-  const sys=[setupCard(),bkCard(),rc>=0?`<div class="card recap-cta" data-a="rcOpen" data-i="${rc}"><div class="cc-ic">${ic('star')}</div>
+  const sys=[hrvCard(),ritualCard(),setupCard(),bkCard(),rc>=0?`<div class="card recap-cta" data-a="rcOpen" data-i="${rc}"><div class="cc-ic">${ic('star')}</div>
     <div class="sp"><div class="h3">Recapitularea săptămânii</div><div class="sm mu">${rc?'Săptămâna trecută':'Săptămâna asta'}, în povești animate</div></div>${ic('play')}</div>`:''].filter(Boolean);
   /* v9: antrenamentul zilei stă pe poză (dacă widgetul lui e vizibil); restul widgeturilor vin dedesubt */
   const heroOn=cfg.o.indexOf('next')>=0;

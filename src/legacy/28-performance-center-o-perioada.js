@@ -3,11 +3,11 @@
    indicatori cu schimbarea față de perioada anterioară, grafice interactive, distribuții,
    recorduri, recuperare (cu datele care lipsesc spuse explicit).
    ===================================================================== */
-const PERF_TABS=[['ov','Prezentare','grid'],['s','Forță','dumbbell'],['r','Alergare','run'],['k1','1 KM','stopwatch'],['b','Corp','ruler'],['rec','Recuperare','moon'],['pr','Recorduri','trophy'],['twin','Atlet','user'],['t','Teste','medal']];
+const PERF_TABS=[['ov','Prezentare','grid'],['s','Forță','dumbbell'],['r','Alergare','run'],['k1','1 KM','stopwatch'],['b','Corp','ruler'],['rec','Recuperare','moon'],['pr','Recorduri','trophy'],['twin','Atlet','user'],['t','Teste','medal'],['an','Analiză','activity'],['mx','Mastery','award'],['sq','Squad','flag']];
 function viewProg(){
   if(S.progTab==='w') S.progTab='b';
   if(!PERF_TABS.some(t=>t[0]===S.progTab)) S.progTab='ov';
-  const P=S.progTab, body=P==='s'?perfStrength():P==='r'?runLab():P==='k1'?k1Lab():P==='b'?perfBody():P==='rec'?perfRec():P==='pr'?perfRecords():P==='t'?progTests():P==='twin'?progTwin():perfOverview();
+  const P=S.progTab, body=P==='s'?perfStrength():P==='r'?runLab():P==='k1'?k1Lab():P==='b'?perfBody():P==='rec'?perfRec():P==='pr'?perfRecords():P==='t'?progTests():P==='twin'?progTwin():P==='an'?eliteAnalytics():P==='mx'?eliteMastery():P==='sq'?eliteSquad():perfOverview();
   return `<div class="seg scr wide" style="margin-top:6px">${PERF_TABS.map(t=>`<button class="${P===t[0]?'on':''}" data-a="progTab" data-k="${t[0]}">${ic(t[2])} ${t[1]}</button>`).join('')}</div>${body}`;
 }
 /* bara de perioadă, comună */

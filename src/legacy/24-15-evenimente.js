@@ -190,7 +190,7 @@ document.addEventListener('click',async ev=>{
     case 'tmFor': if(!s) return; { const day=sessDay(s), pr=tmPresetFor(day.ex[X],day,s.w); if(pr) tmOpen(pr,X); } return;
     case 'tmPick': { const from=TM.choose?TM.choose.from:null, f=k==='engine'?P_ENGINE:k==='amrap'?P_AMRAP:(TM_LIST().find(t=>t[0]===k)||[])[4]; if(f) tmOpen(f(),from); } return;
     case 'tmGo': tmGo(); return;
-    case 'tmPause': { const st=TM.st; if(!st) return; if(st.pAt){ const pd=Date.now()-st.pAt; st.t0+=pd; st.pausedMs+=pd; st.pAt=null; tmSched(); keepAwake(true); } else { st.pAt=Date.now(); cancelSched('tm'); if(!S.sess) keepAwake(false); } buzz([40]); tmRender(); return; }
+    case 'tmPause': { const st=TM.st; if(!st) return; if(st.pAt){ const pd=Date.now()-st.pAt; st.t0+=pd; st.pausedMs+=pd; st.pAt=null; tmSched(); keepAwake(true); cuesFor(st); } else { st.pAt=Date.now(); cancelSched('tm'); cancelSched('cue'); if(!S.sess) keepAwake(false); } buzz([40]); tmRender(); return; }
     case 'tmSkip': if(TM.st&&!TM.st.pAt) tmAdvance(0,false); return;
     case 'tmLap': if(TM.st) tmAdvance(0,false); return;
     case 'tmRound': if(TM.st){ TM.st.rounds++; const r=$('#tmRounds'); if(r) r.textContent=TM.st.rounds; beep(990,.06); buzz(30); floatText(el,'+1'); } return;
@@ -208,6 +208,7 @@ document.addEventListener('click',async ev=>{
     case 'aiKeySave': { const v=($('#aiKeyIn').value||'').trim(); if(!COACH.vault.isApiKey(v)){ shake('#aiKeyIn'); toast('Cheia nu pare validă','O cheie Anthropic începe cu „sk-ant-". O copiezi din console.anthropic.com → API Keys.','info'); return; }
       try{ await COACH.vault.saveKey(v); }catch(e){ toast('Cheia nu s-a putut salva criptat','Browserul nu permite stocarea (poate e modul privat). Cheia merge doar până închizi aplicația.','info'); }
       S.aiKey=v; AI.err=null; render(); toast('Cheie salvată','Criptată pe acest dispozitiv. Antrenorul AI e gata.','info'); setTimeout(aiSyncQueue,500); return; }
+    case 'cuesToggle': await save('cues',S.cues===false); render(); return;
     case 'deloadToggle': await save('deload',S.deload===false); STC=null; render(); return;
     case 'aiKeyDel': try{ await COACH.vault.deleteKey(); }catch(e){} S.aiKey=''; render(); return;
     case 'aiInj': { const P=Object.assign({},S.prof||{}), cur=(Array.isArray(P.inj)?P.inj:[]).filter(COACH.isInjury);

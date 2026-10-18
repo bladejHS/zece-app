@@ -45,7 +45,7 @@ function tmOpen(pr,from){
 }
 const tmPh=()=>TM.st.ph[TM.st.i];
 function tmEl(){ const st=TM.st; if(!st||!st.t0) return 0; return ((st.pAt||Date.now())-st.t0)/1000; }
-function tmGo(){ const st=TM.st; st.start=Date.now(); st.t0=Date.now(); st.started=true; actxGet(); keepAlive(true); tmSched(); tmRender(); say(voxPhase(tmPh(),st)); }
+function tmGo(){ const st=TM.st; st.start=Date.now(); st.t0=Date.now(); st.started=true; actxGet(); keepAlive(true); tmSched(); tmRender(); voxStyleFor(st,tmPh(),tmPh().d); cuesFor(st); say(voxPhase(tmPh(),st)); }
 const spSay=v=>{ const r=Math.round(v*10)/10, i=Math.floor(r), d=Math.round((r-i)*10); return i+(d?' virgulă '+d:''); };
 /* ce spune vocea la fiecare bucată: voxPhase (085-voice.js), cu încurajări unde nu e un cronometru calm */
 const tmSay=p=>say(voxPhase(p,TM.st));
@@ -72,7 +72,7 @@ function tmAdvance(over,auto){
   if(st.i>=st.ph.length-1){ tmFinish(auto); return; }
   st.i++; st.t0=Date.now()-(over||0)*1000; if(!auto) tmSched();
   const np=tmPh(); if(np.k!=='breath'&&!tmCalm(st)) UI.shutter(np.k==='rest'?'Pauză':np.l,np.k==='rest');
-  buzz(np.k==='rest'?[80]:[150,60,150]); tmRender(); tmSay(np);
+  buzz(np.k==='rest'?[80]:[150,60,150]); tmRender(); voxStyleFor(st,np,np.d); cuesFor(st); tmSay(np);
 }
 function tmTick(){
   const st=TM.st; if(!st||!st.started||st.done||st.pAt) return;
@@ -81,7 +81,7 @@ function tmTick(){
   tmPaint();
 }
 function tmFinish(auto){
-  const st=TM.st; st.done=true; st.total=(Date.now()-st.start-st.pausedMs)/1000; cancelSched('tm');
+  const st=TM.st; st.done=true; st.total=(Date.now()-st.start-st.pausedMs)/1000; cancelSched('tm'); cancelSched('cue'); voxStyleFor(null,null);
   if(!auto){ beep(660,.12); setTimeout(()=>beep(880,.12),150); setTimeout(()=>beep(1320,.25),300); }
   if(!S.sess){ keepAlive(false); keepAwake(false); }
   /* rezultatul intră în istoricul de conditioning (folosit de profilul atletului) */
@@ -92,14 +92,14 @@ function tmPaint(){
   const st=TM.st; if(!st||!st.started||st.done) return; const ph=tmPh(), el=tmEl();
   const tEl=$('#tmTime'); if(tEl) tEl.textContent=fmtClock(ph.d!=null?Math.ceil(Math.max(0,ph.d-el)):el);
   const left=ph.d!=null?ph.d-el:null, f=ph.d!=null?clamp(el/ph.d,0,1):(el%60)/60;
-  UI.setGauge($('#tmGauge'),f,left!=null&&left<=3);
+  UI.setGauge($('#tmGauge'),f,left!=null&&left<=3); voxStyleFor(st,ph,left);
   if(left!=null&&ph.k!=='breath'&&ph.d>=6) UI.countdownCue(tEl,$('#tmFlash'),left,buzz);
   const tot=$('#tmTot'); if(tot) tot.textContent=fmtClock(((st.pAt||Date.now())-st.start-st.pausedMs)/1000);
   const hz=$('#tmHrz'); if(hz&&ph.hr){ const lv=hrLive(), b=HR.bpm, c=!lv?'':b<ph.hr[0]?'lo':b>ph.hr[1]?'hi':'ok';
     hz.className='tm-hrz '+c; hz.textContent=lv?b+' bpm · '+(c==='ok'?'în țintă':c==='hi'?'peste țintă: scade 0,3 km/h':'sub țintă'):'țintă puls '+ph.hr[0]+'–'+ph.hr[1]; }
 }
 function tmRender(){
-  const r=$('#tmRoot'); if(!TM.open){ r.innerHTML=''; updLock(); return; }
+  const r=$('#tmRoot'); if(!TM.open){ r.innerHTML=''; cancelSched('cue'); voxStyleFor(null,null); updLock(); return; }
   document.body.classList.add('lock');
   const top=(t)=>`<div class="fx-top"><button class="ib" data-a="tmClose" ${TM.st&&TM.st.started&&!TM.st.done?'data-confirm="Stop?"':''} aria-label="Închide">${ic('x')}</button>
     <div class="fx-tt"><div class="eyebrow">Cronometru</div><div class="t">${esc(t)}</div></div>${hrChip()}${TM.st&&TM.st.started&&!TM.st.done?`<div class="fx-clock" id="tmTot">0:00</div>`:''}</div>`;

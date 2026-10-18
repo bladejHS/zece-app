@@ -22,7 +22,7 @@ function kbDayLoads(){ const m={}, add=(date,min,intense,deload)=>{ if(!date) re
 /* ---------- check-in-ul de dinainte (20 de secunde, butoane mari) ---------- */
 function kbLastRpe(a){ const s=kbSessions().find(x=>x.a===a&&x.x.rpe); return s?+s.x.rpe:0; }
 function kbBuild(a,ci){ const p=kbPref(a), inj=aiCtx().injuries;
-  let s=TRAINING.buildCombatSession({discipline:a,rounds:p.r,workSec:p.rs,restSec:p.rest,level:p.lvl||2,kicks:p.kicks!==false,week:kbWeek(),deloadAuto:S.deload!==false,injuries:inj});
+  let s=TRAINING.buildCombatSession({discipline:a,rounds:p.r,workSec:p.rs,restSec:p.rest,level:p.lvl||2,kicks:p.kicks!==false,week:kbWeek(),deloadAuto:S.deload!==false,forceDeload:hrvNow().force,injuries:inj});
   s=TRAINING.applyCheckIn(s,{energy:ci.energy,sleep:ci.sleep,lastRpe:ci.rpe||undefined,pain:Object.keys(ci.pain).filter(COACH.isInjury).map(area=>({area,level:ci.pain[area]}))});
   return TRAINING.validateSession(s,kbDayLoads(),todayKey(),inj).session; }
 function kbciHTML(){ const a=SH.k, A=KB_A[a], ci=SH.ci; if(!A) return '';
@@ -66,7 +66,7 @@ ACT.kbFullGo=()=>{ if(!SH||!SH.plan) return; if(TM.open&&TM.st&&TM.st.started&&!
 function kbSessionPreset(a,s){ const A=KB_A[a]||KB_A.bag, p=kbPref(a), cs=TRAINING.allChunks(s);
   const ph=[{k:'prep',d:10,l:'Pregătește-te',s:'Activare · '+(cs[0]?cs[0].label:''),phase:'activation'}];
   cs.forEach((c,ci)=>ph.push({k:c.kind==='rest'?'rest':'work',d:c.durationSec,l:c.label,s:TRAINING.PHASE_LABEL[c.phase]+' · '+c.cue,phase:c.phase,ci,
-    call:c.call,lvl:c.complexity,kicks:c.kicks,cog:c.cognitive?c.cognitive.kind:null,planned:c.durationSec}));
+    call:c.call,lvl:c.complexity,kicks:c.kicks,cog:c.cognitive?c.cognitive.kind:null,planned:c.durationSec,int:c.intensity}));
   const works=cs.filter(c=>c.kind==='work'&&c.phase==='conditioning').length;
   return {title:A.n+' · 4 faze · '+TRAINING.sessionMinutes(s)+' min',kind:'kb4',ph,kb:{a,r:works,rs:p.rs,rest:p.rest,
     call:A.call?{lvl:p.lvl||2,kicks:p.kicks!==false,tempo:KB_TEMPO[p.tempo]?p.tempo:'slow'}:null,tg:null,cur:null,next:0,ph:-1,n:0,

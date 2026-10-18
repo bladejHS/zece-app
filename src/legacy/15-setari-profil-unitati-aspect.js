@@ -94,6 +94,7 @@ function viewSet(){
   <div class="set-h" id="sTrain">Antrenament</div>
   ${icsCard()}
   <div class="card"><div class="set-row" style="margin-top:0"><span class="sp"><b>Deload automat în săptămâna 4</b><div class="sm mu">Volum −40% (serii, minute, reprize, runde), aceleași zile de antrenament. Recuperarea face parte din progres.</div></span><button class="sw ${S.deload!==false?'on':''}" data-a="deloadToggle" role="switch" aria-checked="${S.deload!==false}" aria-label="Deload automat"></button></div></div>
+  ${healthCard()}
   <div class="card"><div class="eyebrow">${ic('run')} Progresia alergării</div>
     <div class="rp-grid"><span></span>${Array.from({length:WEEKS},(_,w)=>`<span class="h">S${w+1}</span>`).join('')}
       ${rpRow('Easy luni (min)','ez1','w')}${rpRow('Prag (reprize)','thr','r')}${rpRow('Easy joi (min)','ez2','w')}${rpRow('Long run (min)','lng','w')}</div>

@@ -197,3 +197,31 @@ html[data-mode="light"] .card{background:var(--glass)}
 .mp-r i{display:block;font-style:normal;color:var(--mu2);font-size:11.5px}
 .mp-high b{color:var(--c-effort)} .mp-rest b{color:var(--c-rest)} .mp-deload b{color:var(--c-steel)}
 .nutri-gate{border-color:var(--warn-bg)}
+
+/* ---------- elite: HRV, mastery, analize, squad ---------- */
+.elite-hrv{box-shadow:var(--sh-card),inset 3px 0 0 var(--c-rest)}
+.mx-l{display:flex;align-items:center;gap:14px;margin-top:10px}
+.mx-l > b{display:grid;place-items:center;width:64px;height:64px;font:700 34px/1 var(--fd);color:var(--on);background:linear-gradient(180deg,var(--hi),var(--lo));
+  clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px)}
+.mx-b{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-top:1px solid var(--ln);opacity:.62}
+.mx-b:first-of-type{border-top:0}
+.mx-b.on{opacity:1}
+.mx-i{display:grid;place-items:center;width:40px;height:40px;flex:none;border:1px solid var(--ln2);border-radius:var(--r-md);color:var(--mu)}
+.mx-b.on .mx-i{color:var(--ac);border-color:var(--ac)}
+.mx-b b{display:block;font:600 14px/1.2 var(--fd);letter-spacing:.06em;text-transform:uppercase}
+.mx-b span{display:block;font-size:12.5px;color:var(--mu);margin-top:2px}
+.mx-b .seg-g{height:6px;margin-top:8px}
+.an-g{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}
+.an-t{background:rgba(var(--bg-rgb),.5);border:1px solid var(--ln);border-radius:var(--r-md);padding:12px}
+.an-t .k{font:600 10.5px/1.2 var(--fd);letter-spacing:.16em;text-transform:uppercase;color:var(--mu)}
+.an-t .v{margin-top:8px;font:700 28px/1 var(--fd);font-variant-numeric:tabular-nums}
+.an-t .v small{font-size:12px;color:var(--mu2);margin-left:2px}
+.an-t .s{margin-top:8px;font-size:12px;color:var(--mu);line-height:1.4}
+.sk-r{display:grid;grid-template-columns:minmax(0,1fr) 46% 32px;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--ln);font-size:13px}
+.sk-r:first-of-type{border-top:0}
+.sk-r .seg-g{margin-top:0;height:8px}
+.sk-r b{font:700 14px/1 var(--fd);text-align:right;font-variant-numeric:tabular-nums}
+.sq-r{display:grid;gap:2px;padding:10px 0;border-top:1px solid var(--ln)}
+.sq-r b{font:600 14px/1.2 var(--fd);letter-spacing:.06em}
+.sq-r span{font-size:12.5px;color:var(--mu)}
+@media (min-width:720px){ .an-g{grid-template-columns:repeat(4,1fr)} }

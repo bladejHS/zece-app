@@ -30,6 +30,7 @@ export default function legacyApp(): Plugin {
         `import * as UI from '/src/ui/index.ts';`,
         `import * as TRAINING from '/src/lib/training/index.ts';`,
         `import * as NUTRI from '/src/lib/nutrition/index.ts';`,
+        `import * as ELITE from '/src/lib/premium/index.ts';`,
       ];
       return `${imports.join('\n')}\n${parts.join('\n')}`;
     },

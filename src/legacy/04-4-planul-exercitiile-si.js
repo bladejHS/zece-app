@@ -135,7 +135,7 @@ function dayBase(w,d){
   });
   const liftMin=(base.lift||[]).reduce((a,s)=>a+s[1],0);
   let min=base.run?Math.round(runTotal(base.run,w)+liftMin):base.min;
-  const dl=deloadOn(w);
+  const dl=deloadOn(w)||hrvDeloadDay(w,d);
   if(dl){ ex.forEach(deloadEx); min=TRAINING.deloadMinutes(min); }
   return {w,d,t:base.t,cat:base.cat,run:base.run,min,ex,notes:NOTES[d],deload:dl};
 }

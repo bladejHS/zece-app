@@ -6,7 +6,7 @@
 /* tipul zilei k din planul hibrid (aceeași săptămână a ciclului), plus kickboxingul notat azi */
 function nutriDay(k){
   const wd=(parseKey(k).getDay()+6)%7, nx=nextDay(), w=nx?nx.w:0, day=dayFor(w,wd,true);
-  const dl=deloadOn(w), kbHard=(S.ext||[]).some(x=>x.date===k&&!x.dup&&(+x.rpe||0)>=7);
+  const dl=deloadOn(w)||(k===todayKey()&&hrvNow().force), kbHard=(S.ext||[]).some(x=>x.date===k&&!x.dup&&(+x.rpe||0)>=7);
   let type=day.cat==='rest'?'rest':(day.run==='thr'||day.run==='lng'||/Conditioning|Power/.test(day.t)||kbHard)?'high':'moderate';
   if(dl&&type!=='rest') type='deload';
   return {type,label:NUTRI.DAY_LABEL[type],t:day.t,minutes:type==='rest'?0:(+day.min||60),intensity:type==='high'?'high':type==='rest'?'low':'moderate'}; }
