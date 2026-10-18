@@ -37,7 +37,7 @@ async function startSess(w,d,ready){
   }
   const adj=adjFor(w,d), day=dayFor(w,d); let cur=day.ex.findIndex((_,x)=>!isDone(w,d,x)); if(cur<0) cur=0;
   S.sess=Object.assign(sessBase(),{w,d,cur,ready:ready||null,adj});
-  S.fxOpen=true; S.fxDir=''; await persistSess(); keepAwake(true); keepAlive(true); render();
+  S.fxOpen=true; S.fxDir=''; await persistSess(); keepAwake(true); keepAlive(true); render(); hydAlert();
 }
 /* pauza: inel mare, −15 / +15 secunde și „Sari", plus ce urmează */
 function restBlock(nextTxt){

@@ -681,10 +681,8 @@ function fuelCard(){
     <div class="note">Cantitățile pe kg sunt calculate la ${num(R,0)} kg (greutatea țintă), la fel ca proteina. ${tg.phase&&tg.phase.cut?'În deficit, mută carbohidrații zilei în jurul antrenamentului: aceleași calorii, antrenament mai bun.':''}</div></div>`;
 }
 /* suplimente: doar cele cu dovezi bune pentru performanță sau pentru lipsuri frecvente; bifezi ce iei, ZECE ține seria */
-const SUPP=[['creatina','Creatină monohidrat','3–5 g pe zi, oricând, și în zilele libere. Efectul vine din saturare, după 3–4 săptămâni.','dovezi puternice','ev3'],
-  ['vitd','Vitamina D3','1000–2000 UI pe zi, mai ales din octombrie până în aprilie. Ideal după un test de sânge.','dacă ai deficit','ev2'],
-  ['omega3','Omega-3 (EPA + DHA)','1–2 g pe zi, dacă mănânci pește gras mai rar de două ori pe săptămână.','pentru sănătate','ev2'],
-  ['betaal','Beta-alanină','3,2–6,4 g pe zi, împărțit, cel puțin 4 săptămâni. Ajută la eforturile de 1–4 minute; poate furnica.','dovezi moderate','ev2']];
+/* suplimentele pe niveluri (src/lib/nutrition/supplements.ts): [id, nume, doză, nivel, clasă]; Tier 3 e doar explicat, blocat */
+const SUPP=NUTRI.SUPPLEMENTS.map(s=>[s.id,s.name,s.dose,'Tier '+s.tier+' · '+s.evidence,s.tier===1?'ev3':'ev2']);
 const suppOn=id=>!!(S.supp&&S.supp.on&&S.supp.on[id]);
 const suppTook=(id,k)=>((S.supp&&S.supp.log&&S.supp.log[k])||[]).indexOf(id)>=0;
 function suppStreak(id){ let n=0, k=todayKey(); if(!suppTook(id,k)) k=dayShift(k,-1); while(suppTook(id,k)&&n<999){ n++; k=dayShift(k,-1); } return n; }
@@ -699,7 +697,7 @@ function suppCard(){
     ${off.length?`<details class="notes sp-more"${on.length?'':' open'}><summary>${ic('plus')} ${on.length?'Adaugă altele':'Ce merită luat'}</summary>
       ${off.map(([id,n,d,ev,cl])=>`<div class="sp-o"><div class="sp"><b>${esc(n)}</b> <span class="shot-t" style="display:inline-flex;margin:0"><span class="${cl}">${esc(ev)}</span></span><p>${esc(d)}</p></div>
         <button class="btn ghost sm" data-a="suppOn" data-k="${id}">Îl iau</button></div>`).join('')}</details>`:''}
-    <div class="note">Cafeina are calculatorul ei la Unelte; nitrații (sfeclă) sunt la Shot-uri. Proteina pudră e doar mâncare comodă: contează totalul zilei. Suplimentele nu înlocuiesc somnul și mâncarea.</div></div>`;
+    <div class="note">Cafeina are calculatorul ei la Unelte; nitrații (sfeclă) sunt la Shot-uri. Proteina pudră e doar mâncare comodă: contează totalul zilei. Suplimentele nu înlocuiesc somnul și mâncarea.</div>${suppBlockedHTML()}</div>`;
 }
 /* câte mese de azi au destulă proteină: ~0,4 g/kg pe masă, de 3–5 ori pe zi */
 function protMeals(k){ const R=refW(), thr=clamp(Math.round(.4*R),25,50), ml=mlogDay(k), n=ml.filter(m=>(+m.p||0)>=thr*.85).length; return {thr,n,tot:ml.length}; }
@@ -709,6 +707,7 @@ function protMeals(k){ const R=refW(), thr=clamp(Math.round(.4*R),25,50), ml=mlo
 const SC={img:null,data:null,hint:'',busy:false,res:null,err:null};
 function viewNutri(){
   const tabs=[['azi','Azi','flame'],['plan','Mese','bowl'],['shots','Shot-uri','glass'],['shop','Listă','cart'],['nec','Necesar','calc']];
+  if(!nutriOk()) return nutriGate();
   const body=S.nTab==='plan'?nutriPlan():S.nTab==='shop'?nutriShop():S.nTab==='nec'?nutriNeed():S.nTab==='shots'?nutriShots():nutriToday();
   return `<div class="seg scr" style="margin-top:6px">${tabs.map(t=>`<button class="${S.nTab===t[0]?'on':''}" data-a="nTab" data-k="${t[0]}">${ic(t[2])} ${t[1]}</button>`).join('')}</div>${body}`;
 }
@@ -822,7 +821,7 @@ function nutriToday(){
           <div class="fld"><label for="scP">Proteină (g)</label><input class="inp" id="scP" type="number" inputmode="numeric" value="${SC.res.p}"></div>
           <div class="fld"><label for="scC">Carbohidrați (g)</label><input class="inp" id="scC" type="number" inputmode="numeric" value="${SC.res.c}"></div>
           <div class="fld"><label for="scG">Grăsimi (g)</label><input class="inp" id="scG" type="number" inputmode="numeric" value="${SC.res.g}"></div></div>
-        <div class="note">Încredere: <b>${esc(SC.res.conf||'—')}</b>. ${esc(SC.res.note||'')}${SC.res.cost!=null?' · analiza a costat ~$'+SC.res.cost.toFixed(3):''}</div>
+        <div class="note">Încredere: <b>${esc(SC.res.conf||'—')}</b>. ${esc(SC.res.note||'')}${SC.res.cost!=null?' · analiza a costat ~$'+SC.res.cost.toFixed(3):''}</div>${mealFbHTML(SC.res)}
         <div class="inrow"><button class="btn ghost" data-a="scanX">Renunță</button><button class="btn pri" style="flex:1" data-a="scanAdd">${ic('check')} Adaugă în jurnal</button></div>`
       :`<div class="fld" style="margin-top:12px"><label for="scHint">Detalii (opțional): cantități, ulei, sosuri</label><input class="inp" id="scHint" value="${esc(SC.hint)}" placeholder="ex: 200 g piept de pui, o lingură de ulei"></div>
         ${SC.err?`<div class="err">${ic('alert')}<span>${esc(SC.err)}</span></div>`:''}
@@ -837,6 +836,7 @@ function nutriToday(){
     <div class="mbars">${[['Carbohidrați',d.c,tg.c,COL().warn],['Grăsimi',d.g,tg.f,'#B3AECB']].map(([l,v,t,c])=>`<div><div class="row"><span class="sm">${l}</span><span class="xs mu sp" style="text-align:right">${Math.round(v)} / ${t} g</span></div>
       <div class="bar" style="margin-top:6px"><i style="width:${(clamp(t?v/t:0,0,1)*100).toFixed(1)}%;background:${c};box-shadow:0 0 12px ${c}"></i></div></div>`).join('')}</div>
     <div class="xs mu" style="margin-top:10px">${esc(tg.phase.sub)} · necesar ${tg.measured?'măsurat':'estimat'} ${tg.tdee} kcal${tg.manual?' · țintă manuală':''}</div></div>
+  ${nutriDayCard(tg,wt)}
   <div class="card"><div class="row"><div class="sp"><div class="eyebrow">${ic('drop')} Apă</div>
       <div class="big sm" style="margin-top:6px">${num(wt/1000,2)}<small>/ ${num(tg.water/1000,1)} L</small></div></div>
     <button class="btn sm ghost" data-a="water" data-i="-250" aria-label="minus 250 ml">−</button>
@@ -844,6 +844,7 @@ function nutriToday(){
     <div class="water">${Array.from({length:cups},(_,i)=>`<svg class="glass ${i<full?'':'e'}" viewBox="0 0 26 34" aria-hidden="true"><path d="M3 3h20l-2.5 27a2 2 0 0 1-2 1.8H7.5a2 2 0 0 1-2-1.8z" fill="none" style="stroke:rgba(var(--w),.2)" stroke-width="1.6"/><path class="w" d="M4.6 11h16.8l-1.9 19a1.4 1.4 0 0 1-1.4 1.2H7.9a1.4 1.4 0 0 1-1.4-1.2z" style="transition-delay:${i*25}ms"/></svg>`).join('')}</div></div>
   ${fuelCard()}
   ${suppCard()}
+  ${quickCard()}
   ${scan||`<label class="card link row" style="display:flex">${'<div class="cc-ic">'+ic('camera')+'</div>'}<div class="sp"><div class="h3">Scanează o masă</div>
     <div class="sm mu">Faci o poză, iar AI-ul estimează caloriile și proteina.</div></div>${ic('right')}<input type="file" accept="image/*" capture="environment" data-scan="1" style="position:absolute;inset:0;opacity:0;cursor:pointer" aria-label="Scanează o masă"></label>`}
   <button class="card link row fd-cta" data-a="foodOpen" style="display:flex;width:100%;text-align:left;color:inherit"><div class="cc-ic">${ic('bowl')}</div><div class="sp"><div class="h3">Caută un aliment</div>
@@ -890,10 +891,11 @@ function nutriPlan(){
 const FOOD_CAT=n=>{ const c=FCAT.find(([,re])=>re.test(n)); return c?c[0]:'Altele'; };
 function nutriShop(){
   const n=S.shopDays||7, tk=todayKey(), tg=targets(), agg={};
+  const prep=mealPrepCard();
   for(let i=0;i<n;i++){ planFor(dayShift(tk,i),tg).forEach(mi=>{ if(mi==null) return; MEALS[mi][8].forEach(([f,g])=>{ agg[f]=(agg[f]||0)+g; }); }); }
   const groups={}; Object.keys(agg).forEach(f=>{ const nm=MFOOD[f]||'?', c=FOOD_CAT(nm); (groups[c]=groups[c]||[]).push({nm,g:agg[f]}); });
   const order=FCAT.map(x=>x[0]).concat(['Altele']), all=Object.values(groups).reduce((a,x)=>a+x.length,0), got=Object.keys(agg).filter(f=>S.shop[MFOOD[f]]).length;
-  return `<div class="card"><div class="row"><div class="eyebrow sp">${ic('cart')} Lista de cumpărături</div><span class="xs mu">${got}/${all} bifate</span></div>
+  return prep+`<div class="card"><div class="row"><div class="eyebrow sp">${ic('cart')} Lista de cumpărături</div><span class="xs mu">${got}/${all} bifate</span></div>
     <div class="chips" style="margin-top:12px">${[[1,'Azi'],[3,'3 zile'],[7,'7 zile']].map(([d,l])=>`<button class="chip ${n===d?'on':''}" data-a="shopDays" data-i="${d}">${l}</button>`).join('')}
       <button class="chip" data-a="shopReset">${ic('refresh')} Debifează tot</button></div>
     <div class="note">Din planul de mese pentru ${n===1?'azi':'următoarele '+n+' zile'}. Gramajele sunt cele din rețete; rotunjește la ambalaje.</div></div>

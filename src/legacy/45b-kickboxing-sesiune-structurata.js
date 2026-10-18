@@ -53,12 +53,14 @@ ACT.kbFull=()=>{ const a=SH&&SH.k; if(!KB_A[a]) return; SH={kind:'kbci',k:a,ci:{
 ACT.kbCi=(el,{k,I})=>{ if(!SH||!SH.ci) return; SH.ci[k]=I; buzz(8); shRender(); };
 ACT.kbCiPain=(el,{k})=>{ if(!SH||!SH.ci||!COACH.isInjury(k)) return; SH.painArea=k; if(!SH.ci.pain[k]) SH.ci.pain[k]=3; buzz(8); shRender(); };
 ACT.kbCiLvl=(el,{I})=>{ if(!SH||!SH.painArea) return; if(I>0) SH.ci.pain[SH.painArea]=I; else delete SH.ci.pain[SH.painArea]; SH.painArea=null; shRender(); };
-ACT.kbCiBuild=()=>{ if(!SH||!SH.ci) return; SH.plan=kbBuild(SH.k,SH.ci); shRender(); };
+ACT.kbCiBuild=async()=>{ if(!SH||!SH.ci) return; const ci=SH.ci; SH.plan=kbBuild(SH.k,ci); shRender();
+  /* check-in-ul de azi ajustează și nutriția zilei (energie, RPE) */
+  await save('kb',Object.assign({},S.kb,{ci:{date:todayKey(),energy:ci.energy,sleep:ci.sleep,rpe:ci.rpe||0}})); STC=null; };
 ACT.kbCiBack=()=>{ if(!SH) return; SH.plan=null; shRender(); };
 ACT.kbFullGo=()=>{ if(!SH||!SH.plan) return; if(TM.open&&TM.st&&TM.st.started&&!TM.st.done){ toast('Cronometrul rulează deja','','info'); return; }
   const a=SH.k, s=SH.plan; SH=null; shRender();
   TRAINING.sessionPhases(s).forEach(p=>voxPreload(p));
-  tmOpen(kbSessionPreset(a,s)); };
+  tmOpen(kbSessionPreset(a,s)); hydAlert(); };
 
 /* sesiunea → fazele cronometrului; fiecare fază păstrează legătura cu bucata ei (ci), pentru feedback */
 function kbSessionPreset(a,s){ const A=KB_A[a]||KB_A.bag, p=kbPref(a), cs=TRAINING.allChunks(s);

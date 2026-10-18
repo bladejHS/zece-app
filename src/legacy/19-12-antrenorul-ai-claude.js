@@ -88,7 +88,7 @@ function snapshot(){
     return `Ultima cântărire: ${num(ws.last.w)} kg (${ws.last.d}). Media pe 7 zile: ${num(ws.a7)} kg.`+(ws.wk!=null?` Ritm: ${ws.wk>0?'+':''}${num(ws.wk,2)} kg/săptămână.`:'')+
       `\nCântăriri recente: ${a.slice(-14).map(x=>x.d.slice(5)+' '+num(x.w)).join(', ')}.`; });
   sec('Măsurători (cm)',()=>bList().slice(-4).map(x=>`- ${x.d}: `+MEAS.filter(([k])=>+x[k]>0).map(([k,l])=>l.toLowerCase()+' '+num(x[k])).join(', ')).join('\n'));
-  sec('Nutriție',()=>{ const tg=targets(); let s=`Faza: ${tg.phase.label.toLowerCase()} (${tg.phase.sub}). Ținte: ${tg.kcal} kcal, ${tg.p} g proteină, ${tg.c} g carbohidrați, ${tg.f} g grăsimi, ${num(tg.water/1000,1)} L apă pe zi (bazal ~${tg.bmr}, necesar ${tg.measured?'măsurat din date':'estimat'} ~${tg.tdee} kcal).`;
+  sec('Nutriție',()=>{ const tg=targets(); let s=`Tipul zilei: ${tg.day.label.toLowerCase()} (${tg.day.t}); ținta e periodizată: ${tg.per.notes.join(' ')||'baza zilei'}. Faza: ${tg.phase.label.toLowerCase()} (${tg.phase.sub}). Ținte: ${tg.kcal} kcal, ${tg.p} g proteină, ${tg.c} g carbohidrați, ${tg.f} g grăsimi, ${num(tg.water/1000,1)} L apă pe zi (bazal ~${tg.bmr}, necesar ${tg.measured?'măsurat din date':'estimat'} ~${tg.tdee} kcal).`;
     const days=[]; for(let i=0;i<7;i++){ const k=dayShift(tk,-i), d=dayTotals(k); if(mlogDay(k).length) days.push(`${k.slice(5)}: ${Math.round(d.k)} kcal, ${Math.round(d.p)} g prot.`); }
     s+=days.length?'\nUltimele zile cu mese notate:\n- '+days.join('\n- '):'\nNicio masă notată în ultimele 7 zile.';
     const today=mlogDay(tk); if(today.length) s+='\nMesele de azi: '+today.map(m=>`${m.n} (${Math.round(+m.k||0)} kcal, ${Math.round(+m.p||0)} g)`).join('; ')+'.';

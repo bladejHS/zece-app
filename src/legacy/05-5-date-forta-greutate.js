@@ -125,13 +125,17 @@ function tdeeMeasured(){
   if(tdee<1500||tdee>7000) return Object.assign(res,{odd:true});
   return {ok:true,tdee,intake:Math.round(intake),perWeek:slope*7,days:ks.length,weighs:a.length};
 }
-function targets(){
+/* ținta zilei k (implicit azi): baza (necesar, fază, deficit) periodizată după tipul zilei de antrenament (14c, NUTRI) */
+function targets(day){
   const P=prof(), ws=wStats(), w=ws?ws.a7:P.startW, A=bmrAll(w), eq=A[P.eq]!=null?P.eq:'mifflin', bmr=A[eq];
   const est=Math.round(bmr*(+P.act||1.55)), ms=tdeeMeasured(), useM=ms.ok&&P.useMeasured!==false, tdee=useM?ms.tdee:est, ph=nPhase();
   const def=ph.cut?(+P.def||600):0, auto=Math.max(Math.round(bmr*1.1/50)*50,Math.round((tdee-def)/50)*50), kcal=+P.kcalT||auto;
   const p=+P.protT||Math.round((P.goalW||w)*2); let f=Math.round(w*.7), c=Math.round((kcal-p*4-f*9)/4);
   if(c<80){ f=Math.max(Math.round(w*.6),Math.round((kcal-p*4-320)/9)); c=Math.max(0,Math.round((kcal-p*4-f*9)/4)); }
-  return {kcal,p,f,c,water:+P.waterT||3500,bmr,tdee,est,measured:useM,ms,auto,manual:!!P.kcalT,phase:ph,eq,def,A};
+  const k=day||todayKey(), dt=nutriDay(k), ci=nutriCi(k);
+  const per=NUTRI.periodize(Object.assign({base:{kcal,p,c,f},dayType:dt.type,sex:P.sex==='f'?'f':'m',weightKg:w,tdee,cut:ph.cut},ci));
+  const hyd=NUTRI.hydration({weightKg:w,minutes:dt.minutes,intensity:dt.intensity});
+  return {kcal:per.kcal,p:per.p,f:per.f,c:per.c,water:+P.waterT||hyd.totalMl,hyd,day:dt,per,base:{kcal,p,c,f},bmr,tdee,est,measured:useM,ms,auto,manual:!!P.kcalT,phase:ph,eq,def,A};
 }
 /* planul de mese: pentru fiecare masă, rețetele cele mai apropiate de ținta ei; aceeași zi dă același plan până îl schimbi */
 const mealOK=m=>(!S.mf.port||m[6]===1)&&(!S.mf.cold||m[7]===1);
