@@ -890,23 +890,47 @@ function nutriPlan(){
     ${cards}`;
 }
 const FOOD_CAT=n=>{ const c=FCAT.find(([,re])=>re.test(n)); return c?c[0]:'Altele'; };
-function nutriShop(){
-  const n=[1,7,14].indexOf(S.shopDays)>=0?S.shopDays:7, tk=todayKey(), m0=mondayOf(tk), agg={};
+/* lista de cumpărături: alimentele din planul de mese al perioadei alese, pe categorii */
+const SHOP_CAT={'Proteine':['dumbbell','--ac'],'Carbohidrați':['bowl','--warn'],'Legume':['leaf','--ok'],'Fructe':['sun','--vio'],'Grăsimi și semințe':['drop','--run'],'Altele':['grid','--mu']};
+const SHOP_RANGE=[[1,'Azi'],[7,'Săptămâna asta'],[14,'Săptămâna viitoare']];
+function shopData(){
+  const n=[1,7,14].indexOf(S.shopDays)>=0?S.shopDays:7, tk=todayKey(), m0=mondayOf(tk), agg={}, cnt={}, hv=mealHave();
   /* azi · săptămâna asta (de azi până duminică) · săptămâna viitoare (luni–duminică) */
   const from=n===14?dayShift(m0,7):tk, to=n===1?tk:n===14?dayShift(m0,13):dayShift(m0,6), ks=[]; for(let k=from;k<=to;k=dayShift(k,1)) ks.push(k);
-  const prep=mealPrepCard(), hv=mealHave();
-  ks.forEach(k=>planFor(k).forEach(mi=>{ if(mi==null) return; MEALS[mi][8].forEach(([f,g])=>{ agg[f]=(agg[f]||0)+g; }); }));
+  let meals=0;
+  ks.forEach(k=>planFor(k).forEach(mi=>{ if(mi==null) return; meals++; MEALS[mi][8].forEach(([f,g])=>{ agg[f]=(agg[f]||0)+g; cnt[f]=(cnt[f]||0)+1; }); }));
+  const groups={}; Object.keys(agg).forEach(f=>{ const nm=MFOOD[f]||'?', c=FOOD_CAT(nm); (groups[c]=groups[c]||[]).push({nm,g:agg[f],n:cnt[f],on:!!S.shop[nm],have:!!(hv&&hv.has(+f))}); });
+  /* ce mai ai de luat sus, cele bifate jos; în fiecare parte, cantitățile mari întâi */
+  Object.values(groups).forEach(a=>a.sort((x,y)=>(x.on-y.on)||(y.g-x.g)));
+  const order=FCAT.map(x=>x[0]).concat(['Altele']).filter(c=>groups[c]), items=[].concat(...order.map(c=>groups[c]));
+  return {n,ks,meals,groups,order,items,all:items.length,got:items.filter(x=>x.on).length,home:items.filter(x=>x.have).length,
+    left:items.filter(x=>!x.on).reduce((a,x)=>a+x.g,0)}; }
+const shopHint=it=>/albuș/.test(it.nm)?' · ~'+Math.round(it.g/33)+' ouă':/ou întreg/.test(it.nm)?' · ~'+Math.round(it.g/55)+' ouă':/whey/.test(it.nm)?' · ~'+Math.round(it.g/30)+' doze':'';
+function nutriShop(){
+  const D=shopData(), {n,ks}=D, tk=todayKey(), f=D.all?D.got/D.all:0;
   setTimeout(()=>planLock(ks),0);
-  const groups={}; Object.keys(agg).forEach(f=>{ const nm=MFOOD[f]||'?', c=FOOD_CAT(nm); (groups[c]=groups[c]||[]).push({nm,g:agg[f]}); });
-  const order=FCAT.map(x=>x[0]).concat(['Altele']), all=Object.values(groups).reduce((a,x)=>a+x.length,0), got=Object.keys(agg).filter(f=>S.shop[MFOOD[f]]).length, home=hv?Object.keys(agg).filter(f=>hv.has(+f)).length:0;
-  return prep+`<div class="card"><div class="row"><div class="eyebrow sp">${ic('cart')} Lista de cumpărături</div><span class="xs mu">${got}/${all} bifate</span></div>
-    <div class="chips" style="margin-top:12px">${[[1,'Azi'],[7,'Săptămâna asta'],[14,'Săptămâna viitoare']].map(([d,l])=>`<button class="chip ${n===d?'on':''}" data-a="shopDays" data-i="${d}">${l}</button>`).join('')}
-      <button class="chip" data-a="shopReset">${ic('refresh')} Debifează tot</button></div>
-    <div class="note">Din planul de mese ${n===1?'de azi':'de '+(ks.length>1?fmtDay(ks[0])+' până '+fmtDay(ks[ks.length-1]):fmtDay(ks[0]))} (${ks.length} ${ks.length===1?'zi':'zile'}). Planul acestor zile rămâne fixat, ca mesele să fie cele pentru care cumperi; se reface doar dacă schimbi alimentele.${home?` ${home} alimente le ai deja acasă.`:''} Gramajele sunt cele din rețete; rotunjește la ambalaje.</div></div>
-    ${order.filter(c=>groups[c]).map(c=>`<div class="card"><div class="eyebrow">${esc(c)}</div><div style="margin-top:4px">
-      ${groups[c].sort((a,b)=>b.g-a.g).map(it=>{ const on=!!S.shop[it.nm]; return `<div class="shop-r ${on?'on':''}"><button class="tick ${on?'on':''}" data-a="shopTick" data-k="${esc(it.nm)}" aria-label="Bifează ${esc(it.nm)}">${ic('check')}</button>
-        <span class="sp nm">${esc(it.nm)}${hv&&hv.has(MFOOD.indexOf(it.nm))?'<span class="have">ai acasă</span>':''}</span><b class="v">${fmtG(it.g)}</b>${/albuș/.test(it.nm)?`<span class="xs mu">~${Math.round(it.g/33)} ouă</span>`:''}</div>`; }).join('')}</div></div>`).join('')}`;
-}
+  const when=ks.length>1?fmtDay(ks[0])+' – '+fmtDay(ks[ks.length-1]):ks[0]===tk?'azi, '+fmtDay(tk):fmtDay(ks[0]);
+  const hero=`<div class="card sl-hero">
+    <div class="sl-top"><div class="sp"><div class="eyebrow">${ic('cart')} Lista de cumpărături</div>
+        <div class="sl-ttl">${esc(SHOP_RANGE.find(x=>x[0]===n)[1])}</div>
+        <div class="sl-sub">${esc(when)} · ${D.meals} mese din plan</div></div>
+      <div class="sl-ring">${ring(f,{s:84,sw:7,c:f>=1?COL().ok:TH().ac})}<div class="sl-ring-v"><b>${D.got}</b><span>din ${D.all}</span></div></div></div>
+    <div class="seg sl-seg" role="tablist">${SHOP_RANGE.map(([d,l])=>`<button class="${n===d?'on':''}" data-a="shopDays" data-i="${d}" role="tab" aria-selected="${n===d}">${l}</button>`).join('')}</div>
+    <div class="sl-kpis"><div><b>${D.all-D.got}</b><span>de luat</span></div><div><b>${fmtG(D.left)}</b><span>cântărit</span></div><div><b>${D.home}</b><span>ai acasă</span></div></div>
+    <div class="sl-act"><button class="btn ghost sm" data-a="shopCopy" ${D.all-D.got?'':'disabled'}>${ic('copy')} Copiază lista</button>${D.got?`<button class="btn ghost sm" data-a="shopReset" data-confirm="Sigur?">${ic('refresh')} Debifează tot</button>`:''}</div></div>`;
+  if(!D.all) return hero+`<div class="card"><div class="empty sm">Planul de mese nu are rețete pentru perioada asta. Verifică filtrele din Mese.</div></div>`;
+  const cats=D.order.map(c=>{ const a=D.groups[c], [icn,col]=SHOP_CAT[c]||SHOP_CAT.Altele, dn=a.filter(x=>x.on).length;
+    return `<div class="card sl-cat ${dn===a.length?'done':''}" style="--cc:var(${col})">
+      <div class="sl-ch"><span class="sl-ci">${ic(icn)}</span><div class="sp"><b>${esc(c)}</b><span>${dn===a.length?'gata':dn+' din '+a.length}</span></div>
+        <div class="sl-mini" aria-hidden="true"><i style="width:${(dn/a.length*100).toFixed(0)}%"></i></div></div>
+      ${a.map(it=>`<button class="sl-r ${it.on?'on':''}" data-a="shopTick" data-k="${esc(it.nm)}" aria-pressed="${it.on}">
+        <span class="sl-t">${ic('check')}</span>
+        <span class="sp"><span class="sl-n">${esc(it.nm)}</span><span class="sl-s">${it.n===1?'o masă':'în '+it.n+' mese'}${shopHint(it)}</span></span>
+        ${it.have?`<span class="sl-have">acasă</span>`:''}<span class="sl-q">${fmtG(it.g)}</span></button>`).join('')}</div>`; }).join('');
+  return hero+cats+`<div class="card sl-note"><p class="sm">${ic('info')} Gramajele sunt cele din rețete (gătite, unde scrie „fiert”); rotunjește la ambalaje. Planul zilelor din listă rămâne fixat, ca mesele să fie cele pentru care cumperi; se reface doar dacă schimbi alimentele.</p></div>`+mealPrepCard(); }
+ACT.shopCopy=async()=>{ const D=shopData(), L=D.order.map(c=>{ const a=D.groups[c].filter(x=>!x.on); return a.length?c+'\n'+a.map(x=>'- '+x.nm+': '+fmtG(x.g)).join('\n'):''; }).filter(Boolean);
+  const t='Lista de cumpărături · '+SHOP_RANGE.find(x=>x[0]===D.n)[1].toLowerCase()+'\n\n'+L.join('\n\n');
+  try{ await navigator.clipboard.writeText(t); toast('Lista copiată',(D.all-D.got)+' alimente','info'); }catch(e){ toast('Nu pot copia aici','Browserul nu permite copierea.','info'); } };
 function nutriNeed(){
   const P=prof(), tg=targets(), w=curW(), ms=tg.ms, ws=wStats(), rate=(tg.def*7/7700);
   const eqRows=EQS.map(([k,l,b])=>`<tr class="${tg.eq===k?'sel':''}" data-a="eqSel" data-k="${k}" style="cursor:pointer"><td>${tg.eq===k?'▸ ':''}${l}</td><td><b>${tg.A[k]}</b> kcal</td><td class="mu">${b}</td></tr>`).join('');
