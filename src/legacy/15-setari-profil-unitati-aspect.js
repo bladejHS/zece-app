@@ -29,6 +29,7 @@ function viewSet(){
   <div class="card"><div class="eyebrow">${ic('flame')} Ținte de nutriție</div>
     <div class="form">
       <div class="fld"><label for="pAct">Activitate</label><select class="inp" id="pAct" data-p="act">${[[1.375,'Ușoară'],[1.55,'Moderată'],[1.725,'Mare'],[1.9,'Foarte mare']].map(a=>`<option value="${a[0]}" ${+P.act===a[0]?'selected':''}>${a[1]} (×${a[0]})</option>`).join('')}</select></div>
+      <div class="fld"><label for="pMet">Metabolism</label><select class="inp" id="pMet" data-p="metab">${METAB.map(([v,l])=>`<option value="${v}" ${metabF()===v?'selected':''}>${l}</option>`).join('')}</select></div>
       <div class="fld"><label for="pDef">Deficit (kcal/zi)</label><input class="inp" id="pDef" data-p="def" data-opt="1" type="number" inputmode="numeric" value="${P.def||''}" placeholder="auto ${tg.autoDef}"></div>
       <div class="fld"><label for="pK">Calorii/zi (gol = auto ${tg.auto})</label><input class="inp" id="pK" data-p="kcalT" data-opt="1" type="number" inputmode="numeric" value="${P.kcalT||''}" placeholder="${tg.auto}"></div>
       <div class="fld"><label for="pPr">Proteină g/zi</label><input class="inp" id="pPr" data-p="protT" data-opt="1" type="number" inputmode="numeric" value="${P.protT||''}" placeholder="${Math.round(P.goalW*2)}"></div>

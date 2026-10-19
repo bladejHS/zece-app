@@ -256,3 +256,6 @@ html[data-mode="light"] .card{background:var(--glass)}
 .std-r.ok .v{color:var(--ok)}
 .std-r.ok .bar i{background:var(--ok)}
 .std-r .v .i{width:14px;height:14px}
+
+/* ---------- alimentele din planul de mese ---------- */
+.chip.fp.off{text-decoration:line-through;opacity:.5}

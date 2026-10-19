@@ -157,7 +157,9 @@ function dayFor(w,d,raw){
   const day=dayBase(w,d), a=raw?null:adjFor(w,d); return a?applyAdj(day,a):day; }
 function dayBase(w,d){
   const base=PLAN[d], p=runPlan();
-  const ex=base.ex.map(([n,pr],x)=>{
+  const sw=(S.prof||{}).exSwap||{};
+  /* v16: exercițiile înlocuite permanent (de tine sau de antrenorul AI) păstrează seriile, repetările și pauza */
+  const ex=base.ex.map(([n0,pr],x)=>{ const n=sw[d+'_'+x]||n0;
     let txt=pr, planMin=null;
     if(base.run==='thr'&&n==='Threshold'){ const r=p.thr.r[w]||0; txt=r+' × '+mmss(p.thr.m)+' @ ritm de prag · pauză '+p.thr.rest+'s jog ușor'; planMin=Math.round(runWork('thr',w)); }
     else if(base.run==='lng'&&/^Long run/.test(n)){ planMin=p.lng.w[w]||0; txt=planMin+' min continuu · ritm conversațional, zona 2'; }

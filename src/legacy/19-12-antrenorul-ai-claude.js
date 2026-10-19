@@ -30,6 +30,7 @@ Cum răspunzi:
 - Limite fixe (aplicația oprește răspunsurile care le încalcă): nu pomeni deloc test boosters, arzătoare de grăsimi, prohormoni, SARMs, steroizi sau diuretice, nici măcar ca să le descurajezi; nu propune un aport sub 1600 kcal pe zi pentru femei sau 2000 kcal pe zi pentru bărbați; nu propune mai mult de 7 zile de antrenament la rând fără o zi de odihnă; nu recomanda exerciții care solicită zonele declarate accidentate (le găsești în profil) și nici nu le numi, propune direct alternativa.
 - Ai unelte de citire (get_workouts, get_exercise_history, get_runs, get_records, get_period_summary, get_body, get_goals, get_insights) care întorc date exacte din aplicație. Folosește-le ori de câte ori întrebarea cere mai mult decât rezumatul de mai jos: istoric complet, comparații între antrenamente sau alergări, recorduri, perioade anume. Răspunde doar din ce întorc; dacă o unealtă nu găsește date, spune ce lipsește.
 - Ai unelte prin care notezi date în aplicație (greutate, alergare, masă, apă, măsurători) și schimbi progresia alergărilor. Folosește-le doar când utilizatorul îți dă valorile și vrea să le notezi (de exemplu „am 131,4 kg azi" sau „notează-mi alergarea de 8 km în 55 de minute"); nu inventa valori pentru unelte. Utilizatorul confirmă fiecare acțiune în aplicație; după rezultat, confirmă pe scurt ce s-a notat.
+- Poți și modifica aplicația, tot cu confirmarea utilizatorului: set_nutrition (metabolism, activitate, deficit, calorii, proteină, greutate-țintă, grăsime, pauze de dietă), set_food_preferences (alimentele scoase din planul de mese), swap_meal (o masă din plan), swap_exercise (înlocuiește permanent un exercițiu din plan; seriile și repetările rămân) și set_app_setting. Folosește-le când utilizatorul cere o schimbare sau când datele o cer clar (de ex. cântarul arată că se îngrașă cu ținta de acum) și explică de ce. Caloriile se ajustează deja singure din cântar o dată pe săptămână; nu dubla corecția fără motiv.
 - Format: răspunsuri scurte (de regulă sub 180 de cuvinte), paragrafe scurte și liste cu liniuță, **bold** pentru cifrele-cheie. Fără tabele.`;
 const AI_TOOLS=[
   {name:'log_weight',description:'Notează greutatea corporală a utilizatorului într-o zi.',eager_input_streaming:true,
@@ -75,6 +76,7 @@ function toolInfo(name,inp){
         const rp=Object.assign({},S.runPlan||{}), h=JSON.parse(JSON.stringify(rp.h||{})), cur=runPlan(); h[inp.row]=h[inp.row]||{}; h[inp.row][f]=(h[inp.row][f]||cur[inp.row][f]).slice(); h[inp.row][f][inp.week-1]=inp.value; rp.h=h; await save('runPlan',rp);
         return 'Schimbat: '+lbl+', săptămâna '+inp.week+' = '+inp.value+unit+'.'; }}; }
   }
+  if(typeof AI_WTOOLS!=='undefined'&&AI_WTOOLS[name]) return AI_WTOOLS[name](inp,date,dl);
   return {err:'Unealtă necunoscută.'};
 }
 function snapshot(){
@@ -92,7 +94,11 @@ function snapshot(){
     const days=[]; for(let i=0;i<7;i++){ const k=dayShift(tk,-i), d=dayTotals(k); if(mlogDay(k).length) days.push(`${k.slice(5)}: ${Math.round(d.k)} kcal, ${Math.round(d.p)} g prot.`); }
     s+=days.length?'\nUltimele zile cu mese notate:\n- '+days.join('\n- '):'\nNicio masă notată în ultimele 7 zile.';
     const today=mlogDay(tk); if(today.length) s+='\nMesele de azi: '+today.map(m=>`${m.n} (${Math.round(+m.k||0)} kcal, ${Math.round(+m.p||0)} g)`).join('; ')+'.';
-    s+=`\nApă azi: ${waterOf(tk)} ml.`; return s; });
+    s+=`\nApă azi: ${waterOf(tk)} ml.`;
+    { const A=nAdj(); s+=`\nMetabolism declarat: ${(METAB.find(m=>m[0]===metabF())||[0,'Normal'])[1]}. Corecția din cântar a necesarului: ${A.c>0?'+':''}${A.c||0} kcal${A.d?` (ultima pe ${A.d}: cântarul ${A.r} kg/săpt. față de ${A.pred} planificat)`:''}.`; }
+    const exl=(S.mf||{}).ex||[]; if(exl.length) s+=`\nAlimente scoase din planul de mese: ${exl.join(', ')}.`;
+    const sw=prof().exSwap||{}; if(Object.keys(sw).length) s+=`\nExerciții înlocuite în plan: `+Object.keys(sw).map(k=>{ const [d,x]=k.split('_'); return DAYN[+d]+' '+((PLAN[+d].ex[+x]||[])[0]||'?')+' → '+sw[k]; }).join('; ')+'.';
+    return s; });
   sec('Unde a ajuns în program',()=>{ const nx=nextDay(); let s=`Ciclul ${cyc()}.`;
     if(!nx) return s+' Toate cele 4 săptămâni sunt bifate; urmează un ciclu nou.';
     const day=dayFor(nx.w,nx.d);

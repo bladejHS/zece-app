@@ -4,7 +4,7 @@
 async function loadAll(){
   const keys=Object.keys(K), vals=await Promise.all(keys.map(k=>store.get(K[k]))), o=Object.fromEntries(keys.map((k,i)=>[k,vals[i]]));
   const obj=v=>v&&typeof v==='object'&&!Array.isArray(v)?v:{};
-  ['lifts','weights','wlog','cyc','runPlan','prof','mlog','water','body','journal','tech','mplan','shop','adj','strava','exNote','dash','notifCfg','kb','vox','std'].forEach(k=>{ S[k]=obj(o[k]); });
+  ['lifts','weights','wlog','cyc','runPlan','prof','mlog','water','body','journal','tech','mplan','shop','adj','strava','exNote','dash','notifCfg','kb','vox','std','nlog'].forEach(k=>{ S[k]=obj(o[k]); });
   S.ach=o.ach&&typeof o.ach==='object'&&!Array.isArray(o.ach)?o.ach:null; S.notif=Array.isArray(o.notif)?o.notif:undefined;
   S.exFav=Array.isArray(o.exFav)?o.exFav:[]; S.exCustom=Array.isArray(o.exCustom)?o.exCustom:[];
   try{ const r=JSON.parse(localStorage.getItem('zece3:rng')||'"m"'); if(RANGES.some(x=>x[0]===r)) S.rng=r; }catch(e){}
@@ -27,7 +27,7 @@ async function loadAll(){
   else S.aiChat=o.aiChat&&Array.isArray(o.aiChat.msgs)?Object.assign({tools:{}},o.aiChat):null;
   await migrate(); await cfAchFix(); await planAbsMigrate(+o.planV||0);
   STC=null; S.loaded=true;
-  await migSplit();
+  await migSplit(); await mealsMigrate(); try{ await nAdaptRun(); }catch(e){}
 }
 /* migrări de date, la fiecare încărcare (și după import sau sincronizare):
    v8 scoate „câte repetări mai puteai" (RIR) din serii: o serie rămâne [kg, repetări] (+ tipul, ca text, la drop set / rest-pause) */
