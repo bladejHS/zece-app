@@ -201,13 +201,40 @@ function slotCands(si,tg){ const [,cat,share]=MSLOTS[si], kT=tg.kcal*share, pT=t
 /* încearcă 40 de combinații din cele mai potrivite rețete pe fiecare masă și o păstrează pe cea mai apropiată de totalul zilei */
 const PLC={};
 /* v17: fiecare zi își folosește ținta ei (zilele intense mai mult, cele de odihnă mai puțin) */
-function planFor(k,tg){ tg=tg||targets(k); const sv=(S.mplan||{})[k]||{}, key=k+'|'+(sv.s||0)+'|'+(S.mf.port?1:0)+(S.mf.cold?1:0)+((S.mf.ex||[]).join(','))+'|'+(mealHave()?(S.mf.have||[]).join(','):'')+'|'+tg.kcal+'|'+tg.p+'|'+JSON.stringify(sv.m||[]);
+/* v17: varietate. Pentru fiecare rețetă: sursele de proteină (grupate: lactate, ouă, pește), fructele și numele de bază (fără mărime).
+   O zi nu repetă aceeași proteină (whey cel mult de 2 ori, lactatele cel mult de 2 ori), nici aceeași rețetă în alte mărimi;
+   iar rețetele din ultimele 2 zile și proteina de ieri de la prânz și cină sunt depunctate, ca săptămâna să fie diversă. */
+let MINF=null;
+function mealInfo(){ if(MINF) return MINF; const PR=FCAT[0][1], FR=(FCAT.find(c=>c[0]==='Fructe')||[0,/^$/])[1], ST=FCAT[1][1], VG=(FCAT.find(c=>c[0]==='Legume')||[0,/^$/])[1];
+  const grp=n=>/skyr|iaurt|cottage/.test(n)?'lactate':/albuș|ou întreg/.test(n)?'ouă':/cod|somon|ton/.test(n)?'pește':n;
+  MINF=MEALS.map(m=>{ const pr=m[8].map(([f])=>MFOOD[f]||'').filter(n=>PR.test(n));
+    const nm=m[8].map(([f])=>MFOOD[f]||'');
+    return {pr,gr:[...new Set(pr.map(grp))],fr:nm.filter(n=>FR.test(n)),st:nm.filter(n=>ST.test(n)),vg:nm.filter(n=>VG.test(n)),base:m[1].replace(/ · porție.*/,''),ty:m[1].split(' ')[0].toLowerCase()}; });
+  return MINF; }
+function divPen(pick,hist){ const I=mealInfo(), food={}, grp={}, fr={}, st={}, vg={}, base={}; let pen=0;
+  pick.forEach(i=>{ if(i==null) return; const x=I[i]; x.pr.forEach(n=>{ food[n]=(food[n]||0)+1; }); x.gr.forEach(g=>{ grp[g]=(grp[g]||0)+1; }); x.fr.forEach(n=>{ fr[n]=(fr[n]||0)+1; }); x.st.forEach(n=>{ st[n]=(st[n]||0)+1; }); x.vg.forEach(n=>{ vg[n]=(vg[n]||0)+1; }); base[x.base]=(base[x.base]||0)+1; });
+  /* garnitura și legumele: nu aceleași la prânz și la cină */
+  Object.keys(st).forEach(n=>{ pen+=Math.max(0,st[n]-1)*.12; }); Object.keys(vg).forEach(n=>{ pen+=Math.max(0,vg[n]-1)*.06; });
+  Object.keys(food).forEach(n=>{ pen+=Math.max(0,food[n]-(/whey/.test(n)?2:1))*.3; });
+  Object.keys(grp).forEach(g=>{ if(g==='lactate') pen+=Math.max(0,grp[g]-2)*.3; });
+  Object.keys(fr).forEach(n=>{ pen+=Math.max(0,fr[n]-1)*.08; });
+  Object.keys(base).forEach(b=>{ pen+=Math.max(0,base[b]-1)*.3; });
+  hist.forEach((h,d)=>{ const w=d===0?1:.6, hb=new Set(h.filter(i=>i!=null&&I[i]).map(i=>I[i].base));
+    pick.forEach((i,si)=>{ if(i==null) return; if(hb.has(I[i].base)) pen+=.12*w;
+      /* micul dejun și gustările: nu același fel (sandviș, skyr, omletă, ovăz…) ca ieri la aceeași masă */
+      const j=h[si]; if((si===0||si===1||si===3)&&j!=null&&I[j]&&I[j].ty===I[i].ty) pen+=(si===0?.12:.05)*w; });
+    if(d===0) [2,4].forEach(si=>{ const a=pick[si], b=h[si]; if(a!=null&&b!=null&&I[a]&&I[b]&&I[a].gr.some(g=>I[b].gr.indexOf(g)>=0)) pen+=.08; }); });
+  return pen; }
+/* planul zilei: din cele mai potrivite rețete pe fiecare masă, combinația cea mai apropiată de țintă și cea mai variată */
+function planFor(k,tg){ tg=tg||targets(k); const sv=(S.mplan||{})[k]||{}, tk=todayKey(), hist=[];
+  for(let d=1;d<=2;d++){ const dk=dayShift(k,-d), s2=(S.mplan||{})[dk]; if(s2&&s2.m) hist.push(s2.m); else if(dk>=tk) hist.push(planFor(dk)); }
+  const key=k+'|'+(sv.s||0)+'|'+(S.mf.port?1:0)+(S.mf.cold?1:0)+((S.mf.ex||[]).join(','))+'|'+(mealHave()?(S.mf.have||[]).join(','):'')+'|'+tg.kcal+'|'+tg.p+'|'+JSON.stringify(sv.m||[])+'|'+JSON.stringify(hist);
   if(PLC[key]) return PLC[key].slice();
-  const rnd=seedRand(key), cands=MSLOTS.map((_,si)=>sv.m&&sv.m[si]!=null&&MEALS[sv.m[si]]?[sv.m[si]]:slotCands(si,tg).slice(0,7).map(x=>x.i));
+  const rnd=seedRand(key), cands=MSLOTS.map((_,si)=>sv.m&&sv.m[si]!=null&&MEALS[sv.m[si]]?[sv.m[si]]:slotCands(si,tg).slice(0,14).map(x=>x.i));
   let best=null,bs=Infinity;
-  for(let t=0;t<40;t++){ const used=new Set(cands.filter(c=>c.length===1).map(c=>c[0]));
+  for(let t=0;t<160;t++){ const used=new Set(cands.filter(c=>c.length===1).map(c=>c[0]));
     const pick=cands.map(c=>{ if(c.length===1) return c[0]; const free=c.filter(i=>!used.has(i)); if(!free.length) return null; const i=free[Math.floor(rnd()*free.length)]; used.add(i); return i; });
-    const tot=pick.reduce((a,i)=>i==null?a:{k:a.k+MEALS[i][2],p:a.p+MEALS[i][3]},{k:0,p:0}), sc=Math.abs(tot.k-tg.kcal)/tg.kcal+Math.max(0,tg.p-tot.p)/tg.p*.5;
+    const tot=pick.reduce((a,i)=>i==null?a:{k:a.k+MEALS[i][2],p:a.p+MEALS[i][3]},{k:0,p:0}), sc=Math.abs(tot.k-tg.kcal)/tg.kcal+Math.max(0,tg.p-tot.p)/tg.p*.5+divPen(pick,hist);
     if(sc<bs){ bs=sc; best=pick; } }
   PLC[key]=best; return best.slice(); }
 async function planSet(k,si,mi){ const mp=Object.assign({},S.mplan), cur=planFor(k), sv=Object.assign({},mp[k]||{}); sv.m=cur.slice(); if(si!=null) sv.m[si]=mi; mp[k]=sv;

@@ -72,11 +72,11 @@ const MEALS=(()=>{
 })();
 /* planurile salvate țin indicii rețetelor vechi: o singură dată, după ce s-a schimbat baza de rețete, le iau de la capăt */
 async function mealsMigrate(){ let v=''; try{ v=localStorage.getItem('zece3:mealsV')||''; }catch(e){}
-  if(v==='3') return; if(v!=='2') await save('mplan',{});
+  if(v==='4') return; if(v==='3'){ await planUnlock(); try{ localStorage.setItem('zece3:mealsV','4'); }catch(e){} return; } if(v!=='2') await save('mplan',{});
   /* v17: alimentele bifate în lista veche de cumpărături (cele cumpărate) devin ce ai acasă, iar planul de azi încolo se reface din ele */
   const got=Object.keys(S.shop||{}).filter(n=>S.shop[n]&&MFOOD.indexOf(n)>=0);
   if(got.length) await save('mf',Object.assign({},S.mf,{have:got.sort(),useHave:true}));
-  await planUnlock(); try{ localStorage.setItem('zece3:mealsV','3'); }catch(e){} }
+  await planUnlock(); try{ localStorage.setItem('zece3:mealsV','4'); }catch(e){} }
 /* planul de azi încolo se reface (după ce schimbi alimentele); zilele trecute rămân cum au fost */
 async function planUnlock(){ const tk=todayKey(), mp=Object.assign({},S.mplan||{}); let ch=false;
   Object.keys(mp).forEach(k=>{ if(k>=tk&&mp[k]&&mp[k].m){ const o=Object.assign({},mp[k]); delete o.m; mp[k]=o; ch=true; } }); if(ch) await save('mplan',mp); }
