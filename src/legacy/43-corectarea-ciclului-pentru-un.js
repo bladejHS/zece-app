@@ -4,7 +4,7 @@
    se mută în ciclul vechi, la aceeași zi a săptămânii, în prima săptămână în care ziua aceea nu e făcută;
    antrenamentele terminate primesc ciclul și săptămâna noi. Se poate anula din mesajul de confirmare.
    ===================================================================== */
-const cfHas=(c,w,d)=>Object.keys((S.wlog||{})[dKeyC(c,w,d)]||{}).length>0;
+const cfHas=(c,w,d)=>Object.keys((S.wlog||{})[dKeyC(c,w,d)]||{}).some(k=>k!==SPLIT_MK);
 function cfCount(c){ let n=0; for(let w=0;w<WEEKS;w++) for(let d=0;d<7;d++) if(fullIn(c,w,d)) n++; return n; }
 /* un ciclu terminat de-adevărat: toate cele 28 de zile bifate (în ciclul curent sau într-unul anterior) */
 function cycDoneAny(){ if(!nextDay()) return true; for(let c=1;c<cyc();c++) if(cfCount(c)===WEEKS*7) return true; return false; }
@@ -38,7 +38,7 @@ ACT.cfGo=async()=>{
   const before={wlog:S.wlog,hist:S.hist,adj:S.adj,cyc:S.cyc};
   const log=Object.assign({},S.wlog), adj=Object.assign({},S.adj||{});
   P.moves.forEach(m=>{ const a=dKeyC(P.h,m.w,m.d), b=dKeyC(P.p,m.to,m.d), o=Object.assign({},log[b]||{});
-    Object.keys(log[a]||{}).forEach(e=>{ o[b+e.slice(a.length)]=1; }); log[b]=o; delete log[a];
+    Object.keys(log[a]||{}).forEach(e=>{ if(e===SPLIT_MK) o[SPLIT_MK]=1; else o[b+e.slice(a.length)]=1; }); log[b]=o; delete log[a];
     if(adj[a]){ adj[b]=adj[a]; delete adj[a]; } });
   const hist=(S.hist||[]).map(x=>{ if(x.cyc!==P.h) return x; const m=P.moves.find(m=>m.w===x.w&&m.d===x.d); return m?Object.assign({},x,{cyc:P.p,w:m.to}):x; });
   await save('wlog',log); await save('hist',hist); await save('adj',adj); await save('cyc',Object.assign({},S.cyc||{},{h:P.p,t:Date.now()}));

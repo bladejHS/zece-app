@@ -33,4 +33,4 @@ const S={tab:'azi',lifts:{},weights:{},runs:[],wlog:{},cyc:{},runPlan:{},prof:{}
   exNote:{},rest:null,fxOpen:false,fxDir:'',summary:null,planW:null,openDay:-1,progTab:'ov',prEx:null,wRange:90,runKind:'ez',
   dash:{},ach:null,notif:undefined,notifCfg:{},exFav:[],exCustom:[],rng:'m',trTab:'plan',loaded:false};
 async function save(p,v){ S[p]=v; STC=null; ACTC=null; TWC=null; TGC=null; ADC=null; IXC=null; WLC=null; await store.set(K[p],v); syncMark(p); }
-const prof=()=>Object.assign({sex:'m',age:30,h:180,startW:90,goalW:80,act:1.55,def:600},S.prof||{});
+const prof=()=>Object.assign({sex:'m',age:30,h:180,startW:90,goalW:80,act:1.55},S.prof||{});

@@ -1,7 +1,7 @@
 /* =====================================================================
    SETĂRI — Profil · Unități · Aspect · Notificări · Acasă · Scurtături · Conexiuni · Antrenor AI · Antrenament · Date
    ===================================================================== */
-const SET_SEC=[['sProf','Profil'],['sUnits','Unități'],['sAsp','Aspect'],['sNotif','Notificări'],['sDash','Acasă'],['sKeys','Scurtături'],['sConn','Conexiuni'],['sAi','Antrenor AI'],['sTrain','Antrenament'],['sData','Date și copii']];
+const SET_SEC=[['sProf','Profil'],['sUnits','Unități'],['sAsp','Aspect'],['sNotif','Notificări'],['sDash','Acasă'],['sConn','Conexiuni'],['sAi','Antrenor AI'],['sTrain','Antrenament'],['sData','Date și copii']];
 function viewSet(){
   const P=prof(), p=runPlan(), key=S.aiKey, tg=targets(), nc=notifCfg(), md=S.mode||'dark';
   const rpRow=(lbl,k,f)=>`<span class="n">${lbl}</span>${Array.from({length:WEEKS},(_,w)=>`<input class="inp" type="number" inputmode="numeric" data-rp="${k}|${f}|${w}" value="${p[k][f][w]}" aria-label="${lbl} săptămâna ${w+1}">`).join('')}`;
@@ -29,7 +29,7 @@ function viewSet(){
   <div class="card"><div class="eyebrow">${ic('flame')} Ținte de nutriție</div>
     <div class="form">
       <div class="fld"><label for="pAct">Activitate</label><select class="inp" id="pAct" data-p="act">${[[1.375,'Ușoară'],[1.55,'Moderată'],[1.725,'Mare'],[1.9,'Foarte mare']].map(a=>`<option value="${a[0]}" ${+P.act===a[0]?'selected':''}>${a[1]} (×${a[0]})</option>`).join('')}</select></div>
-      <div class="fld"><label for="pDef">Deficit (kcal/zi)</label><input class="inp" id="pDef" data-p="def" type="number" inputmode="numeric" value="${P.def}"></div>
+      <div class="fld"><label for="pDef">Deficit (kcal/zi)</label><input class="inp" id="pDef" data-p="def" data-opt="1" type="number" inputmode="numeric" value="${P.def||''}" placeholder="auto ${tg.autoDef}"></div>
       <div class="fld"><label for="pK">Calorii/zi (gol = auto ${tg.auto})</label><input class="inp" id="pK" data-p="kcalT" data-opt="1" type="number" inputmode="numeric" value="${P.kcalT||''}" placeholder="${tg.auto}"></div>
       <div class="fld"><label for="pPr">Proteină g/zi</label><input class="inp" id="pPr" data-p="protT" data-opt="1" type="number" inputmode="numeric" value="${P.protT||''}" placeholder="${Math.round(P.goalW*2)}"></div>
       <div class="fld full"><label for="pW">Apă ml/zi</label><input class="inp" id="pW" data-p="waterT" data-opt="1" type="number" inputmode="numeric" value="${P.waterT||''}" placeholder="3500"></div></div>
@@ -71,11 +71,6 @@ function viewSet(){
     <div class="set-row"><span class="sp"><b>Layout: ${esc((DASH_PRESETS[dashCfg().p]||{n:'personalizat'}).n)}</b><div class="sm mu">${dashCfg().o.length} widgeturi vizibile</div></span><button class="btn sm" data-a="dashEdit">${ic('sliders')} Personalizează</button></div>
     ${sw('setupT',!(S.dash||{}).setupOff,'Lista de configurare','Pașii pentru a completa aplicația, pe Acasă, până îi termini')}</div>
 
-  <div class="set-h" id="sKeys">Scurtături</div>
-  <div class="card"><div class="eyebrow">${ic('keyboard')} Tastatură și gesturi</div>
-    ${SHORTCUTS.map(([k,d])=>`<div class="list-row"><span class="sp">${esc(d)}</span><kbd>${esc(k)}</kbd></div>`).join('')}
-    <div class="note">Pe telefon: glisezi stânga-dreapta între ecranele principale; o apăsare lungă pe o alergare, un exercițiu sau un antrenament deschide meniul lui.</div></div>
-
   <div class="set-h" id="sConn">Conexiuni</div>
   ${connCard()}
   ${stCard()}
@@ -93,6 +88,7 @@ function viewSet(){
 
   <div class="set-h" id="sTrain">Antrenament</div>
   ${icsCard()}
+  <div class="card">${sw('qlToggle',qlOn(),'Notare direct în plan','Kg și repetări, distanța, timpul și viteza la alergare se notează în cardul zilei, fără ecranul complet')}</div>
   <div class="card"><div class="set-row" style="margin-top:0"><span class="sp"><b>Deload automat în săptămâna 4</b><div class="sm mu">Volum −40% (serii, minute, reprize, runde), aceleași zile de antrenament. Recuperarea face parte din progres.</div></span><button class="sw ${S.deload!==false?'on':''}" data-a="deloadToggle" role="switch" aria-checked="${S.deload!==false}" aria-label="Deload automat"></button></div></div>
   ${healthCard()}
   <div class="card"><div class="eyebrow">${ic('run')} Progresia alergării</div>

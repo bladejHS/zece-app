@@ -3,10 +3,10 @@
    apoi widgeturi pe care le rearanjezi, le ascunzi sau le alegi dintr-un layout gata făcut.
    ===================================================================== */
 const DASH_PRESETS={
-  bal:{n:'Echilibrat',d:'Antrenamentul, cifrele zilei și analiza',o:['next','adapt','week','brief','quick','insights','goals','k1','prs','trend','recent','body','run']},
-  train:{n:'Antrenament',d:'Doar ce ai de făcut azi și săptămâna',o:['next','adapt','week','quick','prs','run','recent']},
+  bal:{n:'Echilibrat',d:'Antrenamentul, cifrele zilei și analiza',o:['next','adapt','week','brief','std','insights','goals','k1','prs','trend','recent','body','run']},
+  train:{n:'Antrenament',d:'Doar ce ai de făcut azi și săptămâna',o:['next','adapt','week','std','prs','run','recent']},
   data:{n:'Analiză',d:'Tendințe, recorduri și obiective',o:['insights','trend','goals','k1','body','run','prs','load','heat','recent','ach']},
-  min:{n:'Minimal',d:'Antrenamentul de azi și scurtăturile',o:['next','brief','quick']}
+  min:{n:'Minimal',d:'Antrenamentul de azi și țintele',o:['next','brief','std']}
 };
 /* fiecare widget: titlu (pentru personalizare), mărime (l = pe toată lățimea pe desktop) și funcția care îl desenează */
 const WIDGETS={
@@ -22,7 +22,6 @@ const WIDGETS={
   recent:{t:'Activitate recentă',sz:'m',r:()=>wRecent()},
   body:{t:'Corp',sz:'m',r:()=>wBody()},
   run:{t:'Alergare',sz:'m',r:()=>wRun()},
-  quick:{t:'Acțiuni rapide',sz:'l',r:()=>wQuick()},
   ready:{t:'Readiness',sz:'m',r:()=>readyCard()},
   load:{t:'Încărcare · 12 săptămâni',sz:'m',r:()=>loadCard()},
   heat:{t:'Consecvență · 16 săptămâni',sz:'m',r:()=>heatCard()},
@@ -189,14 +188,6 @@ function wRun(){
 }
 /* „Notează greutatea": deschide Corp și pune cursorul în câmpul de greutate */
 ACT.wFocus=()=>{ S.tab='prog'; S.progTab='b'; render(); window.scrollTo({top:0}); requestAnimationFrame(()=>{ const i=$('#wIn'); if(i){ i.scrollIntoView({block:'center'}); i.focus(); } }); };
-/* v9: scurtăturile sunt un rând de butoane rotunde (pe telefon se derulează în lateral) */
-function wQuick(){
-  const it=[['tmList','clock','Cronometru'],['actAdd','plus','Activitate',' data-k="Ride"'],['spdOpen','gauge','Viteza'],['toolGo','wind','Respirație',' data-k="br"'],
-    ['wFocus','scale','Greutate'],['tab','run','Alergare',' data-k="prog" data-s="r" data-f="runForm"'],['water','drop','+250 ml',' data-i="250"']];
-  return `<div class="qr" role="group" aria-label="Acțiuni rapide">${it.map(([a,icn,l,x])=>`<button class="qr-b" data-a="${a}"${x||''}><span class="qr-i">${ic(icn)}</span><span>${l}</span></button>`).join('')}
-    <label class="qr-b"><span class="qr-i">${ic('camera')}</span><span>Scanează</span><input type="file" accept="image/*" capture="environment" data-scan="1" aria-label="Scanează o masă"></label>
-    <button class="qr-b" data-a="toolOpen"><span class="qr-i">${ic('tool')}</span><span>Unelte</span></button></div>`;
-}
 function wNutri(){ const tk=todayKey(), tg=targets(), d=dayTotals(tk);
   return `<div class="card">${wHead('flame','Nutriție azi',`data-a="tab" data-k="nutri"`)}<div class="row" style="margin-top:10px">${ringsNut(tk,64).join('')}
     <div class="sp sm"><div><b>${Math.round(d.k)}</b> / ${tg.kcal} kcal</div><div class="mu"><b class="tx">${Math.round(d.p)}</b> / ${tg.p} g proteină</div></div></div></div>`; }

@@ -29,7 +29,7 @@ function rdRender(){
     <div class="rd-score"><div class="big" style="color:${v[2]==='good'?'var(--ok)':v[2]==='bad'?'var(--warn)':'var(--tx)'}">${sc}</div><div><b>${v[0]}</b><div class="sm mu">${v[1]}</div></div></div>
     <div class="inrow"><button class="btn ghost" data-a="rdSkip">Sari peste</button><button class="btn pri" style="flex:1" data-a="rdGo">${ic('play')} Începe</button></div></div></div>`;
 }
-const sessBase=()=>({start:Date.now(),h:new Date().getHours(),sets:{},runs:{},tasks:{},prs:[],best:{},kg:{},rp:{},tmMin:{}});
+const sessBase=()=>({start:Date.now(),h:new Date().getHours(),sets:{},runs:{},tasks:{},prs:[],best:{},kg:{},rp:{},tmMin:{},[SPLIT_MK]:1});
 async function startSess(w,d,ready){
   if(S.sess){
     if(S.sess.w!==w||S.sess.d!==d) toast('Ai deja un antrenament pornit','Termină-l sau renunță la el înainte să începi altul.','info');
@@ -258,7 +258,7 @@ async function exDone(){ const s=S.sess; s.tasks[s.cur]=1; await markDone(s,s.cu
 async function finishSess(){
   const s=S.sess; if(!s) return; const day=sessDay(s);
   { const log=Object.assign({},S.wlog), k=dKey(s.w,s.d), dd=Object.assign({},log[k]||{});
-    day.ex.forEach((e,x)=>{ if(!e.opt) dd[eId(s.w,s.d,x)]=1; }); log[k]=dd; await save('wlog',log); }
+    day.ex.forEach((e,x)=>{ if(!e.opt) dd[eId(s.w,s.d,x)]=1; }); if(splitDay(s.d)) dd[SPLIT_MK]=1; log[k]=dd; await save('wlog',log); }
   let sets=0,vol=0; Object.values(s.sets).forEach(a=>a.forEach(([w,r])=>{ sets++; vol+=w*r; }));
   const km=Object.values(s.runs).reduce((a,r)=>a+(+r.km||0),0);
   const has=x=>{ const e=day.ex[x]; return e.kind==='lift'?(s.sets[x]||[]).length:e.kind==='run'?s.runs[x]||s.tasks[x]:s.tasks[x]; };
@@ -279,7 +279,7 @@ function restSounds(left){ schedule('rest',[[left-3,880,.06],[left-2,880,.06],[l
 function startRest(sec,lbl){ if(!sec) return; S.rest={end:Date.now()+sec*1000,total:sec,lbl:lbl||'Pauză'}; restSounds(sec);
   if('mediaSession' in navigator&&window.MediaMetadata) try{ navigator.mediaSession.metadata=new MediaMetadata({title:(lbl||'Pauză')+' '+fmtClock(sec),artist:'ZECE'}); }catch(e){} }
 function stopRest(){ S.rest=null; cancelSched('rest'); }
-function restDone(){ S.rest=null; AU.sched.rest=[]; buzz([200,100,200]); if(!document.hidden) flash(); say(voxEnc()?mot('rdone'):'Gata pauza. Următoarea serie.'); renderFocus(); renderPill(); }
+function restDone(){ S.rest=null; AU.sched.rest=[]; buzz([200,100,200]); if(!document.hidden) flash(); say(voxEnc()?mot('rdone'):'Gata pauza. Următoarea serie.'); renderFocus(); renderPill(); if(S.qlAt&&!S.fxOpen){ S.qlAt=null; render(); } }
 function tick(){
   if(TM.open) tmTick();
   if(!S.sess&&!S.rest) return;

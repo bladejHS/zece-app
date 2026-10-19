@@ -23,10 +23,16 @@ export interface HydrationPlan {
   duringMlPerHour: [number, number] | null;
   /** După antrenament, ml (150% din pierdere). */
   postMl: number;
+  /** Sodiul pierdut estimat prin transpirație (~900 mg pe litru), mg. */
+  sodiumMg: number;
+  /** Sodiu în timpul efortului, mg pe oră (peste 60 de minute sau la căldură). */
+  sodiumPerHour: [number, number] | null;
 }
 
 /** Transpirația medie la efort, litri pe oră (variază mult de la om la om). */
 export const SWEAT_L_PER_H: Record<Intensity, number> = { low: 0.5, moderate: 0.8, high: 1.1 };
+/** Sodiul din transpirație, mg pe litru (media sportivilor; variază de la ~200 la peste 2000). */
+export const SWEAT_NA_MG_PER_L = 900;
 const BASE_ML_PER_KG = 35;
 const r50 = (n: number): number => Math.round(n / 50) * 50;
 
@@ -41,6 +47,8 @@ export function hydration(i: HydrationInput): HydrationPlan {
     preMl: [r50(kg * 5), r50(kg * 7)],
     duringMlPerHour: i.minutes > 45 ? [400, 800] : null,
     postMl: r50(lossMl * 1.5),
+    sodiumMg: r50((lossMl / 1000) * SWEAT_NA_MG_PER_L),
+    sodiumPerHour: i.minutes > 60 || i.hot ? [300, 600] : null,
   };
 }
 

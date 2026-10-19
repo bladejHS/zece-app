@@ -43,10 +43,10 @@ const CARBS: Record<DayType, string> = {
   deload: '1 porție la prânz, 1 mică seara',
 };
 const NOTE: Record<DayType, string> = {
-  high: 'masa de dinainte cu 2–3 ore, gustare cu carbohidrați după',
-  moderate: 'mese normale, proteina în 3–5 mese',
+  high: 'masa de dinainte cu 2–3 ore, gustare cu carbohidrați după, 30–40 g proteină înainte de somn',
+  moderate: 'mese normale, proteina în 3–5 mese, 30–40 g înainte de somn',
   rest: 'proteina la fel, mai multe legume și fructe',
-  deload: 'volum mai mic: carbohidrați puțin mai puțini',
+  deload: 'volum mai mic: carbohidrați cu ~15% mai puțini, proteina la fel',
 };
 
 /** Meal prep pe săptămână: două sesiuni de gătit (duminică și miercuri), porțiile după tipul fiecărei zile. */

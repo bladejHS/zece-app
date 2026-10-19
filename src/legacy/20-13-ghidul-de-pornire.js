@@ -37,7 +37,7 @@ function onbRender(){
 async function onbNext(){
   if(OB.step===1){ await save('prof',Object.assign({},S.prof||{},{focus:OB.focus}));
     /* layoutul de pe Acasă, după ce urmărești */
-    const f=OB.focus, o=['next','week','brief','insights'].concat(f.indexOf('k1')>=0?['k1']:[],['goals','prs'],f.indexOf('run')>=0||f.indexOf('k1')>=0?['run']:[],f.indexOf('body')>=0?['body']:[],['trend','recent','quick']);
+    const f=OB.focus, o=['next','week','brief','insights'].concat(f.indexOf('k1')>=0?['k1']:[],['goals','prs'],f.indexOf('run')>=0||f.indexOf('k1')>=0?['run']:[],f.indexOf('body')>=0?['body']:[],['std','trend','recent']);
     if(f.indexOf('plan')<0) o.splice(o.indexOf('week'),1); if(!(S.dash||{}).o) await save('dash',Object.assign({},S.dash||{},{o:[...new Set(o)],p:''})); }
   if(OB.step===2){ const g=id=>parseFloat(String(($('#'+id)||{}).value||'').replace(',','.')), o={sex:OB.sex};
     const a=g('obAge'), h=g('obH'), w=g('obW'), gw=g('obG'); if(a>=10&&a<=100) o.age=a; if(h>=120&&h<=230) o.h=h;

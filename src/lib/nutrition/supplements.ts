@@ -21,7 +21,7 @@ export const SUPPLEMENTS: readonly Supplement[] = [
   { id: 'proteina', name: 'Proteină din zer sau vegetală', tier: 1, evidence: 'dovezi puternice', dose: 'Doar ca să ajungi la ținta zilnică de proteină: 20–40 g pe porție, după antrenament sau când nu ai o masă.' },
   { id: 'cafeina', name: 'Cafeină', tier: 1, evidence: 'dovezi puternice', dose: '3 mg/kg cu 45–60 de minute înainte de sesiunile grele, cel mult 400 mg pe zi și nu după ora 14.', when: 'sesiuni intense' },
   { id: 'vitd', name: 'Vitamina D3', tier: 1, evidence: 'dacă ai deficit', dose: '1000–2000 UI pe zi, mai ales din octombrie până în aprilie. Ideal după un test de sânge.' },
-  { id: 'electroliti', name: 'Electroliți (sodiu)', tier: 1, evidence: 'dovezi bune', dose: '300–600 mg sodiu pe oră în sesiunile de peste 90 de minute sau la căldură.', when: 'sesiuni lungi' },
+  { id: 'electroliti', name: 'Electroliți (sodiu)', tier: 1, evidence: 'dovezi bune', dose: '300–600 mg sodiu pe oră în sesiunile de peste 60 de minute, la căldură sau dacă transpiri mult (urme albe pe haine). După efort: sare în masă sau 500–1000 mg sodiu în apa de rehidratare.', when: 'sesiuni lungi' },
   { id: 'omega3', name: 'Omega-3 (EPA + DHA)', tier: 2, evidence: 'pentru sănătate', dose: '1–2 g pe zi, dacă mănânci pește gras mai rar de două ori pe săptămână.' },
   { id: 'betaal', name: 'Beta-alanină', tier: 2, evidence: 'dovezi moderate', dose: '3,2–6,4 g pe zi, împărțit, cel puțin 4 săptămâni. Ajută la eforturile de 1–4 minute (rundele); poate furnica.' },
   { id: 'nitrati', name: 'Nitrați (suc de sfeclă)', tier: 2, evidence: 'dovezi moderate', dose: '~400 mg nitrați (70–140 ml concentrat) cu 2–3 ore înainte de alergări sau condiționare.' },

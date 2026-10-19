@@ -56,6 +56,7 @@ function perfOverview(){
     <div class="card"><div class="card-h"><div class="eyebrow">${ic('bulb')} Ce spun datele</div></div>
       ${insightsAll().length?`<div class="ins-l">${insightsAll().map(insRow).join('')}</div>`:`<div class="empty sm">Observațiile apar când ai câteva săptămâni de date.</div>`}</div>
     ${goalsCard()}
+    ${ttCard(false)}
     ${(()=>{ const ev=prBook().ev.filter(x=>x.d>=R.a&&x.d<=R.b&&x.cat!=='rep'); return `<div class="card"><div class="card-h"><div class="eyebrow">${ic('trophy')} Recorduri în perioadă</div><button class="btn ghost xs" data-a="progTab" data-k="pr">${ic('right')}</button></div>
       ${ev.length?ev.slice(0,8).map(p=>`<div class="pr-row"><span class="tag pr">PR</span><b>${esc(prName(p))}</b><span class="xs mu">${relDay(p.d)}</span><span class="v">${prVal(p)}</span></div>`).join(''):`<div class="empty sm">Niciun record în ${esc(R.lbl)}.</div>`}</div>`; })()}`;
 }

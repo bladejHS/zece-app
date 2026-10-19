@@ -116,24 +116,16 @@ document.addEventListener('click',e=>{ const t=e.target; if(!t.closest) return;
   if(t.closest('[data-pal="x"]')&&(t.matches('.pal-ov')||t.closest('button[data-pal="x"]'))){ palClose(); return; }
   const it=t.closest('[data-pi]'); if(it&&PAL.open){ e.stopPropagation(); palRun(+it.dataset.pi); } },true);
 document.addEventListener('input',e=>{ if(e.target.id==='palQ'){ PAL.q=e.target.value; PAL.i=0; palRender(false); } });
-/* ---------- scurtături de tastatură ---------- */
+/* v16: fără scurtături de tastatură; rămân doar tastele din paleta deschisă și Enter în câmpurile de kg și repetări */
 const typing=t=>t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.tagName==='SELECT'||t.isContentEditable);
 document.addEventListener('keydown',e=>{
   const k=e.key;
-  if((e.ctrlKey||e.metaKey)&&(k==='k'||k==='K')){ e.preventDefault(); if(PAL.open) palClose(); else palOpen(''); return; }
   if(PAL.open){ if(k==='Escape'){ e.preventDefault(); palClose(); }
     else if(k==='ArrowDown'){ e.preventDefault(); PAL.i=Math.min(PAL.items.length-1,PAL.i+1); palRender(false); }
     else if(k==='ArrowUp'){ e.preventDefault(); PAL.i=Math.max(0,PAL.i-1); palRender(false); }
     else if(k==='Enter'){ e.preventDefault(); palRun(PAL.i); } return; }
-  if(typing(e.target)){ if(k==='Enter'&&(e.target.id==='inKg'||e.target.id==='inRp')&&S.sess){ e.preventDefault(); logSet($('[data-a="logSet"]')); } return; }
-  if(k==='/'&&!e.ctrlKey&&!e.altKey){ e.preventDefault(); palOpen(''); return; }
-  if(e.altKey&&!e.ctrlKey&&!e.metaKey){ const n=+k; if(n>=1&&n<=NAV.length&&!S.fxOpen){ e.preventDefault(); S.tab=NAV[n-1][0]; render(); window.scrollTo({top:0}); return; }
-    const m={a:'act',u:'tools',s:'set'}[k.toLowerCase()]; if(m&&!S.fxOpen){ e.preventDefault(); S.tab=m; render(); window.scrollTo({top:0}); return; }
-    if(k.toLowerCase()==='l'){ e.preventDefault(); ACT.modeToggle(); return; } }
-  if(S.fxOpen&&S.sess&&!SH&&!TM.open){ if(k==='ArrowRight'){ const b=$('[data-a="fxNext"]'); if(b) b.click(); } else if(k==='ArrowLeft'){ const b=$('[data-a="fxPrev"]'); if(b&&!b.disabled) b.click(); } }
+  if(typing(e.target)&&k==='Enter'&&(e.target.id==='inKg'||e.target.id==='inRp')&&S.sess){ e.preventDefault(); logSet($('[data-a="logSet"]')); }
 });
-const SHORTCUTS=[['Ctrl + K sau /','Căutare și comenzi'],['Alt + 1…5','Acasă, Antrenament, Performanță, Nutriție, Antrenor'],['Alt + A','Activitate'],['Alt + U','Unelte'],['Alt + S','Setări'],
-  ['Alt + L','Temă luminoasă / întunecată'],['Enter (în kg sau repetări)','Notează seria'],['← →','Exercițiul anterior / următor, în antrenament'],['Esc','Închide foaia sau paleta'],['Clic dreapta / apăsare lungă','Meniul unei alergări sau al unui antrenament']];
 
 /* ---------- meniuri contextuale: clic dreapta pe desktop, apăsare lungă pe telefon ---------- */
 const CTX={

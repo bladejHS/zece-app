@@ -110,6 +110,17 @@ const EQS=[['mifflin','Mifflin-St Jeor','greutate'],['harris','Harris-Benedict',
 function bmrAll(w){ const P=prof(), f=P.sex==='f', F=w*(1-clamp(+P.bf||28,3,60)/100);
   return {ffm:F,mifflin:Math.round(10*w+6.25*P.h-5*P.age+(f?-161:5)),harris:Math.round(f?447.593+9.247*w+3.098*P.h-4.33*P.age:88.362+13.397*w+4.799*P.h-5.677*P.age),
     cunningham:Math.round(500+22*F),katch:Math.round(370+21.6*F)}; }
+/* v16: deficitul implicit e un ritm de ~0,5% din greutate pe săptămână (7700 kcal/kg), nu 600 kcal fix pentru oricine */
+const autoDef=w=>Math.round(w*.005*7700/7/50)*50;
+/* energia cheltuită la antrenamentul zilei d din săptămâna w, kcal (MET net × 3,5 × kg / 200 pe minut) + activitățile notate în ziua k */
+const NET_MET={ez1:6,ez2:6,thr:8.5,lng:6.5};
+function exKcalOf(w,d,k,kg){ const b=PLAN[d]; let m=0;
+  if(b.run) m+=runTotal(b.run,w)*NET_MET[b.run];
+  (b.lift||[]).forEach(([t,x])=>{ m+=x*(t==='hard'?7:3.5); });
+  if(b.cat==='rest') m+=b.min*2;
+  if(deloadOn(w)) m*=.6;
+  (S.ext||[]).filter(x=>x.date===k&&!x.dup).forEach(x=>{ m+=(+x.min||0)*((+x.rpe||0)>=7?8:5); });
+  return Math.round(m*.0175*kg); }
 /* pauzele de dietă din programul original: săptămânile 1–2 ale ciclului în deficit, 3–4 la menținere */
 function nPhase(){ if(prof().dietBreak===false) return {cut:true,label:'Deficit',sub:'deficit continuu'};
   const nx=nextDay(), w=nx?nx.w:0;
@@ -129,13 +140,15 @@ function tdeeMeasured(){
 function targets(day){
   const P=prof(), ws=wStats(), w=ws?ws.a7:P.startW, A=bmrAll(w), eq=A[P.eq]!=null?P.eq:'mifflin', bmr=A[eq];
   const est=Math.round(bmr*(+P.act||1.55)), ms=tdeeMeasured(), useM=ms.ok&&P.useMeasured!==false, tdee=useM?ms.tdee:est, ph=nPhase();
-  const def=ph.cut?(+P.def||600):0, auto=Math.max(Math.round(bmr*1.1/50)*50,Math.round((tdee-def)/50)*50), kcal=+P.kcalT||auto;
-  const p=+P.protT||Math.round((P.goalW||w)*2); let f=Math.round(w*.7), c=Math.round((kcal-p*4-f*9)/4);
+  const def=ph.cut?(+P.def||autoDef(w)):0, auto=Math.max(Math.round(bmr*1.1/50)*50,Math.round((tdee-def)/50)*50), kcal=+P.kcalT||auto;
+  /* proteina: 2 g/kg din greutatea-țintă, 2,2 g/kg în săptămânile de deficit (protejează masa slabă) */
+  const p=+P.protT||Math.round((P.goalW||w)*(ph.cut?2.2:2)); let f=Math.round(w*.7), c=Math.round((kcal-p*4-f*9)/4);
   if(c<80){ f=Math.max(Math.round(w*.6),Math.round((kcal-p*4-320)/9)); c=Math.max(0,Math.round((kcal-p*4-f*9)/4)); }
   const k=day||todayKey(), dt=nutriDay(k), ci=nutriCi(k);
-  const per=NUTRI.periodize(Object.assign({base:{kcal,p,c,f},dayType:dt.type,sex:P.sex==='f'?'f':'m',weightKg:w,tdee,cut:ph.cut},ci));
-  const hyd=NUTRI.hydration({weightKg:w,minutes:dt.minutes,intensity:dt.intensity});
-  return {kcal:per.kcal,p:per.p,f:per.f,c:per.c,water:+P.waterT||hyd.totalMl,hyd,day:dt,per,base:{kcal,p,c,f},bmr,tdee,est,measured:useM,ms,auto,manual:!!P.kcalT,phase:ph,eq,def,A};
+  const ffm=w*(1-clamp(+P.bf||(P.sex==='f'?28:18),3,60)/100), exKcal=exKcalOf(dt.w,dt.d,k,w);
+  const per=NUTRI.periodize(Object.assign({base:{kcal,p,c,f},dayType:dt.type,sex:P.sex==='f'?'f':'m',weightKg:w,tdee,cut:ph.cut,weekMean:NUTRI_MEAN(),ffmKg:ffm,exerciseKcal:exKcal},ci));
+  const hyd=NUTRI.hydration({weightKg:w,minutes:dt.minutes+dt.extMin,intensity:dt.intensity});
+  return {kcal:per.kcal,p:per.p,f:per.f,c:per.c,water:+P.waterT||hyd.totalMl,hyd,day:dt,per,base:{kcal,p,c,f},bmr,tdee,est,measured:useM,ms,auto,manual:!!P.kcalT,phase:ph,eq,def,A,autoDef:autoDef(w),exKcal,ffm:Math.round(ffm)};
 }
 /* planul de mese: pentru fiecare masă, rețetele cele mai apropiate de ținta ei; aceeași zi dă același plan până îl schimbi */
 const mealOK=m=>(!S.mf.port||m[6]===1)&&(!S.mf.cold||m[7]===1);

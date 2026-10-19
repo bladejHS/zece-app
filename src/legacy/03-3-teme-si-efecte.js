@@ -40,7 +40,7 @@ function applyFx(){
   if(S.fx==='max'&&!motionOff()&&!document.hidden) ptStart(); else ptStop();
 }
 const catCol=c=>c==='lift'?TH().ac:c==='mix'?TH().ac2:c==='run'?COL().run:COL().ok;
-const CAT={mix:['Alergare + forță','mix'],run:['Alergare','run'],lift:['Forță','lift'],rest:['Recuperare','rest']};
+const CAT={mix:['Forță + alergare','mix'],run:['Alergare','run'],lift:['Forță','lift'],rest:['Recuperare','rest']};
 /* particule (doar la efecte maxime) */
 const PT={on:false,raf:0,ps:[]};
 function ptStart(){

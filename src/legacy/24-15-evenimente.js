@@ -244,7 +244,7 @@ document.addEventListener('click',async ev=>{
     case 'actSet': await save('prof',Object.assign({},S.prof||{},{act:+k})); STC=null; render(); return;
     case 'dietBreak': await save('prof',Object.assign({},S.prof||{},{dietBreak:prof().dietBreak===false})); STC=null; render(); return;
     case 'useMeas': await save('prof',Object.assign({},S.prof||{},{useMeasured:prof().useMeasured===false})); STC=null; render(); return;
-    case 'defAdj': { const d=clamp((+prof().def||600)+I,0,1200); await save('prof',Object.assign({},S.prof||{},{def:d})); STC=null; render(); toast('Deficit '+d+' kcal','Ținta nouă: '+targets().kcal+' kcal','info'); return; }
+    case 'defAdj': { const d=clamp((+prof().def||autoDef(curW()))+I,0,1200); await save('prof',Object.assign({},S.prof||{},{def:d})); STC=null; render(); toast('Deficit '+d+' kcal','Ținta nouă: '+targets().kcal+' kcal','info'); return; }
     case 'introMode': await save('intro',k); render(); return;
     case 'motionSet': await save('motion',k); await save('motionAsked',true); applyFx(); if(SH&&SH.kind==='motion'){ SH=null; shRender(); } render();
       if(!motionOff()) burstAt(innerWidth/2,innerHeight/3,30); return;
@@ -358,7 +358,7 @@ document.addEventListener('touchend',e=>{
 
 /* copie de siguranță — cheia API nu intră în export */
 const EXPORT_KEYS=['zece:lifts','zece:weights','zece:runs','zece:wlog','zece:cyc','zece:runPlan','zece:nutri','zece:mlog','zece3:hist','zece3:aiChat','zece3:aiEffort','zece3:sound',
-  'zece3:water','zece3:body','zece3:theme','zece3:fx','zece3:aiUsed','zece3:seenAch','zece3:lvl','zece3:journal','zece3:tech','zece3:voice','zece3:recap','zece3:mplan','zece3:shop','zece3:mf','zece3:intro','zece3:motion','zece3:ptests','zece3:tmlog','zece3:adj','zece3:onb','zece3:motionAsked','zece3:ext','zece3:goals','zece3:supp','zece3:exnote','zece3:foods','zece3:shoes','zece3:mode','zece3:bg','zece3:planv','zece3:dash','zece3:ach','zece3:notif','zece3:notifCfg','zece3:exfav','zece3:excustom','zece3:kb','zece:tests','zece:shoes','zece:body','zece:gtg','zece:workouts','zece:counts','zece:curBlock'];
+  'zece3:water','zece3:body','zece3:theme','zece3:fx','zece3:aiUsed','zece3:seenAch','zece3:lvl','zece3:journal','zece3:tech','zece3:voice','zece3:recap','zece3:mplan','zece3:shop','zece3:mf','zece3:intro','zece3:motion','zece3:ptests','zece3:tmlog','zece3:adj','zece3:onb','zece3:motionAsked','zece3:ext','zece3:goals','zece3:supp','zece3:exnote','zece3:foods','zece3:shoes','zece3:mode','zece3:bg','zece3:planv','zece3:dash','zece3:ach','zece3:notif','zece3:notifCfg','zece3:exfav','zece3:excustom','zece3:kb','zece3:std','zece:tests','zece:shoes','zece:body','zece:gtg','zece:workouts','zece:counts','zece:curBlock'];
 async function doExport(withPh){
   const data={app:'ZECE',v:4,at:new Date().toISOString(),keys:{}};
   for(const k of EXPORT_KEYS){ const v=await store.get(k); if(v!=null) data.keys[k]=v; }

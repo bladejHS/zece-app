@@ -3,13 +3,17 @@
    hidratare după greutate și pierderi, suplimente pe niveluri (Tier 3 blocat), notare rapidă cu vocea sau text,
    feedback pe mese, meal prep pe săptămână și avertizarea medicală obligatorie. Logica: src/lib/nutrition (NUTRI).
    ===================================================================== */
-/* tipul zilei k din planul hibrid (aceeași săptămână a ciclului), plus kickboxingul notat azi */
+/* tipul zilei din plan, fără deload și fără activități notate */
+const planType=b=>b.cat==='rest'?'rest':(b.run==='thr'||b.run==='lng'||/Conditioning|Power/.test(b.t))?'high':'moderate';
+/* media factorilor de carbohidrați pe săptămâna normală a planului: carbohidrații se mută între zile, totalul săptămânii rămâne baza */
+let NMEAN=null; const NUTRI_MEAN=()=>NMEAN||(NMEAN=NUTRI.weekCarbMean(PLAN.map(planType)));
+/* tipul zilei k din planul hibrid (aceeași săptămână a ciclului), plus activitățile notate în ziua k: kickboxingul (sau altă activitate) grea face ziua intensă, chiar dacă era de odihnă */
 function nutriDay(k){
-  const wd=(parseKey(k).getDay()+6)%7, nx=nextDay(), w=nx?nx.w:0, day=dayFor(w,wd,true);
-  const dl=deloadOn(w)||(k===todayKey()&&hrvNow().force), kbHard=(S.ext||[]).some(x=>x.date===k&&!x.dup&&(+x.rpe||0)>=7);
-  let type=day.cat==='rest'?'rest':(day.run==='thr'||day.run==='lng'||/Conditioning|Power/.test(day.t)||kbHard)?'high':'moderate';
-  if(dl&&type!=='rest') type='deload';
-  return {type,label:NUTRI.DAY_LABEL[type],t:day.t,minutes:type==='rest'?0:(+day.min||60),intensity:type==='high'?'high':type==='rest'?'low':'moderate'}; }
+  const wd=(parseKey(k).getDay()+6)%7, nx=nextDay(), w=nx?nx.w:0, day=dayFor(w,wd,true), ext=(S.ext||[]).filter(x=>x.date===k&&!x.dup);
+  const dl=deloadOn(w)||(k===todayKey()&&hrvNow().force), kbHard=ext.some(x=>(+x.rpe||0)>=7), extMin=ext.reduce((a,x)=>a+(+x.min||0),0);
+  let type=kbHard?'high':planType(day);
+  if(dl&&type!=='rest'&&!kbHard) type='deload';
+  return {type,label:NUTRI.DAY_LABEL[type],t:day.t,w,d:wd,extMin,minutes:day.cat==='rest'?0:(+day.min||60),intensity:type==='high'?'high':type==='rest'&&!extMin?'low':'moderate'}; }
 /* semnalele de azi pentru adaptare: energia din check-in-ul de kickboxing, readiness, RPE-ul ultimei sesiuni (2 zile) */
 /* readiness() → recoveryAt() poate cere la rândul ei targets(): fără reintrare, altfel ar fi o buclă */
 let NCI_BUSY=false;
@@ -34,9 +38,10 @@ function nutriDayCard(tg,wt){ const dt=tg.day, per=tg.per; if(!dt||!per) return 
   const alert=trainToday?NUTRI.preWorkoutAlert(wt,tg.hyd):null;
   return `<div class="card nday nday-${dt.type}"><div class="row"><div class="eyebrow sp">${ic(dt.type==='rest'?'leaf':'flame')} ${esc(dt.label)}</div><span class="xs mu">${esc(dt.t)}</span></div>
     <div class="nday-g"><div><span>Calorii</span><b>${tg.kcal}</b><small>${tg.kcal===tg.base.kcal?'baza zilei':(tg.kcal>tg.base.kcal?'+':'')+(tg.kcal-tg.base.kcal)+' față de bază'}</small></div>
-      <div><span>Carbohidrați</span><b>${tg.c} g</b><small>×${NUTRI.CARB_FACTOR[dt.type]}</small></div><div><span>Proteină</span><b>${tg.p} g</b><small>constantă</small></div>
+      <div><span>Carbohidrați</span><b>${tg.c} g</b><small>×${num(per.factor,2)}</small></div><div><span>Proteină</span><b>${tg.p} g</b><small>constantă</small></div>
       <div><span>Apă</span><b>${num(tg.water/1000,1)} L</b><small>${tg.hyd.lossMl?'+'+num(tg.hyd.lossMl/1000,1)+' L pierderi':'fără antrenament'}</small></div></div>
     ${per.notes.length?`<div class="nday-n">${per.notes.map(n=>`<p>${ic(per.floorApplied&&/prag|deficit/.test(n)?'alert':'info')} ${esc(n)}</p>`).join('')}</div>`:''}
+    ${tg.hyd.sodiumMg>=500?`<div class="nday-n"><p>${ic('drop')} Sodiu pierdut azi: ~${num(tg.hyd.sodiumMg/1000,1)} g${tg.hyd.sodiumPerHour?` · în timpul efortului ${tg.hyd.sodiumPerHour[0]}–${tg.hyd.sodiumPerHour[1]} mg pe oră`:''}. După: sare în masă sau electroliți în apă.</p></div>`:''}
     ${alert?`<div class="nday-alert" role="status">${ic('drop')} ${esc(alert)}</div>`:''}</div>`; }
 /* alerta de hidratare la pornirea unui antrenament */
 function hydAlert(){ try{ const tg=targets(), m=NUTRI.preWorkoutAlert(waterOf(todayKey()),tg.hyd); if(m) toast('Hidratare',m,'info'); }catch(e){} }

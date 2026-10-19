@@ -72,10 +72,7 @@ function viewPlan(){
         ${dn===tot?`<span class="tag pr">${ic('check')}</span>`:ring(dn/tot,{s:34,sw:3,c:col})}
         <span class="chev">${ic('down')}</span></button>
       <div class="day-b"><div>
-        ${day.ex.map((e,i)=>{ const on=isDone(w,d,e.x); return `${e.opt&&!(day.ex[i-1]||{}).opt?`<div class="ex-opt-h"><b>${ic('plus')} Abdomen · opțional</b><span>Nu contează la ziua completă: îl faci când ai chef.</span></div>`:''}<div class="ex ${on?'done':''} ${e.opt?'opt':''}">
-          <button class="tick ${on?'on':''}" data-a="tick" data-w="${w}" data-d="${d}" data-x="${e.x}" aria-label="${on?'Debifează':'Bifează'} ${esc(e.n)}">${ic('check')}</button>
-          <div class="sp"><div class="ex-n">${esc(e.n)}</div><div class="ex-p">${esc(e.p)}</div>${lastLine(e)}${exNote(e.n)?`<div class="ex-l ex-nt">${ic('edit')} ${esc(exNote(e.n))}</div>`:''}</div>
-          ${e.kind==='lift'?`<button class="xb" data-a="tech" data-k="${esc(e.n)}" aria-label="Tehnică pentru ${esc(e.n)}">${ic('info')}</button>`:''}</div>`; }).join('')}
+        ${planExHTML(w,d,day)}
         <details class="notes"><summary>${ic('info')} ${esc(day.notes.wk)}</summary>
           ${day.notes.d.map(([t,x])=>`<p><b>${esc(t)}.</b> ${esc(x)}</p>`).join('')}</details>
         <div class="day-act inrow"><button class="btn pri" style="flex:1" data-a="start" data-w="${w}" data-d="${d}">${ic('play')} ${dn&&dn<tot?'Continuă ziua':dn===tot?(optN&&od<optN?'Fă și abdomenul':'Reia ziua'):'Începe ziua'}</button>${day.run?`<button class="btn" data-a="spdOpen" data-d="${d}">${ic('gauge')} Viteza</button>`:''}</div>
@@ -664,15 +661,17 @@ function fuelPlan(){
     :`Cu 2–3 ore înainte: o masă normală cu <b>${g(.5,1)} carbohidrați</b> și 25–40 g proteină. Dacă mănânci mai târziu, cu 30–60 de minute înainte doar ceva mic: o banană sau un iaurt.`;
   const during=cat==='rest'?null:long||min>=90?`Dacă trece de 60–75 de minute: <b>30–60 g carbohidrați pe oră</b> (gel, banană, băutură sport) și apă în înghițituri.`:`Apă, după sete. Sub o oră de efort nu ai nevoie de carbohidrați în timpul lui.`;
   const post=cat==='rest'?null:`În cele ~2 ore după: <b>${g(.3,.4)} proteină</b>${hard?` și ${g(1,1.2)} carbohidrați, ca să refaci glicogenul`:' și o porție de carbohidrați'}. Contează mai mult totalul zilei decât minutul exact.`;
-  const hyd=cat==='rest'?null:`Bea <b>${Math.round(W*5/50)*50}–${Math.round(W*7/50)*50} ml</b> cu 2–4 ore înainte. Urina deschisă la culoare = hidratat.`;
-  return {day,cat,min,long,thr,hard,pre,during,post,hyd,live:!!s};
+  const hyd=cat==='rest'?null:`Bea <b>${Math.round(W*5/50)*50}–${Math.round(W*7/50)*50} ml</b> cu 2–4 ore înainte. Urina deschisă la culoare = hidratat.${min>60?' Peste o oră de efort: 300–600 mg sodiu pe oră (electroliți), mai ales la căldură.':''}`;
+  /* proteina de seară: 30–40 g cu digestie lentă susțin sinteza proteică peste noapte */
+  const night=`Înainte de somn: <b>30–40 g proteină</b> cu digestie lentă (brânză de vaci, skyr, iaurt grecesc sau cazeină).`;
+  return {day,cat,min,long,thr,hard,pre,during,post,hyd,night,live:!!s};
 }
 function fuelCard(){
   const f=fuelPlan(); if(!f) return '';
   const tg=targets(), R=refW(), pt=clamp(Math.round(.4*R),25,50);
   if(f.cat==='rest') return `<div class="card fuel"><div class="eyebrow">${ic('leaf')} Zi de recuperare · nutriție</div>
-    <div class="sm" style="margin-top:8px">Fără mese speciale azi. Proteina împărțită în 3–5 mese de câte <b>~${pt} g</b>, legume și fructe din belșug și somn bun: azi se face progresul de ieri.</div></div>`;
-  const rows=[['clock','Înainte',f.pre],['run','În timpul efortului',f.during],['check','După',f.post],['drop','Hidratare',f.hyd]].filter(r=>r[2]);
+    <div class="sm" style="margin-top:8px">Fără mese speciale azi. Proteina împărțită în 3–5 mese de câte <b>~${pt} g</b>, ultima seara, înainte de somn; legume și fructe din belșug și somn bun: azi se face progresul de ieri.</div></div>`;
+  const rows=[['clock','Înainte',f.pre],['run','În timpul efortului',f.during],['check','După',f.post],['drop','Hidratare',f.hyd],['moon','Seara',f.night]].filter(r=>r[2]);
   return `<div class="card fuel"><div class="row"><div class="eyebrow sp">${ic('flame')} ${f.live?'Antrenamentul de acum':'Antrenamentul următor'} · nutriție</div><span class="tag">${f.min} min</span></div>
     <div class="h3" style="margin-top:8px">${esc(f.day.t)}</div>
     <div class="fu">${rows.map(([icn,t,h])=>`<div class="fu-r"><span class="fu-i">${ic(icn)}</span><div class="sp"><b>${t}</b><p>${h}</p></div></div>`).join('')}</div>
