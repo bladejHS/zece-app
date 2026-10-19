@@ -20,7 +20,7 @@ function P_THR(w,rOv){ const p=runPlan(), r=rOv||p.thr.r[w]||4, m=p.thr.m, rs=p.
 function tmPresetFor(e,day,w){
   if(e.n==='Threshold') return P_THR(w,e.iv);
   if(/^(Easy run|Long run)/.test(e.n)&&e.planMin) return {title:e.n,kind:'run',run:true,ph:[{k:'prep',d:5,l:'Pornește',s:'Zona 2'},{k:'work',d:e.planMin*60,l:e.n,s:'Zona 2 — poți vorbi în propoziții întregi',half:true}]};
-  if(/^Power finisher/.test(e.n)) return {choose:true,title:'Power finisher',fin:true};
+  if(/^Power finisher/.test(e.n)) return P_EMOM();
   if(/^Conditioning/.test(e.n)) return {choose:true,title:'Conditioning'};
   if(e.n==='Stretching') return P_STRETCH();
   if(e.n==='Mobility flow') return P_MOBILITY();
@@ -33,13 +33,13 @@ function tmPresetFor(e,day,w){
 }
 const TM_LIST=()=>{ const nx=nextDay(), w=nx?nx.w:0; return [
   ['thr','run','Threshold · săptămâna '+(w+1),'Reprizele de prag din planul tău',()=>P_THR(w)],
-  ['emom','bolt','EMOM 10 min','Power finisher A de vineri',P_EMOM],['bw','dumbbell','Bodyweight','Power finisher B: tracțiuni + flotări, cu țintă',()=>P_BW()],['amrap','flame','AMRAP 10 min','Conditioning B de miercuri',P_AMRAP],
+  ['emom','bolt','EMOM 10 min','Power finisher de vineri',P_EMOM],['amrap','flame','AMRAP 10 min','Conditioning B de miercuri',P_AMRAP],
   ['engine','refresh','Engine Builder','Conditioning A: 8 runde × 250 m',P_ENGINE],['stretch','leaf','Stretching 45/15','10 întinderi',P_STRETCH],
   ['wup','flame','Încălzire pentru forță','5 minute înainte de greutăți',P_WARMUP],['warmrun','run','Încălzire de alergare','10 min ușor + drills + accelerări',P_WARMRUN],
   ['mob','leaf','Mobility flow','11 mișcări ghidate, 12 minute',P_MOBILITY],['breath','sun','Respirație 4-4-4-4','5 minute de calm',P_BREATH],['lt30','heart','Test de prag · 30 min','Pulsul și ritmul de prag, ghidat',()=>P_LT30()],['free','clock','Cronometru liber','Pornește, apasă Gata când termini',P_FREE]]; };
 function tmOpen(pr,from){
   TM.open=true; TM.list=false; TM.choose=null;
-  if(pr.choose){ TM.choose={from,fin:!!pr.fin}; tmRender(); return; }
+  if(pr.choose){ TM.choose={from}; tmRender(); return; }
   TM.st=Object.assign({},pr,{i:0,t0:null,pAt:null,pausedMs:0,start:null,done:false,rounds:0,laps:[],from:from==null?null:from,total:0});
   keepAwake(true); tmRender();
 }
@@ -104,9 +104,6 @@ function tmRender(){
   const top=(t)=>`<div class="fx-top"><button class="ib" data-a="tmClose" ${TM.st&&TM.st.started&&!TM.st.done?'data-confirm="Stop?"':''} aria-label="Închide">${ic('x')}</button>
     <div class="fx-tt"><div class="eyebrow">Cronometru</div><div class="t">${esc(t)}</div></div>${hrChip()}${TM.st&&TM.st.started&&!TM.st.done?`<div class="fx-clock" id="tmTot">0:00</div>`:''}</div>`;
   if(TM.list){ r.innerHTML=`<div class="tm"><div class="tm-in">${top('Alege un program')}<div class="tm-list">${TM_LIST().map(t=>`<button class="tm-pick" data-a="tmPick" data-k="${t[0]}"><span class="ic">${ic(t[1])}</span><span><b>${esc(t[2])}</b><span>${esc(t[3])}</span></span></button>`).join('')}</div></div></div>`; return; }
-  if(TM.choose&&TM.choose.fin){ const bp=bwTarget('pull'), bq=bwTarget('push'); r.innerHTML=`<div class="tm"><div class="tm-in">${top('Power finisher')}<div class="tm-list">
-      <button class="tm-pick" data-a="tmPick" data-k="emom"><span class="ic">${ic('bolt')}</span><span><b>A · EMOM 10 min</b><span>Minutele impare: 6 Med Ball Chest Throws · pare: 8 Plyo Push Ups</span></span></button>
-      <button class="tm-pick" data-a="tmPick" data-k="bw"><span class="ic">${ic('dumbbell')}</span><span><b>B · Bodyweight</b><span>${bp.target} de tracțiuni + ${bq.target} de flotări, în câte serii ai nevoie${bp.deload?' · deload':''}</span></span></button></div></div></div>`; return; }
   if(TM.choose){ r.innerHTML=`<div class="tm"><div class="tm-in">${top('Conditioning')}<div class="tm-list">
       <button class="tm-pick" data-a="tmPick" data-k="engine"><span class="ic">${ic('refresh')}</span><span><b>A · Engine Builder</b><span>8 runde pentru timp: 250 m Ski/Row, 45s pauză</span></span></button>
       <button class="tm-pick" data-a="tmPick" data-k="amrap"><span class="ic">${ic('flame')}</span><span><b>B · Hybrid Circuit</b><span>AMRAP 10 min: Wall Balls, Burpee Broad Jumps, KB Swings, Push Ups</span></span></button></div></div></div>`; return; }
@@ -115,7 +112,7 @@ function tmRender(){
   if(!st.started){
     r.innerHTML=`<div class="tm"><div class="tm-in">${top(st.title)}
       <div class="tm-ring">${UI.gauge()}
-        <div class="c"><div><div class="tm-lbl">Gata?</div><div class="tm-time">${totalD?fmtClock(totalD):'∞'}</div><div class="tm-sub">${st.bw?st.bw.pull.target+" tracțiuni + "+st.bw.push.target+" flotări · după fiecare serie primești recomandarea pentru următoarea":st.kb?works.length+(works.length===1?' rundă':' runde')+' × '+fmtClock(st.kb.rs):works.length+' '+(works.length===1?'bloc':'blocuri')+' de lucru'}${st.ph.some(p=>p.k==='manual')?' · rundele se termină când apeși tu':''}</div></div></div></div>
+        <div class="c"><div><div class="tm-lbl">Gata?</div><div class="tm-time">${totalD?fmtClock(totalD):'∞'}</div><div class="tm-sub">${st.kb?works.length+(works.length===1?' rundă':' runde')+' × '+fmtClock(st.kb.rs):works.length+' '+(works.length===1?'bloc':'blocuri')+' de lucru'}${st.ph.some(p=>p.k==='manual')?' · rundele se termină când apeși tu':''}</div></div></div></div>
       ${st.ph.some(p=>p.sp)?`<div class="tm-spl">${st.ph.filter(p=>p.sp&&p.k!=='prep').filter((p,i,a)=>i===0||p.l.replace(/\d+\/\d+/,'')!==a[i-1].l.replace(/\d+\/\d+/,'')).slice(0,6).map(p=>`<span><b>${num(p.sp,1)}</b> km/h · ${esc(p.l.replace(/ \d+\/\d+/,''))}</span>`).join('')}</div>`:''}
       ${st.kb?kbStartNote(st):''}<div class="note" style="text-align:center">Sunetele te anunță la fiecare schimbare, inclusiv cu telefonul blocat (lasă volumul pornit).${st.ph.some(p=>p.sp)?' Vocea îți spune viteza la fiecare bucată.':''}</div>
       <div class="tm-ctl" style="grid-template-columns:1fr"><button class="btn pri xl glow" data-a="tmGo">${ic('play')} Start</button></div></div></div>`; return; }
@@ -124,9 +121,9 @@ function tmRender(){
       <div class="sum-h"><div class="cc-ic">${ic('trophy')}</div><div class="h1">Gata!</div><div class="mu">${esc(st.title)}</div></div>
       <div class="kpis"><div class="kpi"><div class="k">Timp total</div><div class="v">${fmtClock(st.total)}</div></div>
         ${st.amrap?`<div class="kpi"><div class="k">Runde</div><div class="v">${st.rounds}</div></div>`:''}
-        ${st.laps.length&&!st.bw?`<div class="kpi"><div class="k">Runda medie</div><div class="v">${fmtClock(st.laps.reduce((a,b)=>a+b,0)/st.laps.length)}</div></div>`:''}</div>
-      ${st.laps.length>1&&!st.bw?`<div class="card">${st.laps.map((l,i)=>`<div class="list-row"><span>Runda ${i+1}</span><span class="v">${fmtClock(l)}</span></div>`).join('')}</div>`:''}
-      ${st.bw?bwDoneHTML(st):st.kb?kbDoneHTML(st):st.kind==='lt30'?lt30Form(st):st.kind==='tread'&&st.from==null?treadDone(st):''}
+        ${st.laps.length?`<div class="kpi"><div class="k">Runda medie</div><div class="v">${fmtClock(st.laps.reduce((a,b)=>a+b,0)/st.laps.length)}</div></div>`:''}</div>
+      ${st.laps.length>1?`<div class="card">${st.laps.map((l,i)=>`<div class="list-row"><span>Runda ${i+1}</span><span class="v">${fmtClock(l)}</span></div>`).join('')}</div>`:''}
+      ${st.kb?kbDoneHTML(st):st.kind==='lt30'?lt30Form(st):st.kind==='tread'&&st.from==null?treadDone(st):''}
       <div class="tm-ctl" style="grid-template-columns:1fr">${st.from!=null&&S.sess?`<button class="btn pri xl" data-a="tmApply">${ic('check')} ${st.run?'Folosește timpul: '+num(st.total/60,1)+' min':'Marchează exercițiul ca făcut'}</button>`:''}
         <button class="btn ghost" data-a="tmClose" ${st.kb?'data-confirm="Închizi fără să notezi?"':''}>Închide</button></div></div></div>`; return; }
   const next=st.ph[st.i+1], cls=ph.k==='rest'?'rest':ph.k==='prep'?'prep':'';
@@ -135,12 +132,12 @@ function tmRender(){
     <div class="tm-flash" id="tmFlash" aria-hidden="true"></div>
     <div class="tm-ring">${UI.gauge()}
       <div class="c"><div><div class="tm-lbl">${esc(ph.l)}</div><div class="tm-time" id="tmTime">0:00</div><div class="tm-sub">${esc(ph.s||'')}</div></div></div></div>
-    ${st.kb?kbLive(st,ph)+kbFbHTML(st,ph):''}${st.bw?bwPanel(st,ph):''}${ph.sp?`<div class="tm-spd"><b>${num(ph.sp,1)}</b><small>km/h</small><span>${mmss(60/ph.sp)} /km</span></div>`:''}${ph.hr?`<div class="tm-hrz" id="tmHrz">țintă puls ${ph.hr[0]}–${ph.hr[1]}</div>`:''}
+    ${st.kb?kbLive(st,ph)+kbFbHTML(st,ph):''}${ph.sp?`<div class="tm-spd"><b>${num(ph.sp,1)}</b><small>km/h</small><span>${mmss(60/ph.sp)} /km</span></div>`:''}${ph.hr?`<div class="tm-hrz" id="tmHrz">țintă puls ${ph.hr[0]}–${ph.hr[1]}</div>`:''}
     ${st.amrap&&ph.k==='work'?`<div class="tm-next">Runde: <b id="tmRounds">${st.rounds}</b></div>`:''}
     ${next?`<div class="tm-next">Urmează: <b>${esc(next.l)}</b>${next.d?' · '+fmtClock(next.d):''}${next.sp?' · <b>'+num(next.sp,1)+' km/h</b>':''}</div>`:`<div class="tm-next">Ultimul bloc</div>`}
     ${dots}
     <div class="tm-ctl">
-      ${st.bw?bwCtl(st,ph):''}${ph.k==='manual'&&!st.bw?`<button class="btn pri xl glow" style="grid-column:1/-1" data-a="tmLap">${ic('check')} ${st.ph.length===1?'Gata':'Gata runda'}</button>`:''}
+      ${ph.k==='manual'?`<button class="btn pri xl glow" style="grid-column:1/-1" data-a="tmLap">${ic('check')} ${st.ph.length===1?'Gata':'Gata runda'}</button>`:''}
       ${st.amrap&&ph.k==='work'?`<button class="btn pri xl" style="grid-column:1/-1" data-a="tmRound">${ic('plus')} Rundă terminată</button>`:''}
       <button class="btn xl" data-a="tmPause">${st.pAt?ic('play')+' Continuă':ic('pause')+' Pauză'}</button>
       <button class="btn xl ghost" data-a="tmSkip">${ic('skip')} Sari</button>${st.kb?kbCtl(st):''}</div></div></div>`;

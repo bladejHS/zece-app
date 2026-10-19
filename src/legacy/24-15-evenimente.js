@@ -188,7 +188,7 @@ document.addEventListener('click',async ev=>{
     case 'restSkip': stopRest(); renderFocus(); renderPill(); return;
     case 'tmList': TM.open=true; TM.list=true; TM.choose=null; TM.st=null; tmRender(); return;
     case 'tmFor': if(!s) return; { const day=sessDay(s), pr=tmPresetFor(day.ex[X],day,s.w); if(pr) tmOpen(pr,X); } return;
-    case 'tmPick': { const from=TM.choose?TM.choose.from:null, f=k==='engine'?P_ENGINE:k==='amrap'?P_AMRAP:k==='emom'?P_EMOM:k==='bw'?P_BW:(TM_LIST().find(t=>t[0]===k)||[])[4]; if(f) tmOpen(f(),from); } return;
+    case 'tmPick': { const from=TM.choose?TM.choose.from:null, f=k==='engine'?P_ENGINE:k==='amrap'?P_AMRAP:(TM_LIST().find(t=>t[0]===k)||[])[4]; if(f) tmOpen(f(),from); } return;
     case 'tmGo': tmGo(); return;
     case 'tmPause': { const st=TM.st; if(!st) return; if(st.pAt){ const pd=Date.now()-st.pAt; st.t0+=pd; st.pausedMs+=pd; st.pAt=null; tmSched(); keepAwake(true); cuesFor(st); } else { st.pAt=Date.now(); cancelSched('tm'); cancelSched('cue'); if(!S.sess) keepAwake(false); } buzz([40]); tmRender(); return; }
     case 'tmSkip': if(TM.st&&!TM.st.pAt) tmAdvance(0,false); return;

@@ -225,19 +225,3 @@ html[data-mode="light"] .card{background:var(--glass)}
 .sq-r b{font:600 14px/1.2 var(--fd);letter-spacing:.06em}
 .sq-r span{font-size:12.5px;color:var(--mu)}
 @media (min-width:720px){ .an-g{grid-template-columns:repeat(4,1fr)} }
-
-/* ---------- Bodyweight (finisher B de vineri) ---------- */
-.bw{margin-top:12px}
-.bw-r{padding:10px 12px;border:1px solid var(--ln);border-radius:var(--r-md);margin-top:8px;opacity:.7}
-.bw-r.on{opacity:1;border-color:var(--ac)}
-.bw-r b{font:600 14px/1.2 var(--fd);letter-spacing:.12em;text-transform:uppercase}
-.bw-r .v{font:700 20px/1 var(--fd);font-variant-numeric:tabular-nums}
-.bw-r .v small{font-size:13px;color:var(--mu2)}
-.bw-r .seg-g{margin-top:8px}
-.bw-r .xs{margin-top:6px}
-.bw-rec{display:flex;gap:8px;align-items:flex-start;margin-top:12px;font-size:14px}
-.bw-rec .i{width:18px;height:18px;flex:none;margin-top:2px;color:var(--ac)}
-.bw-rec small{color:var(--mu)}
-.bw-stp{margin-top:10px}
-.bw-stp .r button{min-width:var(--touch);min-height:var(--touch);font-size:22px}
-.bw-stp input{font:700 28px/1 var(--fd);text-align:center}

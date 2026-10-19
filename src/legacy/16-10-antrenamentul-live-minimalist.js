@@ -138,7 +138,7 @@ function fxTask(e,x){
 /* reperele de execuție pentru blocurile din plan care nu au serii: conditioning, finisher, încălzirea cu drills */
 function movesHTML(e){
   const pick=ns=>MOVES.filter(m=>ns.indexOf(m[0])>=0);
-  const list=/^Conditioning/.test(e.n)?pick(['Wall Balls','Burpee Broad Jumps','Kettlebell Swings','Push Ups','Ski / Row 250 m']):/^Power finisher/.test(e.n)?pick(['Med Ball Chest Throws','Plyo Push Ups','Pull Up','Push Ups'])
+  const list=/^Conditioning/.test(e.n)?pick(['Wall Balls','Burpee Broad Jumps','Kettlebell Swings','Push Ups','Ski / Row 250 m']):/^Power finisher/.test(e.n)?pick(['Med Ball Chest Throws','Plyo Push Ups'])
     :e.n==='Warm up'&&/drills/.test(e.p)?DRILLS.map(([n,h])=>[n,[h]]):null;
   if(!list) return '';
   return `<details class="notes moves"><summary>${ic('info')} Cum se execută mișcările</summary>${list.map(([n,cs])=>`<div class="mv"><b>${esc(n)}</b>${cs.map(c=>`<p>${esc(c)}</p>`).join('')}</div>`).join('')}</details>`;
