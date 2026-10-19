@@ -42,13 +42,15 @@ export interface PeriodizeInput {
   ffmKg?: number;
   /** Energia cheltuită azi la antrenament, kcal. */
   exerciseKcal?: number;
+  /** v17: baza e deja limitată pe media săptămânii (deficit maxim, disponibilitate energetică); pe zi rămâne doar pragul absolut. */
+  weekly?: boolean;
 }
 
 /** Cât se schimbă carbohidrații pe tip de zi (proteina rămâne constantă). Zilele normale se împart la media săptămânii;
  *  deload-ul nu: săptămâna de deload are cu ~15–20% mai puțini carbohidrați, cât scade consumul de la antrenament. */
 export const CARB_FACTOR: Record<DayType, number> = { high: 1.3, moderate: 0.95, rest: 0.65, deload: 0.85 };
-/** Disponibilitatea energetică minimă în deficit, kcal pe kg de masă slabă (sub ea crește riscul RED-S). */
-export const EA_MIN: Record<Sex, number> = { f: 30, m: 25 };
+/** Disponibilitatea energetică minimă în deficit, kcal pe kg de masă slabă (sub ea crește riscul RED-S). La bărbați efectele apar abia pe la ~15, așa că pragul e 20 (v17; 25 nu lăsa deficit deloc cu un metabolism lent). */
+export const EA_MIN: Record<Sex, number> = { f: 30, m: 20 };
 
 /** Media factorilor pe săptămâna normală a planului (zilele de deload nu intră). */
 export function weekCarbMean(types: readonly DayType[]): number {
@@ -82,8 +84,8 @@ export function periodize(i: PeriodizeInput): NutritionPlan {
 
   let kcal = p * 4 + c * 4 + f * 9;
   let floorApplied = false;
-  const minByDeficit = Math.round(i.tdee * (1 - MAX_DEFICIT));
-  const minByEa = i.cut && i.ffmKg && i.ffmKg > 0 ? Math.round(EA_MIN[i.sex] * i.ffmKg + Math.max(0, i.exerciseKcal ?? 0)) : 0;
+  const minByDeficit = i.weekly ? 0 : Math.round(i.tdee * (1 - MAX_DEFICIT));
+  const minByEa = !i.weekly && i.cut && i.ffmKg && i.ffmKg > 0 ? Math.round(EA_MIN[i.sex] * i.ffmKg + Math.max(0, i.exerciseKcal ?? 0)) : 0;
   const floor = Math.max(KCAL_FLOOR[i.sex], i.cut ? minByDeficit : 0, minByEa);
   if (kcal < floor) {
     c += Math.ceil((floor - kcal) / 4);

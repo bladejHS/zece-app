@@ -35,12 +35,14 @@ test('check-in: energie scăzută micșorează deficitul, RPE mare adaugă carbo
   assert.equal(periodize({ ...base, lastRpe: 9 }).c, 272);
 });
 
-test('disponibilitate energetică: în deficit rămân cel puțin 25 (bărbați) / 30 (femei) kcal pe kg de masă slabă', () => {
+test('disponibilitate energetică: în deficit rămân cel puțin 20 (bărbați) / 30 (femei) kcal pe kg de masă slabă', () => {
   const lean = { ...base, base: { kcal: 2300, p: 170, c: 280, f: 56 }, weightKg: 80, tdee: 2760, ffmKg: 68, weekMean: mean };
-  const hard = periodize({ ...lean, dayType: 'high', exerciseKcal: 900 });
-  assert.ok(hard.kcal >= 25 * 68 + 900 - 5, String(hard.kcal)); assert.equal(hard.floorApplied, true);
+  const hard = periodize({ ...lean, dayType: 'high', exerciseKcal: 1300 });
+  assert.ok(hard.kcal >= 20 * 68 + 1300 - 5, String(hard.kcal)); assert.equal(hard.floorApplied, true);
   assert.ok(hard.notes.some((n) => /masă slabă/.test(n)));
-  const off = periodize({ ...lean, cut: false, dayType: 'high', exerciseKcal: 900 });
+  const wk = periodize({ ...lean, dayType: 'high', exerciseKcal: 1300, weekly: true });
+  assert.equal(wk.floorApplied, false, 'pe media săptămânii pragul se aplică bazei, nu zilei');
+  const off = periodize({ ...lean, cut: false, dayType: 'high', exerciseKcal: 1300 });
   assert.equal(off.floorApplied, false);
   const f = periodize({ ...lean, sex: 'f', weightKg: 60, ffmKg: 46, base: { kcal: 1700, p: 130, c: 160, f: 45 }, tdee: 2100, dayType: 'moderate', exerciseKcal: 400 });
   assert.ok(f.kcal >= 30 * 46 + 400 - 5, String(f.kcal));

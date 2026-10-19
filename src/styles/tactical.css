@@ -259,3 +259,12 @@ html[data-mode="light"] .card{background:var(--glass)}
 
 /* ---------- alimentele din planul de mese ---------- */
 .chip.fp.off{text-decoration:line-through;opacity:.5}
+
+/* ---------- media săptămânii pe zile ---------- */
+.wk-k{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:10px 0 6px}
+.wk-k div{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;border:1px solid var(--ln);border-radius:var(--r-sm,8px)}
+.wk-k span{font-size:11px;color:var(--mu);text-transform:uppercase;letter-spacing:.06em}
+.wk-k b{font:600 12.5px/1 var(--fd);font-variant-numeric:tabular-nums}
+.wk-k .on{border-color:var(--ac)}
+.wk-k .wk-high b{color:var(--ac)}
+.wk-k .wk-rest b{color:var(--mu)}
