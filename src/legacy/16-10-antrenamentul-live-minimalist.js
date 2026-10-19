@@ -279,7 +279,7 @@ function restSounds(left){ schedule('rest',[[left-3,880,.06],[left-2,880,.06],[l
 function startRest(sec,lbl){ if(!sec) return; S.rest={end:Date.now()+sec*1000,total:sec,lbl:lbl||'Pauză'}; restSounds(sec);
   if('mediaSession' in navigator&&window.MediaMetadata) try{ navigator.mediaSession.metadata=new MediaMetadata({title:(lbl||'Pauză')+' '+fmtClock(sec),artist:'ZECE'}); }catch(e){} }
 function stopRest(){ S.rest=null; cancelSched('rest'); }
-function restDone(){ S.rest=null; AU.sched.rest=[]; buzz([200,100,200]); if(!document.hidden) flash(); say(voxEnc()?mot('rdone'):'Gata pauza. Următoarea serie.'); renderFocus(); renderPill(); if(S.qlAt&&!S.fxOpen){ S.qlAt=null; render(); } }
+function restDone(){ S.rest=null; AU.sched.rest=[]; buzz([200,100,200]); if(!document.hidden) flash(); say(voxEnc()?mot('rdone'):'Gata pauza. Următoarea serie.'); renderFocus(); renderPill(); }
 function tick(){
   if(TM.open) tmTick();
   if(!S.sess&&!S.rest) return;

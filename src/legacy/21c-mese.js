@@ -72,24 +72,56 @@ const MEALS=(()=>{
 })();
 /* planurile salvate țin indicii rețetelor vechi: o singură dată, după ce s-a schimbat baza de rețete, le iau de la capăt */
 async function mealsMigrate(){ let v=''; try{ v=localStorage.getItem('zece3:mealsV')||''; }catch(e){}
-  if(v==='2') return; await save('mplan',{}); try{ localStorage.setItem('zece3:mealsV','2'); }catch(e){} }
+  if(v==='3') return; if(v!=='2') await save('mplan',{});
+  /* v17: alimentele bifate în lista veche de cumpărături (cele cumpărate) devin ce ai acasă, iar planul de azi încolo se reface din ele */
+  const got=Object.keys(S.shop||{}).filter(n=>S.shop[n]&&MFOOD.indexOf(n)>=0);
+  if(got.length) await save('mf',Object.assign({},S.mf,{have:got.sort(),useHave:true}));
+  await planUnlock(); try{ localStorage.setItem('zece3:mealsV','3'); }catch(e){} }
+/* planul de azi încolo se reface (după ce schimbi alimentele); zilele trecute rămân cum au fost */
+async function planUnlock(){ const tk=todayKey(), mp=Object.assign({},S.mplan||{}); let ch=false;
+  Object.keys(mp).forEach(k=>{ if(k>=tk&&mp[k]&&mp[k].m){ const o=Object.assign({},mp[k]); delete o.m; mp[k]=o; ch=true; } }); if(ch) await save('mplan',mp); }
+/* planul zilelor din lista de cumpărături se fixează, ca mesele să rămână cele pentru care ai cumpărat */
+let PLOCK=false;
+async function planLock(ks){ if(PLOCK) return; PLOCK=true;
+  try{ const mp=Object.assign({},S.mplan||{}); let ch=false;
+    ks.forEach(k=>{ const sv=mp[k]||{}; if(!sv.m){ mp[k]=Object.assign({},sv,{m:planFor(k)}); ch=true; } }); if(ch) await save('mplan',mp); }
+  finally{ PLOCK=false; } }
+/* ---------- ce ai acasă: cu „doar ce am acasă” pornit, planul alege rețetele făcute numai din alimentele tale
+   (uleiul se consideră în casă); dacă la o masă nu ajung, acceptă rețete cu un singur aliment lipsă ---------- */
+let MHV={src:null,on:null,set:null};
+const mealHave=()=>{ const mf=S.mf||{}, a=mf.useHave?mf.have:null; if(MHV.src!==a||MHV.on!==!!mf.useHave){ MHV={src:a,on:!!mf.useHave,set:Array.isArray(a)&&a.length?new Set(a.map(n=>MFOOD.indexOf(n)).filter(i=>i>=0)):null}; } return MHV.set; };
+const mealMiss=m=>{ const h=mealHave(); return h?m[8].filter(([i])=>!h.has(i)&&!/^ulei/.test(MFOOD[i])).length:0; };
 
 /* ---------- ce alimente vrei: cele excluse nu mai apar în nicio rețetă din plan ---------- */
 let MEX={src:null,set:new Set()};
 const mealEx=()=>{ const a=(S.mf||{}).ex; if(MEX.src!==a){ MEX={src:a,set:new Set((Array.isArray(a)?a:[]).map(n=>MFOOD.indexOf(n)).filter(i=>i>=0))}; } return MEX.set; };
 const mealHasEx=m=>{ const ex=mealEx(); return ex.size>0&&m[8].some(([i])=>ex.has(i)); };
 function fprefHTML(){
-  const ex=new Set((S.mf||{}).ex||[]), groups={}; MFOOD.forEach(n=>{ const c=FOOD_CAT(n); (groups[c]=groups[c]||[]).push(n); });
+  const mf=S.mf||{}, home=SH.m==='have', ex=new Set(mf.ex||[]), hv=new Set(mf.have||[]), groups={}; MFOOD.forEach(n=>{ const c=FOOD_CAT(n); (groups[c]=groups[c]||[]).push(n); });
   const order=FCAT.map(x=>x[0]).concat(['Altele']).filter(c=>groups[c]);
-  const left=MSLOTS.map(([l,cat])=>[l,MEALS.filter(m=>m[0]===cat&&mealOK(m)).length]);
+  const left=MSLOTS.map(([l,cat])=>[l,MEALS.filter(m=>m[0]===cat&&mealOK(m)&&mealMiss(m)===0).length]);
+  const got=Object.keys(S.shop||{}).filter(n=>S.shop[n]&&MFOOD.indexOf(n)>=0);
+  const chip=n=>home?`<button class="chip fp ${hv.has(n)?'have':'off'}" data-a="fprefH" data-k="${esc(n)}" aria-pressed="${hv.has(n)}">${hv.has(n)?ic('check')+' ':''}${esc(n)}</button>`
+    :`<button class="chip fp ${ex.has(n)?'off':'on'}" data-a="fprefT" data-k="${esc(n)}" aria-pressed="${!ex.has(n)}">${esc(n)}</button>`;
   return `<button class="ib sh-x" data-a="shClose" aria-label="Închide">${ic('x')}</button>
-    <div class="eyebrow">${ic('bowl')} Planul de mese</div><div class="h2" style="margin-top:6px">Ce alimente mănânci</div>
-    <div class="note">Apasă pe un aliment ca să-l scoți (tăiat) sau să-l pui înapoi. Rețetele cu alimente scoase nu mai apar în plan. Ovăzul vine mereu cu whey.</div>
-    ${order.map(c=>`<div class="dsec"><h4>${esc(c)}</h4><div class="chips">${groups[c].map(n=>`<button class="chip fp ${ex.has(n)?'off':'on'}" data-a="fprefT" data-k="${esc(n)}" aria-pressed="${!ex.has(n)}">${esc(n)}</button>`).join('')}</div></div>`).join('')}
-    <div class="dsec"><h4>Rețete rămase</h4>${left.filter((x,i,a)=>a.findIndex(y=>y[0]===x[0])===i).map(([l,n])=>`<div class="list-row"><span class="sp">${esc(l)}</span><span class="v ${n?'':'bad'}">${n}</span></div>`).join('')}</div>
-    <div class="inrow" style="margin-top:12px">${ex.size?`<button class="btn ghost" data-a="fprefAll">${ic('refresh')} Toate alimentele</button>`:''}<button class="btn pri" style="flex:1" data-a="shClose">${ic('check')} Gata</button></div>`; }
+    <div class="eyebrow">${ic('bowl')} Planul de mese</div><div class="h2" style="margin-top:6px">${home?'Ce ai acasă':'Ce alimente mănânci'}</div>
+    <div class="seg" role="tablist" style="margin-top:10px"><button class="${home?'':'on'}" data-a="fprefM" data-k="ex" role="tab" aria-selected="${!home}">Nu mănânc</button><button class="${home?'on':''}" data-a="fprefM" data-k="have" role="tab" aria-selected="${home}">Am acasă · ${hv.size}</button></div>
+    ${home?`<div class="row" style="margin-top:12px"><div class="sp"><b>Planul folosește doar ce am acasă</b><div class="xs mu">Uleiul se consideră în casă. Dacă la o masă nu ajung rețetele, intră și cele cu un singur aliment lipsă.</div></div>
+        <button class="sw ${mf.useHave?'on':''}" data-a="fprefUse" role="switch" aria-checked="${!!mf.useHave}" aria-label="Doar ce am acasă"></button></div>
+      <div class="inrow" style="margin-top:10px">${got.length?`<button class="btn ghost sm" data-a="fprefGot">${ic('cart')} Preia din lista bifată (${got.length})</button>`:''}${hv.size?`<button class="btn ghost sm" data-a="fprefHClr">${ic('trash')} Golește</button>`:''}</div>`
+      :`<div class="note">Apasă pe un aliment ca să-l scoți (tăiat) sau să-l pui înapoi. Rețetele cu alimente scoase nu mai apar în plan. Ovăzul vine mereu cu whey.</div>`}
+    ${order.map(c=>`<div class="dsec"><h4>${esc(c)}</h4><div class="chips">${groups[c].map(chip).join('')}</div></div>`).join('')}
+    <div class="dsec"><h4>Rețete ${mf.useHave&&hv.size?'din ce ai acasă':'rămase'}</h4>${left.filter((x,i,a)=>a.findIndex(y=>y[0]===x[0])===i).map(([l,n])=>`<div class="list-row"><span class="sp">${esc(l)}</span><span class="v ${n?'':'bad'}">${n}</span></div>`).join('')}</div>
+    <div class="inrow" style="margin-top:12px">${!home&&ex.size?`<button class="btn ghost" data-a="fprefAll">${ic('refresh')} Toate alimentele</button>`:''}<button class="btn pri" style="flex:1" data-a="shClose">${ic('check')} Gata</button></div>`; }
 SHEETS.fpref=()=>fprefHTML();
-ACT.fprefOpen=()=>{ SH={kind:'fpref'}; shRender(); };
-async function fprefSet(ex){ await save('mf',Object.assign({},S.mf,{ex:[...new Set(ex)].filter(n=>MFOOD.indexOf(n)>=0).sort()})); }
+ACT.fprefOpen=(el,{k})=>{ SH={kind:'fpref',m:k==='have'?'have':'ex'}; shRender(); };
+ACT.fprefM=(el,{k})=>{ if(SH&&SH.kind==='fpref'){ SH.m=k==='have'?'have':'ex'; shRender(); } };
+async function fprefSet(ex){ await save('mf',Object.assign({},S.mf,{ex:[...new Set(ex)].filter(n=>MFOOD.indexOf(n)>=0).sort()})); await planUnlock(); }
+async function haveSet(hv,use){ const mf=Object.assign({},S.mf,{have:[...new Set(hv)].filter(n=>MFOOD.indexOf(n)>=0).sort()}); if(use!=null) mf.useHave=use; await save('mf',mf); await planUnlock(); }
+const fpRe=()=>{ shRender(); render(); };
+ACT.fprefH=async(el,{k})=>{ if(MFOOD.indexOf(k)<0) return; const hv=new Set((S.mf||{}).have||[]); if(hv.has(k)) hv.delete(k); else hv.add(k); await haveSet([...hv]); fpRe(); };
+ACT.fprefUse=async()=>{ await haveSet((S.mf||{}).have||[],!(S.mf||{}).useHave); fpRe(); };
+ACT.fprefGot=async()=>{ const got=Object.keys(S.shop||{}).filter(n=>S.shop[n]); await haveSet(((S.mf||{}).have||[]).concat(got),true); fpRe(); toast('Ce ai acasă',got.length+' alimente din lista bifată','info'); };
+ACT.fprefHClr=async()=>{ await haveSet([],false); fpRe(); };
 ACT.fprefT=async(el,{k})=>{ if(MFOOD.indexOf(k)<0) return; const ex=new Set((S.mf||{}).ex||[]); if(ex.has(k)) ex.delete(k); else ex.add(k); await fprefSet([...ex]); shRender(); render(); };
 ACT.fprefAll=async()=>{ await fprefSet([]); shRender(); render(); };

@@ -54,6 +54,8 @@ const GUIDE={
   x:['Jumătăți de repetare: brațele nu se întind jos.','Tragi din mâini în loc de coate, iar umerii urcă spre urechi.','Balans sau smucituri ca să treci de bară.'],s:'Dacă te doare umărul la priza largă, îngustează priza sau folosește priza neutră.'},
  'Weighted Pull Up':{m:['Dorsal mare','Spate (mijloc)','Biceps'],c:['Centura cu greutatea atârnă la șolduri; abdomenul strâns, picioarele încrucișate.','Pornește din atârnare completă, cu brațele întinse.','Coboară umerii înainte să tragi, apoi trage coatele spre coaste.','Bărbia trece peste bară, pieptul urcă spre ea.','Coboară controlat 2–3 secunde până la brațe întinse.'],
   x:['Greutate prea mare, din care ies doar jumătăți de repetare.','Legănat din picioare ca să urci.','Coborâre scăpată, fără control.'],s:'Crește greutatea în pași mici (1,25–2,5 kg). La durere în umăr sau cot, revino la greutatea corpului.'},
+ 'Hammer Chest Press':{m:['Piept','Triceps','Umeri (față)'],c:['Reglează scaunul ca mânerele să fie la nivelul mijlocului pieptului.','Omoplații strânși și lipiți de spătar, tălpile pe podea.','Împinge pe traiectoria aparatului până aproape de brațele întinse, fără să blochezi coatele.','Revino lent, 2 secunde, până simți întinderea în piept.'],
+  x:['Umerii se ridică și ies de pe spătar.','Mișcare scurtă, doar din coate.','Coborâre scăpată, cu greutățile lovind stiva.'],s:'Aparatul îți ține traiectoria, așa că poți merge aproape de eșec în siguranță. Brațele pot împinge și pe rând, dacă una e mai slabă.'},
  'Incline Dumbbell Press':{m:['Piept (sus)','Umeri (față)','Triceps'],c:['Banca la 30–45°; omoplații strânși, tălpile ferme pe podea.','Ganterele pornesc deasupra pieptului de sus, cu încheieturile drepte.','Coboară până simți întinderea în piept, coatele la 45–60° față de trunchi.','Împinge în sus și ușor spre interior, fără să lovești ganterele.','Controlează coborârea timp de 2 secunde.'],
   x:['Banca înclinată peste 45°: efortul trece pe umeri.','Coatele deschise complet lateral.','Arc exagerat al spatelui, care transformă mișcarea în împins orizontal.'],s:'Ca să lași ganterele jos, adu-le la piept și ridică genunchii; nu le arunca lateral cu brațele întinse.'},
  'Flat Dumbbell Press':{m:['Piept','Triceps','Umeri (față)'],c:['Așază-te cu ganterele pe coapse, apoi culcă-te și adu-le deasupra pieptului cu ajutorul genunchilor.','Omoplații strânși și coborâți, tălpile ferme pe podea.','Coboară ganterele lateral de piept, coatele la 45–60° față de trunchi.','Coboară până simți o întindere bună în piept, fără durere în umăr.','Împinge în sus, ușor spre interior, până la brațe întinse.'],
@@ -226,7 +228,7 @@ function motionHTML(){
     <div class="note">Poți schimba oricând din Setări → Aspect → Mișcare.</div>`;
 }
 function mealsHTML(){
-  const tg=targets(), si=SH.si, cur=planFor(SH.k,tg)[si], c=slotCands(si,tg).slice(0,40);
+  const tg=targets(SH.k), si=SH.si, cur=planFor(SH.k,tg)[si], c=slotCands(si,tg).slice(0,40);
   return `<div class="eyebrow">${ic(MSLOTS[si][3])} ${MSLOTS[si][0]} · țintă ~${Math.round(tg.kcal*MSLOTS[si][2])} kcal</div><div class="h2" style="margin-top:6px">Alege rețeta</div>
     <div class="note">Cele mai apropiate ${c.length} variante de ținta acestei mese${S.mf.port||S.mf.cold?', cu filtrele active':''}.</div>
     <div style="margin-top:6px">${c.map(x=>`<div class="list-row"><span class="sp"><b>${esc(x.m[1])}</b><div class="xs mu">${x.m[2]} kcal · P ${x.m[3]} · C ${x.m[4]} · G ${x.m[5]}</div></span>

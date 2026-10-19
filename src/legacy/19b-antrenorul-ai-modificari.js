@@ -15,8 +15,8 @@ AI_TOOLS.push(
    input_schema:{type:'object',properties:{slot:{type:'integer',description:'1–5'},meal:{type:'string',description:'Numele rețetei sau o parte din el, ex: „Ovăz cu whey și banană”.'},date:{type:'string',description:'YYYY-MM-DD, azi sau în următoarele 6 zile. Implicit azi.'}},required:['slot','meal']}},
   {name:'swap_exercise',description:'Înlocuiește permanent un exercițiu din planul de antrenament cu altul (seriile, repetările și pauza rămân). replacement „original” pune înapoi exercițiul din program. day: 1 luni … 7 duminică.',eager_input_streaming:true,
    input_schema:{type:'object',properties:{day:{type:'integer',description:'1–7'},exercise:{type:'string',description:'Exercițiul de acum din ziua aceea.'},replacement:{type:'string',description:'Exercițiul nou (din baza de exerciții) sau „original”.'}},required:['day','exercise','replacement']}},
-  {name:'set_app_setting',description:'Pornește sau oprește o setare: deload_auto (deload în săptămâna 4), quick_log (notare direct în plan), diet_breaks (pauze de dietă), sound, voice.',eager_input_streaming:true,
-   input_schema:{type:'object',properties:{setting:{type:'string',enum:['deload_auto','quick_log','diet_breaks','sound','voice']},value:{type:'boolean'}},required:['setting','value']}}
+  {name:'set_app_setting',description:'Pornește sau oprește o setare: deload_auto (deload în săptămâna 4), diet_breaks (pauze de dietă), sound, voice.',eager_input_streaming:true,
+   input_schema:{type:'object',properties:{setting:{type:'string',enum:['deload_auto','diet_breaks','sound','voice']},value:{type:'boolean'}},required:['setting','value']}}
 );
 const aiFind=(q,list)=>{ const f=fold(String(q||'')).trim(); if(!f) return null;
   return list.find(n=>fold(n)===f)||list.find(n=>fold(n).indexOf(f)===0)||list.find(n=>fold(n).indexOf(f)>=0)||list.find(n=>f.indexOf(fold(n))>=0)||null; };
@@ -57,8 +57,7 @@ const AI_WTOOLS={
     return {icon:'dumbbell',title:'Schimb un exercițiu din plan',desc:DAYN[d]+': '+e.n+' → '+rep+(back?' (originalul)':'')+' · '+e.p,
       apply:async()=>{ const sw=Object.assign({},prof().exSwap||{}); if(rep===orig) delete sw[d+'_'+e.x]; else sw[d+'_'+e.x]=rep; await profSet({exSwap:sw}); return DAYN[d]+': '+e.n+' a devenit '+rep+'.'; }}; },
   set_app_setting(inp){ if(typeof inp.value!=='boolean') return {err:'value: true sau false.'}; const v=inp.value;
-    const S1={deload_auto:['Deload automat',async()=>{ await save('deload',v); STC=null; }],quick_log:['Notare direct în plan',async()=>{ await profSet({qlOff:!v}); }],
-      diet_breaks:['Pauze de dietă',async()=>{ await profSet({dietBreak:v}); }],sound:['Sunet și vibrații',async()=>{ await save('sound',v); }],voice:['Voce',async()=>{ await save('voice',v); }]}[inp.setting];
+    const S1={deload_auto:['Deload automat',async()=>{ await save('deload',v); STC=null; }],diet_breaks:['Pauze de dietă',async()=>{ await profSet({dietBreak:v}); }],sound:['Sunet și vibrații',async()=>{ await save('sound',v); }],voice:['Voce',async()=>{ await save('voice',v); }]}[inp.setting];
     if(!S1) return {err:'Setare necunoscută.'};
     return {icon:'sliders',title:'Schimb o setare',desc:S1[0]+' → '+(v?'pornit':'oprit'),apply:async()=>{ await S1[1](); return S1[0]+': '+(v?'pornit':'oprit')+'.'; }}; }
 };

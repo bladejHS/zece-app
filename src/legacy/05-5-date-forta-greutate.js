@@ -194,10 +194,14 @@ const mealOK=m=>(!S.mf.port||m[6]===1)&&(!S.mf.cold||m[7]===1)&&!mealHasEx(m);
 function seedRand(str){ let h=2166136261>>>0; for(let i=0;i<str.length;i++){ h^=str.charCodeAt(i); h=Math.imul(h,16777619)>>>0; }
   return ()=>{ h^=h<<13; h>>>=0; h^=h>>>17; h^=h<<5; h>>>=0; return h/4294967296; }; }
 function slotCands(si,tg){ const [,cat,share]=MSLOTS[si], kT=tg.kcal*share, pT=tg.p*share;
-  return MEALS.map((m,i)=>({m,i})).filter(x=>x.m[0]===cat&&mealOK(x.m)).map(x=>Object.assign(x,{sc:Math.abs(x.m[2]-kT)/kT+Math.max(0,pT-x.m[3])/pT*.6})).sort((a,b)=>a.sc-b.sc); }
+  let L=MEALS.map((m,i)=>({m,i})).filter(x=>x.m[0]===cat&&mealOK(x.m)).map(x=>Object.assign(x,{miss:mealMiss(x.m)}));
+  /* cu „doar ce am acasă”: rețetele fără alimente lipsă; dacă sunt sub 3, și cele cu unul singur lipsă */
+  if(mealHave()){ const z=L.filter(x=>x.miss===0); L=z.length>=3?z:L.filter(x=>x.miss<=1).length?L.filter(x=>x.miss<=1):L; }
+  return L.map(x=>Object.assign(x,{sc:Math.abs(x.m[2]-kT)/kT+Math.max(0,pT-x.m[3])/pT*.6+x.miss*.5})).sort((a,b)=>a.sc-b.sc); }
 /* încearcă 40 de combinații din cele mai potrivite rețete pe fiecare masă și o păstrează pe cea mai apropiată de totalul zilei */
 const PLC={};
-function planFor(k,tg){ tg=tg||targets(); const sv=(S.mplan||{})[k]||{}, key=k+'|'+(sv.s||0)+'|'+(S.mf.port?1:0)+(S.mf.cold?1:0)+((S.mf.ex||[]).join(','))+'|'+tg.kcal+'|'+tg.p+'|'+JSON.stringify(sv.m||[]);
+/* v17: fiecare zi își folosește ținta ei (zilele intense mai mult, cele de odihnă mai puțin) */
+function planFor(k,tg){ tg=tg||targets(k); const sv=(S.mplan||{})[k]||{}, key=k+'|'+(sv.s||0)+'|'+(S.mf.port?1:0)+(S.mf.cold?1:0)+((S.mf.ex||[]).join(','))+'|'+(mealHave()?(S.mf.have||[]).join(','):'')+'|'+tg.kcal+'|'+tg.p+'|'+JSON.stringify(sv.m||[]);
   if(PLC[key]) return PLC[key].slice();
   const rnd=seedRand(key), cands=MSLOTS.map((_,si)=>sv.m&&sv.m[si]!=null&&MEALS[sv.m[si]]?[sv.m[si]]:slotCands(si,tg).slice(0,7).map(x=>x.i));
   let best=null,bs=Infinity;
@@ -223,7 +227,7 @@ async function jSet(k,o){ const j=Object.assign({},S.journal), d=Object.assign({
   Object.keys(d).forEach(x=>{ if(d[x]==null||d[x]==='') delete d[x]; }); if(Object.keys(d).length) j[k]=d; else delete j[k]; await save('journal',j); }
 /* mușchii lucrați: seriile fiecărui exercițiu, pe grupe (1 = mușchi principal, 0,5 = secundar) */
 const MUSC=[['piept','Piept'],['spate','Spate'],['umeri','Umeri'],['biceps','Biceps'],['triceps','Triceps'],['cvadriceps','Cvadriceps'],['femurali','Femurali'],['fesieri','Fesieri'],['gambe','Gambe'],['abdomen','Abdomen']];
-const EXM={'Bench Press':{piept:1,triceps:.5,umeri:.5},'Pull Up / Lat Pulldown':{spate:1,biceps:.5},'Incline Dumbbell Press':{piept:1,umeri:.5,triceps:.5},
+const EXM={'Bench Press':{piept:1,triceps:.5,umeri:.5},'Pull Up / Lat Pulldown':{spate:1,biceps:.5},'Incline Dumbbell Press':{piept:1,umeri:.5,triceps:.5},'Hammer Chest Press':{piept:1,triceps:.5,umeri:.5},
   'Chest Supported Row':{spate:1,biceps:.5,umeri:.5},'Lateral Raise':{umeri:1},'Dumbbell Lateral Raise':{umeri:1},'Tricep Pushdown':{triceps:1},'Tricep Rope Pushdown':{triceps:1},
   'Tricep Overhead Extension':{triceps:1},'Bicep Curl':{biceps:1},'Alternating Dumbbell Curl':{biceps:1},'Barbell Curl':{biceps:1},'Weighted Pull Up':{spate:1,biceps:.5},
   'Flat Dumbbell Press':{piept:1,triceps:.5,umeri:.5},'Seated Overhead Press':{umeri:1,triceps:.5},'Cable Face Pull':{umeri:1,spate:.5},'Hack Squat':{cvadriceps:1,fesieri:.5},

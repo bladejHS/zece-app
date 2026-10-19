@@ -6,9 +6,9 @@ const DAYS=['Lu','Ma','Mi','Jo','Vi','Sâ','Du'];
 const WEEKS=4;
 const PLAN=[
  {t:'Upper + Easy run',cat:'mix',min:90,run:'ez1',lift:[['cal',70]],ex:[
-  ['Bench Press','4×6–8 · pauză 90s'],
+  ['Bench Press','4×6–8 · pauză 240s'],
   ['Pull Up / Lat Pulldown','4×6–10 · pauză 90s'],
-  ['Incline Dumbbell Press','3×8–10 · pauză 90s'],
+  ['Hammer Chest Press','3×8–10 · pauză 90s'],
   ['Chest Supported Row','3×8–10 · pauză 90s'],
   ['Lateral Raise','3×12–15 · pauză 60s'],
   ['Tricep Pushdown','3×10–12 · pauză 60s'],
@@ -33,7 +33,7 @@ const PLAN=[
   ['Dragon Flag','4×3–6 · pauză 90s — negative lente (cobori în 4–5 s) până reușești repetări complete'],
   ['Pallof Press','3×10–12 pe parte · pauză 45s']]},
  {t:'Lower + Easy run',cat:'mix',min:95,run:'ez2',lift:[['cal',65]],ex:[
-  ['Hack Squat','4×4–6 · pauză 180s — în loc de Back Squat'],
+  ['Hack Squat','4×4–6 · pauză 240s — în loc de Back Squat'],
   ['Romanian Deadlift','4×6–8 · pauză 90s'],
   ['Walking Lunge','3×8–10 pe picior · pauză 90s'],
   ['Hip Thrust','3×8–10 · pauză 90s'],
@@ -42,7 +42,7 @@ const PLAN=[
   ['Calf Raise','3×12–15 · pauză 60s'],
   ['Easy run Z2','30 min · ușor — e flush, nu antrenament']]},
  {t:'Upper Strength + Power',cat:'lift',min:98,lift:[['cal',88],['hard',10]],ex:[
-  ['Bench Press','5×3–5 · pauză 180s'],
+  ['Bench Press','5×3–5 · pauză 240s'],
   ['Weighted Pull Up','4×4–6 · pauză 150s'],
   ['Incline Dumbbell Press','4×6–8 · pauză 90s'],
   ['Chest Supported Row','4×6–8 · pauză 90s'],
@@ -130,7 +130,7 @@ const RUN_WU={thr:22.5,lng:20};
 const RUNK={ez:'Easy Z2',thr:'Prag',lng:'Long run',int:'Intervale',tmp:'Tempo'};
 const RUN_EX=/^(Easy run|Threshold$|Long run)/;
 const BARBELL=/^(Bench Press|Push Press|Close Grip Bench Press|Romanian Deadlift|Barbell Curl)$/;
-const COMPOUND=/^(Bench Press|Hack Squat|Romanian Deadlift|Push Press|Seated Overhead Press|Leg Press|Close Grip Bench Press|Flat Dumbbell Press|Incline Dumbbell Press|Hip Thrust)$/;
+const COMPOUND=/^(Bench Press|Hack Squat|Romanian Deadlift|Push Press|Seated Overhead Press|Leg Press|Close Grip Bench Press|Flat Dumbbell Press|Incline Dumbbell Press|Hammer Chest Press|Hip Thrust)$/;
 
 function runPlan(){
   const d=JSON.parse(JSON.stringify(RUN_DEFAULT)), sv=(S.runPlan||{}).h||{}, n=Math.max(0,Math.min(RUN_CYC.max,cyc()-1));

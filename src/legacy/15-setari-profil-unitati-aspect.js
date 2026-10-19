@@ -89,7 +89,6 @@ function viewSet(){
 
   <div class="set-h" id="sTrain">Antrenament</div>
   ${icsCard()}
-  <div class="card">${sw('qlToggle',qlOn(),'Notare direct în plan','Kg și repetări, distanța, timpul și viteza la alergare se notează în cardul zilei, fără ecranul complet')}</div>
   <div class="card"><div class="set-row" style="margin-top:0"><span class="sp"><b>Deload automat în săptămâna 4</b><div class="sm mu">Volum −40% (serii, minute, reprize, runde), aceleași zile de antrenament. Recuperarea face parte din progres.</div></span><button class="sw ${S.deload!==false?'on':''}" data-a="deloadToggle" role="switch" aria-checked="${S.deload!==false}" aria-label="Deload automat"></button></div></div>
   ${healthCard()}
   <div class="card"><div class="eyebrow">${ic('run')} Progresia alergării</div>

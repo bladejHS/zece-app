@@ -2,7 +2,7 @@
    ANTRENOR ADAPTIV — un strat de ajustări peste planul de bază.
    Propune din datele reale → tu accepți → se aplică doar antrenamentului de azi → revii oricând.
    ===================================================================== */
-const SWAPS={'Bench Press':['Flat Dumbbell Press','Incline Dumbbell Press'],'Flat Dumbbell Press':['Bench Press','Incline Dumbbell Press'],'Incline Dumbbell Press':['Flat Dumbbell Press','Bench Press'],
+const SWAPS={'Bench Press':['Flat Dumbbell Press','Incline Dumbbell Press'],'Flat Dumbbell Press':['Bench Press','Incline Dumbbell Press'],'Incline Dumbbell Press':['Flat Dumbbell Press','Bench Press'],'Hammer Chest Press':['Machine Chest Press','Incline Dumbbell Press'],
   'Pull Up / Lat Pulldown':['Weighted Pull Up','Chest Supported Row'],'Weighted Pull Up':['Pull Up / Lat Pulldown'],'Chest Supported Row':['Pull Up / Lat Pulldown'],
   'Seated Overhead Press':['Push Press'],'Push Press':['Seated Overhead Press'],'Hack Squat':['Leg Press'],'Leg Press':['Hack Squat'],'Walking Lunge':['Leg Press'],
   'Romanian Deadlift':['Hamstring Curl','Hip Thrust'],'Hip Thrust':['Romanian Deadlift'],'Hamstring Curl':['Romanian Deadlift'],'Close Grip Bench Press':['Tricep Pushdown'],

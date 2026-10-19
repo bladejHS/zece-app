@@ -233,7 +233,7 @@ document.addEventListener('click',async ev=>{
     case 'planNew': { const dk=dayShift(tk,S.planDay||0), mp=Object.assign({},S.mplan); mp[dk]={s:Math.floor(Math.random()*1e9)}; await save('mplan',mp); render(); buzz(15); return; }
     case 'mealEat': { const plan=planFor(tk), mi=plan[I], m=MEALS[mi]; if(!m) return; floatText(el,'+'+m[2]+' kcal'); await planSet(tk,null,null);
       await addMeal({n:m[1],k:m[2],p:m[3],c:m[4],g:m[5],mi,si:I}); buzz(20); render(); toast('Masă notată',m[1]+' · '+m[2]+' kcal','info'); return; }
-    case 'mealRe': { const dk=dayShift(tk,S.planDay||0), tg=targets(), plan=planFor(dk,tg), cur=plan[I], others=plan.filter((_,j)=>j!==I);
+    case 'mealRe': { const dk=dayShift(tk,S.planDay||0), tg=targets(dk), plan=planFor(dk,tg), cur=plan[I], others=plan.filter((_,j)=>j!==I);
       const c=slotCands(I,tg).filter(x=>x.i!==cur&&others.indexOf(x.i)<0).slice(0,10); if(!c.length) return; await planSet(dk,I,c[Math.floor(Math.random()*c.length)].i); buzz(10); render(); return; }
     case 'mealAll': SH={kind:'meals',k:dayShift(tk,S.planDay||0),si:I}; shRender(); return;
     case 'mealPick': if(SH&&SH.kind==='meals'){ await planSet(SH.k,SH.si,I); SH=null; shRender(); render(); } return;
