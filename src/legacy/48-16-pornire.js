@@ -43,8 +43,8 @@ async function migrate(){
 }
 /* ---------- animația de deschidere (src/components/Intro.astro, src/styles/intro.css) ---------- */
 const INTRO={on:false,leaving:false,done:null,mode:'full'};
-/* secunda (× k) la care se aprinde al 10-lea segment: vibrația scurtă cade pe el */
-const IN_T10=1.75;
+/* secunda (× k) la care ținta se blochează pe semn (colțurile devin amber): vibrația scurtă cade pe ea */
+const IN_LOCK=1.15;
 function introStart(){
   const intro=$('#intro'); let mode='full';
   try{ const m=JSON.parse(localStorage.getItem(K.intro)||'"full"'); if(['full','short','off'].indexOf(m)>=0) mode=m; }catch(e){}
@@ -60,11 +60,11 @@ function introStart(){
   if(mode==='short') intro.classList.add('short');
   INTRO.on=true;
   const k=mode==='full'?1:.45;
-  setTimeout(()=>{ if(INTRO.on) buzz([22]); },Math.round(IN_T10*k*1000));
+  setTimeout(()=>{ if(INTRO.on) buzz([22]); },Math.round(IN_LOCK*k*1000));
   intro.addEventListener('click',introExit);
-  setTimeout(introExit,Math.round((mode==='full'?2.9:1.35)*1000));
+  setTimeout(introExit,Math.round((mode==='full'?2.75:1.35)*1000));
 }
-/* ieșirea: semnul zboară în antet, iar cele două lame se deschid ca un obturator */
+/* ieșirea: semnul zboară în antet, iar fundalul se închide ca un diafragm spre locul lui (--ix, --iy) */
 function introExit(){
   if(INTRO.leaving) return; INTRO.leaving=true;
   const intro=$('#intro'), il=$('#inLogo'), hl=$('.top .logo');
@@ -75,6 +75,7 @@ function introExit(){
     intro.getAnimations({subtree:true}).forEach(a=>{ try{ a.finish(); }catch(e){} });
     const r1=il.getBoundingClientRect(), r2=hl.getBoundingClientRect(), cx=r2.left+r2.width/2, cy=r2.top+r2.height/2;
     const dx=cx-(r1.left+r1.width/2), dy=cy-(r1.top+r1.height/2), sc=r2.width/r1.width;
+    intro.style.setProperty('--ix',cx+'px'); intro.style.setProperty('--iy',cy+'px');
     intro.classList.add('out');
     const a=il.animate([{transform:'translate(0,0) scale(1)'},{transform:`translate(${dx}px,${dy}px) scale(${sc})`}],{duration:520,easing:'cubic-bezier(.25,.46,.45,.94)',fill:'forwards'});
     a.onfinish=finish; setTimeout(()=>{ if(intro.isConnected) finish(); },900);
