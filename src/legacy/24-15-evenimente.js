@@ -229,14 +229,10 @@ document.addEventListener('click',async ev=>{
     case 'shotN': S.shotN=I; render(); return;
     case 'shotDrink': { const s=shotOf(k); if(!s) return; floatText(el,'+'+s.m.k+' kcal'); await addMeal({n:'Shot · '+s.n,k:s.m.k,p:s.m.p,c:s.m.c,g:s.m.g,shot:s.id}); buzz(20); render(); toast('Shot notat',s.n+' · '+s.m.k+' kcal','info'); return; }
     case 'planDay': S.planDay=I; render(); return;
-    case 'mFilter': { const mf=Object.assign({},S.mf); mf[k]=!mf[k]; await save('mf',mf); render(); return; }
-    case 'planNew': { const dk=dayShift(tk,S.planDay||0), mp=Object.assign({},S.mplan); mp[dk]={s:Math.floor(Math.random()*1e9)}; await save('mplan',mp); render(); buzz(15); return; }
-    case 'mealEat': { const plan=planFor(tk), mi=plan[I], m=MEALS[mi]; if(!m) return; floatText(el,'+'+m[2]+' kcal'); await planSet(tk,null,null);
-      await addMeal({n:m[1],k:m[2],p:m[3],c:m[4],g:m[5],mi,si:I}); buzz(20); render(); toast('Masă notată',m[1]+' · '+m[2]+' kcal','info'); return; }
-    case 'mealRe': { const dk=dayShift(tk,S.planDay||0), tg=targets(dk), plan=planFor(dk,tg), cur=plan[I], others=plan.filter((_,j)=>j!==I);
-      const c=slotCands(I,tg).filter(x=>x.i!==cur&&others.indexOf(x.i)<0).slice(0,10); if(!c.length) return; await planSet(dk,I,c[Math.floor(Math.random()*c.length)].i); buzz(10); render(); return; }
-    case 'mealAll': SH={kind:'meals',k:dayShift(tk,S.planDay||0),si:I}; shRender(); return;
-    case 'mealPick': if(SH&&SH.kind==='meals'){ await planSet(SH.k,SH.si,I); SH=null; shRender(); render(); } return;
+    case 'mfOrig': await save('mf',Object.assign({},S.mf,{orig:k==='orig'})); render(); buzz(10); return;
+    case 'goalSet': if(GOALS[k]){ await save('prof',Object.assign({},S.prof||{},{goalMode:k})); STC=null; render(); buzz(15); toast('Obiectiv: '+GOALS[k].l,'Țintele și planul de mese s-au recalculat.','info'); } return;
+    case 'mealEat': { const D=dayPlan(tk), m=D.meals[I]; if(!m) return; floatText(el,'+'+m.k+' kcal');
+      await addMeal({n:D.name+' · '+m.n,k:m.k,p:m.p,c:m.c,g:m.g,pl:D.kind+I}); buzz(20); render(); toast('Masă notată',m.n+' · '+m.k+' kcal','info'); return; }
     case 'shopDays': S.shopDays=I; render(); return;
     case 'shopTick': { const sh=Object.assign({},S.shop); if(sh[k]) delete sh[k]; else sh[k]=true; await save('shop',sh); buzz(8); render(); return; }
     case 'shopReset': await save('shop',{}); render(); return;

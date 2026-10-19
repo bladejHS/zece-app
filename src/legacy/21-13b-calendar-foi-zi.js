@@ -227,18 +227,11 @@ function motionHTML(){
       <button class="btn ghost wide" data-a="motionSet" data-k="auto">Las-o după sistem</button></div>
     <div class="note">Poți schimba oricând din Setări → Aspect → Mișcare.</div>`;
 }
-function mealsHTML(){
-  const tg=targets(SH.k), si=SH.si, cur=planFor(SH.k,tg)[si], c=slotCands(si,tg).slice(0,40);
-  return `<div class="eyebrow">${ic(MSLOTS[si][3])} ${MSLOTS[si][0]} · țintă ~${Math.round(tg.kcal*MSLOTS[si][2])} kcal</div><div class="h2" style="margin-top:6px">Alege rețeta</div>
-    <div class="note">Cele mai apropiate ${c.length} variante de ținta acestei mese${S.mf.port||S.mf.cold?', cu filtrele active':''}.</div>
-    <div style="margin-top:6px">${c.map(x=>`<div class="list-row"><span class="sp"><b>${esc(x.m[1])}</b><div class="xs mu">${x.m[2]} kcal · P ${x.m[3]} · C ${x.m[4]} · G ${x.m[5]}</div></span>
-      ${x.i===cur?`<span class="tag rest">${ic('check')}</span>`:`<button class="btn sm" data-a="mealPick" data-i="${x.i}">Alege</button>`}</div>`).join('')}</div>`;
-}
 /* foile modulelor noi: SHEETS.tip=()=>html */
 const SHEETS={dash:()=>dashEditHTML(),goal1:()=>goalHTML(),hist:()=>histHTML(),notif:()=>notifHTML(),run:()=>runHTML(),rcmp:()=>rcmpHTML()};
 function shRender(){
   const r=$('#shRoot'); if(!SH){ r.innerHTML=''; updLock(); return; }
-  const inner=SHEETS[SH.kind]?SHEETS[SH.kind]():SH.kind==='day'?dayHTML(SH.k):SH.kind==='tech'?techHTML():SH.kind==='meals'?mealsHTML():SH.kind==='motion'?motionHTML():SH.kind==='hr'?hrHTML()
+  const inner=SHEETS[SH.kind]?SHEETS[SH.kind]():SH.kind==='day'?dayHTML(SH.k):SH.kind==='tech'?techHTML():SH.kind==='motion'?motionHTML():SH.kind==='hr'?hrHTML()
     :SH.kind==='ci'?readyCard():SH.kind==='goal'?goalForm():SH.kind==='tool'?toolHTML():SH.kind==='food'?foodHTML():SH.kind==='cyc'?cycHTML():cmpHTML();
   /* aceeași foaie deja deschisă: înlocuiesc doar conținutul, fără să reiau animația de intrare și fără să pierd derularea */
   const sh=r.querySelector('.sheet');

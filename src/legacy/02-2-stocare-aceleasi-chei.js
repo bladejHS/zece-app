@@ -28,7 +28,7 @@ const K={lifts:'zece:lifts',weights:'zece:weights',runs:'zece:runs',wlog:'zece:w
 const S={tab:'azi',lifts:{},weights:{},runs:[],wlog:{},cyc:{},runPlan:{},prof:{},mlog:{},hist:[],sess:null,sound:true,
   aiKey:'',aiChat:null,aiEffort:'medium',aiUsed:0,water:{},body:{},theme:'tactical',bg:'anthr',mode:'dark',fx:'normal',onb:false,seenAch:null,seenLvl:null,
   journal:{},tech:{},voice:true,recapSeen:0,photos:undefined,mSel:null,phPose:'fata',
-  mplan:{},shop:{},mf:{port:false,cold:false},intro:'full',nTab:'azi',planDay:0,shopDays:7,motion:'auto',motionAsked:false,
+  mplan:{},shop:{},mf:{},intro:'full',nTab:'azi',planDay:0,shopDays:7,motion:'auto',motionAsked:false,
   ptests:[],tmlog:[],twAttr:'str',twRange:90,ciOpen:null,adj:{},strava:{},ext:[],stq:[],mWin:7,shotN:1,shotF:'all',shotOpen:null,
   exNote:{},rest:null,fxOpen:false,fxDir:'',summary:null,planW:null,openDay:-1,progTab:'ov',prEx:null,wRange:90,runKind:'ez',
   dash:{},ach:null,notif:undefined,notifCfg:{},exFav:[],exCustom:[],rng:'m',trTab:'plan',loaded:false};

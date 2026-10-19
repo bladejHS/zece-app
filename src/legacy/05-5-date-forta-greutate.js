@@ -98,11 +98,7 @@ function activity(){
 }
 const mlogDay=k=>((S.mlog||{})[k])||[];
 const dayTotals=k=>mlogDay(k).reduce((a,m)=>({k:a.k+(+m.k||0),p:a.p+(+m.p||0),c:a.c+(+m.c||0),g:a.g+(+m.g||0)}),{k:0,p:0,c:0,g:0});
-/* ---------- nutriție: baza de rețete, metabolism, necesar măsurat, faze, ținte ---------- */
-/* rețetele și alimentele (MFOOD, MEALS) sunt în 21c-mese.js */
-const MSLOTS=[['Mic dejun',0,.25,'sun'],['Gustare 1',3,.10,'leaf'],['Prânz',1,.275,'flame'],['Gustare 2',3,.10,'leaf'],['Cină',2,.275,'star']];
-const FCAT=[['Proteine',/albuș|ou întreg|somon|cottage|cod|iaurt|porc|curcan|pui|pudră|skyr|tofu|ton|vită/],['Carbohidrați',/rondele|cartof|couscous|ovăz|linte|lipie|mămăligă|orez|paste|pâine|quinoa/],
-  ['Legume',/ardei|broccoli|castrave|ciuperci|conopidă|dovlecel|fasole|morcov|roșii|salată|spanac|varză/],['Fructe',/banană|fructe|mere/],['Grăsimi și semințe',/avocado|migdale|nuci|semințe|ulei|arahide/]];
+/* ---------- nutriție: obiectivul, metabolism, necesar măsurat, faze, ținte ---------- */
 const EQS=[['mifflin','Mifflin-St Jeor','greutate'],['harris','Harris-Benedict','greutate'],['cunningham','Cunningham','masă slabă'],['katch','Katch-McArdle','masă slabă']];
 /* v17: procentul de grăsime: cel setat, altfel ultima estimare US Navy din măsurători, altfel din IMC (Deurenberg).
    Înainte era 18% fix: la o greutate mare masa slabă ieșea mult prea mare și pragul de disponibilitate energetică urca ținta. */
@@ -112,8 +108,13 @@ function bfOf(w){ const P=prof(); if(+P.bf) return clamp(+P.bf,3,60);
 function bmrAll(w){ const P=prof(), f=P.sex==='f', F=w*(1-bfOf(w)/100);
   return {ffm:F,mifflin:Math.round(10*w+6.25*P.h-5*P.age+(f?-161:5)),harris:Math.round(f?447.593+9.247*w+3.098*P.h-4.33*P.age:88.362+13.397*w+4.799*P.h-5.677*P.age),
     cunningham:Math.round(500+22*F),katch:Math.round(370+21.6*F)}; }
-/* v16: deficitul implicit e un ritm de ~0,5% din greutate pe săptămână (7700 kcal/kg), nu 600 kcal fix pentru oricine */
-const autoDef=w=>Math.round(w*.005*7700/7/50)*50;
+/* v18: obiectivul, după cărțile tale (Fat Loss Forever și The Complete Contest Prep Guide — Norton & Baker, ghidul de nutriție Y3T, Chris Aceto):
+   cut 0,6% din greutate pe săptămână (intervalul 0,4–0,8%, maxim 1%) și 2,4 g proteină/kg masă slabă;
+   recompoziție −0,25% pe săptămână și 2,6 g/kg masă slabă; lean bulk +0,25% pe săptămână și 2,0 g/kg masă slabă.
+   Proteina nu coboară sub 1,6 g/kg corp. Deficitul (sau surplusul) implicit vine din ritm, la 7700 kcal/kg. */
+const GOALS={cut:{l:'Cut',rate:-.006,pk:2.4},recomp:{l:'Recompoziție',rate:-.0025,pk:2.6},bulk:{l:'Lean bulk',rate:.0025,pk:2}};
+const goalMode=()=>GOALS[prof().goalMode]?prof().goalMode:'cut';
+const autoDef=w=>Math.round(-w*GOALS[goalMode()].rate*7700/7/50)*50;
 /* energia cheltuită la antrenamentul zilei d din săptămâna w, kcal (MET net × 3,5 × kg / 200 pe minut) + activitățile notate în ziua k */
 const NET_MET={ez1:6,ez2:6,thr:8.5,lng:6.5};
 function exKcalOf(w,d,k,kg){ const b=PLAN[d]; let m=0;
@@ -124,9 +125,12 @@ function exKcalOf(w,d,k,kg){ const b=PLAN[d]; let m=0;
   (S.ext||[]).filter(x=>x.date===k&&!x.dup).forEach(x=>{ m+=(+x.min||0)*((+x.rpe||0)>=7?8:5); });
   return Math.round(m*.0175*kg); }
 /* pauzele de dietă din programul original: săptămânile 1–2 ale ciclului în deficit, 3–4 la menținere */
-function nPhase(){ if(prof().dietBreak===false) return {cut:true,label:'Deficit',sub:'deficit continuu'};
+function nPhase(){ const g=goalMode();
+  if(g==='bulk') return {cut:false,goal:g,label:'Lean bulk',sub:'surplus mic, ~0,25% din greutate pe săptămână'};
+  if(g==='recomp') return {cut:false,goal:g,label:'Recompoziție',sub:'deficit mic, proteină mare'};
+  if(prof().dietBreak===false) return {cut:true,goal:g,label:'Cut',sub:'deficit continuu'};
   const nx=nextDay(), w=nx?nx.w:0;
-  return w<2?{cut:true,label:'Deficit',sub:'săptămâna '+(w+1)+' din 2 de deficit'}:{cut:false,label:'Menținere',sub:'săptămâna '+(w-1)+' din 2 de menținere'}; }
+  return w<2?{cut:true,goal:g,label:'Cut',sub:'săptămâna '+(w+1)+' din 2 de deficit'}:{cut:false,goal:g,brk:true,label:'Pauză de dietă',sub:'săptămâna '+(w-1)+' din 2 la menținere'}; }
 /* v16: metabolismul declarat (unii oameni ard mai puțin decât spun formulele) */
 const METAB=[[1,'Normal'],[.9,'Lent (−10%)'],[.82,'Foarte lent (−18%)']];
 const metabF=()=>{ const v=+prof().metab; return METAB.some(m=>m[0]===v)?v:1; };
@@ -148,7 +152,7 @@ async function nAdaptRun(){
   const pred=days.reduce((a,d)=>{ const e=ate(d); return a+((e!=null?e:L[d].k)-L[d].t); },0)/days.length*7/7700, err=W.rate-pred;
   let step=Math.round(-err*7700/7*.5/10)*10; step=clamp(step,-200,200); if(Math.abs(step)<30) step=0;
   const c=clamp((A.c||0)+step,-900,500), r2=v=>Math.round(v*100)/100;
-  await save('prof',Object.assign({},S.prof||{},{nAdj:{c,d:tk,r:r2(W.rate),pred:r2(pred),step,n:W.n,w0:r2(W.w0),w1:r2(W.w1),eat:eaten.length>=4?Math.round(eaten.reduce((a,x)=>a+x,0)/eaten.length):null}})); STC=null; }
+  await save('prof',Object.assign({},S.prof||{},{nAdj:{c,d:tk,r:r2(W.rate),pred:r2(pred),step,n:W.n,h:(A.h||[]).concat([r2(W.rate)]).slice(-4),w0:r2(W.w0),w1:r2(W.w1),eat:eaten.length>=4?Math.round(eaten.reduce((a,x)=>a+x,0)/eaten.length):null}})); STC=null; }
 /* media cântăririlor din ultimele 7 zile față de cele 7 dinainte (cel puțin 3 în fiecare), în kg pe săptămână */
 function wWeeks(tk){ tk=tk||todayKey(); const a=wList(), m=dayShift(tk,-7), b1=a.filter(x=>x.d>m&&x.d<=tk), b0=a.filter(x=>x.d>dayShift(tk,-14)&&x.d<=m);
   if(b1.length<3||b0.length<3) return null;
@@ -175,70 +179,20 @@ function targets(day){
      antrenamentul nu mai ridică ținta zilei peste deficit. Energia de la antrenament se scalează cu metabolismul și cu corecția din cântar. */
   const sc=clamp(tdee/est,.5,1), m0=mondayOf(k);
   const exWk=Math.round(Array.from({length:7},(_,i)=>{ const kk=dayShift(m0,i), x=kk===k?dt:nutriDay(kk); return exKcalOf(x.w,x.d,kk,w); }).reduce((a,x)=>a+x,0)/7*metabF()*sc);
-  const def=ph.cut?(+P.def||autoDef(w)):0, goal=Math.max(Math.round(bmrR*1.1/50)*50,Math.round((tdee-def)/50)*50);
-  const wkFloor=ph.cut?Math.ceil(Math.max(COACH.KCAL_FLOOR[sex],Math.round(tdee*(1-NUTRI.MAX_DEFICIT)),Math.round(NUTRI.EA_MIN[sex]*ffm+exWk))/50)*50:0;
+  const def=ph.goal==='cut'?(ph.cut?(+P.def||autoDef(w)):0):autoDef(w), goal=Math.max(Math.round(bmrR*1.1/50)*50,Math.round((tdee-def)/50)*50);
+  const wkFloor=def>0?Math.ceil(Math.max(COACH.KCAL_FLOOR[sex],Math.round(tdee*(1-NUTRI.MAX_DEFICIT)),Math.round(NUTRI.EA_MIN[sex]*ffm+exWk))/50)*50:0;
   const auto=Math.max(goal,wkFloor), kcal=+P.kcalT||auto;
-  /* proteina: 2 g/kg din greutatea-țintă, 2,2 g/kg în săptămânile de deficit (protejează masa slabă) */
-  const p=+P.protT||Math.round((P.goalW||w)*(ph.cut?2.2:2)); let f=Math.round(w*.7), c=Math.round((kcal-p*4-f*9)/4);
+  /* proteina pe masa slabă, după obiectiv (Fat Loss Forever, tabelul 1), cel puțin 1,6 g/kg corp */
+  const p=+P.protT||Math.max(Math.round(GOALS[ph.goal].pk*ffm),Math.round(1.6*w)); let f=Math.round(w*.7), c=Math.round((kcal-p*4-f*9)/4);
   if(c<80){ f=Math.max(Math.round(w*.6),Math.round((kcal-p*4-320)/9)); c=Math.max(0,Math.round((kcal-p*4-f*9)/4)); }
   const exKcal=Math.round(exKcalOf(dt.w,dt.d,k,w)*metabF()*sc);
-  const per=NUTRI.periodize(Object.assign({base:{kcal,p,c,f},dayType:dt.type,sex,weightKg:w,tdee,cut:ph.cut,weekMean:NUTRI_MEAN(),ffmKg:ffm,exerciseKcal:exKcal,weekly:true},ci));
+  const per=NUTRI.periodize(Object.assign({base:{kcal,p,c,f},dayType:dt.type,sex,weightKg:w,tdee,cut:def>0,weekMean:NUTRI_MEAN(),ffmKg:ffm,exerciseKcal:exKcal,weekly:true},ci));
   const hyd=NUTRI.hydration({weightKg:w,minutes:dt.minutes+dt.extMin,intensity:dt.intensity});
-  return {kcal:per.kcal,p:per.p,f:per.f,c:per.c,water:+P.waterT||hyd.totalMl,hyd,day:dt,per,base:{kcal,p,c,f},bmr,tdee,est,measured:useM,ms,auto,manual:!!P.kcalT,phase:ph,eq,def,A,autoDef:autoDef(w),exKcal,ffm:Math.round(ffm),adj,metab:metabF(),bmrR,exWk,wkFloor,raised:!P.kcalT&&wkFloor>goal,bf:Math.round(bfOf(w))};
+  return {kcal:per.kcal,p:per.p,f:per.f,c:per.c,water:+P.waterT||hyd.totalMl,hyd,day:dt,per,base:{kcal,p,c,f},bmr,tdee,est,measured:useM,ms,auto,manual:!!P.kcalT,phase:ph,eq,def,A,autoDef:autoDef(w),exKcal,ffm:Math.round(ffm),adj,metab:metabF(),bmrR,exWk,wkFloor,raised:!P.kcalT&&wkFloor>goal,bf:Math.round(bfOf(w)),goal:ph.goal,rateT:Math.round(-(P.kcalT?0:def)*7/7700*100)/100,w};
 }
 /* v17: ținta medie a săptămânii (luni–duminică): zilele intense primesc mai mult, cele de odihnă mai puțin, media rămâne baza */
 function weekTargets(k){ const m0=mondayOf(k||todayKey()), a=Array.from({length:7},(_,i)=>{ const kk=dayShift(m0,i), t=targets(kk); return {k:kk,kcal:t.kcal,type:t.day.type}; });
   return {days:a,avg:Math.round(a.reduce((s,x)=>s+x.kcal,0)/7)}; }
-/* planul de mese: pentru fiecare masă, rețetele cele mai apropiate de ținta ei; aceeași zi dă același plan până îl schimbi */
-const mealOK=m=>(!S.mf.port||m[6]===1)&&(!S.mf.cold||m[7]===1)&&!mealHasEx(m);
-function seedRand(str){ let h=2166136261>>>0; for(let i=0;i<str.length;i++){ h^=str.charCodeAt(i); h=Math.imul(h,16777619)>>>0; }
-  return ()=>{ h^=h<<13; h>>>=0; h^=h>>>17; h^=h<<5; h>>>=0; return h/4294967296; }; }
-function slotCands(si,tg){ const [,cat,share]=MSLOTS[si], kT=tg.kcal*share, pT=tg.p*share;
-  let L=MEALS.map((m,i)=>({m,i})).filter(x=>x.m[0]===cat&&mealOK(x.m)).map(x=>Object.assign(x,{miss:mealMiss(x.m)}));
-  /* cu „doar ce am acasă”: rețetele fără alimente lipsă; dacă sunt sub 3, și cele cu unul singur lipsă */
-  if(mealHave()){ const z=L.filter(x=>x.miss===0); L=z.length>=3?z:L.filter(x=>x.miss<=1).length?L.filter(x=>x.miss<=1):L; }
-  return L.map(x=>Object.assign(x,{sc:Math.abs(x.m[2]-kT)/kT+Math.max(0,pT-x.m[3])/pT*.6+x.miss*.5})).sort((a,b)=>a.sc-b.sc); }
-/* încearcă 40 de combinații din cele mai potrivite rețete pe fiecare masă și o păstrează pe cea mai apropiată de totalul zilei */
-const PLC={};
-/* v17: fiecare zi își folosește ținta ei (zilele intense mai mult, cele de odihnă mai puțin) */
-/* v17: varietate. Pentru fiecare rețetă: sursele de proteină (grupate: lactate, ouă, pește), fructele și numele de bază (fără mărime).
-   O zi nu repetă aceeași proteină (whey cel mult de 2 ori, lactatele cel mult de 2 ori), nici aceeași rețetă în alte mărimi;
-   iar rețetele din ultimele 2 zile și proteina de ieri de la prânz și cină sunt depunctate, ca săptămâna să fie diversă. */
-let MINF=null;
-function mealInfo(){ if(MINF) return MINF; const PR=FCAT[0][1], FR=(FCAT.find(c=>c[0]==='Fructe')||[0,/^$/])[1], ST=FCAT[1][1], VG=(FCAT.find(c=>c[0]==='Legume')||[0,/^$/])[1];
-  const grp=n=>/skyr|iaurt|cottage/.test(n)?'lactate':/albuș|ou întreg/.test(n)?'ouă':/cod|somon|ton/.test(n)?'pește':n;
-  MINF=MEALS.map(m=>{ const pr=m[8].map(([f])=>MFOOD[f]||'').filter(n=>PR.test(n));
-    const nm=m[8].map(([f])=>MFOOD[f]||'');
-    return {pr,gr:[...new Set(pr.map(grp))],fr:nm.filter(n=>FR.test(n)),st:nm.filter(n=>ST.test(n)),vg:nm.filter(n=>VG.test(n)),base:m[1].replace(/ · porție.*/,''),ty:m[1].split(' ')[0].toLowerCase()}; });
-  return MINF; }
-function divPen(pick,hist){ const I=mealInfo(), food={}, grp={}, fr={}, st={}, vg={}, base={}; let pen=0;
-  pick.forEach(i=>{ if(i==null) return; const x=I[i]; x.pr.forEach(n=>{ food[n]=(food[n]||0)+1; }); x.gr.forEach(g=>{ grp[g]=(grp[g]||0)+1; }); x.fr.forEach(n=>{ fr[n]=(fr[n]||0)+1; }); x.st.forEach(n=>{ st[n]=(st[n]||0)+1; }); x.vg.forEach(n=>{ vg[n]=(vg[n]||0)+1; }); base[x.base]=(base[x.base]||0)+1; });
-  /* garnitura și legumele: nu aceleași la prânz și la cină */
-  Object.keys(st).forEach(n=>{ pen+=Math.max(0,st[n]-1)*.12; }); Object.keys(vg).forEach(n=>{ pen+=Math.max(0,vg[n]-1)*.06; });
-  Object.keys(food).forEach(n=>{ pen+=Math.max(0,food[n]-(/whey/.test(n)?2:1))*.3; });
-  Object.keys(grp).forEach(g=>{ if(g==='lactate') pen+=Math.max(0,grp[g]-2)*.3; });
-  Object.keys(fr).forEach(n=>{ pen+=Math.max(0,fr[n]-1)*.08; });
-  Object.keys(base).forEach(b=>{ pen+=Math.max(0,base[b]-1)*.3; });
-  hist.forEach((h,d)=>{ const w=d===0?1:.6, hb=new Set(h.filter(i=>i!=null&&I[i]).map(i=>I[i].base));
-    pick.forEach((i,si)=>{ if(i==null) return; if(hb.has(I[i].base)) pen+=.12*w;
-      /* micul dejun și gustările: nu același fel (sandviș, skyr, omletă, ovăz…) ca ieri la aceeași masă */
-      const j=h[si]; if((si===0||si===1||si===3)&&j!=null&&I[j]&&I[j].ty===I[i].ty) pen+=(si===0?.12:.05)*w; });
-    if(d===0) [2,4].forEach(si=>{ const a=pick[si], b=h[si]; if(a!=null&&b!=null&&I[a]&&I[b]&&I[a].gr.some(g=>I[b].gr.indexOf(g)>=0)) pen+=.08; }); });
-  return pen; }
-/* planul zilei: din cele mai potrivite rețete pe fiecare masă, combinația cea mai apropiată de țintă și cea mai variată */
-function planFor(k,tg){ tg=tg||targets(k); const sv=(S.mplan||{})[k]||{}, tk=todayKey(), hist=[];
-  for(let d=1;d<=2;d++){ const dk=dayShift(k,-d), s2=(S.mplan||{})[dk]; if(s2&&s2.m) hist.push(s2.m); else if(dk>=tk) hist.push(planFor(dk)); }
-  const key=k+'|'+(sv.s||0)+'|'+(S.mf.port?1:0)+(S.mf.cold?1:0)+((S.mf.ex||[]).join(','))+'|'+(mealHave()?(S.mf.have||[]).join(','):'')+'|'+tg.kcal+'|'+tg.p+'|'+JSON.stringify(sv.m||[])+'|'+JSON.stringify(hist);
-  if(PLC[key]) return PLC[key].slice();
-  const rnd=seedRand(key), cands=MSLOTS.map((_,si)=>sv.m&&sv.m[si]!=null&&MEALS[sv.m[si]]?[sv.m[si]]:slotCands(si,tg).slice(0,14).map(x=>x.i));
-  let best=null,bs=Infinity;
-  for(let t=0;t<160;t++){ const used=new Set(cands.filter(c=>c.length===1).map(c=>c[0]));
-    const pick=cands.map(c=>{ if(c.length===1) return c[0]; const free=c.filter(i=>!used.has(i)); if(!free.length) return null; const i=free[Math.floor(rnd()*free.length)]; used.add(i); return i; });
-    const tot=pick.reduce((a,i)=>i==null?a:{k:a.k+MEALS[i][2],p:a.p+MEALS[i][3]},{k:0,p:0}), sc=Math.abs(tot.k-tg.kcal)/tg.kcal+Math.max(0,tg.p-tot.p)/tg.p*.5+divPen(pick,hist);
-    if(sc<bs){ bs=sc; best=pick; } }
-  PLC[key]=best; return best.slice(); }
-async function planSet(k,si,mi){ const mp=Object.assign({},S.mplan), cur=planFor(k), sv=Object.assign({},mp[k]||{}); sv.m=cur.slice(); if(si!=null) sv.m[si]=mi; mp[k]=sv;
-  Object.keys(mp).forEach(d=>{ if(d<dayShift(todayKey(),-30)) delete mp[d]; }); await save('mplan',mp); }
 const fmtG=g=>g>=1000?num(g/1000,2)+' kg':Math.round(g)+' g';
 async function addMeal(m,date){ const k=date||todayKey(), ml=Object.assign({},S.mlog); ml[k]=(ml[k]||[]).concat([m]); await save('mlog',ml); }
 const waterOf=k=>+((S.water||{})[k])||0;

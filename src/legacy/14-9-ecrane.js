@@ -705,9 +705,9 @@ function protMeals(k){ const R=refW(), thr=clamp(Math.round(.4*R),25,50), ml=mlo
 /* NUTRIȚIE */
 const SC={img:null,data:null,hint:'',busy:false,res:null,err:null};
 function viewNutri(){
-  const tabs=[['azi','Azi','flame'],['plan','Mese','bowl'],['shots','Shot-uri','glass'],['shop','Listă','cart'],['nec','Necesar','calc']];
+  const tabs=[['azi','Azi','flame'],['tac','Tactică','target'],['plan','Mese','bowl'],['shots','Shot-uri','glass'],['shop','Listă','cart'],['nec','Necesar','calc']];
   if(!nutriOk()) return nutriGate();
-  const body=S.nTab==='plan'?nutriPlan():S.nTab==='shop'?nutriShop():S.nTab==='nec'?nutriNeed():S.nTab==='shots'?nutriShots():nutriToday();
+  const body=S.nTab==='tac'?nutriTactic():S.nTab==='plan'?nutriPlan():S.nTab==='shop'?nutriShop():S.nTab==='nec'?nutriNeed():S.nTab==='shots'?nutriShots():nutriToday();
   return `<div class="seg scr" style="margin-top:6px">${tabs.map(t=>`<button class="${S.nTab===t[0]?'on':''}" data-a="nTab" data-k="${t[0]}">${ic(t[2])} ${t[1]}</button>`).join('')}</div>${body}`;
 }
 /* ---------- Shot-uri: rețete scurte, cu nivelul real de dovezi pentru fiecare ---------- */
@@ -864,61 +864,56 @@ function nutriToday(){
     <div class="note">Cum se calculează țintele vezi în <b>Necesar</b>. Contează media pe săptămână și trendul greutății, nu o zi anume.</div></div>`;
 }
 function nutriPlan(){
-  const tk=todayKey(), off=S.planDay||0, k=dayShift(tk,off), tg=targets(k), plan=planFor(k,tg), eaten=mlogDay(k);
+  const tk=todayKey(), off=S.planDay||0, k=dayShift(tk,off), tg=targets(k), D=dayPlan(k,tg), eaten=mlogDay(k);
   const days=Array.from({length:daysBetween(tk,dayShift(mondayOf(tk),13))+1},(_,i)=>{ const dk=dayShift(tk,i); return `<button class="chip ${i===off?'on':''}" data-a="planDay" data-i="${i}">${i===0?'Azi':i===1?'Mâine':DAYS[(parseKey(dk).getDay()+6)%7]+' '+(+dk.slice(8))}</button>`; }).join('');
-  const tot={k:0,p:0,c:0,g:0};
-  const cards=MSLOTS.map(([name,,share,icn],si)=>{ const mi=plan[si], m=mi!=null?MEALS[mi]:null, sk=Math.round(tg.kcal*share);
-    if(m){ tot.k+=m[2]; tot.p+=m[3]; tot.c+=m[4]; tot.g+=m[5]; }
-    const done=m&&eaten.some(x=>x.mi===mi&&x.si===si);
-    return `<div class="card mcard ${done?'eaten':''}"><div class="row"><div class="eyebrow sp">${ic(icn)} ${name} · țintă ~${sk} kcal</div>${done?`<span class="tag rest">${ic('check')} mâncat</span>`:''}</div>
-      ${m?`<div class="meal-t">${esc(m[1])}</div>
-        <div class="tags"><span class="tag lift">${m[2]} kcal</span><span class="tag run">P ${m[3]} g</span><span class="tag">C ${m[4]} g</span><span class="tag">G ${m[5]} g</span>${m[6]?'<span class="tag">portabil</span>':''}${m[7]?'<span class="tag">fără încălzire</span>':''}</div>
-        <div class="ingr">${m[8].map(([f,g])=>{ const h=mealHave(), lip=h&&!h.has(f)&&!/^ulei/.test(MFOOD[f]||''); return `<span${lip?' class="bad" title="nu ai acasă"':''}><b>${g} g</b> ${esc(MFOOD[f]||'?')}${lip?' · de cumpărat':''}</span>`; }).join('')}</div>
-        <div class="inrow" style="flex-wrap:wrap">${off===0?`<button class="btn ${done?'ghost':'pri'} sm" data-a="mealEat" data-i="${si}" ${done?'disabled':''}>${ic('check')} ${done?'Notat':'Am mâncat'}</button>`:''}
-          <button class="btn ghost sm" data-a="mealRe" data-i="${si}">${ic('refresh')} Altă variantă</button><button class="btn ghost sm" data-a="mealAll" data-i="${si}">Toate variantele</button></div>`
-      :`<div class="note">Nicio rețetă pentru filtrele alese.</div>`}</div>`; }).join('');
+  const pct=v=>(v>=1?'+':'−')+Math.abs(Math.round((v-1)*100))+'%';
+  const cards=D.meals.map((m,si)=>{ const done=eaten.some(x=>x.pl===D.kind+si), cr=m.it.find(x=>x.f==='creatina');
+    return `<div class="card mcard ${done?'eaten':''}"><div class="row"><div class="eyebrow sp">${ic(m.icn)} ${esc(m.n)}</div>${done?`<span class="tag rest">${ic('check')} mâncat</span>`:''}</div>
+      ${m.note?`<div class="xs mu" style="margin-top:4px">${esc(m.note)}</div>`:''}
+      <div class="tags" style="margin-top:8px"><span class="tag lift">${m.k} kcal</span><span class="tag run">P ${m.p} g</span><span class="tag">C ${m.c} g</span><span class="tag">G ${m.g} g</span></div>
+      <div class="ingr">${m.it.map(x=>`<span><b>${mfQty(x.f,x.q)}</b> ${esc(MFD[x.f][0])}${x.opt?' · opțional':''}${!D.orig&&x.q!==x.q0?` <small class="mu2">(plan: ${mfQty(x.f,x.q0)})</small>`:''}</span>`).join('')}</div>
+      ${cr?`<div class="xs mu2" style="margin-top:6px">Creatina: 3–5 g pe zi ajung pentru efect (vezi fila Știință); în plan scrie ${mfQty('creatina',cr.q)}.</div>`:''}
+      ${off===0?`<div class="inrow"><button class="btn ${done?'ghost':'pri'} sm" data-a="mealEat" data-i="${si}" ${done?'disabled':''}>${ic('check')} ${done?'Notat':'Am mâncat'}</button></div>`:''}</div>`; }).join('');
   const bar=(l,v,t,c)=>`<div class="kpi"><div class="k">${l}</div><div class="v" style="font-size:20px">${Math.round(v)}<small>/${t}</small></div><div class="bar" style="margin-top:6px;height:5px"><i style="width:${(clamp(t?v/t:0,0,1.2)/1.2*100).toFixed(0)}%;background:${c}"></i></div></div>`;
-  return `<div class="card"><div class="row"><div class="eyebrow sp">${ic('bowl')} Planul de mese</div><span class="tag ${tg.phase.cut?'lift':'rest'}">${tg.phase.label}</span></div>
+  const dK=D.tot.k-tg.kcal;
+  return `<div class="card"><div class="row"><div class="eyebrow sp">${ic('bowl')} ${esc(D.name)}</div><span class="tag ${tg.phase.cut?'lift':'rest'}">${esc(tg.phase.label)}</span></div>
     <div class="scrollx" style="margin-top:12px">${days}</div>
-    <div class="chips" style="margin-top:10px"><button class="chip ${S.mf.port?'on':''}" data-a="mFilter" data-k="port">Portabil</button><button class="chip ${S.mf.cold?'on':''}" data-a="mFilter" data-k="cold">Fără încălzire</button>
-      <button class="chip" data-a="planNew">${ic('refresh')} Altă zi întreagă</button><button class="chip" data-a="fprefOpen">${ic('sliders')} Alimente${(S.mf.ex||[]).length?' · '+(S.mf.ex||[]).length+' scoase':''}</button>
-      <button class="chip ${S.mf.useHave&&(S.mf.have||[]).length?'on':''}" data-a="fprefOpen" data-k="have">${ic('cart')} Am acasă${(S.mf.have||[]).length?' · '+(S.mf.have||[]).length:''}</button></div>
-    ${S.mf.useHave&&(S.mf.have||[]).length?`<div class="xs mu" style="margin-top:8px">Rețetele vin din cele ${(S.mf.have||[]).length} alimente pe care le ai acasă${plan.some(mi=>mi!=null&&mealMiss(MEALS[mi]))?'; unde nu ajung, e un singur aliment de cumpărat':''}.</div>`:''}
-    <div class="kpis" style="grid-template-columns:repeat(4,1fr)">${bar('kcal',tot.k,tg.kcal,TH().ac)}${bar('Proteină',tot.p,tg.p,COL().run)}${bar('Carbo',tot.c,tg.c,COL().warn)}${bar('Grăsimi',tot.g,tg.f,'#B3AECB')}</div>
-    ${tg.kcal-tot.k>150?`<div class="easy" style="margin-top:12px">${ic('info')} Rețetele ajung la ${tot.k} kcal, cu ~${tg.kcal-tot.k} sub țintă. Adaugă o gustare în plus sau o porție mai mare de carbohidrați la prânz ori cină.</div>`:''}
-    <div class="note">Rețetele vin din baza ta de <b>${MEALS.length}</b> variante; din 40 de combinații o aleg pe cea mai apropiată de ținta zilei. „Am mâncat” o notează direct în jurnalul de azi.</div></div>
+    <div class="seg" role="tablist" style="margin-top:10px"><button class="${D.orig?'':'on'}" data-a="mfOrig" data-k="tinta" role="tab" aria-selected="${!D.orig}">Ajustat la țintă</button><button class="${D.orig?'on':''}" data-a="mfOrig" data-k="orig" role="tab" aria-selected="${D.orig}">Gramaje originale</button></div>
+    <div class="kpis" style="grid-template-columns:repeat(4,1fr)">${bar('kcal',D.tot.k,tg.kcal,TH().ac)}${bar('Proteină',D.tot.p,tg.p,COL().run)}<div class="kpi"><div class="k">Carbo</div><div class="v" style="font-size:20px">${D.tot.c}<small>g</small></div></div><div class="kpi"><div class="k">Grăsimi</div><div class="v" style="font-size:20px">${D.tot.g}<small>g</small></div></div></div>
+    ${D.orig?`<div class="${Math.abs(dK)>150?'easy':'note'}" style="margin-top:12px">${ic('info')} Planul original are <b>${D.tot.k} kcal</b>, ${dK>0?'cu '+dK+' peste':'cu '+(-dK)+' sub'} ținta zilei (${tg.kcal} kcal, ${esc(GOALS[tg.goal].l.toLowerCase())}). Pe „Ajustat la țintă” aceleași mese se potrivesc singure.</div>`
+      :`<div class="note">Aceleași mese și alimente ca în planul tău (${D.base.k} kcal pe foaie). Pentru ținta zilei: carbohidrați <b>${pct(D.sc)}</b>, grăsimi <b>${pct(D.sf)}</b>, proteină <b>${pct(D.sp)}</b>; legumele și suplimentele rămân, iar împărțirea dintre carbohidrați și grăsimi e cea din planul tău. Lângă fiecare aliment schimbat vezi cât scrie în plan.</div>`}
+    <div class="xs mu" style="margin-top:8px">${D.kind==='r'?'Zi de odihnă în planul hibrid → planul de odihnă.':'Zi cu antrenament în planul hibrid → planul de antrenament (pre, intra și post-workout).'} Orezul și cartofii se cântăresc fierți, carnea crudă.</div></div>
     ${cards}`;
 }
-const FOOD_CAT=n=>{ const c=FCAT.find(([,re])=>re.test(n)); return c?c[0]:'Altele'; };
-/* lista de cumpărături: alimentele din planul de mese al perioadei alese, pe categorii */
-const SHOP_CAT={'Proteine':['dumbbell','--ac'],'Carbohidrați':['bowl','--warn'],'Legume':['leaf','--ok'],'Fructe':['sun','--vio'],'Grăsimi și semințe':['drop','--run'],'Altele':['grid','--mu']};
+/* lista de cumpărături: alimentele din cele două planuri, pe zilele perioadei alese (antrenament sau odihnă), cu cantitățile zilei */
+const SHOP_CAT={'Proteine':['dumbbell','--ac'],'Carbohidrați':['bowl','--warn'],'Fructe':['sun','--vio'],'Legume':['leaf','--ok'],'Grăsimi':['drop','--run'],'Suplimente':['bolt','--mu']};
+const SHOP_ORDER=Object.keys(SHOP_CAT);
 const SHOP_RANGE=[[1,'Azi'],[7,'Săptămâna asta'],[14,'Săptămâna viitoare']];
 function shopData(){
-  const n=[1,7,14].indexOf(S.shopDays)>=0?S.shopDays:7, tk=todayKey(), m0=mondayOf(tk), agg={}, cnt={}, hv=mealHave();
+  const n=[1,7,14].indexOf(S.shopDays)>=0?S.shopDays:7, tk=todayKey(), m0=mondayOf(tk), agg={}, cnt={};
   /* azi · săptămâna asta (de azi până duminică) · săptămâna viitoare (luni–duminică) */
   const from=n===14?dayShift(m0,7):tk, to=n===1?tk:n===14?dayShift(m0,13):dayShift(m0,6), ks=[]; for(let k=from;k<=to;k=dayShift(k,1)) ks.push(k);
-  let meals=0;
-  ks.forEach(k=>planFor(k).forEach(mi=>{ if(mi==null) return; meals++; MEALS[mi][8].forEach(([f,g])=>{ agg[f]=(agg[f]||0)+g; cnt[f]=(cnt[f]||0)+1; }); }));
-  const groups={}; Object.keys(agg).forEach(f=>{ const nm=MFOOD[f]||'?', c=FOOD_CAT(nm); (groups[c]=groups[c]||[]).push({nm,g:agg[f],n:cnt[f],on:!!S.shop[nm],have:!!(hv&&hv.has(+f))}); });
+  let meals=0, tr=0;
+  ks.forEach(k=>{ const D=dayPlan(k); if(D.kind==='t') tr++; D.meals.forEach(m=>{ meals++; m.it.forEach(x=>{ agg[x.f]=(agg[x.f]||0)+x.q; cnt[x.f]=(cnt[x.f]||0)+1; }); }); });
+  const groups={}; Object.keys(agg).forEach(f=>{ const nm=MFD[f][0], c=MFD[f][6]; (groups[c]=groups[c]||[]).push({f,nm,q:agg[f],g:mfG(f,agg[f]),n:cnt[f],on:!!S.shop[nm]}); });
   /* ce mai ai de luat sus, cele bifate jos; în fiecare parte, cantitățile mari întâi */
   Object.values(groups).forEach(a=>a.sort((x,y)=>(x.on-y.on)||(y.g-x.g)));
-  const order=FCAT.map(x=>x[0]).concat(['Altele']).filter(c=>groups[c]), items=[].concat(...order.map(c=>groups[c]));
-  return {n,ks,meals,groups,order,items,all:items.length,got:items.filter(x=>x.on).length,home:items.filter(x=>x.have).length,
-    left:items.filter(x=>!x.on).reduce((a,x)=>a+x.g,0)}; }
-const shopHint=it=>/albuș/.test(it.nm)?' · ~'+Math.round(it.g/33)+' ouă':/ou întreg/.test(it.nm)?' · ~'+Math.round(it.g/55)+' ouă':/whey/.test(it.nm)?' · ~'+Math.round(it.g/30)+' doze':'';
+  const order=SHOP_ORDER.filter(c=>groups[c]), items=[].concat(...order.map(c=>groups[c]));
+  return {n,ks,meals,tr,groups,order,items,all:items.length,got:items.filter(x=>x.on).length,left:items.filter(x=>!x.on).reduce((a,x)=>a+x.g,0)}; }
+const shopQty=it=>{ const u=MFD[it.f][7]; return u==='buc'?it.q+' buc':u==='felie'?it.q+(it.q===1?' felie':' felii'):u==='ml'?(it.q>=1000?num(it.q/1000,2)+' L':it.q+' ml'):fmtG(it.q); };
+const shopHint=it=>it.f==='albus'?' · ~'+Math.round(it.q/33)+' ouă sau '+Math.ceil(it.q/500)+' cutii de 500 ml':it.f==='whey'?' · ~'+Math.round(it.q/30)+' doze':it.f==='rondea'||it.f==='toast'?' · ~'+fmtG(it.g):it.f==='legume'?' · opționale':it.f==='orez'?' · ~'+fmtG(Math.round(it.g/2.6/5)*5)+' crud':'';
 function nutriShop(){
   const D=shopData(), {n,ks}=D, tk=todayKey(), f=D.all?D.got/D.all:0;
-  setTimeout(()=>planLock(ks),0);
   const when=ks.length>1?fmtDay(ks[0])+' – '+fmtDay(ks[ks.length-1]):ks[0]===tk?'azi, '+fmtDay(tk):fmtDay(ks[0]);
   const hero=`<div class="card sl-hero">
     <div class="sl-top"><div class="sp"><div class="eyebrow">${ic('cart')} Lista de cumpărături</div>
         <div class="sl-ttl">${esc(SHOP_RANGE.find(x=>x[0]===n)[1])}</div>
-        <div class="sl-sub">${esc(when)} · ${D.meals} mese din plan</div></div>
+        <div class="sl-sub">${esc(when)} · ${D.tr} ${D.tr===1?'zi':'zile'} de antrenament, ${ks.length-D.tr} de odihnă</div></div>
       <div class="sl-ring">${ring(f,{s:84,sw:7,c:f>=1?COL().ok:TH().ac})}<div class="sl-ring-v"><b>${D.got}</b><span>din ${D.all}</span></div></div></div>
     <div class="seg sl-seg" role="tablist">${SHOP_RANGE.map(([d,l])=>`<button class="${n===d?'on':''}" data-a="shopDays" data-i="${d}" role="tab" aria-selected="${n===d}">${l}</button>`).join('')}</div>
-    <div class="sl-kpis"><div><b>${D.all-D.got}</b><span>de luat</span></div><div><b>${fmtG(D.left)}</b><span>cântărit</span></div><div><b>${D.home}</b><span>ai acasă</span></div></div>
+    <div class="sl-kpis"><div><b>${D.all-D.got}</b><span>de luat</span></div><div><b>${fmtG(D.left)}</b><span>cântărit</span></div><div><b>${D.meals}</b><span>mese</span></div></div>
     <div class="sl-act"><button class="btn ghost sm" data-a="shopCopy" ${D.all-D.got?'':'disabled'}>${ic('copy')} Copiază lista</button>${D.got?`<button class="btn ghost sm" data-a="shopReset" data-confirm="Sigur?">${ic('refresh')} Debifează tot</button>`:''}</div></div>`;
-  if(!D.all) return hero+`<div class="card"><div class="empty sm">Planul de mese nu are rețete pentru perioada asta. Verifică filtrele din Mese.</div></div>`;
+  if(!D.all) return hero+`<div class="card"><div class="empty sm">Planul de mese e gol pentru perioada asta.</div></div>`;
   const cats=D.order.map(c=>{ const a=D.groups[c], [icn,col]=SHOP_CAT[c]||SHOP_CAT.Altele, dn=a.filter(x=>x.on).length;
     return `<div class="card sl-cat ${dn===a.length?'done':''}" style="--cc:var(${col})">
       <div class="sl-ch"><span class="sl-ci">${ic(icn)}</span><div class="sp"><b>${esc(c)}</b><span>${dn===a.length?'gata':dn+' din '+a.length}</span></div>
@@ -926,29 +921,24 @@ function nutriShop(){
       ${a.map(it=>`<button class="sl-r ${it.on?'on':''}" data-a="shopTick" data-k="${esc(it.nm)}" aria-pressed="${it.on}">
         <span class="sl-t">${ic('check')}</span>
         <span class="sp"><span class="sl-n">${esc(it.nm)}</span><span class="sl-s">${it.n===1?'o masă':'în '+it.n+' mese'}${shopHint(it)}</span></span>
-        ${it.have?`<span class="sl-have">acasă</span>`:''}<span class="sl-q">${fmtG(it.g)}</span></button>`).join('')}</div>`; }).join('');
-  return hero+cats+`<div class="card sl-note"><p class="sm">${ic('info')} Gramajele sunt cele din rețete (gătite, unde scrie „fiert”); rotunjește la ambalaje. Planul zilelor din listă rămâne fixat, ca mesele să fie cele pentru care cumperi; se reface doar dacă schimbi alimentele.</p></div>`+mealPrepCard(); }
-ACT.shopCopy=async()=>{ const D=shopData(), L=D.order.map(c=>{ const a=D.groups[c].filter(x=>!x.on); return a.length?c+'\n'+a.map(x=>'- '+x.nm+': '+fmtG(x.g)).join('\n'):''; }).filter(Boolean);
+        <span class="sl-q">${shopQty(it)}</span></button>`).join('')}</div>`; }).join('');
+  return hero+cats+`<div class="card sl-note"><p class="sm">${ic('info')} Cantitățile vin din planul tău de mese, ${mfOrig()?'cu gramajele originale':'ajustate la ținta fiecărei zile'}: zilele de antrenament iau planul de antrenament, cele de odihnă planul de odihnă. Orezul și cartofii sunt cântăriți fierți (lângă orez vezi cât iei crud), carnea crudă. Rotunjește la ambalaje.</p></div>`+mealPrepCard(); }
+ACT.shopCopy=async()=>{ const D=shopData(), L=D.order.map(c=>{ const a=D.groups[c].filter(x=>!x.on); return a.length?c+'\n'+a.map(x=>'- '+x.nm+': '+shopQty(x)).join('\n'):''; }).filter(Boolean);
   const t='Lista de cumpărături · '+SHOP_RANGE.find(x=>x[0]===D.n)[1].toLowerCase()+'\n\n'+L.join('\n\n');
   try{ await navigator.clipboard.writeText(t); toast('Lista copiată',(D.all-D.got)+' alimente','info'); }catch(e){ toast('Nu pot copia aici','Browserul nu permite copierea.','info'); } };
 function nutriNeed(){
   const P=prof(), tg=targets(), w=curW(), ms=tg.ms, ws=wStats(), rate=(tg.def*7/7700);
   const eqRows=EQS.map(([k,l,b])=>`<tr class="${tg.eq===k?'sel':''}" data-a="eqSel" data-k="${k}" style="cursor:pointer"><td>${tg.eq===k?'▸ ':''}${l}</td><td><b>${tg.A[k]}</b> kcal</td><td class="mu">${b}</td></tr>`).join('');
   const vals=EQS.map(([k])=>tg.A[k]), lo=Math.min(...vals), hi=Math.max(...vals);
-  let verdict='Ai nevoie de cel puțin două săptămâni de cântăriri ca să judec ritmul.';
-  if(ws&&ws.wk!=null){ const pct=-ws.wk/ws.a7*100;
-    verdict=!tg.phase.cut?`Săptămână de menținere: scopul e ca greutatea să stea pe loc (acum ${ws.wk>0?'+':''}${num(ws.wk,2)} kg/săpt.).`
-      :pct>1?`Scazi ${num(-ws.wk,2)} kg/săpt. (${num(pct,1)}% din greutate) — prea repede; riști să pierzi masă musculară. Adaugă ~150 kcal.`
-      :ws.wk<=-0.2?`Scazi ${num(-ws.wk,2)} kg/săpt. — în ritmul bun. Nu schimba nimic.`
-      :`Greutatea aproape că stă (${ws.wk>0?'+':''}${num(ws.wk,2)} kg/săpt.). Dacă rămâne așa încă o săptămână, scade ~150 kcal, din carbohidrați.`; }
+  const verdict=tacStatus(tg).t;
   return `<div class="card"><div class="eyebrow">${ic('target')} Ținta de azi</div>
       <div class="row" style="margin-top:8px;align-items:flex-end"><div class="big">${tg.kcal}<small>kcal</small></div><span class="tag ${tg.phase.cut?'lift':'rest'}" style="margin-left:auto">${tg.phase.label}</span></div>
       <div class="kpis" style="grid-template-columns:repeat(3,1fr)"><div class="kpi"><div class="k">Proteină</div><div class="v">${tg.p}<small>g</small></div></div>
         <div class="kpi"><div class="k">Carbohidrați</div><div class="v">${tg.c}<small>g</small></div></div><div class="kpi"><div class="k">Grăsimi</div><div class="v">${tg.f}<small>g</small></div></div></div>
-      <div class="note">Necesar ${tg.measured?'<b>măsurat</b>':'estimat'} ${tg.tdee} kcal${tg.def?' − deficit '+tg.def+' kcal (~'+num(rate,2)+' kg/săpt.)':' (menținere)'}${tg.manual?' · ai setat manual '+tg.kcal+' kcal':''}.
-        Proteina: 2 g/kg din greutatea-țintă; grăsimile: 0,7 g/kg (minim 0,6); restul, carbohidrați. Bazalul tău, după metabolismul declarat: ~${tg.bmrR} kcal (formula: ${tg.bmr}). Media săptămânii nu coboară sub el; nu merge mai jos fără un medic sau nutriționist.</div>
+      <div class="note">Necesar ${tg.measured?'<b>măsurat</b>':'estimat'} ${tg.tdee} kcal${tg.def>0?' − deficit '+tg.def+' kcal (~'+num(rate,2)+' kg/săpt.)':tg.def<0?' + surplus '+(-tg.def)+' kcal (~+'+num(-rate,2)+' kg/săpt.)':' (menținere)'}${tg.manual?' · ai setat manual '+tg.kcal+' kcal':''}.
+        Proteina: ${GOALS[tg.goal].pk} g/kg din masa slabă (${esc(GOALS[tg.goal].l.toLowerCase())}), cel puțin 1,6 g/kg corp; grăsimile: 0,7 g/kg (minim 0,6); restul, carbohidrați. Bazalul tău, după metabolismul declarat: ~${tg.bmrR} kcal (formula: ${tg.bmr}). Media săptămânii nu coboară sub el; nu merge mai jos fără un medic sau nutriționist.</div>
       ${tg.raised?`<div class="note">${ic('alert')} Pe media săptămânii, pragul de siguranță (${tg.wkFloor} kcal: ${NUTRI.EA_MIN[P.sex==='f'?'f':'m']} kcal/kg din ~${tg.ffm} kg masă slabă, la ~${tg.bf}% grăsime, plus ~${tg.exWk} kcal/zi antrenament) e peste necesar − deficit. Dacă procentul de grăsime e altul, setează-l în Setări sau notează talia și gâtul la măsurători.</div>`:''}
-      <div class="inrow"><button class="btn ghost sm" data-a="defAdj" data-i="-150">− 150 kcal</button><button class="btn ghost sm" data-a="defAdj" data-i="150">+ 150 kcal</button><span class="xs mu" style="align-self:center">deficit real: ${Math.max(0,tg.tdee-tg.base.kcal)} kcal/zi</span></div></div>
+      ${tg.goal!=='cut'?'':`<div class="inrow"><button class="btn ghost sm" data-a="defAdj" data-i="-150">− 150 kcal</button><button class="btn ghost sm" data-a="defAdj" data-i="150">+ 150 kcal</button><span class="xs mu" style="align-self:center">deficit real: ${Math.max(0,tg.tdee-tg.base.kcal)} kcal/zi</span></div>`}</div>
     <div class="card"><div class="eyebrow">${ic('chart')} Media săptămânii</div>${(()=>{ const W=weekTargets(), tk=todayKey();
       return `<div class="row" style="margin-top:8px;align-items:flex-end"><div class="big">${W.avg}<small>kcal/zi</small></div><span class="xs mu" style="margin-left:auto">${W.avg*7} kcal pe săptămână</span></div>
         <div class="wk-k">${W.days.map(x=>`<div class="${x.k===tk?'on':''} wk-${x.type}"><span>${DAYS[(parseKey(x.k).getDay()+6)%7]}</span><b>${x.kcal}</b></div>`).join('')}</div>
@@ -958,7 +948,7 @@ function nutriNeed(){
         <div class="kpi"><div class="k">Metabolism</div><div class="v" style="font-size:18px">${esc(m?m[1]:'Normal')}</div><div class="s">Setări → Ținte de nutriție</div></div></div>
         <p class="sm">${tg.measured?'Folosesc necesarul măsurat din mese și cântar, așa că nu mai corectez separat.':tg.manual?'Ai setat calorii manual: nu le schimb singur.':A.d&&A.w1!=null?`Media cântarului: <b>${num(A.w0,1)} → ${num(A.w1,1)} kg</b> (${A.r>0?'+':''}${num(A.r,2)} kg/săpt.), iar ${A.eat?'cu ce ai mâncat (~'+A.eat+' kcal/zi)':'cu ținta'} trebuia <b>${A.pred>0?'+':''}${num(A.pred,2)} kg/săpt.</b> Corectez o dată pe săptămână cu jumătate din diferență, cel mult 200 kcal.`:'Cântărește-te dimineața, de cel puțin 3 ori pe săptămână. După 2 săptămâni compar media săptămânii cu media celei dinainte și corectez necesarul singur, o dată pe săptămână.'}</p>
         ${S.aiKey?`<button class="btn ghost wide" data-a="aiWeek" ${AI.busy?'disabled':''}>${ic('coach')} Analiza săptămânii cu antrenorul AI</button>`:'<div class="xs mu">Cu cheia AI (Setări → Antrenor AI), antrenorul analizează singur săptămâna și propune ajustările.</div>'}`; })()}</div>
-    <div class="card"><div class="eyebrow">${ic('scale')} Ritmul de slăbire</div><p class="sm">${verdict}</p></div>
+    <div class="card"><div class="eyebrow">${ic('scale')} Ritmul săptămânii · ${esc(GOALS[tg.goal].l)}</div><p class="sm">${verdict}</p><button class="btn ghost sm" style="margin-top:8px" data-a="nTab" data-k="tac">${ic('target')} Tactica</button></div>
     <div class="card"><div class="row"><div class="eyebrow sp">${ic('chart')} Necesar măsurat</div>${ms.ok?`<button class="sw ${P.useMeasured!==false?'on':''}" data-a="useMeas" role="switch" aria-checked="${P.useMeasured!==false}" aria-label="Folosește necesarul măsurat"></button>`:''}</div>
       ${ms.ok?`<div class="kpis"><div class="kpi"><div class="k">Necesar</div><div class="v">${ms.tdee}</div></div><div class="kpi"><div class="k">Aport mediu</div><div class="v">${ms.intake}</div></div>
           <div class="kpi"><div class="k">Greutate</div><div class="v" style="font-size:20px">${ms.perWeek>0?'+':''}${num(ms.perWeek,2)}<small>kg/săpt</small></div></div></div>
@@ -973,7 +963,7 @@ function nutriNeed(){
         <div class="fld"><label>Masă slabă</label><div class="big sm" style="padding-top:4px">${num(tg.A.ffm,1)}<small>kg</small></div></div></div>
       <div class="sm" style="margin-top:12px;font-weight:600">Activitate</div>
       <div class="chips" style="margin-top:8px">${[[1.375,'Ușoară'],[1.55,'Moderată'],[1.725,'Mare'],[1.9,'Foarte mare']].map(([v,l])=>`<button class="chip ${Math.abs((+P.act||1.55)-v)<.01?'on':''}" data-a="actSet" data-k="${v}">${l} ×${v}</button>`).join('')}</div></div>
-    <div class="card"><div class="set-row" style="border:0;padding:0"><span class="sp"><b>Pauze de dietă</b><div class="sm mu">Săptămânile 1–2 ale ciclului în deficit, 3–4 la menținere, ca în programul tău original.</div></span>
+    <div class="card"><div class="set-row" style="border:0;padding:0"><span class="sp"><b>Pauze de dietă (la cut)</b><div class="sm mu">Săptămânile 1–2 ale ciclului în deficit, 3–4 la menținere (studiul MATADOR, din Fat Loss Forever).</div></span>
       <button class="sw ${P.dietBreak!==false?'on':''}" data-a="dietBreak" role="switch" aria-checked="${P.dietBreak!==false}" aria-label="Pauze de dietă"></button></div></div>`;
 }
 
