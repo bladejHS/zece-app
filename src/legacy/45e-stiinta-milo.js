@@ -1,6 +1,6 @@
 /* =====================================================================
    v18 · ȘTIINȚĂ → MILO WOLF — ideile din canalul de YouTube al lui Dr. Milo Wolf (PhD în știința sportului),
-   din ~45 de videoclipuri despre antrenament, nutriție, slăbit, bulk, recompoziție și suplimente.
+   din toate videoclipurile lui (~340): antrenament, alergare și forță împreună, recuperare, suplimente. Nutriția din aplicație urmează acum Layne Norton (Știință → Layne Norton).
    Nivelul dovezilor e cel pe care îl dă el: A = meta-analize consecvente, B = câteva studii, C = un studiu sau experiența lui.
    ===================================================================== */
 SCI_SEC.splice(1,0,['milo','Milo Wolf','dumbbell']);
@@ -135,5 +135,22 @@ SCI.push(
 {s:'milo',ev:'A',t:'Suplimentele care nu merită',n:'glutamină, BCAA, „boostere”',
  sum:'Glutamina nu crește masa (știut din anii 90). BCAA-urile nu au toți aminoacizii esențiali; EAA-urile sunt mai bune, dar tot sub proteina din zer. Boosterele de testosteron (tongkat, ashwagandha, tribulus) nu au dovezi la oameni sănătoși; HMB și colagenul nu ajută masa; beta-alanina ajută doar la eforturi de 1–4 minute.',
  do:['Bani economisiți: mâncare mai bună și proteină.'],
- src:'Wolf · Israetel'}
+ src:'Wolf · Israetel'},
+/* ---------- v19: hibrid, pauze, încălzire, deload ---------- */
+{s:'milo',ev:'B',t:'Forță și alergare în aceeași săptămână',n:'separate ~6 ore sau forța întâi',
+ sum:'Cardio-ul făcut imediat înainte de forță îi scade performanța; separat cu 6–8 ore sau după forță, interferența e mică. Cardio-ul cu impact și excentrică puțină (bicicletă, mers în pantă, ramat) obosește cel mai puțin. Forța reduce accidentările la alergare; Nordic Curl protejează femuralii, pliometria ligamentele genunchiului.',
+ do:['Easy-urile tale sunt a doua sesiune a zilei, la ~6 ore după forță.','Pragul e marți, departe de zilele de picioare.','Nordic Curl vineri, 2 seturi, coborâre lentă.'],
+ src:'Wolf · Wilson · van der Horst'},
+{s:'milo',ev:'B',t:'Cât pauză între seturi',n:'90 s izolare, 2–3 min compuse',
+ sum:'Sub un minut creșterea scade, pentru că pierzi din volumul ridicat; efectul pauzei trece prin performanță. Practic: 1–3 minute la izolare, 2–4 la compusele de sus, 3 sau mai mult la compusele grele de picioare — repornești când poți repeta aproximativ setul de dinainte și nu mai gâfâi. Pauza aleasă singur dă cam același rezultat ca cea cronometrată.',
+ do:['Dacă pierzi 3+ repetări de la un set la altul cu aceeași greutate, ia 30 s în plus (antrenorul local o face singur).','Superseturile între mușchi opuși economisesc timp fără să piardă performanță.'],
+ src:'Wolf · Schoenfeld · Longo'},
+{s:'milo',ev:'B',t:'Încălzirea scurtă',n:'1–3 seturi, doar la primul compus',
+ sum:'Încălzirea lungă e timp în care nu crești. La primul exercițiu compus: ~40% × 8, ~70% × 3–4, ~90% × 1–2 (ultimul te pregătește și psihic pentru greutate). La următoarele exerciții pe aceeași zonă ești deja cald: un set ușor sau deloc. Stretching-ul static înainte nu previne accidentările și scade forța; îl faci, dacă vrei, după.',
+ do:['Aplicația îți arată treptele de încălzire la primul compus al zilei.'],
+ src:'Wolf'},
+{s:'milo',ev:'B',t:'Deload doar când e nevoie',n:'după performanță, nu după calendar',
+ sum:'În studiul Coleman, o săptămână fără antrenament la 4 săptămâni a dat aceeași masă, dar mai puțină forță și motivație decât antrenamentul continuu. Deload-ul are sens când performanța scade 1–2 săptămâni la rând sau viața o cere (stres, boală, mutare, vacanță): mai puține seturi, 2–3 repetări în plus în rezervă, nu pauză totală.',
+ do:['Antrenorul local îți spune când primul set al unui exercițiu a scăzut două sesiuni la rând.','Febra musculară nu e un semn: judeci după kilograme și repetări.'],
+ src:'Wolf · Coleman · Pelland'}
 );

@@ -5,10 +5,15 @@
 const SWAPS={'Bench Press':['Flat Dumbbell Press','Incline Dumbbell Press'],'Flat Dumbbell Press':['Bench Press','Incline Dumbbell Press'],'Incline Dumbbell Press':['Flat Dumbbell Press','Bench Press'],'Hammer Chest Press':['Machine Chest Press','Incline Dumbbell Press'],
   'Pull Up / Lat Pulldown':['Weighted Pull Up','Chest Supported Row'],'Weighted Pull Up':['Pull Up / Lat Pulldown'],'Chest Supported Row':['Pull Up / Lat Pulldown'],
   'Seated Overhead Press':['Push Press'],'Push Press':['Seated Overhead Press'],'Hack Squat':['Leg Press'],'Leg Press':['Hack Squat'],'Walking Lunge':['Leg Press'],
-  'Romanian Deadlift':['Hamstring Curl','Hip Thrust'],'Hip Thrust':['Romanian Deadlift'],'Hamstring Curl':['Romanian Deadlift'],'Close Grip Bench Press':['Tricep Pushdown'],
+  'Romanian Deadlift':['Good Morning','Hamstring Curl','Hip Thrust'],'Hip Thrust':['Romanian Deadlift'],'Hamstring Curl':['Romanian Deadlift'],'Close Grip Bench Press':['Tricep Pushdown'],
   'Lateral Raise':['Dumbbell Lateral Raise'],'Dumbbell Lateral Raise':['Lateral Raise'],'Tricep Pushdown':['Tricep Rope Pushdown','Tricep Overhead Extension'],
   'Tricep Rope Pushdown':['Tricep Pushdown','Tricep Overhead Extension'],'Tricep Overhead Extension':['Tricep Rope Pushdown'],'Cable Face Pull':['Chest Supported Row'],
-  'Bicep Curl':['Alternating Dumbbell Curl','Barbell Curl'],'Alternating Dumbbell Curl':['Bicep Curl','Barbell Curl'],'Barbell Curl':['Bicep Curl','Alternating Dumbbell Curl']};
+  'Bicep Curl':['Alternating Dumbbell Curl','Barbell Curl'],'Alternating Dumbbell Curl':['Bicep Curl','Barbell Curl'],'Barbell Curl':['Bicep Curl','Alternating Dumbbell Curl'],
+  /* v19: planul după Milo Wolf — alternative cu stretch similar */
+  'Lat Pulldown':['Pull Up / Lat Pulldown','Pull Up'],'Pull Up':['Lat Pulldown','Pull Up / Lat Pulldown'],'T-Bar Row':['Chest Supported Row','Dumbbell Row'],'Machine Chest Press':['Hammer Chest Press','Flat Dumbbell Press'],
+  'Dumbbell Fly':['Cable Fly','Pec Deck'],'Cable Lateral Raise':['Dumbbell Lateral Raise','Lateral Raise'],'Rear Delt Fly':['Cable Face Pull'],'Skull Crusher':['Tricep Overhead Extension','Tricep Rope Pushdown'],
+  'Preacher Curl':['Cable Curl','Incline Dumbbell Curl'],'Incline Dumbbell Curl':['Cable Curl','Preacher Curl'],'Cable Curl':['Incline Dumbbell Curl','Preacher Curl'],'Shrug':['Chest Supported Row'],
+  'Leg Extension':['Leg Press','Bulgarian Split Squat'],'Good Morning':['Romanian Deadlift'],'Bulgarian Split Squat':['Walking Lunge','Leg Press'],'Nordic Curl':['Hamstring Curl'],'Hip Abduction Machine':['Hip Thrust'],'Cable Crunch':['Ab Wheel Rollout','Hanging Leg Raise']};
 const LOWER=['cvadriceps','femurali','fesieri','gambe'];
 const regionOf=n=>{ const m=EXM[n]; if(!m) return null; return Object.keys(m).some(k=>m[k]===1&&LOWER.indexOf(k)>=0)?'jos':'sus'; };
 const thrReps=e=>+((/^(\d+) ×/.exec(e.p)||[])[1])||0;

@@ -59,11 +59,15 @@ function platesHTML(kg,bar=20){
   return `<div class="plates"><div class="rod"></div>${out.map((p,i)=>{ const pl=PLATES.find(x=>x[0]===p); return `<i class="pl" style="--h:${pl[2]}px;--c:${pl[1]};--i:${i}" title="${num(p)} kg"></i>`; }).join('')}<div class="collar"></div></div>
     <div class="plates-t">${out.length?'Pe fiecare parte: <b>'+out.map(p=>num(p,2)).join(' + ')+' kg</b>':'Doar bara'} · bara ${bar} kg${rest?' · '+num(rest,2)+' kg nu se pot pune exact':''}</div>`;
 }
-function warmSteps(kg,n){ const bar=BARBELL.test(n), r=x=>bar?Math.max(20,Math.round(x/2.5)*2.5):Math.max(2,Math.round(x/2)*2);
-  const out=[]; if(bar) out.push([20,10]); [[.4,8],[.6,5],[.8,3],[.9,1]].forEach(([p,rep])=>{ const w=r(kg*p); if(w<kg&&!out.some(x=>x[0]===w)) out.push([w,rep]); }); return out; }
+/* v19 (Wolf): încălzire scurtă — la primul compus al zonei ~40% × 8, ~70% × 3–4, ~90% × 1; la următoarele, un singur set ușor */
+function warmSteps(kg,n,later){ const bar=BARBELL.test(n), r=x=>bar?Math.max(20,Math.round(x/2.5)*2.5):Math.max(2,Math.round(x/2)*2);
+  const out=[]; (later?[[.7,3]]:[[.4,8],[.7,4],[.9,1]]).forEach(([p,rep])=>{ const w=r(kg*p); if(w<kg&&!out.some(x=>x[0]===w)) out.push([w,rep]); }); return out; }
+/* a mai fost azi un compus pe aceeași zonă (sus / jos)? atunci mușchii sunt deja calzi */
+function warmLater(n){ const s=S.sess; if(!s) return false; const day=sessDay(s), rg=regionOf(n);
+  return Object.keys(s.sets||{}).some(i=>{ const q=day.ex[+i]; return q&&q.n!==n&&COMPOUND.test(q.n)&&regionOf(q.n)===rg&&(s.sets[i]||[]).length; }); }
 function auxHTML(e,kg,sets){
   const k=+kg||0;
-  const warm=COMPOUND.test(e.n)&&!(sets||[]).length&&k>=30?`<div class="warm">${ic('flame')} Încălzire: ${warmSteps(k,e.n).map(([w,r])=>`<span>${num(w)}×${r}</span>`).join('')}</div>`:'';
+  const warm=COMPOUND.test(e.n)&&!(sets||[]).length&&k>=30?`<div class="warm">${ic('flame')} Încălzire${warmLater(e.n)?' (ești deja cald)':''}: ${warmSteps(k,e.n,warmLater(e.n)).map(([w,r])=>`<span>${num(w)}×${r}</span>`).join('')}</div>`:'';
   return warm+(BARBELL.test(e.n)?platesHTML(k,+prof().bar||20):'');
 }
 function updAux(){ const s=S.sess, el=$('#aux'); if(!s||!el) return; const e=sessDay(s).ex[s.cur]; if(!e) return;
@@ -89,6 +93,7 @@ function fxLift(e,x){
       return `<div class="sd ${st?'ok':i===sets.length?'cur':''}">${st?`<b>${num(st[0])}</b> × <b>${st[1]}</b>${pr?'<span class="tag pr">PR</span>':''}${typeof st[2]==='string'&&SET_TAG[st[2]]?`<small>${SET_TAG[st[2]]}</small>`:''}`:'Seria '+(i+1)}</div>`; }).join('')}</div>
     ${lvDone()}
     ${restBlock(complete?nextTxt(day,x):'')}
+    ${miloLive(e,x)}
     <div class="logger">
       <div class="stp"><label for="inKg">kg</label><div class="r"><button data-a="kg" data-v="${-inc}" aria-label="minus ${inc} kg">−</button>
         <input id="inKg" type="number" step="0.5" inputmode="decimal" value="${kg===''?'':num(kg,2)}" placeholder="0"><button data-a="kg" data-v="${inc}" aria-label="plus ${inc} kg">+</button></div></div>
@@ -164,7 +169,7 @@ function renderFocus(){
     <div class="fx-body ${S.fxDir}">${body}</div>
     ${n?`<div class="fx-nav"><button class="btn ghost" data-a="fxPrev" ${x===0?'disabled':''}>${ic('left')} Înapoi</button>
       ${x<n-1&&x!==lastReq(s)?`<button class="btn" data-a="fxNext">Următorul ${ic('right')}</button>`:`<button class="btn pri" data-a="fxFinish">${ic('trophy')} Termină</button>`}</div>
-      ${x>lastReq(s)&&x<n-1?`<button class="btn ghost wide sm" style="margin-top:8px" data-a="fxFinish">${ic('trophy')} Termină aici, fără restul abdomenului</button>`:''}`:''}
+      ${x>lastReq(s)&&x<n-1?`<button class="btn ghost wide sm" style="margin-top:8px" data-a="fxFinish">${ic('trophy')} Termină aici${absFrom(s.d)?', fără restul abdomenului':''}</button>`:''}`:''}
     <button class="btn ghost wide sm danger fx-quit" data-a="fxQuit" data-confirm="Sigur? Seriile notate rămân">Renunță la sesiune</button>
   </div></div>`;
   S.fxDir=''; fxWasOpen=true; document.body.classList.add('lock');
@@ -189,7 +194,7 @@ function summaryHTML(){
       <div class="zleg">${m.hrS.z.map((s_,i)=>`<span><b style="color:${HRZC()[i]}">Z${i+1}</b> ${Math.round(s_/60)} min</span>`).join('')}</div></div>`:''}
     ${m.prList.length?`<div class="card"><div class="eyebrow">${ic('trophy')} Recorduri noi</div>${m.prList.map(p=>`<div class="pr-row"><span class="tag pr">PR</span><b>${esc(p.n)}</b>
       <span class="xs mu">${num(p.w)}×${p.r}</span><span class="v">${p.prev}→${p.v}</span></div>`).join('')}</div>`:''}
-    ${m.absT?`<div class="note">${ic(m.absN?'check':'info')} Abdomen opțional: ${m.absN?m.absN+' din '+m.absT+' exerciții făcute':'sărit azi — ziua e completă oricum'}.</div>`:''}
+    ${m.absT?`<div class="note">${ic(m.absN?'check':'info')} ${absFrom(m.d)?'Abdomen opțional':'Zi opțională'}: ${m.absN?m.absN+' din '+m.absT+' exerciții făcute':'sărit azi — ziua e completă oricum'}.</div>`:''}
     ${m.skipped.length?`<div class="note">Fără date notate: ${m.skipped.map(esc).join(', ')}. Ziua e bifată oricum, ca ciclul să meargă mai departe.</div>`:''}
     ${stOn()&&stCanWrite()?`<div class="note st-sum" id="stSum">${stSumTxt(m)}</div>`:''}
     <button class="btn pri xl wide glow" style="margin-top:18px" data-a="sumClose">${ic('check')} Gata</button>
@@ -232,7 +237,7 @@ async function logSet(btn){
   s.sets[x]=sets.concat([[w,rp]]); s.kg[x]=w; s.rp[x]=rp;
   S.lvOk={t:Date.now(),txt:'Seria '+s.sets[x].length+' notată · '+num(w)+' kg × '+rp};
   if(s.sets[x].length>=e.sets&&!sessIsDone(s,x)) await markDone(s,x,true);
-  startRest(e.rest);
+  startRest(mwRestFor(e,s.sets[x]));
   await persistSess(); renderFocus();
 }
 async function undoSet(){

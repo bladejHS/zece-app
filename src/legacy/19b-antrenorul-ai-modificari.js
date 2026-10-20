@@ -29,7 +29,7 @@ const AI_WTOOLS={
       o.nAdj=Object.assign({},nAdj(),{c:inp.scale_correction_kcal,d:todayKey(),step:inp.scale_correction_kcal-(nAdj().c||0),ai:1}); d.push('corecția din cântar '+(inp.scale_correction_kcal>0?'+':'')+inp.scale_correction_kcal+' kcal'); }
     if(inp.goal_weight_kg!=null){ if(!n(inp.goal_weight_kg)||inp.goal_weight_kg<40||inp.goal_weight_kg>300) return {err:'goal_weight_kg: 40–300.'}; o.goalW=Math.round(inp.goal_weight_kg*10)/10; d.push('greutate-țintă '+num(o.goalW)+' kg'); }
     if(inp.body_fat_pct!=null){ if(!n(inp.body_fat_pct)||inp.body_fat_pct<5||inp.body_fat_pct>60) return {err:'body_fat_pct: 5–60.'}; o.bf=Math.round(inp.body_fat_pct*10)/10; d.push('grăsime '+num(o.bf)+'%'); }
-    if(inp.diet_breaks!=null){ if(typeof inp.diet_breaks!=='boolean') return {err:'diet_breaks: true sau false.'}; o.dietBreak=inp.diet_breaks; d.push(inp.diet_breaks?'pauze de dietă (2 + 2 săptămâni)':'deficit continuu'); }
+    if(inp.diet_breaks!=null){ if(typeof inp.diet_breaks!=='boolean') return {err:'diet_breaks: true sau false.'}; o.dietBreak=inp.diet_breaks; d.push(inp.diet_breaks?'pauze de dietă ('+(dietCutWeeks()===2?'2 + 2':'3 + 1')+' săptămâni)':'deficit continuu'); }
     if(!d.length) return {err:'Nicio setare de schimbat.'};
     return {icon:'flame',title:'Schimb setările de nutriție',desc:d.join(' · '),apply:async()=>{ await profSet(o); const tg=targets(); return 'Schimbat: '+d.join(', ')+'. Ținta de azi: '+tg.kcal+' kcal, '+tg.p+' g proteină; media săptămânii: '+weekTargets().avg+' kcal/zi.'; }}; },
   swap_exercise(inp){ if(!Number.isInteger(inp.day)||inp.day<1||inp.day>7) return {err:'day: 1–7.'}; const d=inp.day-1;

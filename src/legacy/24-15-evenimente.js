@@ -265,7 +265,7 @@ document.addEventListener('click',async ev=>{
     case 'shoeRet': await save('shoes',(S.shoes||[]).map(s=>s.id===k?Object.assign({},s,{ret:tk}):s)); render(); return;
     case 'shoeDel': await save('shoes',(S.shoes||[]).filter(s=>s.id!==k)); render(); return;
     case 'muscle': S.mSel=k; render(); return;
-    case 'tech': if(GUIDE[k]){ SH={kind:'tech',n:k,busy:false,err:null}; shRender(); return; } await techLoad(k,false); return;
+    case 'tech': if(guideOf(k)){ SH={kind:'tech',n:k,busy:false,err:null}; shRender(); return; } await techLoad(k,false); return;
     case 'exNoteSave': { const v=(($('#exNote')||{}).value||'').trim().slice(0,200), o=Object.assign({},S.exNote); if(v) o[k]=v; else delete o[k]; await save('exNote',o); toast(v?'Notiță salvată':'Notiță ștearsă',k,'info'); if(S.sess) renderFocus(); return; }
     case 'techRe': await techLoad(k,true); return;
     case 'phPose': S.phPose=k; render(); return;

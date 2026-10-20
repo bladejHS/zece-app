@@ -91,7 +91,7 @@ function viewSet(){
   ${healthCard()}
   <div class="card"><div class="eyebrow">${ic('run')} Progresia alergării</div>
     <div class="rp-grid"><span></span>${Array.from({length:WEEKS},(_,w)=>`<span class="h">S${w+1}</span>`).join('')}
-      ${rpRow('Easy luni (min)','ez1','w')}${rpRow('Prag (reprize)','thr','r')}${rpRow('Easy joi (min)','ez2','w')}${rpRow('Long run (min)','lng','w')}</div>
+      ${rpRow('Easy luni (min)','ez1','w')}${rpRow('Prag (reprize)','thr','r')}${rpRow('Easy joi (min)','ez2','w')}</div>
     <div class="note">Reprizele de prag au ${p.thr.m} min, cu ${p.thr.rest}s jog între ele. Exercițiile și zilele planului rămân aceleași.</div>
     <button class="btn ghost sm" style="margin-top:10px" data-a="rpReset" data-confirm="Sigur? Apasă iar">${ic('refresh')} Valorile din program</button></div>
   <div class="card">${sw('sound',S.sound,'Sunet și vibrații','Pauze, cronometru, recorduri')}

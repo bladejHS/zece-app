@@ -428,3 +428,8 @@ html[data-mode="light"] .cover .btn:not(.pri){color:#F4F6F8;border-color:rgba(25
 .swatch{min-width:0;padding:10px 8px;gap:8px;font-size:13px;border-width:1px;border-radius:var(--r-md);box-shadow:none;transition:border-color var(--fast) var(--ease)}
 .swatch.on{border-color:var(--ac);box-shadow:0 0 0 1px var(--ac)}
 .swatch i{width:20px;height:20px;border-radius:50%;box-shadow:inset 0 0 0 1px var(--ln3)}
+
+/* v19 · antrenorul local (Wolf) în antrenament */
+.mw-live{margin-top:14px;padding:12px 12px 10px;border-radius:14px;border:1px solid var(--ln);background:rgba(var(--w),.03)}
+.mw-live .tac-st{margin-top:8px}
+.mw-live .eyebrow .xs{font-weight:500;letter-spacing:0;text-transform:none}

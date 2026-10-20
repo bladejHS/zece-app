@@ -175,8 +175,11 @@ async function techLoad(n,force){
   if(SH&&SH.kind==='tech'&&SH.n===n) shRender();
   STC=null;
 }
+/* v19: ghidul fără internet și fără AI — GUIDE pentru exercițiile vechi din plan, altfel instrucțiunile din catalog (32) */
+function guideOf(n){ if(GUIDE[n]) return GUIDE[n]; const i=exInfo(n); if(!i||!i.c||!i.c.length) return null;
+  return {m:Object.keys(i.mm||{}).sort((a,b)=>(i.mm[b]||0)-(i.mm[a]||0)).map(k=>MUSC_RO[k]||k),c:i.c,x:i.x||[],s:i.s||''}; }
 function techHTML(){
-  const n=SH.n, g=GUIDE[n];
+  const n=SH.n, g=guideOf(n);
   if(!g) return techAiHTML();
   const t=S.tech[n], cue=(c,i)=>`<div class="cue"><b>${i+1}</b><span>${esc(c)}</span></div>`, bad=c=>`<div class="cue"><span class="xi">${ic('x')}</span><span>${esc(c)}</span></div>`;
   return `<div class="eyebrow">${ic('info')} Ghidul exercițiului</div><div class="h2" style="margin-top:6px">${esc(n)}</div>
@@ -184,7 +187,7 @@ function techHTML(){
     ${miloCue(n)?`<div class="easy" style="margin-top:12px">${ic('bolt')} <b>Dr. Milo Wolf:</b> ${esc(miloCue(n))}</div>`:''}
     <div class="dsec"><h4>Execuție</h4>${g.c.map(cue).join('')}</div>
     <div class="dsec"><h4>Greșeli frecvente</h4>${g.x.map(bad).join('')}</div>
-    <div class="easy" style="margin-top:12px">${ic('alert')} ${esc(g.s)}</div>
+    ${g.s?`<div class="easy" style="margin-top:12px">${ic('alert')} ${esc(g.s)}</div>`:''}
     <a class="btn ghost wide" style="margin-top:14px" href="${ytLink(n)}" target="_blank" rel="noopener">${ic('play')} Vezi execuția pe YouTube</a>
     <div class="dsec"><h4>Notița ta</h4><textarea class="inp" id="exNote" rows="2" maxlength="200" placeholder="ex: scaunul pe 4, picioarele sus pe platformă, priza pe inelul 2">${esc(exNote(n))}</textarea>
       <button class="btn sm" style="margin-top:8px" data-a="exNoteSave" data-k="${esc(n)}">${ic('check')} Salvează notița</button>

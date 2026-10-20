@@ -66,16 +66,16 @@ function viewPlan(){
   const days=PLAN.map((_,d)=>{ const day=dayFor(w,d), dn=doneCount(w,d), tot=absFrom(d), optN=PLAN[d].ex.length-tot, od=optDone(w,d), open=S.openDay===d, isN=nx&&nx.w===w&&nx.d===d, c=CAT[day.cat], col=catCol(day.cat);
     return `<div class="card day ${open?'open':''} ${isN?'next':''}" id="day${d}" style="--c:${col}">
       <button class="day-h" data-a="toggleDay" data-d="${d}" aria-expanded="${open}">
-        <span class="day-bar"></span>${dayBadge(d,dn===tot?'done':isN?'next':'')}
+        <span class="day-bar"></span>${dayBadge(d,tot&&dn===tot?'done':isN?'next':'')}
         <span class="sp"><span class="day-k">${DAYN[d]}${isN?' · următorul':''}</span><span class="day-t" style="display:block">${esc(day.t)}</span>
-          <span class="day-m" style="display:block">${c[0]} · ${day.min} min · ${dn}/${tot} bifate${optN?od===optN?' · + abdomen':' · abdomen opțional':''}</span></span>
-        ${dn===tot?`<span class="tag pr">${ic('check')}</span>`:ring(dn/tot,{s:34,sw:3,c:col})}
+          <span class="day-m" style="display:block">${c[0]} · ${day.min} min · ${tot?dn+'/'+tot+' bifate'+(optN?od===optN?' · + abdomen':' · abdomen opțional':''):'opțională · '+od+'/'+optN+' făcute'}</span></span>
+        ${!tot?(od?ring(od/optN,{s:34,sw:3,c:col}):`<span class="tag">opț.</span>`):dn===tot?`<span class="tag pr">${ic('check')}</span>`:ring(dn/tot,{s:34,sw:3,c:col})}
         <span class="chev">${ic('down')}</span></button>
       <div class="day-b"><div>
         ${planExHTML(w,d,day)}
         <details class="notes"><summary>${ic('info')} ${esc(day.notes.wk)}</summary>
           ${day.notes.d.map(([t,x])=>`<p><b>${esc(t)}.</b> ${esc(x)}</p>`).join('')}</details>
-        <div class="day-act inrow"><button class="btn pri" style="flex:1" data-a="start" data-w="${w}" data-d="${d}">${ic('play')} ${dn&&dn<tot?'Continuă ziua':dn===tot?(optN&&od<optN?'Fă și abdomenul':'Reia ziua'):'Începe ziua'}</button></div>
+        <div class="day-act inrow"><button class="btn pri" style="flex:1" data-a="start" data-w="${w}" data-d="${d}">${ic('play')} ${!tot?(od?'Continuă ziua':'Începe ziua'):dn&&dn<tot?'Continuă ziua':dn===tot?(optN&&od<optN?'Fă și abdomenul':'Reia ziua'):'Începe ziua'}</button></div>
       </div></div></div>`; }).join('');
   return `
   <div class="card plan-hd"><div class="h3">Planul de 4 săptămâni</div>
@@ -932,7 +932,7 @@ function nutriNeed(){
       <div class="kpis" style="grid-template-columns:repeat(3,1fr)"><div class="kpi"><div class="k">Proteină</div><div class="v">${tg.p}<small>g</small></div></div>
         <div class="kpi"><div class="k">Carbohidrați</div><div class="v">${tg.c}<small>g</small></div></div><div class="kpi"><div class="k">Grăsimi</div><div class="v">${tg.f}<small>g</small></div></div></div>
       <div class="note">Necesar ${tg.measured?'<b>măsurat</b>':'estimat'} ${tg.tdee} kcal${tg.def>0?' − deficit '+tg.def+' kcal (~'+num(rate,2)+' kg/săpt.)':tg.def<0?' + surplus '+(-tg.def)+' kcal (~+'+num(-rate,2)+' kg/săpt.)':' (menținere)'}${tg.manual?' · ai setat manual '+tg.kcal+' kcal':''}.
-        Proteina: ${GOALS[tg.goal].pk} g/kg din greutatea de referință (~${tg.ref} kg: masa slabă la ~15% grăsime; ${esc(GOALS[tg.goal].l.toLowerCase())}); grăsimile: ~20% din calorii, puține (cel puțin 0,5 g/kg); restul, carbohidrați. Bazalul tău, după metabolismul declarat: ~${tg.bmrR} kcal (formula: ${tg.bmr}). Media săptămânii nu coboară sub el; nu merge mai jos fără un medic sau nutriționist.</div>
+        Proteina (Norton): ${num(protPL(tg.goal),2)} g/kg din ~${tg.ffm} kg masă slabă (${esc(GOALS[tg.goal].l.toLowerCase())}${protAgeF()>1?', cu +1,5% pe an după 30':''}); grăsimile: ~20% din calorii, puține (cel puțin 0,5 g/kg); restul, carbohidrați; fibre cel puțin 15 g la 1000 kcal. Bazalul tău, după metabolismul declarat: ~${tg.bmrR} kcal (formula: ${tg.bmr}). Media săptămânii nu coboară sub el; nu merge mai jos fără un medic sau nutriționist.</div>
       ${tg.raised?`<div class="note">${ic('alert')} Pe media săptămânii, pragul de siguranță (${tg.wkFloor} kcal: cel puțin 30 kcal/kg din ~${tg.ffm} kg masă slabă, Wolf; și ${NUTRI.EA_MIN[P.sex==='f'?'f':'m']} kcal/kg + ~${tg.exWk} kcal/zi antrenament) e peste necesar − deficit. Deficitul în plus îl faci din pași, nu din mâncare. Dacă procentul de grăsime e altul, setează-l în Setări sau notează talia și gâtul la măsurători.</div>`:''}
       ${tg.goal!=='cut'?'':`<div class="inrow"><button class="btn ghost sm" data-a="defAdj" data-i="-150">− 150 kcal</button><button class="btn ghost sm" data-a="defAdj" data-i="150">+ 150 kcal</button><span class="xs mu" style="align-self:center">deficit real: ${Math.max(0,tg.tdee-tg.base.kcal)} kcal/zi</span></div>`}</div>
     <div class="card"><div class="eyebrow">${ic('chart')} Media săptămânii</div>${(()=>{ const W=weekTargets(), tk=todayKey();
@@ -959,7 +959,7 @@ function nutriNeed(){
         <div class="fld"><label>Masă slabă</label><div class="big sm" style="padding-top:4px">${num(tg.A.ffm,1)}<small>kg</small></div></div></div>
       <div class="sm" style="margin-top:12px;font-weight:600">Activitate</div>
       <div class="chips" style="margin-top:8px">${[[1.375,'Ușoară'],[1.55,'Moderată'],[1.725,'Mare'],[1.9,'Foarte mare']].map(([v,l])=>`<button class="chip ${Math.abs((+P.act||1.55)-v)<.01?'on':''}" data-a="actSet" data-k="${v}">${l} ×${v}</button>`).join('')}</div></div>
-    <div class="card"><div class="set-row" style="border:0;padding:0"><span class="sp"><b>Pauze de dietă (la cut)</b><div class="sm mu">Săptămânile 1–2 ale ciclului în deficit, 3–4 la menținere (studiul MATADOR, din Fat Loss Forever).</div></span>
+    <div class="card"><div class="set-row" style="border:0;padding:0"><span class="sp"><b>Pauze de dietă (la cut)</b><div class="sm mu">Norton: cu cât ești mai slab, cu atât mai des. Tu: ${dietCutWeeks()===2?'2 săptămâni în deficit, 2 la menținere (foarte slab, 1:1)':'3 săptămâni în deficit, a 4-a la menținere (~3:1)'}. Menținerea reală, cu tot notat, nu „mănânci orice”.</div></span>
       <button class="sw ${P.dietBreak!==false?'on':''}" data-a="dietBreak" role="switch" aria-checked="${P.dietBreak!==false}" aria-label="Pauze de dietă"></button></div></div>`;
 }
 

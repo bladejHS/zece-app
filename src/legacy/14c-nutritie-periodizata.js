@@ -4,7 +4,7 @@
    feedback pe mese, meal prep pe săptămână și avertizarea medicală obligatorie. Logica: src/lib/nutrition (NUTRI).
    ===================================================================== */
 /* tipul zilei din plan, fără deload și fără activități notate */
-const planType=b=>b.cat==='rest'?'rest':(b.run==='thr'||b.run==='lng'||/Conditioning|Power/.test(b.t))?'high':'moderate';
+const planType=b=>b.cat==='rest'?'rest':(b.run==='thr'||b.run==='lng'||/Conditioning|Power|Lower/.test(b.t))?'high':'moderate';
 /* media factorilor de carbohidrați pe săptămâna normală a planului: carbohidrații se mută între zile, totalul săptămânii rămâne baza */
 let NMEAN=null; const NUTRI_MEAN=()=>NMEAN||(NMEAN=NUTRI.weekCarbMean(PLAN.map(planType)));
 /* tipul zilei k din planul hibrid (aceeași săptămână a ciclului), plus activitățile notate în ziua k: kickboxingul (sau altă activitate) grea face ziua intensă, chiar dacă era de odihnă */

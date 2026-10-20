@@ -26,7 +26,7 @@ async function removeSet(n,w,r){
 function otherRanges(n,lo,hi){ const out=[]; PLAN.forEach(p=>p.ex.forEach(([nm,pr])=>{ if(nm!==n) return; const m=/^(\d+)×(\d+)(?:–(\d+))?/.exec(pr);
   if(m){ const a=+m[2], b=+(m[3]||m[2]); if(a!==lo||b!==hi) out.push([a,b]); } })); return out; }
 function incFor(n){ return /Leg Press|Hack Squat|Hip Thrust|Romanian Deadlift/.test(n)?5
-  :/Dumbbell|Lateral Raise|Curl|Extension|Pushdown|Face Pull|Calf|Hamstring|Lunge/.test(n)?2:2.5; }
+  :/Dumbbell|Lateral Raise|Curl|Extension|Pushdown|Face Pull|Calf|Hamstring|Lunge|Fly|Crusher|Shrug|Abduction|Crunch|Split Squat/.test(n)?2:2.5; }
 /* dublă progresie, cu starea de azi luată în calcul */
 /* recomandarea, cu ajustarea acceptată azi aplicată peste ea (fără creșteri / procent din greutate) */
 function suggest(e){
@@ -113,7 +113,11 @@ function bmrAll(w){ const P=prof(), f=P.sex==='f', F=w*(1-bfOf(w)/100);
    recompoziție −0,25% pe săptămână (menținere sau deficit mic); lean bulk 0,75% pe LUNĂ (Wolf: 0,5–1%/lună).
    Proteina (Wolf: ≥2,35 g/kg, mai mult în cut) se socotește pe „greutatea de referință” — masa slabă la ~15% grăsime, ca la o greutate mare
    să nu iasă absurd de mult. Deficitul (sau surplusul) implicit vine din ritm, la 7700 kcal/kg. */
-const GOALS={cut:{l:'Cut',rate:-.005,pk:2.6},recomp:{l:'Recompoziție',rate:-.0025,pk:2.5},bulk:{l:'Lean bulk',rate:.00175,pk:2.35}};
+/* v19: nutriția urmează Layne Norton (canalele lui de YouTube, Fat Loss Forever, Contest Prep Guide). Proteina pe MASA SLABĂ (Norton):
+   ~2,4 g/kg optim, în deficit +10–20% (cut ~2,8), +1,5% pe an după 30 de ani, plafon ~3,1 g/kg masă slabă. */
+const GOALS={cut:{l:'Cut',rate:-.005,pl:2.8},recomp:{l:'Recompoziție',rate:-.0025,pl:2.6},bulk:{l:'Lean bulk',rate:.00175,pl:2.4}};
+const protAgeF=()=>1+.015*Math.max(0,(+prof().age||30)-30);
+const protPL=g=>Math.round(Math.min(3.1,GOALS[g].pl*protAgeF())*100)/100;
 const refKg=(w,ffm)=>Math.min(w,ffm/.85);
 const goalMode=()=>GOALS[prof().goalMode]?prof().goalMode:'cut';
 const autoDef=w=>Math.round(-w*GOALS[goalMode()].rate*7700/7/50)*50;
@@ -131,8 +135,10 @@ function nPhase(){ const g=goalMode();
   if(g==='bulk') return {cut:false,goal:g,label:'Lean bulk',sub:'surplus mic, ~0,25% din greutate pe săptămână'};
   if(g==='recomp') return {cut:false,goal:g,label:'Recompoziție',sub:'deficit mic, proteină mare'};
   if(prof().dietBreak===false) return {cut:true,goal:g,label:'Cut',sub:'deficit continuu'};
-  const nx=nextDay(), w=nx?nx.w:0;
-  return w<2?{cut:true,goal:g,label:'Cut',sub:'săptămâna '+(w+1)+' din 2 de deficit'}:{cut:false,goal:g,brk:true,label:'Pauză de dietă',sub:'săptămâna '+(w-1)+' din 2 la menținere'}; }
+  /* v19 (Norton): cu cât ești mai slab, cu atât mai des pauza — foarte slab 1:1 (2 săptămâni deficit, 2 menținere), altfel ~3:1 (a 4-a săptămână la menținere) */
+  const nx=nextDay(), w=nx?nx.w:0, cw=dietCutWeeks();
+  return w<cw?{cut:true,goal:g,label:'Cut',sub:'săptămâna '+(w+1)+' din '+cw+' de deficit'}:{cut:false,goal:g,brk:true,label:'Pauză de dietă',sub:'săptămâna '+(w-cw+1)+' din '+(WEEKS-cw)+' la menținere'}; }
+function dietCutWeeks(){ const ws=wStats(), w=ws?ws.a7:+prof().startW||80, bf=bfOf(w); return bf<(prof().sex==='f'?22:12)?2:3; }
 /* v16: metabolismul declarat (unii oameni ard mai puțin decât spun formulele) */
 const METAB=[[1,'Normal'],[.9,'Lent (−10%)'],[.82,'Foarte lent (−18%)']];
 const metabF=()=>{ const v=+prof().metab; return METAB.some(m=>m[0]===v)?v:1; };
@@ -185,7 +191,7 @@ function targets(day){
   const wkFloor=def>0?Math.ceil(Math.max(COACH.KCAL_FLOOR[sex],Math.round(tdee*(1-NUTRI.MAX_DEFICIT)),Math.round(NUTRI.EA_MIN[sex]*ffm+exWk),Math.round(30*ffm))/50)*50:0;
   const auto=Math.max(goal,wkFloor), kcal=+P.kcalT||auto;
   /* proteina: g/kg din greutatea de referință, după obiectiv (Wolf: 2,35 minim, spre 3 în cut); pragul de jos al caloriilor: 30 kcal/kg masă slabă (Wolf, RED-S) */
-  const rk=refKg(w,ffm), p=+P.protT||Math.round(GOALS[ph.goal].pk*rk); /* v18: dietă cu puține grăsimi, la cererea utilizatorului: ~20% din calorii, cel puțin 0,6 g/kg masă slabă; restul, carbohidrați */
+  const rk=refKg(w,ffm), p=+P.protT||Math.round(protPL(ph.goal)*ffm); /* v18: dietă cu puține grăsimi, la cererea utilizatorului: ~20% din calorii, cel puțin 0,6 g/kg masă slabă; restul, carbohidrați */
   let f=Math.max(Math.round(kcal*.2/9),Math.round(.5*rk)), c=Math.round((kcal-p*4-f*9)/4);
   if(c<80){ f=Math.max(Math.round(.5*ffm),Math.round((kcal-p*4-320)/9)); c=Math.max(0,Math.round((kcal-p*4-f*9)/4)); }
   const exKcal=Math.round(exKcalOf(dt.w,dt.d,k,w)*metabF()*sc);
@@ -217,9 +223,13 @@ const EXM={'Bench Press':{piept:1,triceps:.5,umeri:.5},'Pull Up / Lat Pulldown':
   'Flat Dumbbell Press':{piept:1,triceps:.5,umeri:.5},'Seated Overhead Press':{umeri:1,triceps:.5},'Cable Face Pull':{umeri:1,spate:.5},'Hack Squat':{cvadriceps:1,fesieri:.5},
   'Romanian Deadlift':{femurali:1,fesieri:.5},'Walking Lunge':{cvadriceps:1,fesieri:1},'Hip Thrust':{fesieri:1,femurali:.5},'Leg Press':{cvadriceps:1,fesieri:.5},
   'Hamstring Curl':{femurali:1},'Calf Raise':{gambe:1},'Push Press':{umeri:1,triceps:.5},'Close Grip Bench Press':{triceps:1,piept:.5},
-  'Dragon Flag':{abdomen:1},'Hanging Leg Raise':{abdomen:1},'Ab Wheel Rollout':{abdomen:1},'Pallof Press':{abdomen:1},'Plank':{abdomen:1}};
+  'Dragon Flag':{abdomen:1},'Hanging Leg Raise':{abdomen:1},'Ab Wheel Rollout':{abdomen:1},'Pallof Press':{abdomen:1},'Plank':{abdomen:1},
+  /* v19: exercițiile din planul după Milo Wolf */
+  'Lat Pulldown':{spate:1,biceps:.5},'Pull Up':{spate:1,biceps:.5},'T-Bar Row':{spate:1,biceps:.5,umeri:.5},'Machine Chest Press':{piept:1,triceps:.5,umeri:.5},'Dumbbell Fly':{piept:1},
+  'Cable Lateral Raise':{umeri:1},'Rear Delt Fly':{umeri:1},'Skull Crusher':{triceps:1},'Preacher Curl':{biceps:1},'Incline Dumbbell Curl':{biceps:1},'Cable Curl':{biceps:1},'Shrug':{spate:.5},
+  'Leg Extension':{cvadriceps:1},'Good Morning':{femurali:1,fesieri:.5},'Bulgarian Split Squat':{cvadriceps:1,fesieri:1},'Nordic Curl':{femurali:1},'Hip Abduction Machine':{fesieri:1},'Cable Crunch':{abdomen:1}};
 /* exerciții cu greutatea corpului: progresia e varianta mai grea, nu kilogramele */
-const BW_PROG={'Dragon Flag':'coboară mai lent (5–6 s) sau treci de la negative la repetări complete','Hanging Leg Raise':'treci de la genunchi la picioarele întinse','Ab Wheel Rollout':'rulează mai departe sau mai lent, cu spatele drept'};
+const BW_PROG={'Nordic Curl':'coboară mai lent sau mai jos înainte să te prinzi cu mâinile','Dragon Flag':'coboară mai lent (5–6 s) sau treci de la negative la repetări complete','Hanging Leg Raise':'treci de la genunchi la picioarele întinse','Ab Wheel Rollout':'rulează mai departe sau mai lent, cu spatele drept'};
 function muscleSets(from,to){ const m={}, by={}; MUSC.forEach(([k])=>{ m[k]=0; by[k]={}; });
   Object.keys(S.lifts||{}).forEach(n=>{ const map=EXM[n]; if(!map) return; (S.lifts[n]||[]).forEach(e=>{ if(e.d<from||e.d>to) return; const c=e.s.length;
     Object.keys(map).forEach(k=>{ m[k]+=c*map[k]; by[k][n]=(by[k][n]||0)+c; }); }); });

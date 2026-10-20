@@ -8,7 +8,7 @@
    cu pulsul la prag (LTHR) din testul de 30 de minute, reprizele țintesc 95–100% din el.
    Modul bandă: aceleași bucăți, pe cronometru, cu viteza mare pe ecran, sunet și voce la fiecare schimbare.
    ===================================================================== */
-const SPD_DAYS=[[0,'Luni','ez1'],[1,'Marți','thr'],[3,'Joi','ez2'],[5,'Sâmbătă','lng']];
+const SPD_DAYS=[[0,'Luni','ez1'],[1,'Marți','thr'],[3,'Joi','ez2']];
 const SPD_K='zece3:spd';
 /* pulsul de repaus: din profil, altfel mediana check-in-urilor din ultimele 14 zile */
 function restHR(){ const P=prof(); if(+P.hrRest>0) return {v:+P.hrRest,src:'din profil'};
