@@ -4,7 +4,7 @@
    pauzele de dietă, refeed-urile, reverse diet-ul) și cărțile Fat Loss Forever și The Complete Contest Prep Guide.
    Nivelul dovezilor: A = meta-analize sau studii mari consecvente, B = câteva studii, C = un studiu sau experiența lui cu clienții.
    ===================================================================== */
-SCI_SEC.splice(2,0,['norton','Layne Norton','bowl']);
+SCI_SEC.splice(2,0,['norton','Layne Norton · nutriție și suplimente','bowl']);
 SCI.push(
 {s:'norton',ev:'A',t:'Problema nu e slăbitul, e menținerea',n:'95% recâștigă în 3 ani',
  sum:'Șase din șapte oameni pot slăbi, dar 70% recâștigă tot într-un an, 85% în doi și 95% în trei; o treime până la două treimi ajung mai grei decât la început. Corpul tratează dieta ca pe o foamete controlată: metabolism mai mic, foame mai mare, stocare mai eficientă după.',
@@ -53,5 +53,46 @@ SCI.push(
 {s:'norton',ev:'B',t:'Creatina, cafeina, sodiul, alcoolul',n:'pe scurt',
  sum:'Creatina (3–5 g) se ia și în cut: apa e în mușchi. Cafeina merge și la cine o bea zilnic: 150–250 mg constant, mai mult (≤6 mg/kg) la sesiunile cheie. Sodiul nu trebuie restricționat dacă nu ești sensibil la sare (5–10%). Alcoolul are 7 kcal/g; 1–2 băuturi notate nu strică, 4–6 (beat) scad lipoliza și sinteza musculară.',
  do:['Alcoolul îl notezi ca grame de carbohidrați sau grăsimi.'],
+ src:'Norton'},
+/* ---------- v23: mai multe idei din canale (miturile, dieta flexibilă, suplimentele) ---------- */
+{s:'norton',ev:'A',t:'Insulina nu te îngrașă',n:'la calorii și proteine egale',
+ sum:'Grăsimea se stochează și fără insulină; bilanțul energetic decide. Deficitul îmbunătățește sensibilitatea la insulină și inflamația indiferent de câți carbohidrați mănânci, chiar și cu zahăr. Avantajul dietelor low-carb vine din proteina mai mare, nu din insulină.',
+ do:['Carbohidrații îi păstrezi pentru antrenament și alergare.'],
+ src:'Norton · Hall'},
+{s:'norton',ev:'B',t:'Postul intermitent: merge, dar costă mușchi',n:'65% din kilograme, masă slabă',
+ sum:'În studiul TREAT (fereastră de 8 ore), slăbirea a fost aceeași, dar 65% din kilogramele pierdute au fost masă slabă și pașii au scăzut. Dacă îți place, ține cel puțin 3 mese proteice în fereastră și pașii constanți.',
+ do:['Planul tău: 4 mese, distribuite pe zi.'],
+ src:'Norton · Lowe'},
+{s:'norton',ev:'B',t:'Fără „cheat day”',n:'zile planificate la menținere',
+ sum:'Alternanța restricție mare / exces strică relația cu mâncarea. Varianta lui: zile cu mai multe calorii, până la menținere, planificate, cu aceleași alimente. După o abatere: dacă a fost din stres, revii a doua zi la normal, fără pedeapsă; dacă a fost planificată, împarți surplusul pe 4–6 zile (−300…500 kcal pe zi).',
+ do:['De sărbători: menținere, nu dietă de slăbit.'],
+ src:'Norton'},
+{s:'norton',ev:'A',t:'Dieta flexibilă',n:'consecvența bate perfecțiunea',
+ sum:'Dieta cea mai bună e cea pe care o poți ține. Numeri tot, dar alegi alimentele: un desert mic în limita caloriilor e în regulă, mesele gata preparate ajută dacă te țin pe plan. Schimbi alimentele între ele păstrând proteina, carbohidrații și grăsimile.',
+ do:['În Mese, apeși pe un aliment ca să-l înlocuiești cu unul echivalent.'],
+ src:'Norton · FLF'},
+{s:'norton',ev:'B',t:'Menținerea ta reală',n:'din cântar, nu din formulă',
+ sum:'Formulele (Mifflin, Katch) sunt doar estimări; menținerea reală o afli din mâncarea notată și media cântăririlor zilnice pe ~4 săptămâni. Ea scade pe măsură ce slăbești (bazal, NEAT, eficiența la efort), deci o recalculezi. Etichetele au erori de 10–20%.',
+ do:['Aplicația corectează necesarul o dată pe săptămână, din cântar.'],
+ src:'Norton'},
+{s:'norton',ev:'A',t:'Suplimentele care merită',n:'creatină, cafeină, proteină',
+ sum:'Creatina monohidrat 3–5 g pe zi, și în cut (poate chiar mai utilă). Cafeina ajută și pe cine o bea zilnic: 150–250 mg constant, până la 6 mg/kg la sesiunile cheie. Proteina pudră e doar mâncare comodă. Vitamina D dacă ai deficit; omega-3 și proteina mare pot limita pierderea de masă slabă în deficitele mari; melatonina 3–10 mg ajută la adormire.',
+ do:['Le găsești în Nutriție → Azi → Suplimente.'],
+ src:'Norton'},
+{s:'norton',ev:'A',t:'Suplimentele care nu merită',n:'BCAA, glutamină, carnitină',
+ sum:'BCAA/EAA nu adaugă nimic când proteina zilei e atinsă (leucina singură nu construiește mușchi). Glutamina e captată de intestin. Carnitina nu arde mai multă grăsime: oxidarea e decisă de bilanțul energetic. Arzătoarele și boosterele nu schimbă compoziția corporală.',
+ do:['Banii merg pe mâncare și pe proteină.'],
+ src:'Norton'},
+{s:'norton',ev:'B',t:'Cum îți măsori grăsimea',n:'aceeași metodă, aceleași condiții',
+ sum:'Orice metodă are erori (bioimpedanța mai ales). Folosești mereu aceeași, dimineața, pe nemâncate, după toaletă; pliometru în 3 puncte, de 3 ori, săptămânal; contează tendința, nu cifra.',
+ do:['Talia o dată pe săptămână, poze la 2 săptămâni.'],
  src:'Norton'}
 );
+/* v23: nutriția și suplimentele sunt STRICT Layne Norton: scot din Știință ideile de nutriție și suplimente din alte surse
+   (secțiunile Metabolism lent, Nutriție, Suplimente, ideile de nutriție ale lui Milo Wolf și miturile de nutriție, unde unele îl contrazic). */
+(function(){ const dropSec=['met','nut','sup'], dropT=new Set(['Zahărul lichid și ultraprocesatele: combustibil direct pentru burtă','Testosteronul: slăbitul îl crește, „boosterele” nu','La masă, deficitul și proteina fac aproape toată treaba',
+  'Cafeina se plătește în ore de somn','Alcoolul taie direct din recuperare',
+  '„Am metabolismul stricat, de-asta nu slăbesc.”','„Dacă am metabolism lent, trebuie să tai și mai mult.”','„Reverse dieting-ul îți repornește metabolismul.”','„Kilogramul pus după o pauză de dietă e grăsime.”','„Mâncatul seara îngrașă.”','„Corpul nu folosește mai mult de 30 g de proteină pe masă.”','„Fără fereastra anabolică de 30 de minute pierzi progresul.”','„Frigul și grăsimea brună topesc grăsimea.”','„Arzătoarele de grăsimi accelerează metabolismul.”','„Creatina îngrașă și strică rinichii.”','„Cântăritul zilnic te obsedează.”','„Mai mult fier înseamnă mai multă energie.”','„Cardio-ul pe nemâncate arde mai multă grăsime.”',
+  'Proteină: 2,35 g/kg, nu 1,6','Proteina împărțită în 3–4 mese','Carbohidrați și grăsimi: minime, nu procente','Carbohidrați înainte de antrenament','Cut: ~0,5% pe săptămână','Pragul de 30 kcal/kg masă slabă','Metabolismul lent nu te condamnă','Pașii bat cardio-ul, dar nu compensează dieta','Ieșirea din cut: direct la menținere','Bulk: 0,5–1% din greutate pe lună','Recompoziția merge și la avansați','Ce te ține sătul în cut','Apa: 3–4 L pe zi','Psihologia slăbitului','Suplimentele care merită','Pentru sănătate: vitamina D și omega-3','Suplimentele care nu merită']);
+  const keep=SCI.filter(x=>!(dropSec.indexOf(x.s)>=0||(x.s!=='norton'&&dropT.has(x.t)))); SCI.length=0; keep.forEach(x=>SCI.push(x));
+  const sec=SCI_SEC.filter(x=>dropSec.indexOf(x[0])<0); SCI_SEC.length=0; sec.forEach(x=>SCI_SEC.push(x)); })();

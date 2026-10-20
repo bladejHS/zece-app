@@ -3,7 +3,7 @@
    din toate videoclipurile lui (~340): antrenament, alergare și forță împreună, recuperare, suplimente. Nutriția din aplicație urmează acum Layne Norton (Știință → Layne Norton).
    Nivelul dovezilor e cel pe care îl dă el: A = meta-analize consecvente, B = câteva studii, C = un studiu sau experiența lui.
    ===================================================================== */
-SCI_SEC.splice(1,0,['milo','Milo Wolf','dumbbell']);
+SCI_SEC.splice(1,0,['milo','Milo Wolf · antrenament','dumbbell']);
 SCI.push(
 /* ---------- antrenament ---------- */
 {s:'milo',ev:'A',t:'Mai multe seturi, mai multă creștere',n:'până la 30–40 de seturi pe săptămână',

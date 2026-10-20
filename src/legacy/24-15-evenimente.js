@@ -223,12 +223,8 @@ document.addEventListener('click',async ev=>{
     case 'icsExport': await icsExport(); return;
     case 'bkLater': await save('bk',Object.assign({},S.bk,{snooze:dayShift(tk,7)})); render(); return;
     case 'nTab': S.nTab=k; render(); return;
-    case 'shotOpen': S.shotOpen=S.shotOpen===k&&!el.dataset.go?null:k; render(); if(el.dataset.go||S.shotOpen){ const c=document.querySelector('.shot.open'); if(c&&el.dataset.go) c.scrollIntoView({behavior:'smooth',block:'start'}); } return;
-    case 'shotF': S.shotF=k; render(); return;
-    case 'shotN': S.shotN=I; render(); return;
-    case 'shotDrink': { const s=shotOf(k); if(!s) return; floatText(el,'+'+s.m.k+' kcal'); await addMeal({n:'Shot · '+s.n,k:s.m.k,p:s.m.p,c:s.m.c,g:s.m.g,shot:s.id}); buzz(20); render(); toast('Shot notat',s.n+' · '+s.m.k+' kcal','info'); return; }
     case 'planDay': S.planDay=I; render(); return;
-    case 'goalSet': if(GOALS[k]){ await save('prof',Object.assign({},S.prof||{},{goalMode:k})); STC=null; render(); buzz(15); toast('Obiectiv: '+GOALS[k].l,'Țintele și planul de mese s-au recalculat.','info'); } return;
+    case 'goalSet': if(GOALS[k]){ await save('prof',Object.assign({},S.prof||{},{goalMode:k},k==='cut'&&prof().goalMode!=='cut'?{dbStart:mondayOf(todayKey())}:{})); STC=null; render(); buzz(15); toast('Obiectiv: '+GOALS[k].l,'Țintele și planul de mese s-au recalculat.','info'); } return;
     case 'mealEat': { const D=dayPlan(tk), m=D.meals[I]; if(!m) return; floatText(el,'+'+m.k+' kcal');
       await addMeal({n:D.name+' · '+m.n,k:m.k,p:m.p,c:m.c,g:m.g,pl:D.kind+I}); buzz(20); render(); toast('Masă notată',m.n+' · '+m.k+' kcal','info'); return; }
     case 'shopDays': S.shopDays=I; render(); return;

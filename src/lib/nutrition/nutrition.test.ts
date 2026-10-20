@@ -71,7 +71,7 @@ test('hidratare: bază + pierderi, înainte/în timpul/după', () => {
 
 test('suplimente: niveluri și blocări', () => {
   assert.equal(tierOf('Creatină monohidrat'), 1);
-  assert.equal(tierOf('betaal'), 2);
+  assert.equal(tierOf('omega3'), 2);
   assert.equal(tierOf('fat burner extrem'), 3);
   assert.equal(tierOf('test booster'), 3);
   assert.equal(tierOf('ceai verde'), null);

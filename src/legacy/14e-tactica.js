@@ -33,7 +33,7 @@ function tacWarn(tg){ const P=prof(), bf=tg.bf, g=tg.goal, out=[], ms=tg.ms, cal
   if(g==='bulk'&&bf>20) out.push(['bad',`Ai ~${bf}% grăsime. Un surplus acum adaugă mai ales grăsime: întâi cut sau recompoziție la menținere, apoi bulk-ul controlat (Norton).`]);
   else if(g==='bulk'&&bf>15) out.push(['warn',`Ai ~${bf}% grăsime: merge un bulk lent (0,5% pe lună), dar și recompoziția la menținere e o opțiune bună.`]);
   if(g==='recomp'&&bf>25) out.push(['warn',`Ai ~${bf}% grăsime: recompoziția merge (Murphy: se câștigă masă chiar și la ~500 kcal deficit), dar un cut te duce mai repede în zona de 10–25%.`]);
-  if(tg.raised&&tg.def>0) out.push(['info',`Ținta e ținută sus de pragul de siguranță (cel puțin 30 kcal/kg masă slabă, ~${Math.round(30*tg.ffm)} kcal): sub el apare deficitul relativ de energie (RED-S): hormoni, somn, performanță. Deficitul în plus îl faci din pași (+2000/zi), nu din mâncare.`]);
+  if(tg.raised&&tg.def>0) out.push(['info',tg.wkFloor<=COACH.KCAL_FLOOR[prof().sex==='f'?'f':'m']?`Ținta e ținută la ${tg.wkFloor} kcal, pragul de siguranță al aplicației: deficitul real e mai mic de ~${tg.def} kcal. Restul îl faci din pași (NEAT), nu tăind din mâncare.`:`Ținta e limitată la ${tg.wkFloor} kcal: Norton nu trece de 1% din greutate pe săptămână (peste el, până la jumătate din kilograme sunt masă slabă).`]);
   if(g==='cut'&&ms.ok&&ms.tdee<calc*.75) out.push(['bad',`Menții greutatea cu ~${ms.tdee} kcal, sub 75% din necesarul calculat (${calc} kcal). Norton: nu mai slăbi acum; ridică caloriile spre necesar și mișcă-te mai mult, apoi reiei cut-ul.`]);
   return out; }
 /* regulile obiectivului, cu cifrele tale: [iconiță, titlu, text, surse] — nutriția după Norton, antrenamentul după Wolf */
@@ -44,19 +44,19 @@ function tacRules(tg){ const g=tg.goal, W=weekTargets().avg, P=tg.p, ffm=tg.ffm,
   const sleep=['heart','Somnul','7,5–9 ore. Sub 5,5 ore, jumătate din kilogramele pierdute au fost masă slabă (față de aproape doar grăsime la 8 ore): foamea crește, NEAT-ul scade.','NY'];
   if(g==='cut') return [
     ['scale','Ritmul',`0,4–0,8% din greutate pe săptămână, niciodată peste 1% (atunci până la jumătate din kilograme pot fi masă slabă). Aplicația: 0,5%, ~${num(T,2)} kg, adică un deficit de ~${d} kcal pe zi.`,'NY FLF'],
-    prot('În deficit proteina crește cu 10–20%. '),
+    prot('În deficit proteina crește cu 10–20% (aici +10%, ca să rămână carbohidrați pentru alergare). În ziua de prag: +5 g pe oră de efort intens. '),
     ['flame','Grăsimi și carbohidrați','La calorii și proteine egale, împărțirea dintre ele nu schimbă pierderea de grăsime (DIETFITS, 12 luni). Grăsimile puține (~20%, niciodată sub ~15% din calorii: hormonii), restul carbohidrați.','NY'],
     ['run','NEAT și pași','NEAT-ul e partea care scade cel mai mult în dietă (până la −500 kcal pe zi). Notează-ți pașii înainte și ține-i în dietă; dacă scad, plimbări intenționate. Cardio-ul nu e obligatoriu; pe nemâncate nu arde mai multă grăsime.','NY'],
     ['alert','Platoul','Cântar zilnic dimineața, medii săptămânale. Întâi verifici notarea (oamenii își subestimează aportul cu până la 50%), apoi o singură schimbare: −100…200 kcal sau mai mulți pași. Nu schimbi nimic după o singură săptămână.','NY FLF'],
-    ['leaf','Pauze de dietă',`MATADOR: mai multă grăsime pierdută și metabolism mai bine păstrat. Cu cât ești mai slab, cu atât mai des: ${dietCutWeeks()===2?'acum 2 săptămâni deficit, 2 la menținere':'acum 3 săptămâni deficit, 1 la menținere'}. ${prof().dietBreak!==false?'Sunt pornite.':'Acum sunt oprite; le pornești din Necesar.'} Opțional, refeed: 2 zile la rând la menținere (din carbohidrați) păstrează masa slabă mai bine decât una izolată.`,'NY FLF CPG'],
+    ['leaf','Pauze de dietă',`MATADOR: mai multă grăsime pierdută și metabolism mai bine păstrat. Frecvența după cât de slab ești (slab 1:1, normal 2:1, multă grăsime 1–2 săptămâni la 1–2 luni). Tu: ${dietBreakPlan().l}. În pauză urmărești tot: menținere, aceeași proteină, carbohidrați mai mulți, grăsimi spre ~0,7 g/kg. ${prof().dietBreak!==false?'Sunt pornite.':'Acum sunt oprite; le pornești din Necesar.'} Opțional, refeed: 2 zile la rând la menținere (din carbohidrați) păstrează masa slabă mai bine decât una izolată.`,'NY FLF CPG'],
     meal, fib, sleep,
-    ['bolt','Creatina','3–5 g pe zi și în cut: apa e în mușchi (masă slabă), nu grăsime, iar performanța se păstrează mai bine în deficit.','NY'],
+    ['bolt','Suplimente (Norton)','Merită: creatină monohidrat 3–5 g pe zi (și în cut: apa e în mușchi, nu grăsime), cafeină 150–250 mg constant, până la 6 mg/kg la sesiunile cheie, proteină pudră doar ca mâncare comodă, vitamina D dacă ai deficit. Nu merită: glutamină, carnitină, BCAA/EAA când proteina zilei e atinsă (leucina singură nu construiește mușchi), boostere și arzătoare.','NY'],
     ['dumbbell','Antrenamentul','Același program ca în bulk (Wolf): aproape de eșec, progresie; forța e cel mai mare factor care păstrează mușchiul în deficit.','MW'],
     ['trophy','După cut','Plan pentru „dieta de după dietă”: la final mănânci până ești plin fizic și te oprești; urci la menținerea REALĂ (din ritmul tău de slăbit, nu din formulă); apoi, dacă vrei mai multe calorii, reverse diet: +2–5% carbohidrați și grăsimi pe săptămână, proteina la fel. Păstrezi antrenamentul și cântarul zilnic.','NY FLF']];
   if(g==='recomp') return [
     ['target','Când are sens','Începător, revenire după pauză sau grăsime moderată: poți pierde grăsime și câștiga masă în același timp. La avansați merge mai lent.','NY'],
     ['scale','Caloriile',`Menținere sau un deficit mic: ~0,25% pe săptămână (~${num(T,2)} kg, ~${d} kcal pe zi), în medie ${W} kcal/zi.`,'NY'],
-    prot(''), meal, fib, sleep,
+    prot(''), meal, fib, sleep, ['bolt','Suplimente (Norton)','Merită: creatină monohidrat 3–5 g pe zi (și în cut), cafeină 150–250 mg constant, până la 6 mg/kg la sesiunile cheie, proteină pudră doar ca mâncare comodă, vitamina D dacă ai deficit. Nu merită: glutamină, carnitină, BCAA/EAA când proteina zilei e atinsă (leucina singură nu construiește mușchi), boostere și arzătoare.','NY'],
     ['dumbbell','Antrenamentul face treaba','Nutriția doar permite creșterea; stimulul e antrenamentul (Wolf): volum, aproape de eșec, exerciții cu stretch, progresie.','MW'],
     ['chart','Cum judeci','Nu după cântar: talia o dată pe săptămână, poze la 2 săptămâni, aceeași metodă și aceleași condiții; contează tendința, nu o săptămână.','NY FLF'],
     ['alert','Când schimbi direcția','Dacă după 4 săptămâni talia nu scade și forța stă, treci pe cut sau pe un bulk lent.','FLF']];
@@ -67,7 +67,7 @@ function tacRules(tg){ const g=tg.goal, W=weekTargets().avg, P=tg.p, ffm=tg.ffm,
     ['flame','Carbohidrați și grăsimi','Carbohidrații ajută creșterea musculară (ketogenic cu aceeași proteină = mai puțină masă slabă câștigată); grăsimile puține, restul carbohidrați.','NY'],
     ['dumbbell','Antrenamentul','Bulk lung și lent. E momentul pentru specializare (Wolf): 20–35 de seturi pe săptămână pe 1–3 mușchi, 5–10 pe restul.','MW'],
     ['alert','Prea repede','Peste ~1,3% pe lună sau talia urcă mai repede decât forța: −100…200 kcal.','NY FLF'],
-    ['bolt','Suplimente','Creatină monohidrat 3–5 g pe zi; cafeina 150–250 mg constant, mai mult (≤6 mg/kg) doar la sesiunile cheie, departe de somn.','NY MW']]; }
+    ['bolt','Suplimente (Norton)','Merită: creatină monohidrat 3–5 g pe zi (și în cut), cafeină 150–250 mg constant, până la 6 mg/kg la sesiunile cheie, proteină pudră doar ca mâncare comodă, vitamina D dacă ai deficit. Nu merită: glutamină, carnitină, BCAA/EAA când proteina zilei e atinsă (leucina singură nu construiește mușchi), boostere și arzătoare.','NY']]; }
 function nutriTactic(){ const tg=targets(), g=tg.goal, st=tacStatus(tg), W=weekTargets(), ww=wWeeks();
   const cls={ok:'ok',warn:'warn',bad:'bad',info:'info'};
   return `<div class="card tac-hero"><div class="eyebrow">${ic('target')} Obiectivul tău</div>

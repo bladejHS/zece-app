@@ -16,16 +16,22 @@ export interface Supplement {
   when?: string;
 }
 
+/* v23: strict după Layne Norton (canalele lui de YouTube): doar ce recomandă el. Beta-alanina, nitrații și bicarbonatul au ieșit. */
 export const SUPPLEMENTS: readonly Supplement[] = [
-  { id: 'creatina', name: 'Creatină monohidrat', tier: 1, evidence: 'dovezi puternice', dose: '3–5 g pe zi, oricând, și în zilele libere. Efectul vine din saturare, după 3–4 săptămâni.' },
-  { id: 'proteina', name: 'Proteină din zer sau vegetală', tier: 1, evidence: 'dovezi puternice', dose: 'Doar ca să ajungi la ținta zilnică de proteină: 20–40 g pe porție, după antrenament sau când nu ai o masă.' },
-  { id: 'cafeina', name: 'Cafeină', tier: 1, evidence: 'dovezi puternice', dose: '3 mg/kg cu 45–60 de minute înainte de sesiunile grele, cel mult 400 mg pe zi și nu după ora 14.', when: 'sesiuni intense' },
-  { id: 'vitd', name: 'Vitamina D3', tier: 1, evidence: 'dacă ai deficit', dose: '1000–2000 UI pe zi, mai ales din octombrie până în aprilie. Ideal după un test de sânge.' },
-  { id: 'electroliti', name: 'Electroliți (sodiu)', tier: 1, evidence: 'dovezi bune', dose: '300–600 mg sodiu pe oră în sesiunile de peste 60 de minute, la căldură sau dacă transpiri mult (urme albe pe haine). După efort: sare în masă sau 500–1000 mg sodiu în apa de rehidratare.', when: 'sesiuni lungi' },
-  { id: 'omega3', name: 'Omega-3 (EPA + DHA)', tier: 2, evidence: 'pentru sănătate', dose: '1–2 g pe zi, dacă mănânci pește gras mai rar de două ori pe săptămână.' },
-  { id: 'betaal', name: 'Beta-alanină', tier: 2, evidence: 'dovezi moderate', dose: '3,2–6,4 g pe zi, împărțit, cel puțin 4 săptămâni. Ajută la eforturile de 1–4 minute (rundele); poate furnica.' },
-  { id: 'nitrati', name: 'Nitrați (suc de sfeclă)', tier: 2, evidence: 'dovezi moderate', dose: '~400 mg nitrați (70–140 ml concentrat) cu 2–3 ore înainte de alergări sau condiționare.' },
-  { id: 'bicarbonat', name: 'Bicarbonat de sodiu', tier: 2, evidence: 'dovezi moderate', dose: '0,2–0,3 g/kg cu 60–90 de minute înainte de eforturi repetate de 1–7 minute. Încearcă întâi într-o zi fără meci: poate deranja stomacul.' },
+  { id: 'creatina', name: 'Creatină monohidrat', tier: 1, evidence: 'Norton: da, și în cut', dose: '3–5 g pe zi, oricând, și în zilele libere (sau încărcare 20 g pe zi, 5–7 zile). În deficit e poate chiar mai utilă: apa reținută e în mușchi, nu grăsime.' },
+  { id: 'cafeina', name: 'Cafeină', tier: 1, evidence: 'Norton: da', dose: '150–250 mg pe zi, constant; la sesiunile cheie până la 6 mg/kg, cu ~45 de minute înainte și departe de somn. Merge și dacă bei cafea zilnic.', when: 'sesiuni cheie' },
+  { id: 'proteina', name: 'Proteină din zer', tier: 1, evidence: 'Norton: mâncare comodă', dose: 'Doar ca să ajungi la ținta zilei și la 30–50 g pe masă; nu e magică, contează totalul și distribuția pe 3–5 mese.' },
+  { id: 'vitd', name: 'Vitamina D3 (+ calciu din mâncare)', tier: 1, evidence: 'Norton: dacă ai deficit', dose: '1000–2000 UI pe zi toamna și iarna, ideal după analiză. Cu calciu și forță, protejează oasele când mănânci multe proteine.' },
+  { id: 'electroliti', name: 'Sodiu (sare)', tier: 1, evidence: 'Norton: nu-l restricționa', dose: 'Sportivii pierd sodiu prin transpirație; doar 5–10% dintre oameni sunt sensibili la sare. Sare normală în mâncare, mai multă în zilele cu transpirație multă, și apă multă.' },
+  { id: 'omega3', name: 'Omega-3 (EPA + DHA)', tier: 2, evidence: 'Norton: în deficit mare', dose: '1–2 g pe zi. În deficitele mari, alături de proteina mare, poate limita pierderea de masă slabă.' },
+  { id: 'melatonina', name: 'Melatonină', tier: 2, evidence: 'Norton: opțional, pentru somn', dose: '3–10 mg seara, dacă adormi greu. Întâi rutina: aceeași oră, cameră întunecată la 19–21 °C, fără ecran înainte.' },
+];
+
+/** Ce spune Norton că NU merită (nu e periculos, doar inutil). */
+export const USELESS: readonly { name: string; why: string }[] = [
+  { name: 'BCAA / EAA', why: 'Cu proteina zilei atinsă și distribuită pe mese nu adaugă nimic; leucina singură nu construiește mușchi.' },
+  { name: 'Glutamină', why: 'E captată de intestin; nu crește masa musculară.' },
+  { name: 'L-carnitină', why: 'Nu arde mai multă grăsime: oxidarea grăsimilor e decisă de bilanțul energetic.' },
 ];
 
 /** Exemple de ce blochează aplicația (explicate, nu recomandate). */

@@ -2,7 +2,7 @@
    Codul vechi (src/legacy) o folosește prin `NUTRI`. */
 export { belowFloor, CARB_FACTOR, DAY_LABEL, EA_MIN, MAX_DEFICIT, periodize, weekCarbMean, type DayType, type Macros, type NutritionPlan, type PeriodizeInput } from './plan.ts';
 export { hydration, preWorkoutAlert, SWEAT_L_PER_H, SWEAT_NA_MG_PER_L, type HydrationPlan, type Intensity } from './hydration.ts';
-export { BLOCKED, SUPPLEMENTS, tierOf, type Supplement, type Tier } from './supplements.ts';
+export { BLOCKED, SUPPLEMENTS, USELESS, tierOf, type Supplement, type Tier } from './supplements.ts';
 export { mealFeedback, mealPrep, type Meal, type MealContext, type MealPrep } from './meals.ts';
 
 /** Textul de avertizare medicală, acceptat o dată înainte de nutriție. */

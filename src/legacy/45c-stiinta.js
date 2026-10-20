@@ -18,7 +18,7 @@ function sciDiag(){ const tk=todayKey(), tg=targets(), days=Array.from({length:7
   const st=avg(days.map(k=>+jOf(k).steps).filter(v=>v>0));
   out.push({k:'Pași',v:st!=null?Math.round(st).toLocaleString('ro-RO'):'—',ok:st==null?null:st>=8000,why:st==null?'Notează pașii în jurnal: sunt cea mai mare pârghie pe metabolismul „lent”.':st>=8000?'NEAT-ul îți ține cheltuiala sus.':'Mișcarea zilnică scade prima în deficit. Urcă treptat spre 8.000–10.000.'});
   const ld=days.filter(k=>mlogDay(k).length>=3), pd=ld.filter(k=>dayTotals(k).p>=tg.p*.9).length;
-  out.push({k:'Proteină',v:ld.length?pd+'/'+ld.length+' zile':'—',ok:ld.length?pd>=ld.length*.7:null,why:ld.length?'Ținta: '+tg.p+' g/zi, în 4–5 mese.':'Notează mesele ca să văd dacă atingi '+tg.p+' g/zi.'});
+  out.push({k:'Proteină',v:ld.length?pd+'/'+ld.length+' zile':'—',ok:ld.length?pd>=ld.length*.7:null,why:ld.length?'Ținta: '+tg.p+' g/zi, în 3–5 mese de 30–50 g.':'Notează mesele ca să văd dacă atingi '+tg.p+' g/zi.'});
   const wn=wList().filter(x=>x.d>dayShift(tk,-7)&&x.d<=tk).length;
   out.push({k:'Cântăriri',v:wn+'/7',ok:wn>=3,why:wn>=3?'Suficiente pentru media săptămânii.':'Cântărește-te dimineața, de cel puțin 3 ori pe săptămână.'});
   /* talia raportată la înălțime: cel mai simplu indicator al grăsimii de pe abdomen (ținta: sub 0,5) */
@@ -26,20 +26,22 @@ function sciDiag(){ const tk=todayKey(), tg=targets(), days=Array.from({length:7
   out.push({k:'Talie / înălțime',v:wh!=null?num(wh,2)+(ow?' · '+(lw.waist-ow.waist>0?'+':'')+num(lw.waist-ow.waist,1)+' cm':''):'—',ok:wh==null?null:wh<.5,
     why:wh==null?'Măsoară talia dimineața, mereu la buric, la finalul unei expirații, o dată pe săptămână (Performanță → Corp → Măsurători). E cel mai bun semnal pentru abdomen.':wh<.5?'Sub 0,5: risc metabolic scăzut (NICE).':(wh<.6?'0,5–0,59: risc crescut.':'0,6 sau peste: risc mare.')+' Talia scade cu ~1 cm la fiecare kg slăbit; judecă tendința pe o lună.'+(+lw.waist>=94?' Peste 94 cm: cere tensiune, glicemie, HbA1c, lipide și ALT/AST (vezi Abdomen și șolduri).':'')});
   const ww=wWeeks(tk);
-  /* ritmul bun: 0,5–1% din greutate pe săptămână, ideal ~0,7% (Garthe 2011); îl socotesc în regulă de la 0,4% */
+  /* ritmul bun (Norton): 0,4–0,8% din greutate pe săptămână, niciodată peste 1% */
   const pc=ww?-ww.rate/ww.w1*100:null;
   out.push({k:'Ritm',v:ww?(ww.rate>0?'+':'')+num(ww.rate,2)+' kg/săpt.':'—',ok:ww?pc>=.4&&pc<=1:null,why:!ww?'Am nevoie de 2 săptămâni de cântăriri.':pc<.4?'Sub 0,4% pe săptămână: ținta scade singură din cântar, o dată pe săptămână.':pc>1?'Peste 1% pe săptămână: riști masa musculară. Mănâncă ceva mai mult.':'În ritmul bun ('+num(pc,1)+'% pe săptămână; ideal ~0,7%).'});
   return out; }
 /* ---------- protocolul tău: doze pe greutatea ta ---------- */
 function sciProto(){ const w=Math.round(+curW()||+prof().startW||80), tg=targets();
-  return [['dumbbell','Proteină',tg.p+' g/zi','~'+Math.round(w*.4)+' g pe masă, 4–5 mese, una înainte de somn'],
-    ['pill','Creatină monohidrat','3–5 g/zi','zilnic, oricând; +1–2 kg pe cântar din apă în primele săptămâni (nu e grăsime)'],
-    ['cup','Cafeină','~'+Math.round(w*3)+' mg','3 mg/kg cu ~60 min înainte, doar la sesiunile de dimineață; după-amiaza ≤100 mg; ultima cafea cu ~9 h înainte de culcare'],
-    ['run','Pași','8.000–10.000+','zilnic, în afara antrenamentelor; cea mai mare pârghie pe cheltuiala zilnică'],
-    ['moon','Somn','8–9 h în pat','oră fixă de trezire; fără sesiuni grele devreme după o noapte scurtă'],
-    ['drop','Apă',num(tg.water/1000,1)+' L','+ sare sau electroliți după antrenamentele cu transpirație mare'],
-    ['bowl','Între 2 sesiuni grele','~'+Math.round(w*.8)+' g carbo + '+Math.round(w*.3)+' g proteină/oră','2–3 ore, doar dacă ambele sesiuni sunt grele; după forță + Z2 ușor ajunge o masă normală'],
-    ['scale','Ritm de slăbire','~'+num(w*.005,2)+' kg/săpt.','0,5% din greutate (Milo Wolf, Murphy); Norton: 0,4–0,8%, maxim 1%']]; }
+  /* v23: strict Layne Norton */
+  const pm=clamp(Math.round(tg.p/4),30,55);
+  return [['dumbbell','Proteină',tg.p+' g/zi','~'+pm+' g pe masă, 3–5 mese egale (Norton: 30–50 g); pe masa slabă, +1,5% pe an după 30'],
+    ['pill','Creatină monohidrat','3–5 g/zi','zilnic, oricând, și în cut: apa e în mușchi, nu grăsime'],
+    ['cup','Cafeină','150–250 mg/zi','constant; la sesiunile cheie până la ~'+Math.round(w*6/50)*50+' mg (6 mg/kg), departe de somn'],
+    ['run','Pași','~10.000','urmărește-i înainte de dietă și ține-i: NEAT-ul scade cel mai mult în deficit'],
+    ['moon','Somn','7,5–9 h','sub 5,5 h, jumătate din kilogramele pierdute sunt masă slabă'],
+    ['drop','Apă și sare',num(tg.water/1000,1)+' L','sare normală, nu restricționa sodiul (sportivii îl pierd prin transpirație)'],
+    ['leaf','Fibre','≥'+Math.round(tg.kcal/1000*15)+' g/zi','cel puțin 15 g la 1000 kcal: legume, fructe, ovăz'],
+    ['scale','Ritm de slăbire','~'+num(w*.005,2)+' kg/săpt.','0,5% din greutate (Norton: 0,4–0,8%, niciodată peste 1%)']]; }
 
 function viewSci(){ const sec=S.sciSec||'all', D=sciDiag(), ok=D.filter(x=>x.ok===true).length, known=D.filter(x=>x.ok!=null).length;
   const L=SCI.filter(x=>sec==='all'||x.s===sec);

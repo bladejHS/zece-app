@@ -648,37 +648,33 @@ function aeroCard(){
 }
 
 
-/* ---------- nutriție pentru performanță: mesele din jurul antrenamentului, suplimente cu dovezi, proteina pe mese ----------
-   Recomandări după pozițiile ISSN (nutrient timing, cafeină, creatină) și ACSM (nutriție și hidratare la sportivi).
-   Cantitățile pe kg folosesc greutatea țintă, la fel ca ținta de proteină; hidratarea folosește greutatea de acum. */
+/* ---------- nutriția din jurul antrenamentului — strict Layne Norton: fereastra anabolică e supraevaluată, contează totalul zilei și
+   distribuția proteinei (3–5 mese cu 30–50 g, una cu câteva ore înainte, una după); carbohidrații înainte/după sunt o preferință,
+   dar la sesiunile cheie de anduranță ai nevoie de carbohidrați (low-carb: −2–3% performanță); sodiul nu se restricționează. ---------- */
 const refW=()=>{ const P=prof(); return +P.goalW>0?Math.min(+P.goalW,curW()):curW(); };
 function fuelPlan(){
   const s=S.sess, nx=s?{w:s.w,d:s.d}:nextDay(); if(!s&&!nx) return null;
-  const day=s?sessDay(s):dayFor(nx.w,nx.d), cat=day.cat, min=+day.min||60, R=refW(), W=curW();
-  const runs=day.ex.filter(e=>e.planMin), runMin=runs.reduce((a,e)=>a+(+e.planMin||0),0), long=runs.some(e=>/long/i.test(e.n))||runMin>=75, thr=day.ex.some(e=>e.n==='Threshold');
-  const g=(a,b)=>`${Math.round(a*R/5)*5}–${Math.round(b*R/5)*5} g`;
-  const hard=long||thr||min>=90;
-  const pre=cat==='rest'?null:hard?`Cu 2–3 ore înainte: o masă cu <b>${g(1,1.5)} carbohidrați</b> (orez, paste, ovăz, pâine, cartofi) și 25–40 g proteină, puține grăsimi și fibre.`
-    :`Cu 2–3 ore înainte: o masă normală cu <b>${g(.5,1)} carbohidrați</b> și 25–40 g proteină. Dacă mănânci mai târziu, cu 30–60 de minute înainte doar ceva mic: o banană sau un iaurt.`;
-  const during=cat==='rest'?null:long||min>=90?`Dacă trece de 60–75 de minute: <b>30–60 g carbohidrați pe oră</b> (gel, banană, băutură sport) și apă în înghițituri.`:`Apă, după sete. Sub o oră de efort nu ai nevoie de carbohidrați în timpul lui.`;
-  const post=cat==='rest'?null:`În cele ~2 ore după: <b>${g(.3,.4)} proteină</b>${hard?` și ${g(1,1.2)} carbohidrați, ca să refaci glicogenul`:' și o porție de carbohidrați'}. Contează mai mult totalul zilei decât minutul exact.`;
-  const hyd=cat==='rest'?null:`Bea <b>${Math.round(W*5/50)*50}–${Math.round(W*7/50)*50} ml</b> cu 2–4 ore înainte. Urina deschisă la culoare = hidratat.${min>60?' Peste o oră de efort: 300–600 mg sodiu pe oră (electroliți), mai ales la căldură.':''}`;
-  /* proteina de seară: 30–40 g cu digestie lentă susțin sinteza proteică peste noapte */
-  const night=`Înainte de somn: <b>30–40 g proteină</b> cu digestie lentă (brânză de vaci, skyr, iaurt grecesc sau cazeină).`;
-  return {day,cat,min,long,thr,hard,pre,during,post,hyd,night,live:!!s};
+  const day=s?sessDay(s):dayFor(nx.w,nx.d), cat=day.cat, min=+day.min||60, thr=day.ex.some(e=>e.n==='Threshold'), hard=thr||min>=90, long=min>=90;
+  const pm=clamp(Math.round(targets().p/4),30,55);
+  const pre=cat==='rest'?null:`Cu câteva ore înainte: una din mesele tale proteice (~<b>${pm} g proteină</b>).${thr?' Pragul e sesiunea cheie de alergare: carbohidrați la masa dinainte (low-carb scade performanța la anduranță cu 2–3%).':' Carbohidrați simpli înainte, dacă te ajută: e o preferință, nu o regulă.'}`;
+  const during=cat==='rest'?null:'Apă. Băutura din planul tău de mese (intra-workout) e opțională: o iei dacă te ajută.';
+  const post=cat==='rest'?null:`În câteva ore după: o masă cu ~<b>${pm} g proteină</b>. Fereastra anabolică e supraevaluată: contează totalul zilei și distribuția pe 3–5 mese, nu minutul exact.`;
+  const hyd=cat==='rest'?null:'Apă multă și sare normală în mâncare: sportivii pierd sodiu prin transpirație, nu-l restricționa (doar 5–10% dintre oameni sunt sensibili la sare).';
+  const night=`Ultima masă proteică seara, ca parte din cele 3–5 mese egale (o masă săracă nu se compensează cu una mare).`;
+  return {day,cat,min,long,thr,hard,pre,during,post,hyd,night,live:!!s,pm};
 }
 function fuelCard(){
   const f=fuelPlan(); if(!f) return '';
-  const tg=targets(), R=refW(), pt=clamp(Math.round(.4*R),25,50);
+  const tg=targets(), pt=f.pm;
   if(f.cat==='rest') return `<div class="card fuel"><div class="eyebrow">${ic('leaf')} Zi de recuperare · nutriție</div>
-    <div class="sm" style="margin-top:8px">Fără mese speciale azi. Proteina împărțită în 3–5 mese de câte <b>~${pt} g</b>, ultima seara, înainte de somn; legume și fructe din belșug și somn bun: azi se face progresul de ieri.</div></div>`;
+    <div class="sm" style="margin-top:8px">Fără mese speciale azi. Proteina împărțită egal în 3–5 mese de câte <b>~${pt} g</b> (Norton: 30–50 g pe masă); fibre (legume, fructe) și somn 7,5–9 ore.</div></div>`;
   const rows=[['clock','Înainte',f.pre],['run','În timpul efortului',f.during],['check','După',f.post],['drop','Hidratare',f.hyd],['moon','Seara',f.night]].filter(r=>r[2]);
   return `<div class="card fuel"><div class="row"><div class="eyebrow sp">${ic('flame')} ${f.live?'Antrenamentul de acum':'Antrenamentul următor'} · nutriție</div><span class="tag">${f.min} min</span></div>
     <div class="h3" style="margin-top:8px">${esc(f.day.t)}</div>
     <div class="fu">${rows.map(([icn,t,h])=>`<div class="fu-r"><span class="fu-i">${ic(icn)}</span><div class="sp"><b>${t}</b><p>${h}</p></div></div>`).join('')}</div>
     <div class="row" style="margin-top:12px;gap:8px;flex-wrap:wrap"><button class="btn ghost sm" data-a="toolGo" data-k="caf">${ic('cup')} Cafeină: doza și ora</button>
       ${f.long?`<button class="btn ghost sm" data-a="toolGo" data-k="sweat">${ic('drop')} Cât să bei</button>`:''}</div>
-    <div class="note">Cantitățile pe kg sunt calculate la ${num(R,0)} kg (greutatea țintă), la fel ca proteina. ${tg.phase&&tg.phase.cut?'În deficit, mută carbohidrații zilei în jurul antrenamentului: aceleași calorii, antrenament mai bun.':''}</div></div>`;
+    <div class="note">Norton: ${tg.phase&&tg.phase.cut?'în deficit, carbohidrații în jurul antrenamentului sunt o preferință (aceleași calorii); ':''}consecvența contează mai mult decât momentul.</div></div>`;
 }
 /* suplimente: doar cele cu dovezi bune pentru performanță sau pentru lipsuri frecvente; bifezi ce iei, FALCO ține seria */
 /* suplimentele pe niveluri (src/lib/nutrition/supplements.ts): [id, nume, doză, nivel, clasă]; Tier 3 e doar explicat, blocat */
@@ -693,118 +689,24 @@ function suppCard(){
       return `<div class="sp-r"><button class="tick ${t?'on':''}" data-a="suppTick" data-k="${id}" aria-label="${esc(n)} luat azi">${ic('check')}</button>
         <div class="sp"><b>${esc(n)}</b><div class="xs mu">${st?st+(st===1?' zi':' zile')+' la rând':'nebifat de ieri'}</div></div>
         <button class="xb" data-a="suppOn" data-k="${id}" aria-label="Nu mai urmări">${ic('x')}</button></div>`; }).join('')}</div>`
-      :`<div class="sm mu" style="margin-top:8px">Alege ce iei și bifează zilnic. Le-am păstrat doar pe cele cu dovezi bune.</div>`}
+      :`<div class="sm mu" style="margin-top:8px">Alege ce iei și bifează zilnic. Sunt doar cele recomandate de Layne Norton.</div>`}
     ${off.length?`<details class="notes sp-more"${on.length?'':' open'}><summary>${ic('plus')} ${on.length?'Adaugă altele':'Ce merită luat'}</summary>
       ${off.map(([id,n,d,ev,cl])=>`<div class="sp-o"><div class="sp"><b>${esc(n)}</b> <span class="shot-t" style="display:inline-flex;margin:0"><span class="${cl}">${esc(ev)}</span></span><p>${esc(d)}</p></div>
         <button class="btn ghost sm" data-a="suppOn" data-k="${id}">Îl iau</button></div>`).join('')}</details>`:''}
-    <div class="note">Cafeina are calculatorul ei la Unelte; nitrații (sfeclă) sunt la Shot-uri. Proteina pudră e doar mâncare comodă: contează totalul zilei. Suplimentele nu înlocuiesc somnul și mâncarea.</div>${suppBlockedHTML()}</div>`;
+    <div class="note">Lista e strict după Layne Norton. Cafeina are calculatorul ei la Unelte. Suplimentele nu înlocuiesc somnul, totalul de proteină și deficitul.</div>
+    <details class="notes sp-more"><summary>${ic('x')} Ce nu merită, după Norton</summary>${NUTRI.USELESS.map(u=>`<div class="sp-o"><div class="sp"><b>${esc(u.name)}</b><p>${esc(u.why)}</p></div></div>`).join('')}</details>${suppBlockedHTML()}</div>`;
 }
-/* câte mese de azi au destulă proteină: ~0,4 g/kg pe masă, de 3–5 ori pe zi */
-function protMeals(k){ const R=refW(), thr=clamp(Math.round(.4*R),25,50), ml=mlogDay(k), n=ml.filter(m=>(+m.p||0)>=thr*.85).length; return {thr,n,tot:ml.length}; }
+/* câte mese de azi au destulă proteină: cel puțin ~30 g, de 3–5 ori pe zi (Norton) */
+function protMeals(k){ /* Norton: cel puțin ~30 g pe masă */ const thr=30, ml=mlogDay(k), n=ml.filter(m=>(+m.p||0)>=thr*.85).length; return {thr,n,tot:ml.length}; }
 
 
 /* NUTRIȚIE */
 const SC={img:null,data:null,hint:'',busy:false,res:null,err:null};
 function viewNutri(){
-  const tabs=[['azi','Azi','flame'],['tac','Tactică','target'],['plan','Mese','bowl'],['shots','Shot-uri','glass'],['shop','Listă','cart'],['nec','Necesar','calc']];
+  const tabs=[['azi','Azi','flame'],['tac','Tactică','target'],['plan','Mese','bowl'],['shop','Listă','cart'],['nec','Necesar','calc']];
   if(!nutriOk()) return nutriGate();
-  const body=S.nTab==='tac'?nutriTactic():S.nTab==='plan'?nutriPlan():S.nTab==='shop'?nutriShop():S.nTab==='nec'?nutriNeed():S.nTab==='shots'?nutriShots():nutriToday();
+  const body=S.nTab==='tac'?nutriTactic():S.nTab==='plan'?nutriPlan():S.nTab==='shop'?nutriShop():S.nTab==='nec'?nutriNeed():nutriToday();
   return `<div class="seg scr" style="margin-top:6px">${tabs.map(t=>`<button class="${S.nTab===t[0]?'on':''}" data-a="nTab" data-k="${t[0]}">${ic(t[2])} ${t[1]}</button>`).join('')}</div>${body}`;
-}
-/* ---------- Shot-uri: rețete scurte, cu nivelul real de dovezi pentru fiecare ---------- */
-const SHOT_TAGS={alergare:'Alergare',recuperare:'Recuperare',somn:'Somn',energie:'Energie',hidratare:'Hidratare',imunitate:'Imunitate',digestie:'Digestie'};
-const SHOT_EV=[null,['Dovezi slabe','ev1'],['Dovezi moderate','ev2'],['Dovezi bune','ev3']];
-const SHOTS=[
- {id:'sfecla',n:'Sfeclă roșie',col:['#B36A78','#5A3A40'],tags:['alergare'],ev:3,when:'Cu 2–3 ore înainte de antrenamentul de prag sau de alergarea lungă.',
-  why:'Nitrații din sfeclă cresc oxidul nitric: mușchii folosesc oxigenul mai eficient. E unul dintre puținele shot-uri cu efect demonstrat la alergare: în medie câteva procente mai bine pe cronometru, mai mult la amatori.',
-  ing:[[250,'g','sfeclă roșie crudă'],[10,'ml','zeamă de lămâie'],[5,'g','ghimbir proaspăt']],
-  steps:['Curăță sfecla și tai-o bucăți.','Trece-o prin storcător împreună cu ghimbirul. Fără storcător: mixeaz-o cu 50 ml apă și strecoar-o printr-o sită fină.','Adaugă lămâia și bea imediat.'],
-  m:{k:50,p:1,c:11,g:0},note:'Variantă rapidă: un shot concentrat de sfeclă din magazin (~400 mg nitrați). În ziua respectivă evită apa de gură antibacteriană: oprește transformarea nitraților. Urina roșiatică e normală. Atenție dacă ai avut pietre la rinichi.'},
- {id:'visine',n:'Vișine',col:['#A55848','#3A2A28'],tags:['recuperare','somn'],ev:2,when:'Seara (și dimineața) în zilele cu antrenament greu și 2–3 zile după.',
-  why:'Antocianii din vișine reduc febra musculară și pierderea de forță după antrenamentele grele. Vișinele conțin și puțină melatonină; câteva studii mici arată un somn mai bun.',
-  ing:[[150,'g','vișine fără sâmburi (proaspete sau congelate)'],[50,'ml','apă']],
-  steps:['Mixează vișinele cu apa.','Strecoară printr-o sită dacă vrei shot-ul fin.','Bea-l rece.'],
-  m:{k:75,p:1,c:18,g:0},note:'Merge și sucul de vișine 100% fără zahăr adăugat (~100 ml). Are zahăr natural (~16 g), deci intră în calorii.'},
- {id:'ghimbir',n:'Ghimbir și lămâie',col:['#F0C483','#E5C07B'],tags:['recuperare','digestie'],ev:2,when:'Dimineața. Contează să-l iei zilnic 1–2 săptămâni, nu un shot izolat.',
-  why:'2–4 g de ghimbir pe zi, luate câteva zile la rând, reduc moderat durerea musculară după efort. Ajută și la greață și digestie.',
-  ing:[[30,'g','ghimbir proaspăt'],[25,'ml','zeamă de lămâie (½ lămâie)'],[7,'g','miere (1 linguriță)'],[30,'ml','apă']],
-  steps:['Rade sau mixează ghimbirul cu apa.','Strecoară și stoarce bine pulpa.','Amestecă cu lămâia și mierea.'],
-  m:{k:35,p:0,c:9,g:0},note:'Ustură, e normal. Atenție dacă iei anticoagulante sau ai reflux.'},
- {id:'turmeric',n:'Turmeric și piper',col:['#E5C07B','#B5703A'],tags:['recuperare'],ev:1,when:'Oricând, după o masă.',
-  why:'Curcumina e antiinflamatoare, dar se absoarbe foarte slab: piperina din piperul negru crește absorbția de până la ~20 de ori, iar grăsimea ajută și ea. Studiile cu efect pe febra musculară au folosit doze de supliment, mult peste ce e într-un shot.',
-  ing:[[3,'g','turmeric pudră (1 linguriță rasă)'],[1,'vârf','piper negru măcinat'],[50,'ml','suc de portocale'],[5,'ml','ulei de măsline']],
-  steps:['Pune totul într-un borcan mic.','Agită energic 10 secunde.','Bea imediat, înainte să se separe.'],
-  m:{k:70,p:0,c:6,g:5},note:'Evită dacă iei anticoagulante sau ai probleme cu fierea. Pătează hainele și blatul.'},
- {id:'electroliti',n:'Electroliți de casă',col:['#E1F5FE','#B7D8F6'],tags:['hidratare','alergare'],ev:3,when:'Înainte de alergările de peste 75 de minute sau pe căldură, și după antrenamentele în care transpiri mult.',
-  why:'Prin transpirație pierzi mult sodiu, iar la greutatea ta chiar mai mult. Sodiul te ajută să reții apa băută și scade riscul de crampe și amețeală la efortul lung.',
-  ing:[[150,'ml','apă'],[20,'ml','zeamă de lămâie sau lime'],[1.5,'g','sare (¼ linguriță, ~600 mg sodiu)'],[7,'g','miere']],
-  steps:['Dizolvă sarea și mierea în puțină apă caldă.','Adaugă restul apei rece și lămâia.','Bea-l cu 15–30 de minute înainte de start.'],
-  m:{k:25,p:0,c:7,g:0},note:'Dacă ai tensiune mare, vorbește întâi cu medicul.'},
- {id:'espresso',n:'Espresso pre-antrenament',col:['#A1887F','#2B1A14'],tags:['energie'],ev:3,when:'Cu 30–60 de minute înainte de antrenament. Nu după ora 14–15.',
-  why:'Cafeina e cel mai bine dovedit „booster” legal: mai multă putere, rezistență și concentrare, iar efortul pare mai ușor.',
-  ing:[[2,'shot','espresso (~120–150 mg cafeină)'],[5,'g','miere (opțional)']],
-  steps:['Fă un espresso dublu.','Îndulcește cu miere dacă vrei.','Bea-l și pornește încălzirea după ~30 de minute.'],
-  m:{k:20,p:0,c:5,g:0},note:'Maximum ~400 mg de cafeină pe zi, în total. Cafeina târzie îți strică somnul, iar somnul cântărește cel mai mult în Readiness.'},
- {id:'otet',n:'Oțet de mere',col:['#F3D6A8','#C98B3C'],tags:['digestie'],ev:1,when:'Cu 10–20 de minute înainte de o masă bogată în carbohidrați.',
-  why:'Poate reduce puțin creșterea glicemiei după masă. Efectul asupra slăbitului e mic și nesigur: nu e un arzător de grăsimi.',
-  ing:[[15,'ml','oțet de mere (1 lingură)'],[150,'ml','apă']],
-  steps:['Diluează oțetul în apă.','Bea-l cu un pai.','Clătește gura cu apă după.'],
-  m:{k:3,p:0,c:0,g:0},note:'Niciodată nediluat: acidul atacă smalțul dinților. Evită dacă ai reflux.'},
- {id:'verde',n:'Verde: spanac, măr, lămâie',col:['#C5E1A5','#558B2F'],tags:['imunitate'],ev:1,when:'Dimineața sau între mese.',
-  why:'Spanacul aduce nitrați și folați, mărul și lămâia vitamina C. E o porție de legume și fructe, nu un „detox”: detoxul îl fac ficatul și rinichii.',
-  ing:[[40,'g','spanac baby'],[1,'buc','măr verde (~150 g)'],[10,'ml','zeamă de lămâie'],[5,'g','ghimbir'],[50,'ml','apă']],
-  steps:['Taie mărul bucăți.','Mixează totul până devine fin.','Strecoară dacă vrei, sau bea-l cu fibre (sățios).'],
-  m:{k:70,p:1,c:16,g:0},note:'Cu fibrele păstrate te ține mai mult sătul.'},
- {id:'vitc',n:'Portocală și kiwi',col:['#F0C483','#C9A25E'],tags:['imunitate','somn'],ev:2,when:'Zilnic în sezonul rece. Kiwi seara, dacă dormi prost.',
-  why:'La oamenii obișnuiți, vitamina C luată zilnic nu previne răceala. La cei care fac efort intens (maratoniști, schiori) a redus însă riscul la jumătate. Un studiu mic a legat și kiwi-ul seara de un somn mai bun.',
-  ing:[[1,'buc','portocală (~130 g)'],[1,'buc','kiwi (~75 g)'],[50,'ml','apă']],
-  steps:['Curăță portocala și kiwi-ul.','Mixează cu apa.','Strecoară dacă vrei shot-ul fin.'],
-  m:{k:90,p:2,c:20,g:0},note:'Un shot are ~120 mg de vitamina C, mai mult decât necesarul zilnic.'}
-];
-const shotOf=id=>SHOTS.find(s=>s.id===id);
-/* shot-ul zilei, ales din planul și check-in-ul tău */
-function shotPick(){
-  const tk=todayKey(), j=jOf(tk), nx=nextDay(), hr=new Date().getHours(), day=S.sess?dayBase(S.sess.w,S.sess.d):nx?dayBase(nx.w,nx.d):null;
-  const last=(S.hist||[]).filter(h=>h.date>=dayShift(tk,-1)).pop();
-  if(day&&(day.run==='thr'||day.run==='lng')&&hr<17) return ['sfecla','Următorul antrenament e '+(day.run==='thr'?'cel de prag':'alergarea lungă')+': sfecla cu 2–3 ore înainte.'];
-  if(+j.sore>=3) return ['visine','Febră musculară '+j.sore+'/5 azi: vișinele ajută recuperarea.'];
-  if(last&&last.rpe>=8) return ['visine','Ultimul antrenament a fost greu (RPE '+last.rpe+'): vișine seara, pentru recuperare.'];
-  if(+j.sleep>0&&+j.sleep<7) return ['visine','Ai dormit '+num(+j.sleep)+' h: un shot de vișine seara poate ajuta somnul.'];
-  if(day&&(day.cat==='lift'||day.cat==='mix')&&hr<14) return ['espresso','Urmează forță ('+day.t+'): espresso cu 30–60 de minute înainte.'];
-  const mo=new Date().getMonth(); if(mo>=9||mo<=2) return ['vitc','Sezonul rece și antrenament intens: vitamina C zilnic.'];
-  return ['ghimbir','Ghimbir și lămâie dimineața, pentru recuperare și digestie.'];
-}
-const glassSVG=(s,big)=>{ const id='gl'+s.id+(big?'b':'');
-  return `<svg class="glass ${big?'big':''}" viewBox="0 0 40 52" aria-hidden="true"><defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${s.col[0]}"/><stop offset="1" stop-color="${s.col[1]}"/></linearGradient>
-    <clipPath id="${id}c"><path d="M7.2 5h25.6l-2.9 40.2a3.4 3.4 0 0 1-3.4 3.2H13.5a3.4 3.4 0 0 1-3.4-3.2z"/></clipPath></defs>
-    <g clip-path="url(#${id}c)"><path class="wave" d="M-40 17q5-3 10 0t10 0t10 0t10 0t10 0t10 0t10 0t10 0t10 0t10 0V60H-40z" fill="url(#${id})"/><rect x="0" y="40" width="40" height="12" fill="rgba(0,0,0,.18)"/></g>
-    <path d="M6 4h28l-3 41.4a4.4 4.4 0 0 1-4.4 4.1H13.4A4.4 4.4 0 0 1 9 45.4z" fill="none" style="stroke:rgba(var(--w),.42)" stroke-width="1.4"/>
-    <path d="M10.4 9l1.8 33" style="stroke:rgba(var(--w),.3)" stroke-width="1.8" stroke-linecap="round"/></svg>`; };
-function nutriShots(){
-  const n=S.shotN||1, f=S.shotF||'all', [pid,why]=shotPick(), P=shotOf(pid), tk=todayKey(), drank=mlogDay(tk).filter(m=>m.shot).map(m=>m.shot);
-  const list=SHOTS.filter(s=>f==='all'||s.tags.indexOf(f)>=0), qty=x=>num(x*n,x*n<10?1:0);
-  const card=s=>{ const op=S.shotOpen===s.id, ev=SHOT_EV[s.ev];
-    return `<div class="card shot ${op?'open':''}" style="--sc:${s.col[0]}">
-      <button class="shot-h" data-a="shotOpen" data-k="${s.id}" aria-expanded="${op}">${glassSVG(s)}
-        <span class="sp"><b>${esc(s.n)}</b><span class="shot-t">${s.tags.map(t=>`<span>${SHOT_TAGS[t]}</span>`).join('')}<span class="ev ${ev[1]}">${ev[0]}</span></span></span>
-        <span class="shot-k">${s.m.k}<small>kcal</small></span>${ic('down','chev')}</button>
-      ${op?`<div class="shot-b">
-        <p>${esc(s.why)}</p>
-        <div class="when">${ic('clock')} ${esc(s.when)}</div>
-        <div class="dsec"><h4>Ingrediente${n>1?' · '+n+' shot-uri':''}</h4>${s.ing.map(([q,u,t])=>`<div class="list-row"><span class="sp">${esc(t)}</span><span class="v">${qty(q)} ${u}</span></div>`).join('')}</div>
-        <div class="dsec"><h4>Preparare</h4>${s.steps.map((t,i)=>`<div class="cue"><b>${i+1}</b><span>${esc(t)}</span></div>`).join('')}</div>
-        <div class="easy">${ic('alert')} ${esc(s.note)}</div>
-        <div class="xs mu2" style="margin-top:8px">Un shot: ~${s.m.k} kcal · P ${s.m.p} g · C ${s.m.c} g · G ${s.m.g} g (aproximativ)</div>
-        <button class="btn pri wide" style="margin-top:12px" data-a="shotDrink" data-k="${s.id}">${ic('check')} Am băut${drank.indexOf(s.id)>=0?' încă unul':''} · intră în jurnal</button></div>`:''}</div>`; };
-  return `
-  <div class="card shot-hero" style="--sc:${P.col[0]}"><div class="eyebrow">${ic('star')} Shot-ul zilei</div>
-    <div class="row" style="margin-top:10px;gap:14px">${glassSVG(P,true)}<div class="sp"><div class="h3">${esc(P.n)}</div><div class="sm mu" style="margin-top:4px">${esc(why)}</div>
-      <div class="inrow" style="margin-top:10px"><button class="btn sm" data-a="shotOpen" data-k="${P.id}" data-go="1">Rețeta</button><button class="btn pri sm" data-a="shotDrink" data-k="${P.id}">${ic('check')} Am băut</button></div></div></div>
-    ${drank.length?`<div class="xs mu" style="margin-top:10px">Azi: ${drank.map(id=>esc((shotOf(id)||{}).n||id)).join(', ')}</div>`:''}</div>
-  <div class="scrollx" style="margin-top:12px">${[['all','Toate']].concat(Object.entries(SHOT_TAGS)).map(([k,l])=>`<button class="chip ${f===k?'on':''}" data-a="shotF" data-k="${k}">${l}</button>`).join('')}</div>
-  <div class="row" style="margin-top:10px"><span class="xs mu sp">Cantități</span>${[[1,'1 shot'],[3,'3 zile'],[7,'o săptămână']].map(([v,l])=>`<button class="chip ${n===v?'on':''}" data-a="shotN" data-i="${v}">${l}</button>`).join('')}</div>
-  ${list.map(card).join('')}
-  <div class="note" style="padding:0 4px">Shot-urile nu înlocuiesc mâncarea, somnul sau medicul. La fiecare ai nivelul real de dovezi științifice, ca să știi la ce să te aștepți.</div>`;
 }
 function nutriToday(){
   const tk=todayKey(), tg=targets(), d=dayTotals(tk), ml=mlogDay(tk), wt=waterOf(tk), [rk,rp]=ringsNut(tk,132);
@@ -871,14 +773,14 @@ function nutriPlan(){
     return `<div class="card mcard ${done?'eaten':''}"><div class="row"><div class="eyebrow sp">${ic(m.icn)} ${esc(m.n)}</div>${done?`<span class="tag rest">${ic('check')} mâncat</span>`:''}</div>
       ${m.note?`<div class="xs mu" style="margin-top:4px">${esc(m.note)}</div>`:''}
       <div class="tags" style="margin-top:8px"><span class="tag lift">${m.k} kcal</span><span class="tag run">P ${m.p} g</span><span class="tag">C ${m.c} g</span><span class="tag">G ${m.g} g</span></div>
-      <div class="ingr">${m.it.map(x=>`<span><b>${mfQty(x.f,x.q)}</b> ${esc(MFD[x.f][0])}${x.opt?' · opțional':''}</span>`).join('')}</div>
+      <div class="ingr">${m.it.map(x=>MFIX[x.of]==null&&MFD[x.of][5]!=='x'&&x.of!=='dextrina'?`<button class="mf-sw ${x.sw?'on':''}" data-a="mfSwap" data-k="${D.kind}${si}:${x.of}" aria-label="Înlocuiește ${esc(MFD[x.f][0])}"><b>${mfQty(x.f,x.q)}</b> ${esc(MFD[x.f][0])} ${ic('refresh')}</button>`:`<span><b>${mfQty(x.f,x.q)}</b> ${esc(MFD[x.f][0])}${x.opt?' · opțional':''}</span>`).join('')}</div>
       ${off===0?`<div class="inrow"><button class="btn ${done?'ghost':'pri'} sm" data-a="mealEat" data-i="${si}" ${done?'disabled':''}>${ic('check')} ${done?'Notat':'Am mâncat'}</button></div>`:''}</div>`; }).join('');
   const bar=(l,v,t,c)=>`<div class="kpi"><div class="k">${l}</div><div class="v" style="font-size:20px">${Math.round(v)}<small>/${t}</small></div><div class="bar" style="margin-top:6px;height:5px"><i style="width:${(clamp(t?v/t:0,0,1.2)/1.2*100).toFixed(0)}%;background:${c}"></i></div></div>`;
   return `<div class="card"><div class="row"><div class="eyebrow sp">${ic('bowl')} ${esc(D.name)}</div><span class="tag ${tg.phase.cut?'lift':'rest'}">${esc(tg.phase.label)}</span></div>
     <div class="scrollx" style="margin-top:12px">${days}</div>
     <div class="kpis" style="grid-template-columns:repeat(4,1fr)">${bar('kcal',D.tot.k,tg.kcal,TH().ac)}${bar('Proteină',D.tot.p,tg.p,COL().run)}${bar('Carbo',D.tot.c,tg.c,COL().warn)}${bar('Grăsimi',D.tot.g,tg.f,'#B3AECB')}</div>
     <div class="note">Mesele și alimentele sunt cele din planul tău; cantitățile le calculez din ținta zilei (${esc(GOALS[tg.goal].l.toLowerCase())}): proteina împărțită egal pe mese, ${D.kind==='t'?'carbohidrații strânși în jurul antrenamentului (pre, intra, post), grăsimile departe de el':'carbohidrații mai mulți la prânz și seara'}. Se recalculează singure când se schimbă ținta.</div>
-    <div class="xs mu" style="margin-top:8px">${D.kind==='r'?'Zi de odihnă în planul hibrid → planul de odihnă.':'Zi cu antrenament în planul hibrid → planul de antrenament (pre, intra și post-workout).'} Orezul și cartofii se cântăresc fierți, carnea crudă.</div></div>
+    <div class="xs mu" style="margin-top:8px">${D.kind==='r'?'Zi de odihnă în planul hibrid → planul de odihnă.':'Zi cu antrenament în planul hibrid → planul de antrenament (pre, intra și post-workout).'} Orezul și cartofii se cântăresc fierți, carnea crudă. Apasă pe un aliment ca să-l înlocuiești cu altul echivalent (Norton: dieta flexibilă).</div></div>
     ${cards}`;
 }
 /* lista de cumpărături: alimentele din cele două planuri, pe zilele perioadei alese (antrenament sau odihnă), cu cantitățile zilei */
@@ -933,7 +835,7 @@ function nutriNeed(){
         <div class="kpi"><div class="k">Carbohidrați</div><div class="v">${tg.c}<small>g</small></div></div><div class="kpi"><div class="k">Grăsimi</div><div class="v">${tg.f}<small>g</small></div></div></div>
       <div class="note">Necesar ${tg.measured?'<b>măsurat</b>':'estimat'} ${tg.tdee} kcal${tg.def>0?' − deficit '+tg.def+' kcal (~'+num(rate,2)+' kg/săpt.)':tg.def<0?' + surplus '+(-tg.def)+' kcal (~+'+num(-rate,2)+' kg/săpt.)':' (menținere)'}${tg.manual?' · ai setat manual '+tg.kcal+' kcal':''}.
         Proteina (Norton): ${num(protPL(tg.goal),2)} g/kg din ~${tg.ffm} kg masă slabă (${esc(GOALS[tg.goal].l.toLowerCase())}${protAgeF()>1?', cu +1,5% pe an după 30':''}); grăsimile: ~20% din calorii, puține (cel puțin 0,5 g/kg); restul, carbohidrați; fibre cel puțin 15 g la 1000 kcal. Bazalul tău, după metabolismul declarat: ~${tg.bmrR} kcal (formula: ${tg.bmr}). Media săptămânii nu coboară sub el; nu merge mai jos fără un medic sau nutriționist.</div>
-      ${tg.raised?`<div class="note">${ic('alert')} Pe media săptămânii, pragul de siguranță (${tg.wkFloor} kcal: cel puțin 30 kcal/kg din ~${tg.ffm} kg masă slabă, Wolf; și ${NUTRI.EA_MIN[P.sex==='f'?'f':'m']} kcal/kg + ~${tg.exWk} kcal/zi antrenament) e peste necesar − deficit. Deficitul în plus îl faci din pași, nu din mâncare. Dacă procentul de grăsime e altul, setează-l în Setări sau notează talia și gâtul la măsurători.</div>`:''}
+      ${tg.raised?`<div class="note">${ic('alert')} Pe media săptămânii, ținta e limitată la ${tg.wkFloor} kcal: Norton nu trece de 1% din greutate pe săptămână, iar aplicația nu coboară sub ${COACH.KCAL_FLOOR[P.sex==='f'?'f':'m']} kcal. Dacă vrei să slăbești mai repede, crești pașii (NEAT), nu tai din mâncare.</div>`:''}
       ${tg.goal!=='cut'?'':`<div class="inrow"><button class="btn ghost sm" data-a="defAdj" data-i="-150">− 150 kcal</button><button class="btn ghost sm" data-a="defAdj" data-i="150">+ 150 kcal</button><span class="xs mu" style="align-self:center">deficit real: ${Math.max(0,tg.tdee-tg.base.kcal)} kcal/zi</span></div>`}</div>
     <div class="card"><div class="eyebrow">${ic('chart')} Media săptămânii</div>${(()=>{ const W=weekTargets(), tk=todayKey();
       return `<div class="row" style="margin-top:8px;align-items:flex-end"><div class="big">${W.avg}<small>kcal/zi</small></div><span class="xs mu" style="margin-left:auto">${W.avg*7} kcal pe săptămână</span></div>
@@ -959,7 +861,7 @@ function nutriNeed(){
         <div class="fld"><label>Masă slabă</label><div class="big sm" style="padding-top:4px">${num(tg.A.ffm,1)}<small>kg</small></div></div></div>
       <div class="sm" style="margin-top:12px;font-weight:600">Activitate</div>
       <div class="chips" style="margin-top:8px">${[[1.375,'Ușoară'],[1.55,'Moderată'],[1.725,'Mare'],[1.9,'Foarte mare']].map(([v,l])=>`<button class="chip ${Math.abs((+P.act||1.55)-v)<.01?'on':''}" data-a="actSet" data-k="${v}">${l} ×${v}</button>`).join('')}</div></div>
-    <div class="card"><div class="set-row" style="border:0;padding:0"><span class="sp"><b>Pauze de dietă (la cut)</b><div class="sm mu">Norton: cu cât ești mai slab, cu atât mai des. Tu: ${dietCutWeeks()===2?'2 săptămâni în deficit, 2 la menținere (foarte slab, 1:1)':'3 săptămâni în deficit, a 4-a la menținere (~3:1)'}. Menținerea reală, cu tot notat, nu „mănânci orice”.</div></span>
+    <div class="card"><div class="set-row" style="border:0;padding:0"><span class="sp"><b>Pauze de dietă (la cut)</b><div class="sm mu">Norton: cu cât ești mai slab, cu atât mai des. Tu: ${dietBreakPlan().l}. Menținerea reală, cu tot notat, nu „mănânci orice”.</div></span>
       <button class="sw ${P.dietBreak!==false?'on':''}" data-a="dietBreak" role="switch" aria-checked="${P.dietBreak!==false}" aria-label="Pauze de dietă"></button></div></div>`;
 }
 
