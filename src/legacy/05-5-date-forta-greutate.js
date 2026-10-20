@@ -183,10 +183,11 @@ function targets(day){
   const wkFloor=def>0?Math.ceil(Math.max(COACH.KCAL_FLOOR[sex],Math.round(tdee*(1-NUTRI.MAX_DEFICIT)),Math.round(NUTRI.EA_MIN[sex]*ffm+exWk))/50)*50:0;
   const auto=Math.max(goal,wkFloor), kcal=+P.kcalT||auto;
   /* proteina pe masa slabă, după obiectiv (Fat Loss Forever, tabelul 1), cel puțin 1,6 g/kg corp */
-  const p=+P.protT||Math.max(Math.round(GOALS[ph.goal].pk*ffm),Math.round(1.6*w)); let f=Math.round(w*.7), c=Math.round((kcal-p*4-f*9)/4);
-  if(c<80){ f=Math.max(Math.round(w*.6),Math.round((kcal-p*4-320)/9)); c=Math.max(0,Math.round((kcal-p*4-f*9)/4)); }
+  const p=+P.protT||Math.max(Math.round(GOALS[ph.goal].pk*ffm),Math.round(1.6*w)); /* v18: dietă cu puține grăsimi, la cererea utilizatorului: ~20% din calorii, cel puțin 0,6 g/kg masă slabă; restul, carbohidrați */
+  let f=Math.max(Math.round(kcal*.2/9),Math.round(.6*ffm)), c=Math.round((kcal-p*4-f*9)/4);
+  if(c<80){ f=Math.max(Math.round(.5*ffm),Math.round((kcal-p*4-320)/9)); c=Math.max(0,Math.round((kcal-p*4-f*9)/4)); }
   const exKcal=Math.round(exKcalOf(dt.w,dt.d,k,w)*metabF()*sc);
-  const per=NUTRI.periodize(Object.assign({base:{kcal,p,c,f},dayType:dt.type,sex,weightKg:w,tdee,cut:def>0,weekMean:NUTRI_MEAN(),ffmKg:ffm,exerciseKcal:exKcal,weekly:true},ci));
+  const per=NUTRI.periodize(Object.assign({base:{kcal,p,c,f},dayType:dt.type,sex,weightKg:w,fatMinG:Math.round(.6*ffm),tdee,cut:def>0,weekMean:NUTRI_MEAN(),ffmKg:ffm,exerciseKcal:exKcal,weekly:true},ci));
   const hyd=NUTRI.hydration({weightKg:w,minutes:dt.minutes+dt.extMin,intensity:dt.intensity});
   return {kcal:per.kcal,p:per.p,f:per.f,c:per.c,water:+P.waterT||hyd.totalMl,hyd,day:dt,per,base:{kcal,p,c,f},bmr,tdee,est,measured:useM,ms,auto,manual:!!P.kcalT,phase:ph,eq,def,A,autoDef:autoDef(w),exKcal,ffm:Math.round(ffm),adj,metab:metabF(),bmrR,exWk,wkFloor,raised:!P.kcalT&&wkFloor>goal,bf:Math.round(bfOf(w)),goal:ph.goal,rateT:Math.round(-(P.kcalT?0:def)*7/7700*100)/100,w};
 }

@@ -26,6 +26,8 @@ export interface PeriodizeInput {
   dayType: DayType;
   sex: Sex;
   weightKg: number;
+  /** Minimul de grăsimi, g (implicit 0,6 g/kg corp); aplicația îl dă pe masa slabă, pentru o dietă cu puține grăsimi. */
+  fatMinG?: number;
   /** Necesarul (estimat sau măsurat), pentru limita de deficit. */
   tdee: number;
   /** În faza de deficit. */
@@ -68,7 +70,7 @@ export function periodize(i: PeriodizeInput): NutritionPlan {
   const notes: string[] = [];
   const kg = Math.max(35, i.weightKg);
   let p = Math.max(i.base.p, Math.round(PROTEIN_MIN_G_PER_KG * kg));
-  let f = Math.max(i.base.f, Math.round(FAT_MIN_G_PER_KG * kg));
+  let f = Math.max(i.base.f, i.fatMinG ?? Math.round(FAT_MIN_G_PER_KG * kg));
   const factor = i.dayType === 'deload' ? CARB_FACTOR.deload : CARB_FACTOR[i.dayType] / (i.weekMean || 1);
   let c = Math.round(i.base.c * factor);
   const pct = Math.round(Math.abs(factor - 1) * 100), vs = i.weekMean ? ' față de media săptămânii' : '';

@@ -42,7 +42,7 @@ function tacRules(tg){ const g=tg.goal, W=weekTargets().avg, P=tg.p, ffm=tg.ffm,
   if(g==='cut') return [
     ['scale','Ritmul',`0,4–0,8% din greutate pe săptămână, maxim 1%. Ținta ta: ~${num(T,2)} kg/săpt. (0,6%), adică un deficit de ~${d} kcal pe zi față de necesar.`,'FLF'],
     ['bowl','Proteina',`2,2–2,4 g/kg de masă slabă în deficit: ${P} g pe zi (la ~${ffm} kg masă slabă). Mai multă nu protejează mai bine mușchiul, doar ia locul carbohidraților.`,'FLF'],
-    ['flame','De unde tai',`Proteina nu se atinge; tai din carbohidrați și grăsimi. Alege o împărțire care îți place și ține-o constantă. Fibre: 10–15 g la 1000 kcal, adică ${fib} g pe zi.`,'FLF Aceto'],
+    ['flame','De unde tai',`Proteina nu se atinge; grăsimile stau jos (~20% din calorii, ~${tg.f} g azi), restul sunt carbohidrați; ții împărțirea constantă, iar când tai, tai din amândouă. Fibre: 10–15 g la 1000 kcal, adică ${fib} g pe zi.`,'FLF Aceto'],
     ['chart','Media săptămânii',`Contează totalul săptămânii (${W} kcal/zi în medie): zilele grele primesc mai mulți carbohidrați, cele de odihnă mai puțini. E zig-zag-ul lui Aceto (zile jos, apoi o zi sus), pe care aplicația îl face singură.`,'Aceto FLF'],
     ['leaf','Pauze de dietă',`2 săptămâni în deficit, 2 la menținere: în studiul MATADOR s-a pierdut mai multă grăsime pe săptămâna de dietă și s-a păstrat bazalul. ${prof().dietBreak!==false?'Sunt pornite.':'Acum sunt oprite; le pornești din Necesar.'}`,'FLF CPG'],
     ['alert','Platoul',`Schimbi ceva doar când 2 verificări săptămânale la rând arată sub jumătate din ritm (sub ${num(T/2,2)} kg/săpt.) sau când stau 2 din 3 indicatori (greutate, talie, poze). Întâi verifici notarea: oamenii subraportează până la 47%. Apoi −5…10% din carbohidrați și grăsimi sau +10% activitate, o singură schimbare, și aștepți o săptămână.`,'FLF Aceto'],
@@ -66,7 +66,7 @@ function tacRules(tg){ const g=tg.goal, W=weekTargets().avg, P=tg.p, ffm=tg.ffm,
     ['scale','Surplusul',`Mic: ~0,25% din greutate pe săptămână (+${num(T,2)} kg/săpt., ~${num(T*4.3,1)} kg pe lună), adică ~${d} kcal peste menținere. Y3T pornește de la +300–500 kcal.`,'Y3T FLF'],
     ['flame','Creșterile, din carbohidrați',`Când greutatea stă 2 săptămâni, crești din carbohidrați. Aceto îi urcă cu 25%, apoi 35%, apoi 50% peste bază, la câte 2 săptămâni fără creștere; aplicația merge mai prudent, ~5% din calorii odată.`,'Aceto'],
     ['bowl','Proteina',`1,8–2,0 g/kg de masă slabă ajung în surplus: ${P} g. Mai multă nu mai construiește mușchi, doar ia locul carbohidraților care alimentează antrenamentul.`,'FLF Aceto'],
-    ['drop','Grăsimile',`Nu doar saturate: omega-3 (pește gras, semințe de in) și uleiuri presate la rece. Untul de arahide și uleiul de măsline din planul tău sunt bune.`,'Aceto'],
+    ['drop','Grăsimile',`Puține: ~20% din calorii (~${tg.f} g), ca surplusul să meargă în carbohidrații care alimentează antrenamentul. Și nu doar saturate: omega-3 (pește gras, semințe de in) și uleiuri presate la rece. Untul de arahide și uleiul de măsline din planul tău sunt bune.`,'Aceto'],
     ['dumbbell','Progresia',`Surplusul fără suprasolicitare progresivă e doar grăsime: urmărește repetările și greutățile din plan.`,'Aceto CPG'],
     ['alert','Prea repede',`Peste ~0,5% pe săptămână sau talia urcă mai repede decât forța: −5% calorii. Când ajungi la ~15% grăsime, faci un mini-cut.`,'Y3T FLF']]; }
 function nutriTactic(){ const tg=targets(), g=tg.goal, st=tacStatus(tg), W=weekTargets(), ww=wWeeks();

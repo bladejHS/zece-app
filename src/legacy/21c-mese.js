@@ -56,8 +56,8 @@ const planKind=k=>nutriDay(k).type==='rest'?'r':'t';
 const mfG=(f,q)=>{ const F=MFD[f]; return F[7]?q*(F[8]||1):q; };
 const mfMac=(f,q)=>{ const F=MFD[f], g=mfG(f,q)/100; return [F[1]*g,F[2]*g,F[3]*g,F[4]*g]; };
 function mfSum(items){ return items.reduce((a,[f,q])=>{ const m=mfMac(f,q); return {k:a.k+m[0],p:a.p+m[1],c:a.c+m[2],g:a.g+m[3]}; },{k:0,p:0,c:0,g:0}); }
-/* rotunjirea: bucățile și feliile la întreg (cel puțin 1), ml-ul la 10, gramele la 5 (cel puțin 5) */
-const mfRound=(f,q)=>{ const u=MFD[f][7]; if(u==='buc'||u==='felie') return Math.max(1,Math.round(q)); if(u==='ml') return Math.max(10,Math.round(q/10)*10); return Math.max(5,Math.round(q/5)*5); };
+/* rotunjirea: bucățile și feliile la întreg (cel puțin 1), albușul la 10 ml, restul la 5 (cel puțin 5) */
+const mfRound=(f,q)=>{ const u=MFD[f][7]; if(u==='buc'||u==='felie') return Math.max(1,Math.round(q)); if(u==='ml'&&f==='albus') return Math.max(10,Math.round(q/10)*10); return Math.max(5,Math.round(q/5)*5); };
 /* planul zilei k: cantitățile se calculează din ținta zilei (obiectivul din Tactică). Fiecare aliment primește partea mesei din macronutrientul
    lui (proteină, carbohidrați sau grăsimi); apoi corectez de câteva ori pentru macronutrienții „ascunși” (proteina din ovăz, grăsimea din ou),
    ca totalul zilei să iasă pe țintă. */
