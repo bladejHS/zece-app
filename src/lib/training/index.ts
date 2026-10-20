@@ -1,4 +1,4 @@
-/* Antrenamentul ZECE: sesiuni în 4 faze, rapoarte de contact, check-in, feedback pe rundă, deload și validatorul de siguranță.
+/* Antrenamentul FALCO: sesiuni în 4 faze, rapoarte de contact, check-in, feedback pe rundă, deload și validatorul de siguranță.
    Codul vechi (src/legacy) îl folosește prin `TRAINING`. */
 export * from './types.ts';
 export { COMBAT_RATIOS, combatRatio, isCombatFormat, ratioOf, restFor, snapRest } from './ratios.ts';

@@ -45,19 +45,17 @@ function viewSet(){
     <div class="note">Folosită la calculul discurilor de pe fiecare parte și al seriilor de încălzire.</div></div>
 
   <div class="set-h" id="sAsp">Aspect</div>
-  <div class="card"><div class="eyebrow">${ic('sun')} Temă</div>
-    <div class="swatches">${[['dark','Întunecată','#050506'],['light','Luminoasă','#F2F2EF'],['auto','Automată','linear-gradient(135deg,#050506 50%,#F2F2EF 50%)']].map(([k,l,c])=>`<button class="swatch mode ${md===k?'on':''}" style="--c1:${k==='auto'?'var(--mu)':c}" data-a="modeSet" data-k="${k}"><i style="background:${c}"></i>${l}</button>`).join('')}</div>
+  <div class="card"><div class="eyebrow">${ic('sun')} Mod</div>
+    <div class="swatches">${[['dark','Întunecată','#050505'],['light','Luminoasă','#F4F5F7'],['auto','Automată','linear-gradient(135deg,#050505 50%,#F4F5F7 50%)']].map(([k,l,c])=>`<button class="swatch mode ${md===k?'on':''}" style="--c1:${k==='auto'?'var(--mu)':c}" data-a="modeSet" data-k="${k}"><i style="background:${c}"></i>${l}</button>`).join('')}</div>
     <div class="note">„Automată" urmează setarea telefonului sau a calculatorului (zi / noapte).</div>
     <div class="sm" style="margin-top:14px;font-weight:600">Fundalul temei întunecate</div>
-    <div class="seg">${[['anthr','Antracit'],['black','Negru']].map(([k,l])=>`<button class="${(S.bg||'anthr')===k?'on':''}" data-a="bgSet" data-k="${k}">${l}</button>`).join('')}</div>
-    <div class="sm" style="margin-top:14px;font-weight:600">Culoarea de accent</div>
-    <div class="swatches">${Object.keys(THEMES).map(k=>{ const t=THEMES[k], v=modeNow()==='light'&&t.L?t.L:t; return `<button class="swatch ${S.theme===k?'on':''}" style="--c1:${v.ac};--c2:${v.ac2}" data-a="theme" data-k="${k}"><i></i>${t.n}</button>`; }).join('')}</div>
+    <div class="seg">${[['anthr','Grafit'],['black','Negru absolut']].map(([k,l])=>`<button class="${(S.bg||'anthr')===k?'on':''}" data-a="bgSet" data-k="${k}">${l}</button>`).join('')}</div>
     <div class="sm" style="margin-top:14px;font-weight:600">Efecte vizuale</div>
     <div class="seg">${[['min','Minime'],['normal','Normale'],['max','Maxime']].map(e=>`<button class="${S.fx===e[0]?'on':''}" data-a="fxLevel" data-k="${e[0]}">${e[1]}</button>`).join('')}</div>
     <div class="note">„Maxime" adaugă particule și strălucire mai puternică. „Minime" oprește animațiile de fundal (economisește bateria).</div>
     <div class="sm" style="margin-top:14px;font-weight:600">Mișcare</div>
     <div class="seg">${[['auto','Automat'],['on','Mereu animat'],['off','Redusă']].map(e=>`<button class="${S.motion===e[0]?'on':''}" data-a="motionSet" data-k="${e[0]}">${e[1]}</button>`).join('')}</div>
-    <div class="note">${MQ_RM.matches?'Sistemul tău cere <b>mișcare redusă</b>. „Automat" respectă asta; „Mereu animat" pornește animațiile doar în ZECE.':'Sistemul tău permite animațiile.'}</div>
+    <div class="note">${MQ_RM.matches?'Sistemul tău cere <b>mișcare redusă</b>. „Automat" respectă asta; „Mereu animat" pornește animațiile doar în FALCO.':'Sistemul tău permite animațiile.'}</div>
     <div class="sm" style="margin-top:14px;font-weight:600">Animația de deschidere</div>
     <div class="seg">${[['full','Completă'],['short','Scurtă'],['off','Oprită']].map(e=>`<button class="${S.intro===e[0]?'on':''}" data-a="introMode" data-k="${e[0]}">${e[1]}</button>`).join('')}</div></div>
 
@@ -115,7 +113,7 @@ function viewSet(){
   ${ioCard()}
   ${syncCard()}
   ${errCard()}
-  <div class="xs mu2" style="text-align:center;margin-top:18px">ZECE · planul Hybrid365</div>`;
+  <div class="xs mu2" style="text-align:center;margin-top:18px">FALCO · planul Hybrid365</div>`;
 }
 ACT.barSet=async(el,{I})=>{ await save('prof',Object.assign({},S.prof||{},{bar:I})); render(); };
 ACT.notifT=async(el,{k})=>{ const c=notifCfg(); c[k]=!c[k]; await save('notifCfg',c); render(); };

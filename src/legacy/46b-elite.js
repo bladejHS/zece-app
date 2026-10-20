@@ -99,7 +99,7 @@ function eliteSquad(){ const s=S.squad;
     <div class="form"><div class="fld full"><label for="sqMe">Numele tău în squad</label><input class="inp" id="sqMe" maxlength="24" placeholder="ex: Andrei"></div>
       <div class="fld full"><label for="sqName">Numele squad-ului (pentru unul nou)</label><input class="inp" id="sqName" maxlength="40" placeholder="ex: Sala de la 7"></div></div>
     <button class="btn pri wide" style="margin-top:10px" data-a="sqCreate">${ic('plus')} Creează squad</button>
-    <div class="form"><div class="fld full"><label for="sqCode">Sau intră cu un cod de invitație</label><input class="inp" id="sqCode" placeholder="ZECE1.…"></div></div>
+    <div class="form"><div class="fld full"><label for="sqCode">Sau intră cu un cod de invitație</label><input class="inp" id="sqCode" placeholder="FALCO1.…"></div></div>
     <button class="btn wide" style="margin-top:8px" data-a="sqJoin">${ic('check')} Intră în squad</button></div>`;
   const tk=todayKey(), m=mondayOf(tk), ch=ELITE.squad.weekChallenge(m), mine=sqMyCard(), cards=[mine].concat(s.members.map(x=>SQ.cards[x.gist]).filter(c=>c&&c.week===m));
   const pr=ELITE.squad.challengeProgress(ch,cards,s.members.length+1), rit=ELITE.ritualState(s.ritual);
@@ -120,7 +120,7 @@ function eliteSquad(){ const s=S.squad;
     ${syCfg().tok?'':`<div class="fld" style="margin-top:8px"><label for="sqTok">Token GitHub (gist), dacă nu ai sincronizarea pornită</label><input class="inp" id="sqTok" type="password" autocomplete="off" value="${esc(s.tok||'')}"></div>`}
     <button class="btn pri wide" style="margin-top:8px" data-a="sqPublish">${ic('upload')} Publică săptămâna mea</button>
     <div class="inrow" style="margin-top:8px"><button class="btn ghost" style="flex:1" data-a="sqCopy" data-k="invite">${ic('copy')} Codul squad-ului</button><button class="btn ghost" style="flex:1" data-a="sqCopy" data-k="me" ${s.me.gist?'':'disabled'}>${ic('copy')} Codul meu</button></div>
-    <div class="inrow" style="margin-top:8px"><input class="inp" id="sqMember" placeholder="Codul unui membru: ZECEM1.…"><button class="btn" data-a="sqAdd">${ic('plus')}</button></div>
+    <div class="inrow" style="margin-top:8px"><input class="inp" id="sqMember" placeholder="Codul unui membru: FALCOM1.…"><button class="btn" data-a="sqAdd">${ic('plus')}</button></div>
     <button class="linkb" style="margin-top:10px" data-a="sqLeave" data-confirm="Sigur? Apasă iar">${ic('trash')} Ieși din squad</button></div>`; }
 function fmtDur(s){ const d=Math.floor(s/86400), h=Math.floor(s%86400/3600), m=Math.floor(s%3600/60); return d?d+' z '+h+' h':h?h+' h '+m+' min':m+' min'; }
 ACT.sqCreate=async()=>{ const me=($('#sqMe').value||'').trim(), n=($('#sqName').value||'').trim(); if(!me) return shake('#sqMe'); if(!n) return shake('#sqName');

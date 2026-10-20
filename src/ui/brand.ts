@@ -1,53 +1,49 @@
-/* ZECE — identitatea vizuală.
-   Semnul: cifra romană X (zece), din două bare de oțel cu tăietură de șablon, pe o placă cu colțuri tășiate;
-   dedesubt, 10 segmente ca pe un indicator de turație, ultimul în amber: runda de 10 puncte. */
+/* FALCO — identitatea vizuală.
+   Semnul: trei rândunici în zbor, urcând în diagonală spre dreapta (libertate, puritate, zbor).
+   Silueta e una singură, desenată din curbe: cap mic, aripi lungi în formă de seceră, coada bifurcată cu fire lungi.
+   Coordonatele siluetei: corpul pe axa x (capul spre +x), aripile simetrice față de y = 0. */
 
 export const BRAND = {
-  name: 'ZECE',
+  name: 'FALCO',
   sub: 'Hybrid365',
+  motto: 'Libertatea de a zbura',
   tagline: 'Antrenament de contact și hibrid, cu datele tale reale.',
 } as const;
 
-let uid = 0;
+/** Corpul: capul, trunchiul și coada bifurcată. */
+export const SWALLOW_BODY =
+  'M26 0C25-3.4 21-5.8 16-6.2C12-6.6 8-7.6 4-7.6C-4-7.4-14-5-22-3C-33-6.5-43-12-54-18C-45-9-37-3-30 0C-37 3-45 9-54 18C-43 12-33 6.5-22 3C-14 5-4 7.4 4 7.6C8 7.6 12 6.6 16 6.2C21 5.8 25 3.4 26 0Z';
+/** Aripile, ca seceri trase spre spate (aceeași orientare ca a corpului, ca să nu apară goluri la suprapunere). */
+export const SWALLOW_WINGS =
+  'M8-7C13-20 4-36-26-48C-9-37-2-22-5-7ZM-5 7C-2 22-9 37-26 48C4 36 13 20 8 7Z';
+export const SWALLOW = SWALLOW_BODY + SWALLOW_WINGS;
+
+/** Formația semnului (viewBox 100×100): [x, y, rotație °, scară]. Prima e rândunica din față. */
+export const FLOCK: ReadonlyArray<readonly [number, number, number, number]> = [
+  [71, 42, -22, 0.54],
+  [38, 68, -16, 0.36],
+  [35, 31, -28, 0.27],
+];
 
 export interface LogoOptions {
   /** Clase CSS pe <svg>. */
   cls?: string;
-  /** Segmentele de sub X (ascunse la dimensiuni foarte mici). */
+  /** Păstrat pentru compatibilitate: semnul nu mai are detalii care se ascund la dimensiuni mici. */
   ticks?: boolean;
-  /** Clase pe părțile animate (intro): plăcuța, barele, segmentele. */
-  parts?: boolean;
 }
 
-/** Semnul ZECE ca SVG inline (viewBox 100×100). Fiecare apel are id-uri proprii pentru gradiente. */
-export function logoSvg({ cls = '', ticks = true, parts = false }: LogoOptions = {}): string {
-  const u = `z${++uid}`;
-  const p = (c: string): string => (parts ? ` class="${c}"` : '');
-  const tk = ticks
-    ? Array.from({ length: 10 }, (_, i) =>
-        `<rect${p('lg-tk')} x="${21 + i * 6}" y="82" width="4" height="5" rx=".6" fill="${i === 9 ? '#E8A84C' : `url(#${u}t)`}" style="--i:${i}"/>`).join('')
-    : '';
-  const xY = ticks ? 0 : 6;
-  return `<svg class="${cls}" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
-<defs>
-<linearGradient id="${u}b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2A2E34"/><stop offset=".5" stop-color="#121418"/><stop offset="1" stop-color="#050607"/></linearGradient>
-<linearGradient id="${u}m" gradientUnits="userSpaceOnUse" x1="0" y1="20" x2="0" y2="74"><stop offset="0" stop-color="#F1F4F7"/><stop offset=".42" stop-color="#D5DAE0"/><stop offset=".55" stop-color="#9AA1AA"/><stop offset="1" stop-color="#5A6069"/></linearGradient>
-<linearGradient id="${u}r" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#D5DAE0" stop-opacity=".7"/><stop offset=".5" stop-color="#5A6069" stop-opacity=".5"/><stop offset="1" stop-color="#9AA1AA" stop-opacity=".7"/></linearGradient>
-<linearGradient id="${u}t" gradientUnits="userSpaceOnUse" x1="0" y1="82" x2="0" y2="87"><stop offset="0" stop-color="#9AA1AA"/><stop offset="1" stop-color="#4A5058"/></linearGradient>
-</defs>
-<path${p('lg-plate')} d="M10 0H90L100 10V90L90 100H10L0 90V10Z" fill="url(#${u}b)"/>
-<path${p('lg-rim')} d="M11.5 3H88.5L97 11.5V88.5L88.5 97H11.5L3 88.5V11.5Z" fill="none" stroke="url(#${u}r)" stroke-width="1.2" pathLength="100"/>
-<g transform="translate(0 ${xY})" fill="url(#${u}m)">
-<path${p('lg-a')} d="M24 20H36L76 74H64Z"/>
-<path${p('lg-b1')} d="M64 20H76L59.7 42H47.7Z"/>
-<path${p('lg-b2')} d="M40.3 52H52.3L36 74H24Z"/>
-</g>${tk}</svg>`;
+/** Semnul FALCO ca SVG inline (viewBox 100×100), în culoarea textului (currentColor). */
+export function logoSvg({ cls = '' }: LogoOptions = {}): string {
+  const birds = FLOCK.map(([x, y, r, s]) => `<path transform="translate(${x} ${y}) rotate(${r}) scale(${s})" d="${SWALLOW}"/>`).join('');
+  return `<svg class="${cls}" viewBox="0 0 100 100" fill="currentColor" aria-hidden="true" focusable="false">${birds}</svg>`;
 }
 
-/** Iconița aplicației (pătrat plin, sigur pentru „maskable": semnul stă în zona centrală de 76%). */
+/** Iconița aplicației (pătrat negru, sigur pentru „maskable": formația stă în zona centrală de 72%). */
 export function iconSvg(size: number): string {
-  const inner = logoSvg({ ticks: true }).replace('<svg class=""', `<svg x="${size * 0.12}" y="${size * 0.12}" width="${size * 0.76}" height="${size * 0.76}"`);
+  const inner = logoSvg()
+    .replace('<svg class=""', `<svg x="${size * 0.14}" y="${size * 0.14}" width="${size * 0.72}" height="${size * 0.72}"`)
+    .replace('fill="currentColor"', 'fill="#F4F6F8"');
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}">
-<defs><linearGradient id="ibg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2A2E34"/><stop offset=".55" stop-color="#121418"/><stop offset="1" stop-color="#050607"/></linearGradient></defs>
+<defs><radialGradient id="ibg" cx=".7" cy=".22" r=".95"><stop offset="0" stop-color="#16202B"/><stop offset=".55" stop-color="#0A0C0F"/><stop offset="1" stop-color="#050505"/></radialGradient></defs>
 <rect width="${size}" height="${size}" fill="url(#ibg)"/>${inner}</svg>`;
 }

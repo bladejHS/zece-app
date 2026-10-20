@@ -207,10 +207,10 @@ function connCard(){
   return `<div class="card conn">
     ${row('scale','Apple Health / Google Fit',need('necesită aplicație nativă'),'O pagină web nu poate citi direct datele de sănătate ale telefonului. Până atunci: check-in manual sau import CSV (mai jos).')}
     <div class="int"><span class="ic2" style="color:${stOn()?'var(--ok)':'var(--mu)'}">${ic('refresh')}</span><div class="sp"><b>Strava · Polar Beat · Garmin</b> ${stOn()?'<span class="tag rest">conectat</span>':stOnline()?'<span class="tag need">neconectat</span>':'<span class="tag need">doar în versiunea online</span>'}
-      <p>${stOn()?'Alergările și celelalte antrenamente vin din Strava; Polar Beat ajunge acolo prin Polar Flow.'+(stCfg().last?' Ultima sincronizare: '+stAgo(stCfg().last)+'.':''):'Conectezi Strava o dată și primești alergările și antrenamentele din Polar Beat, Garmin sau Coros. ZECE poate trimite și antrenamentele lui pe Strava.'}</p>
+      <p>${stOn()?'Alergările și celelalte antrenamente vin din Strava; Polar Beat ajunge acolo prin Polar Flow.'+(stCfg().last?' Ultima sincronizare: '+stAgo(stCfg().last)+'.':''):'Conectezi Strava o dată și primești alergările și antrenamentele din Polar Beat, Garmin sau Coros. FALCO poate trimite și antrenamentele lui pe Strava.'}</p>
       <button class="btn sm" style="margin-top:8px" data-a="stGo">${ic('refresh')} ${stOn()?'Setări Strava':'Conectează Strava'}</button></div></div>
     <div class="int"><span class="ic2" style="color:${hrLive()?'var(--ok)':'var(--mu)'}">${ic('heart')}</span><div class="sp"><b>Polar și alți senzori de puls</b> ${hrOK()?'<span class="tag rest">funcționează</span>':'<span class="tag need">pe iPhone: prin Bluefy</span>'}
-      <p>${hrLive()?'Conectat: '+esc(HR.name)+' · '+HR.bpm+' bpm.':hrOK()?'Puls live în antrenament, zone, puls mediu salvat și HRV dimineața. Merge cu Polar H10, H9, Verity Sense, OH1 și ceasurile Polar care își partajează pulsul.':'Safari pe iPhone nu permite Bluetooth paginilor web. Cu aplicația gratuită Bluefy merge, după ce punem ZECE online.'}</p>
+      <p>${hrLive()?'Conectat: '+esc(HR.name)+' · '+HR.bpm+' bpm.':hrOK()?'Puls live în antrenament, zone, puls mediu salvat și HRV dimineața. Merge cu Polar H10, H9, Verity Sense, OH1 și ceasurile Polar care își partajează pulsul.':'Safari pe iPhone nu permite Bluetooth paginilor web. Cu aplicația gratuită Bluefy merge, după ce punem FALCO online.'}</p>
       <button class="btn sm" style="margin-top:8px" data-a="hrOpen">${ic('heart')} ${hrLive()?'Vezi pulsul':'Conectează senzorul'}</button></div></div>
     <div class="int"><span class="ic2" style="color:var(--ok)">${ic('upload')}</span><div class="sp"><b>Import CSV</b> <span class="tag rest">funcționează</span>
       <p>Un fișier cu coloanele <b>data, somn, pasi, rhr, hrv</b> (de exemplu exportat cu aplicația Scurtături sau Health Auto Export pe iPhone). Datele intră în jurnal și în check-in.</p>
@@ -539,7 +539,7 @@ function shoesCard(){
       <div class="fld"><label for="shK">Km deja făcuți</label><input class="inp" id="shK" type="number" inputmode="decimal" placeholder="0"></div>
       <div class="fld full"><label for="shM">Schimbi la (km)</label><input class="inp" id="shM" type="number" inputmode="numeric" value="700"></div></div>
       <div class="inrow"><button class="btn ghost" data-a="shoeForm">Renunță</button><button class="btn pri" style="flex:1" data-a="shoeAdd">${ic('check')} Salvează</button></div>`:''}
-    ${rows||(S.shoeForm?'':`<div class="empty sm">Adaugă pantofii cu care alergi: ZECE adună singur kilometrii din alergări și îți spune când e timpul să-i schimbi.</div>`)}
+    ${rows||(S.shoeForm?'':`<div class="empty sm">Adaugă pantofii cu care alergi: FALCO adună singur kilometrii din alergări și îți spune când e timpul să-i schimbi.</div>`)}
     ${rows?`<div class="note">Spuma din talpă își pierde amortizarea în timp; reperul uzual e 500–800 km, după greutate, suprafață și model. La ${num(curW(),0)} kg, spre capătul de jos al intervalului. Fiecare alergare intră la pantoful folosit atunci.</div>`:''}</div>`;
 }
 /* încărcarea pe 12 săptămâni: suma încărcării zilnice pe săptămână și raportul față de media ultimelor 4 */
@@ -680,7 +680,7 @@ function fuelCard(){
       ${f.long?`<button class="btn ghost sm" data-a="toolGo" data-k="sweat">${ic('drop')} Cât să bei</button>`:''}</div>
     <div class="note">Cantitățile pe kg sunt calculate la ${num(R,0)} kg (greutatea țintă), la fel ca proteina. ${tg.phase&&tg.phase.cut?'În deficit, mută carbohidrații zilei în jurul antrenamentului: aceleași calorii, antrenament mai bun.':''}</div></div>`;
 }
-/* suplimente: doar cele cu dovezi bune pentru performanță sau pentru lipsuri frecvente; bifezi ce iei, ZECE ține seria */
+/* suplimente: doar cele cu dovezi bune pentru performanță sau pentru lipsuri frecvente; bifezi ce iei, FALCO ține seria */
 /* suplimentele pe niveluri (src/lib/nutrition/supplements.ts): [id, nume, doză, nivel, clasă]; Tier 3 e doar explicat, blocat */
 const SUPP=NUTRI.SUPPLEMENTS.map(s=>[s.id,s.name,s.dose,'Tier '+s.tier+' · '+s.evidence,s.tier===1?'ev3':'ev2']);
 const suppOn=id=>!!(S.supp&&S.supp.on&&S.supp.on[id]);
@@ -725,17 +725,17 @@ const SHOTS=[
   ing:[[150,'g','vișine fără sâmburi (proaspete sau congelate)'],[50,'ml','apă']],
   steps:['Mixează vișinele cu apa.','Strecoară printr-o sită dacă vrei shot-ul fin.','Bea-l rece.'],
   m:{k:75,p:1,c:18,g:0},note:'Merge și sucul de vișine 100% fără zahăr adăugat (~100 ml). Are zahăr natural (~16 g), deci intră în calorii.'},
- {id:'ghimbir',n:'Ghimbir și lămâie',col:['#F0C483','#E8A84C'],tags:['recuperare','digestie'],ev:2,when:'Dimineața. Contează să-l iei zilnic 1–2 săptămâni, nu un shot izolat.',
+ {id:'ghimbir',n:'Ghimbir și lămâie',col:['#F0C483','#E5C07B'],tags:['recuperare','digestie'],ev:2,when:'Dimineața. Contează să-l iei zilnic 1–2 săptămâni, nu un shot izolat.',
   why:'2–4 g de ghimbir pe zi, luate câteva zile la rând, reduc moderat durerea musculară după efort. Ajută și la greață și digestie.',
   ing:[[30,'g','ghimbir proaspăt'],[25,'ml','zeamă de lămâie (½ lămâie)'],[7,'g','miere (1 linguriță)'],[30,'ml','apă']],
   steps:['Rade sau mixează ghimbirul cu apa.','Strecoară și stoarce bine pulpa.','Amestecă cu lămâia și mierea.'],
   m:{k:35,p:0,c:9,g:0},note:'Ustură, e normal. Atenție dacă iei anticoagulante sau ai reflux.'},
- {id:'turmeric',n:'Turmeric și piper',col:['#E8A84C','#B5703A'],tags:['recuperare'],ev:1,when:'Oricând, după o masă.',
+ {id:'turmeric',n:'Turmeric și piper',col:['#E5C07B','#B5703A'],tags:['recuperare'],ev:1,when:'Oricând, după o masă.',
   why:'Curcumina e antiinflamatoare, dar se absoarbe foarte slab: piperina din piperul negru crește absorbția de până la ~20 de ori, iar grăsimea ajută și ea. Studiile cu efect pe febra musculară au folosit doze de supliment, mult peste ce e într-un shot.',
   ing:[[3,'g','turmeric pudră (1 linguriță rasă)'],[1,'vârf','piper negru măcinat'],[50,'ml','suc de portocale'],[5,'ml','ulei de măsline']],
   steps:['Pune totul într-un borcan mic.','Agită energic 10 secunde.','Bea imediat, înainte să se separe.'],
   m:{k:70,p:0,c:6,g:5},note:'Evită dacă iei anticoagulante sau ai probleme cu fierea. Pătează hainele și blatul.'},
- {id:'electroliti',n:'Electroliți de casă',col:['#E1F5FE','#86C6D4'],tags:['hidratare','alergare'],ev:3,when:'Înainte de alergările de peste 75 de minute sau pe căldură, și după antrenamentele în care transpiri mult.',
+ {id:'electroliti',n:'Electroliți de casă',col:['#E1F5FE','#B7D8F6'],tags:['hidratare','alergare'],ev:3,when:'Înainte de alergările de peste 75 de minute sau pe căldură, și după antrenamentele în care transpiri mult.',
   why:'Prin transpirație pierzi mult sodiu, iar la greutatea ta chiar mai mult. Sodiul te ajută să reții apa băută și scade riscul de crampe și amețeală la efortul lung.',
   ing:[[150,'ml','apă'],[20,'ml','zeamă de lămâie sau lime'],[1.5,'g','sare (¼ linguriță, ~600 mg sodiu)'],[7,'g','miere']],
   steps:['Dizolvă sarea și mierea în puțină apă caldă.','Adaugă restul apei rece și lămâia.','Bea-l cu 15–30 de minute înainte de start.'],
@@ -755,7 +755,7 @@ const SHOTS=[
   ing:[[40,'g','spanac baby'],[1,'buc','măr verde (~150 g)'],[10,'ml','zeamă de lămâie'],[5,'g','ghimbir'],[50,'ml','apă']],
   steps:['Taie mărul bucăți.','Mixează totul până devine fin.','Strecoară dacă vrei, sau bea-l cu fibre (sățios).'],
   m:{k:70,p:1,c:16,g:0},note:'Cu fibrele păstrate te ține mai mult sătul.'},
- {id:'vitc',n:'Portocală și kiwi',col:['#F0C483','#C98D35'],tags:['imunitate','somn'],ev:2,when:'Zilnic în sezonul rece. Kiwi seara, dacă dormi prost.',
+ {id:'vitc',n:'Portocală și kiwi',col:['#F0C483','#C9A25E'],tags:['imunitate','somn'],ev:2,when:'Zilnic în sezonul rece. Kiwi seara, dacă dormi prost.',
   why:'La oamenii obișnuiți, vitamina C luată zilnic nu previne răceala. La cei care fac efort intens (maratoniști, schiori) a redus însă riscul la jumătate. Un studiu mic a legat și kiwi-ul seara de un somn mai bun.',
   ing:[[1,'buc','portocală (~130 g)'],[1,'buc','kiwi (~75 g)'],[50,'ml','apă']],
   steps:['Curăță portocala și kiwi-ul.','Mixează cu apa.','Strecoară dacă vrei shot-ul fin.'],
@@ -971,14 +971,14 @@ function icsText(time,alarm){
   const esc_=s=>String(s).replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\n/g,'\\n');
   const fold=l=>{ const out=[]; let s=l; while(s.length>72){ out.push(s.slice(0,72)); s=' '+s.slice(72); } out.push(s); return out.join('\r\n'); };
   const stamp=new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d+Z$/,'Z');
-  const w0=nx?nx.w:0, m0=mondayOf(tk), L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//ZECE//Hybrid365//RO','CALSCALE:GREGORIAN','METHOD:PUBLISH','X-WR-CALNAME:ZECE · antrenamente'];
+  const w0=nx?nx.w:0, m0=mondayOf(tk), L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//FALCO//Hybrid365//RO','CALSCALE:GREGORIAN','METHOD:PUBLISH','X-WR-CALNAME:FALCO · antrenamente'];
   for(let i=0;i<28;i++){ const k=dayShift(tk,i), d=(parseKey(k).getDay()+6)%7, wk=(w0+Math.floor(daysBetween(m0,k)/7))%WEEKS, day=dayFor(wk,d,true);
     const st=new Date(k+'T00:00'); st.setHours(h,mi,0,0); const en=new Date(st.getTime()+(+day.min||60)*6e4);
     const f=x=>keyOf(x).replace(/-/g,'')+'T'+pad(x.getHours())+pad(x.getMinutes())+'00';
     L.push('BEGIN:VEVENT','UID:zece-'+k+'@hybrid365','DTSTAMP:'+stamp,'DTSTART:'+f(st),'DTEND:'+f(en),
-      fold('SUMMARY:'+esc_('ZECE · '+day.t)),
+      fold('SUMMARY:'+esc_('FALCO · '+day.t)),
       fold('DESCRIPTION:'+esc_('Săptămâna '+(wk+1)+' · '+DAYN[d]+' · '+day.min+' min\n'+day.ex.map(e=>'• '+e.n+(short(e)?' · '+short(e):'')).join('\n'))));
-    if(alarm>0) L.push('BEGIN:VALARM','ACTION:DISPLAY','TRIGGER:-PT'+alarm+'M',fold('DESCRIPTION:'+esc_('ZECE în '+alarm+' de minute: '+day.t)),'END:VALARM');
+    if(alarm>0) L.push('BEGIN:VALARM','ACTION:DISPLAY','TRIGGER:-PT'+alarm+'M',fold('DESCRIPTION:'+esc_('FALCO în '+alarm+' de minute: '+day.t)),'END:VALARM');
     L.push('END:VEVENT'); }
   L.push('END:VCALENDAR'); return L.join('\r\n')+'\r\n';
 }
@@ -986,13 +986,13 @@ async function icsExport(){
   const t=($('#icsT')||{}).value||'18:00', al=+(($('#icsA')||{}).value||30);
   await save('prof',Object.assign({},S.prof||{},{icsT:t,icsA:al}));
   const blob=new Blob([icsText(t,al)],{type:'text/calendar'}), file=new File([blob],'zece-antrenamente.ics',{type:'text/calendar'});
-  try{ if(navigator.canShare&&navigator.canShare({files:[file]})&&matchMedia('(pointer:coarse)').matches){ await navigator.share({files:[file],title:'ZECE · antrenamente'}); return; } }catch(e){ if(e&&e.name==='AbortError') return; }
+  try{ if(navigator.canShare&&navigator.canShare({files:[file]})&&matchMedia('(pointer:coarse)').matches){ await navigator.share({files:[file],title:'FALCO · antrenamente'}); return; } }catch(e){ if(e&&e.name==='AbortError') return; }
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=file.name; document.body.appendChild(a); a.click();
   setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },1000); toast('Calendar exportat','Deschide fișierul ca să adaugi antrenamentele cu alarmă.','info');
 }
 function icsCard(){ const P=prof();
   return `<div class="card"><div class="eyebrow">${ic('clock')} Memento-uri în calendar</div>
-    <div class="sm mu" style="margin-top:8px">Pune următoarele 4 săptămâni din plan în calendarul telefonului, cu alarmă înainte. Așa îți amintește chiar și când ZECE e închis.</div>
+    <div class="sm mu" style="margin-top:8px">Pune următoarele 4 săptămâni din plan în calendarul telefonului, cu alarmă înainte. Așa îți amintește chiar și când FALCO e închis.</div>
     <div class="form"><div class="fld"><label for="icsT">Ora antrenamentului</label><input class="inp" id="icsT" type="time" value="${esc(P.icsT||'18:00')}"></div>
       <div class="fld"><label for="icsA">Alarmă înainte</label><select class="inp" id="icsA">${[[0,'Fără'],[15,'15 min'],[30,'30 min'],[60,'1 oră'],[120,'2 ore']].map(([v,l])=>`<option value="${v}" ${+(P.icsA==null?30:P.icsA)===v?'selected':''}>${l}</option>`).join('')}</select></div></div>
     <button class="btn wide" style="margin-top:12px" data-a="icsExport">${ic('download')} Adaugă în calendar (.ics)</button>

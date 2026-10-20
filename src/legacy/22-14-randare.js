@@ -48,7 +48,7 @@ function renderSide(){
   const it=([k,l,icn],kb)=>`<button class="sb ${S.tab===k?'on':''}" data-a="tab" data-k="${k}" ${S.tab===k?'aria-current="page"':''}>${ic(icn)}<span>${l}</span>${k==='coach'&&AI.busy&&S.tab!=='coach'?'<span class="cnt">·</span>':kb?`<span class="kb">${kb}</span>`:''}</button>`;
   const lt=modeNow()==='light';
   sd.innerHTML=`<button class="side-br" data-a="tab" data-k="azi" aria-label="Acasă">${UI.logoSvg({cls:'logo',ticks:false})}
-      <div class="brand">ZECE<small>Hybrid365</small></div></button>
+      <div class="brand">FALCO<small>Hybrid365</small></div></button>
     <button class="side-search" data-a="palOpen">${ic('search')}<span>Caută sau comandă</span></button>
     ${NAV.map((n,i)=>it(n,'Alt '+(i+1))).join('')}
     <div class="side-h">Mai mult</div>

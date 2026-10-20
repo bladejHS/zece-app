@@ -51,7 +51,7 @@ function restBlock(nextTxt){
     <div class="acts"><div class="rs-b"><button class="btn sm" data-a="restAdd" data-i="-15" aria-label="Minus 15 secunde">−15</button><button class="btn sm" data-a="restAdd" data-i="15" aria-label="Plus 15 secunde">+15</button></div>
       <button class="btn sm ghost" data-a="restSkip">${ic('skip')} Sari</button></div></div>`;
 }
-const PLATES=[[25,'#B0645A',64],[20,'#4E9AAB',60],[15,'#E8C46C',54],[10,'#43A047',48],[5,'#ECEFF1',38],[2.5,'#455A64',32],[1.25,'#B0BEC5',26]];
+const PLATES=[[25,'#B0645A',64],[20,'#7DB2E3',60],[15,'#E8C46C',54],[10,'#43A047',48],[5,'#ECEFF1',38],[2.5,'#455A64',32],[1.25,'#B0BEC5',26]];
 function platesHTML(kg,bar=20){
   kg=+kg||0; if(kg<bar) return `<div class="plates-t">Sub ${bar} kg nu se poate pe bara aleasă: folosește o bară mai ușoară.</div>`;
   let side=(kg-bar)/2; const out=[]; PLATES.forEach(([p])=>{ while(side>=p-1e-9){ out.push(p); side-=p; } });
@@ -277,7 +277,7 @@ async function quitSess(){ S.sess=null; stopRest(); S.fxOpen=false; await store.
 /* pauza dintre serii — sunetele de final sunt programate dinainte */
 function restSounds(left){ schedule('rest',[[left-3,880,.06],[left-2,880,.06],[left-1,880,.06],[left,1320,.18],[left+.25,1320,.18]]); }
 function startRest(sec,lbl){ if(!sec) return; S.rest={end:Date.now()+sec*1000,total:sec,lbl:lbl||'Pauză'}; restSounds(sec);
-  if('mediaSession' in navigator&&window.MediaMetadata) try{ navigator.mediaSession.metadata=new MediaMetadata({title:(lbl||'Pauză')+' '+fmtClock(sec),artist:'ZECE'}); }catch(e){} }
+  if('mediaSession' in navigator&&window.MediaMetadata) try{ navigator.mediaSession.metadata=new MediaMetadata({title:(lbl||'Pauză')+' '+fmtClock(sec),artist:'FALCO'}); }catch(e){} }
 function stopRest(){ S.rest=null; cancelSched('rest'); }
 function restDone(){ S.rest=null; AU.sched.rest=[]; buzz([200,100,200]); if(!document.hidden) flash(); say(voxEnc()?mot('rdone'):'Gata pauza. Următoarea serie.'); renderFocus(); renderPill(); }
 function tick(){

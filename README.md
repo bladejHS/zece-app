@@ -1,8 +1,8 @@
-# ZECE
+# FALCO
 
 Aplicație PWA de antrenament pentru sporturi de contact și antrenament hibrid: kickboxing (sac, palmare, sparring), forță, alergare, nutriție. Merge complet fără internet și se instalează pe telefon.
 
-Design „Industrial Tactical Premium”: carbon → gunmetal, argint metalic, amber pentru efort, cyan pentru repaus. Butoane mari (64–76 px), făcute să meargă și cu mănușile pe mâini.
+Identitatea FALCO: libertate, puritate, zbor. Simbolul sunt trei rândunici în zbor. Negru adânc și alb curat, griuri reci pentru suprafețe și text, un albastru de cer palid folosit cu măsură (stări active, progres, focus). Un singur font (Inter), forme rotunjite, linii fine în loc de umbre. Butoanele de antrenament rămân mari (60–72 px), ca să meargă și cu mănușile pe mâini.
 
 ## Setup
 
@@ -30,16 +30,17 @@ Astro (SSG) + Vite + TypeScript strict, fără framework la rulare: o singură p
 |---|---|
 | `src/pages/index.astro` | Pagina unică |
 | `src/components/` | `Intro.astro` (deschiderea), `TopBar.astro` (antetul) |
-| `src/ui/` | Componente TypeScript: semnul ZECE (`brand.ts`), cadranul segmentat al cronometrului, obturatorul dintre runde, cue-urile ultimelor 3 s (`timer.ts`), progresul segmentat (`segments.ts`) |
+| `src/ui/` | Componente TypeScript: semnul FALCO și silueta rândunicii (`brand.ts`), cadranul segmentat al cronometrului, tranziția dintre runde, cue-urile ultimelor 3 s (`timer.ts`), progresul segmentat (`segments.ts`) |
 | `src/lib/coach/` | Antrenorul AI: cheia criptată, filtrul de siguranță, limita de cereri, modul offline, coada de sincronizare |
 | `src/lib/training/` | Sesiuni în 4 faze, rapoarte de contact, check-in, feedback pe rundă, deload, validator, vocea pe faze |
 | `src/lib/nutrition/` | Plan periodizat, hidratare, suplimente pe niveluri, feedback pe mese, meal prep, avertizarea medicală |
 | `src/lib/premium/` | HRV, mastery, analize, squad-uri, ritualuri, vocea dinamică |
 | `src/legacy/NN-*.js` | Interfața aplicației (din monolitul inițial), pe secțiuni, unite de `integrations/legacy-app.ts`. Modulele de mai sus ajung la ea ca `COACH`, `UI`, `TRAINING`, `NUTRI`, `ELITE` |
-| `src/styles/` | `tokens.css` (paleta, tipografia, mișcarea), `tactical.css` (componentele), `intro.css`, `fonts.css`, `legacy.css` |
+| `src/styles/` | `tokens.css` (paleta, tipografia, mișcarea), `falco.css` (componentele), `intro.css`, `fonts.css`, `legacy.css` |
 | `src/sw/` | Service worker-ul, compilat la build de `integrations/service-worker.ts` |
 | `public/vox/<hash>.mp3` + `src/data/vox-index.json` | Vocea (509 fraze), un fișier pe frază |
-| `scripts/` | `build-icons.mjs` (iconițele din semn), `vox-report.mjs` (acoperirea vocii pe faze → `docs/vox-faze.md`), `split-monolith.mjs` (migrarea inițială) |
+| `public/art/` | Ilustrațiile SVG (coperta, benzile paginilor, cardurile Kickboxing, semnele zilelor), generate din silueta rândunicii |
+| `scripts/` | `build-icons.mjs` (iconițele din semn), `build-art.mjs` (ilustrațiile din `public/art/`), `vox-report.mjs` (acoperirea vocii pe faze → `docs/vox-faze.md`), `split-monolith.mjs` (migrarea inițială) |
 
 Datele utilizatorului rămân în `localStorage`, sub cheile `zece3:*` / `zece:*`, aceleași ca înainte, deci nimic nu se pierde la actualizare.
 
@@ -82,7 +83,7 @@ Limitarea variantei fără server: cheia se folosește din browser, deci un scri
 ## Funcții elite
 
 - **HRV și somn**: din check-in sau din import CSV (Garmin Connect, Apple Health printr-o aplicație de export). O aplicație web nu poate citi direct Apple Health sau Garmin.
-- **Mastery**: insigne de tehnică și recuperare, nivel din competență, penalizări pentru limitele de siguranță ignorate.
+- **Mastery**: distincții pentru tehnică și recuperare, nivel din competență, penalizări pentru limitele de siguranță ignorate.
 - **Analiză**: Technical Efficiency Score, Recovery Debt Index, harta abilităților, sincronizarea nutriție–antrenament.
 - **Squad privat** (cel mult 5 oameni), fără server: fiecare membru publică un rezumat săptămânal criptat (PBKDF2 + AES-GCM) într-un gist secret de pe GitHub. Accesul se face prin coduri de invitație, iar provocarea săptămânii e comună.
 - **Ritualul săptămânal**, opțional: 12 minute ghidate, sincronizate pe ceas pentru tot squad-ul.

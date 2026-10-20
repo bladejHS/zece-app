@@ -1,7 +1,7 @@
 /* =====================================================================
    v9 · PULS MAXIM MĂSURAT ȘI TESTUL DE PRAG (30 MIN)
    Pulsul maxim: cel scris în profil; altfel estimat din vârstă (Tanaka), cu propunerea de a folosi cel mai mare puls
-   înregistrat în ultimul an (alergări și activități din Strava, antrenamente VULTUR, cronometre), dacă e mai mare.
+   înregistrat în ultimul an (alergări și activități din Strava, antrenamente FALCO, cronometre), dacă e mai mare.
    Testul de prag (Friel): 15 min încălzire, apoi 30 min cât de tare poți ține egal; pulsul mediu din ultimele 20 de minute
    = pulsul la prag (LTHR), iar ritmul mediu pe 30 de minute = ritmul de prag. Ambele intră în profil, zone și viteze.
    ===================================================================== */

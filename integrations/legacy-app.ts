@@ -15,7 +15,7 @@ const DIR = join(process.cwd(), 'src/legacy');
 export default function legacyApp(): Plugin {
   const files = (): string[] => readdirSync(DIR).filter((f) => f.endsWith('.js')).sort();
   return {
-    name: 'zece:legacy-app',
+    name: 'falco:legacy-app',
     resolveId: (id) => (id === ID ? RESOLVED : null),
     load(id) {
       if (id !== RESOLVED) return null;

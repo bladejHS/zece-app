@@ -17,9 +17,9 @@ async function loadAll(){
   S.sess=o.sess&&o.sess.start&&o.sess.sets?Object.assign({tmMin:{},tasks:{},runs:{},prs:[],best:{},kg:{},rp:{}},o.sess):null;
   S.sound=o.sound!==false; S.aiKey=await COACH.vault.loadKey(); S.aiUsed=+o.aiUsed||0;
   S.aiEffort=['low','medium','high'].indexOf(o.aiEffort)>=0?o.aiEffort:'medium';
-  S.theme=THEMES[o.theme]?o.theme:'tactical'; S.mode=['dark','light','auto'].indexOf(o.mode)>=0?o.mode:'dark'; S.bg=o.bg==='black'?'black':'anthr';
-  /* designul ZECE (v15) pornește o singură dată pe tema Tactical; după aceea tema aleasă în Setări rămâne */
-  if((+o.look||0)<15){ S.theme='tactical'; await store.set(K.theme,'tactical'); await store.set(K.look,15); }
+  S.theme='falco'; S.mode=['dark','light','auto'].indexOf(o.mode)>=0?o.mode:'dark'; S.bg=o.bg==='black'?'black':'anthr';
+  /* FALCO are un singur sistem vizual: o temă veche salvată se înlocuiește o singură dată */
+  if(o.theme!=='falco') await store.set(K.theme,'falco');
   S.fx=['min','normal','max'].indexOf(o.fx)>=0?o.fx:'normal'; S.onb=!!o.onb;
   S.seenAch=Array.isArray(o.seenAch)?o.seenAch:null; S.seenLvl=typeof o.seenLvl==='number'?o.seenLvl:null;
   /* conversațiile din v3 au alt set de unelte și alt prompt: le închidem, altfel istoricul nu mai corespunde */
@@ -43,12 +43,10 @@ async function migrate(){
 }
 /* ---------- animația de deschidere (src/components/Intro.astro, src/styles/intro.css) ---------- */
 const INTRO={on:false,leaving:false,done:null,mode:'full'};
-/* secunda (× k) la care ținta se blochează pe semn (colțurile devin amber): vibrația scurtă cade pe ea */
-const IN_LOCK=1.15;
 function introStart(){
   const intro=$('#intro'); let mode='full';
   try{ const m=JSON.parse(localStorage.getItem(K.intro)||'"full"'); if(['full','short','off'].indexOf(m)>=0) mode=m; }catch(e){}
-  try{ const lk=+JSON.parse(localStorage.getItem(K.look)||'0')||0, t=lk>=15?JSON.parse(localStorage.getItem(K.theme)||'null'):'tactical'; S.theme=THEMES[t]?t:'tactical'; }catch(e){}
+  S.theme='falco';
   try{ S.bg=JSON.parse(localStorage.getItem(K.bg)||'"anthr"')==='black'?'black':'anthr'; }catch(e){}
   try{ const md=JSON.parse(localStorage.getItem(K.mode)||'"dark"'); if(['dark','light','auto'].indexOf(md)>=0) S.mode=md; }catch(e){}
   applyTheme();
@@ -59,23 +57,20 @@ function introStart(){
   if(mode==='off'||motionOff()){ intro.remove(); $('.top .logo').classList.remove('wait'); INTRO.resolve(); return; }
   if(mode==='short') intro.classList.add('short');
   INTRO.on=true;
-  const k=mode==='full'?1:.45;
-  setTimeout(()=>{ if(INTRO.on) buzz([22]); },Math.round(IN_LOCK*k*1000));
   intro.addEventListener('click',introExit);
-  setTimeout(introExit,Math.round((mode==='full'?2.75:1.35)*1000));
+  setTimeout(introExit,Math.round((mode==='full'?2.8:1.35)*1000));
 }
-/* ieșirea: semnul zboară în antet, iar fundalul se închide ca un diafragm spre locul lui (--ix, --iy) */
+/* ieșirea: formația celor trei rândunici zboară în antet, unde e logo-ul, iar negrul se stinge */
 function introExit(){
   if(INTRO.leaving) return; INTRO.leaving=true;
   const intro=$('#intro'), il=$('#inLogo'), hl=$('.top .logo');
   const finish=()=>{ INTRO.on=false; if(intro.isConnected) intro.remove(); hl.classList.remove('wait'); hl.classList.add('land'); setTimeout(()=>hl.classList.remove('land'),460);
     const v=$('#view'); v.classList.remove('anim'); void v.offsetWidth; v.classList.add('anim'); countUp(v); INTRO.resolve(); };
   try{
-    /* animațiile de intrare încă în curs sar direct la final, ca semnul să plece întreg */
+    /* zborul de intrare, dacă e încă în curs, sare direct la final, ca formația să plece întreagă */
     intro.getAnimations({subtree:true}).forEach(a=>{ try{ a.finish(); }catch(e){} });
     const r1=il.getBoundingClientRect(), r2=hl.getBoundingClientRect(), cx=r2.left+r2.width/2, cy=r2.top+r2.height/2;
     const dx=cx-(r1.left+r1.width/2), dy=cy-(r1.top+r1.height/2), sc=r2.width/r1.width;
-    intro.style.setProperty('--ix',cx+'px'); intro.style.setProperty('--iy',cy+'px');
     intro.classList.add('out');
     const a=il.animate([{transform:'translate(0,0) scale(1)'},{transform:`translate(${dx}px,${dy}px) scale(${sc})`}],{duration:520,easing:'cubic-bezier(.25,.46,.45,.94)',fill:'forwards'});
     a.onfinish=finish; setTimeout(()=>{ if(intro.isConnected) finish(); },900);

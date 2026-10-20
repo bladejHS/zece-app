@@ -4,14 +4,14 @@
    ===================================================================== */
 const OB_FOCUS=[['str','Forță','dumbbell','Serii, 1RM, recorduri'],['run','Alergare','run','Ritm, km, despărțiri'],['k1','1 km','stopwatch','Ținta și pacerul'],['body','Corp','scale','Greutate, talie, poze'],['plan','Planul Hybrid365','plan','4 săptămâni, 7 zile']];
 let OB=null;
-function onbOpen(){ const P=prof(); OB={step:0,sex:P.sex,focus:(P.focus||['str','run','plan']).slice(),theme:S.theme,mode:S.mode||'dark'}; onbRender(); }
+function onbOpen(){ const P=prof(); OB={step:0,sex:P.sex,focus:(P.focus||['str','run','plan']).slice(),mode:S.mode||'dark'}; onbRender(); }
 function onbRender(){
   const r=$('#ovRoot'); if(!OB){ r.innerHTML=''; updLock(); return; }
   document.body.classList.add('lock');
   const P=prof(), ws=wStats(), N=4, dots=`<div class="onb-dots">${Array.from({length:N},(_,i)=>`<i class="${i===OB.step?'on':''}"></i>`).join('')}</div>`, f=OB.focus;
   let body='';
   if(OB.step===0) body=`<div class="onb-hero"><div class="onb-ph"></div><div class="onb-mark">${UI.logoSvg({})}</div></div>
-    <div class="onb-big">ZECE</div><p class="mu" style="text-align:center;margin-top:6px">${esc(UI.BRAND.tagline)}</p>
+    <div class="onb-big">FALCO</div><p class="mu" style="text-align:center;margin-top:6px">${esc(UI.BRAND.tagline)}</p>
     <div class="feat"><div>${ic('play')} Antrenament live: serii, pauze, cronometru</div><div>${ic('chart')} Performanță pe orice perioadă, cu grafice interactive</div>
       <div>${ic('stopwatch')} 1 KM Lab, Running Lab, recorduri și obiective</div><div>${ic('shield')} Totul rămâne pe dispozitivul tău</div></div>
     <label class="linkb file-l" style="margin:16px auto 0;display:flex;justify-content:center">${ic('upload')} Am deja o copie: restaurează<input type="file" id="impFile" accept="application/json,.json"></label>`;
@@ -24,10 +24,8 @@ function onbRender(){
       <div class="fld"><label for="obW">Greutatea de azi (kg)</label><input class="inp" id="obW" type="number" step="0.1" inputmode="decimal" placeholder="${ws?num(ws.last.w):'kg'}"></div>
       ${f.indexOf('body')>=0?`<div class="fld"><label for="obG">Greutate țintă (kg)</label><input class="inp" id="obG" type="number" step="0.1" inputmode="decimal" value="${S.prof&&S.prof.goalW?P.goalW:''}" placeholder="opțional"></div>`:''}
       ${f.indexOf('k1')>=0?`<div class="fld ${f.indexOf('body')>=0?'':'full'}"><label for="obK">Ținta pe 1 km (min:sec)</label><input class="inp" id="obK" inputmode="text" placeholder="ex: 4:00" value="${k1Goal()?fmtClock(k1Goal().t):''}"></div>`:''}</div>`;
-  else body=`<div class="eyebrow">Pasul 3 din 3</div><div class="h1">Cum arată</div><p class="mu">Negru adânc sau alb cald. Se schimbă pe loc.</p>
-    <div class="swatches">${[['dark','Întunecată','#050506'],['light','Luminoasă','#F2F2EF'],['auto','Automată','linear-gradient(135deg,#050506 50%,#F2F2EF 50%)']].map(([k,l,c])=>`<button class="swatch mode ${OB.mode===k?'on':''}" style="--c1:var(--mu)" data-a="obMode" data-k="${k}"><i style="background:${c}"></i>${l}</button>`).join('')}</div>
-    <div class="sm" style="margin-top:16px;font-weight:600">Accent</div>
-    <div class="swatches">${Object.keys(THEMES).map(k=>{ const t=THEMES[k], v=modeNow()==='light'&&t.L?t.L:t; return `<button class="swatch ${OB.theme===k?'on':''}" style="--c1:${v.ac};--c2:${v.ac2}" data-a="obTheme" data-k="${k}"><i></i>${t.n}</button>`; }).join('')}</div>
+  else body=`<div class="eyebrow">Pasul 3 din 3</div><div class="h1">Cum arată</div><p class="mu">Negru adânc sau alb curat. Se schimbă pe loc.</p>
+    <div class="swatches">${[['dark','Întunecată','#050505'],['light','Luminoasă','#F4F5F7'],['auto','Automată','linear-gradient(135deg,#050505 50%,#F4F5F7 50%)']].map(([k,l,c])=>`<button class="swatch mode ${OB.mode===k?'on':''}" style="--c1:var(--mu)" data-a="obMode" data-k="${k}"><i style="background:${c}"></i>${l}</button>`).join('')}</div>
     <div class="note">Mai departe, pe Acasă găsești o listă scurtă cu ce merită configurat (check-in, obiectiv, copia datelor). Antrenorul AI și Strava sunt în Setări, opționale.</div>`;
   r.innerHTML=`<div class="onb"><div class="onb-in">${dots}<div class="onb-step">${body}</div>
     <div class="onb-act">${OB.step>0?`<button class="btn ghost" data-a="obBack">${ic('left')} Înapoi</button>`:''}

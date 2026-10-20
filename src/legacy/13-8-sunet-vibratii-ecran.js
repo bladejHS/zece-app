@@ -22,7 +22,7 @@ function keepAlive(on){
         for(let i=0;i<n;i++) v.setUint8(44+i,128);
         AU.keep=new Audio(URL.createObjectURL(new Blob([buf],{type:'audio/wav'}))); AU.keep.loop=true; AU.keep.volume=.01; }
       const p=AU.keep.play(); if(p&&p.catch) p.catch(()=>{});
-      if('mediaSession' in navigator&&window.MediaMetadata) navigator.mediaSession.metadata=new MediaMetadata({title:'Antrenament în desfășurare',artist:'ZECE'});
+      if('mediaSession' in navigator&&window.MediaMetadata) navigator.mediaSession.metadata=new MediaMetadata({title:'Antrenament în desfășurare',artist:'FALCO'});
     } else if(AU.keep) AU.keep.pause();
   }catch(e){}
 }

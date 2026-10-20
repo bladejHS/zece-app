@@ -1,4 +1,4 @@
-/* Progres segmentat, ca un indicator de turație (nu bare colorate pline). Stiluri: .seg-g în src/styles/tactical.css. */
+/* Progres segmentat: linii scurte și rotunjite, câte una pe pas. Stiluri: .seg-g în src/styles/falco.css. */
 
 export type Tone = 'effort' | 'rest' | 'ok' | 'warn' | 'bad';
 

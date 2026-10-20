@@ -1,4 +1,4 @@
-/* Funcțiile elite ZECE: HRV cu deload forțat, gamificare inversă (mastery), analize, squad-uri, ritualuri și vocea dinamică.
+/* Funcțiile elite FALCO: HRV cu deload forțat, gamificare inversă (mastery), analize, squad-uri, ritualuri și vocea dinamică.
    Codul vechi (src/legacy) le folosește prin `ELITE`. Toate dispar în modul activ de antrenament. */
 export { HRV_DELOAD_RATIO, hrvStatus, parseHealthCsv, type HrvPoint, type HrvStatus } from './hrv.ts';
 export { LEVEL_NAMES, mastery, type Badge, type Mastery, type MasteryInput, type Penalty } from './mastery.ts';

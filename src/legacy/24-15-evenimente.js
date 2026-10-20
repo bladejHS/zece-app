@@ -146,7 +146,7 @@ document.addEventListener('click',async ev=>{
     case 'stSendPend': if(ST.pend){ const it=ST.pend; ST.pend=null; await stQueue(it); stSumPaint(it.key); await stFlush(); } return;
     case 'stQDrop': await save('stq',[]); ST.msg=''; render(); return;
     case 'stOff': { const c=stCfg(); try{ if(c.tok) await fetch('https://www.strava.com/oauth/deauthorize',{method:'POST',body:new URLSearchParams({access_token:c.tok})}); }catch(e){}
-      await save('strava',{cid:c.cid,sec:c.sec,own:c.own||[],del:c.del||[]}); ST.msg=''; render(); toast('Strava deconectat','Antrenamentele importate rămân în ZECE.','info'); return; }
+      await save('strava',{cid:c.cid,sec:c.sec,own:c.own||[],del:c.del||[]}); ST.msg=''; render(); toast('Strava deconectat','Antrenamentele importate rămân în FALCO.','info'); return; }
     case 'stReset': await save('strava',{own:stCfg().own||[],del:stCfg().del||[]}); ST.msg=''; render(); return;
     case 'stCopy': try{ await navigator.clipboard.writeText(k); toast('Copiat',k,'info'); }catch(e){ toast('Nu pot copia aici','Selectează textul și copiază-l manual.','info'); } return;
     case 'extDel': await stPatch({del:(stCfg().del||[]).concat([String(k)]).slice(-500)}); await save('ext',(S.ext||[]).filter(x=>String(x.sid)!==String(k))); render(); return;
@@ -215,7 +215,6 @@ document.addEventListener('click',async ev=>{
       P.inj=cur.indexOf(k)>=0?cur.filter(x=>x!==k):cur.concat([k]); await save('prof',P); render(); return; }
     case 'aiIncClear': COACH.incidents.clear(); render(); return;
     case 'aiEffort': await save('aiEffort',k); render(); return;
-    case 'theme': await save('theme',k); applyTheme(); render(); burstAt(innerWidth/2,innerHeight/3,20); return;
     case 'fxLevel': await save('fx',k); applyFx(); render(); return;
     case 'sex': await save('prof',Object.assign({},S.prof||{},{sex:k})); render(); return;
     case 'sound': await save('sound',!S.sound); render(); if(S.sound) beep(880,.08); return;
@@ -284,7 +283,6 @@ document.addEventListener('click',async ev=>{
     case 'obNext': await onbNext(); return;
     case 'obBack': if(OB&&OB.step>0){ OB.step--; onbRender(); } return;
     case 'obSex': OB.sex=k; onbRender(); return;
-    case 'obTheme': OB.theme=k; await save('theme',k); applyTheme(); onbRender(); return;
 
     default: if(ACT[a]) return ACT[a](el,{k,I,W,D,X,tk,s,ev});
   }
@@ -377,5 +375,5 @@ async function doImport(file){
     await loadAll(); applyTheme(); applyFx(); syncMark('lifts');
     const np=Array.isArray(data.photos)?await phImport(data.photos):0;
     render(); toast('Copie importată',n+' seturi de date restaurate'+(np?' · '+np+' poze':'')+'.','info');
-  }catch(e){ toast('Import eșuat','Fișierul nu pare o copie ZECE.','info'); }
+  }catch(e){ toast('Import eșuat','Fișierul nu pare o copie FALCO.','info'); }
 }

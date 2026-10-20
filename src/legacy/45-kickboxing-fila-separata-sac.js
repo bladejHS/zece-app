@@ -7,8 +7,8 @@
    cronologie, export, sincronizare și, dacă vrei, pe Strava. Țintele, preferințele și geanta stau în zece3:kb.
    ===================================================================== */
 K.kb='zece3:kb'; S.kb={}; S.kbTab='train';
-/* pozele filei (operatorul SRI): build.js pune aici fotografiile, build_site.js le face fișiere */
-const KB_PH={"bag":"kb-bag.jpg","band":"kb-band.jpg","pads":"kb-pads.jpg","spar":"kb-spar.jpg","wraps":"kb-wraps.jpg"};
+/* ilustrațiile filei (rândunici, scripts/build-art.mjs) */
+const KB_PH={"bag":"art/kb-bag.svg","band":"art/kb-band.svg","pads":"art/kb-pads.svg","spar":"art/kb-spar.svg","wraps":"art/kb-wraps.svg"};
 Object.keys(KB_PH).forEach(k=>{ try{ document.documentElement.style.setProperty('--kb-'+k,cssUrl(KB_PH[k])); }catch(e){} });
 const kbPh=k=>`var(--kb-${k},var(--cover))`;
 
@@ -383,7 +383,7 @@ ACT.kfSave=async()=>{
   if(!F.id&&F.st&&stOn()&&stCanWrite()){
     const sp=F.a==='spar'?[kb.ok?'Ce a mers: '+kb.ok:'',kb.fix?'De lucrat: '+kb.fix:''].filter(Boolean).join('\n'):x.note||'';
     await stQueue({key:x.sid,start:x.start,end:x.start+min*60000,dur:Math.round(min*60),km:0,sport:'Workout',name:x.name,
-      desc:(A.n+(r?' · '+r+(r===1?' rundă':' runde')+' × '+fmtClock(kb.rs)+(kb.rest&&r>1?' · pauză '+fmtClock(kb.rest):''):'')+' · '+num(min,0)+' min'+(hr?' · puls mediu '+hr:'')+(sp?'\n\n'+sp:'')+'\n\nNotat în ZECE · Hybrid365'),hr:null,pts:[]});
+      desc:(A.n+(r?' · '+r+(r===1?' rundă':' runde')+' × '+fmtClock(kb.rs)+(kb.rest&&r>1?' · pauză '+fmtClock(kb.rest):''):'')+' · '+num(min,0)+' min'+(hr?' · puls mediu '+hr:'')+(sp?'\n\n'+sp:'')+'\n\nNotat în FALCO · Hybrid365'),hr:null,pts:[]});
     setTimeout(stFlush,50); }
   KF=null; SH=null; shRender(); render();
   if(tr&&tr.first) kbTgCelebrate(tr); else toast(F.id?'Sesiune salvată':'Sesiune notată',A.n+(r?' · '+r+(r===1?' rundă':' runde'):'')+' · '+num(min,0)+' min','info');

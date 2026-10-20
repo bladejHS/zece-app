@@ -110,7 +110,7 @@ const ADJ_SCHEMA={type:'object',additionalProperties:false,required:['summary','
   changes:{type:'array',items:{type:'object',additionalProperties:false,required:['x','type','value','text','why'],properties:{
     x:{type:'integer'},type:{type:'string',enum:['sets','load','hold','rest','run','iv','swap','note']},value:{type:'number'},text:{type:'string'},why:{type:'string'}}}}}};
 function adjPrompt(w,d,rule){ const day=dayFor(w,d,true);
-  return 'Ești antrenorul adaptiv din aplicația ZECE. Propune ajustări DOAR pentru antrenamentul de azi; planul de bază nu se schimbă. '+
+  return 'Ești antrenorul adaptiv din aplicația FALCO. Propune ajustări DOAR pentru antrenamentul de azi; planul de bază nu se schimbă. '+
     'Folosește numai datele de mai jos, nu inventa valori, și explică fiecare schimbare cu cifre concrete din date (readiness, somn, febră musculară, puls, încărcare, volum pe mușchi, recorduri). '+
     'Dacă datele nu justifică schimbări, întoarce lista goală și spune de ce în summary. Scrie în română, concis.\n\n'+
     'Tipuri permise (pune value 0 și text "" acolo unde nu se folosesc):\n- sets: value = noul număr de serii (cel mult cu 1 peste plan)\n- load: value = factor aplicat greutății recomandate (0.6–1.1)\n- hold: fără creșteri de greutate azi\n- rest: value = secunde de pauză (30–240)\n- run: value = minute pentru alergarea ușoară sau lungă\n- iv: value = numărul de reprize la Threshold\n- swap: text = un exercițiu din lista de alternative a exercițiului\n- note: text = o indicație scurtă\n\n'+

@@ -1,12 +1,12 @@
 /* =====================================================================
-   ZECE v8 · design system — tokenuri
+   v8 · baza sistemului vizual (tokenurile finale sunt în tokens.css)
    Negru adânc (implicit) sau alb cald (tema luminoasă), linii fine, lumină de studio.
    Accentul vine din tema de culoare (Onix = monocrom) și e scris de applyTheme() pe <html>.
    Regula: componentele folosesc doar tokenuri — nicio culoare scrisă direct, ca ambele teme să funcționeze.
    ===================================================================== */
 :root{
   /* tipografie */
-  --fd:'Barlow Condensed','Arial Narrow',system-ui,sans-serif;
+  --fd:'Inter Variable','Inter',system-ui,sans-serif;
   --fb:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
   --t-2xs:10.5px; --t-xs:12px; --t-sm:13px; --t-md:15px; --t-lg:17px;
   /* spațiere (grilă de 4) */
@@ -22,9 +22,9 @@
   --s1:#0E0E10; --s2:#151517; --s3:#202023; --s4:#2B2B30;
   --ln:rgba(var(--w),.065); --ln2:rgba(var(--w),.12); --ln3:rgba(var(--w),.22);
   --tx:#F4F4F5; --mu:#A1A1AA; --mu2:#6E6E78;
-  --run:#6BB8C9; --run-t:#9CCFDB; --rung:rgba(107,184,201,.5); --run-bg:rgba(107,184,201,.14);
+  --run:#9CC9F2; --run-t:#9CCFDB; --rung:rgba(156,201,242,.5); --run-bg:rgba(156,201,242,.14);
   --ok:#8FBFA0; --ok-t:#B4D6C0; --ok-bg:rgba(143,191,160,.13);
-  --warn:#E8A84C; --warn-t:#F0C483; --warn-bg:rgba(232,168,76,.12);
+  --warn:#E5C07B; --warn-t:#F0C483; --warn-bg:rgba(229,192,123,.12);
   --bad:#C98375; --bad-t:#DDA79C; --bad-bg:rgba(201,131,117,.13);
   --vio:#9A94B8;
   --glass:rgba(13,13,16,.84); --glass2:rgba(22,22,26,.94); --scrim:rgba(0,0,0,.62);
@@ -49,9 +49,9 @@ html[data-mode="light"]{
   --s1:#FFFFFF; --s2:#FAFAF8; --s3:#EBEBE8; --s4:#DCDCD8;
   --ln:rgba(var(--w),.085); --ln2:rgba(var(--w),.15); --ln3:rgba(var(--w),.28);
   --tx:#0D0D10; --mu:#55555E; --mu2:#8A8A93;
-  --run:#3D8597; --run-t:#2E6A79; --rung:rgba(31,120,220,.35); --run-bg:rgba(31,120,220,.10);
+  --run:#2C679C; --run-t:#2E6A79; --rung:rgba(31,120,220,.35); --run-bg:rgba(31,120,220,.10);
   --ok:#4E8A63; --ok-t:#3B6C4C; --ok-bg:rgba(18,150,106,.11);
-  --warn:#A8721F; --warn-t:#80561A; --warn-bg:rgba(194,120,0,.12);
+  --warn:#9A6B12; --warn-t:#80561A; --warn-bg:rgba(194,120,0,.12);
   --bad:#A55848; --bad-t:#83443A; --bad-bg:rgba(210,58,58,.10);
   --glass:rgba(255,255,255,.82); --glass2:rgba(255,255,255,.95); --scrim:rgba(18,18,22,.34);
   --sh-card:0 1px 2px rgba(0,0,0,.04),0 14px 34px -24px rgba(0,0,0,.22);
@@ -61,27 +61,6 @@ html[data-mode="light"]{
   --act:color-mix(in srgb,var(--ac) 82%,#000);
   color-scheme:light;
 }
-/* Onix: accentul e chiar „cerneala” temei, deci nuanțele lui folosesc --w (alb pe negru, negru pe alb) */
-html.th-onix{--a08:rgba(var(--w),.035);--a14:rgba(var(--w),.07);--a25:rgba(var(--w),.08);--a40:rgba(var(--w),.16);--acg:rgba(var(--w),.14);--a80:rgba(var(--w),.42);--act:var(--tx)}
-
-/* Night Ops: negru absolut, accent verde NVG fosforescent, glow discret — forțează dark mode */
-html.th-nightops{
-  --bg:#000000; --bg-rgb:0,0,0;
-  --s1:#080808; --s2:#0C0C0C; --s3:#141414; --s4:#1C1C1C;
-  --ln:rgba(143,191,160,.06); --ln2:rgba(143,191,160,.12); --ln3:rgba(143,191,160,.22);
-  --tx:#D4F5E0; --mu:#6B9B7A; --mu2:#3D6B4E;
-  --run:#8FBFA0; --run-t:#B4D6C0; --rung:rgba(143,191,160,.35); --run-bg:rgba(143,191,160,.10);
-  --ok:#8FBFA0; --ok-t:#B4D6C0; --ok-bg:rgba(143,191,160,.10);
-  --warn:#E8A84C; --warn-t:#F0C483; --warn-bg:rgba(232,168,76,.12);
-  --bad:#C98375; --bad-t:#DDA79C; --bad-bg:rgba(201,131,117,.13);
-  --glass:rgba(0,0,0,.88); --glass2:rgba(8,8,8,.96); --scrim:rgba(0,0,0,.78);
-  --track:rgba(143,191,160,.09);
-  --sh-card:inset 0 1px 0 rgba(143,191,160,.04),0 24px 48px -30px #000;
-  --sh-pop:0 26px 54px -18px rgba(0,0,0,.98),inset 0 1px 0 rgba(143,191,160,.06);
-  --sh-btn:inset 0 1px 0 rgba(143,191,160,.25),0 14px 34px -16px var(--acg);
-  --plate-bar:linear-gradient(180deg,#2A3A2A,#1A2A1A);
-}
-
 /* =====================================================================
    Bază · fundal · antet · meniu lateral (desktop) · bara de jos (telefon) · layouturi
    ===================================================================== */
@@ -262,7 +241,7 @@ p{margin:8px 0 0}
 .btn.pri{background:linear-gradient(180deg,var(--hi),var(--lo));border-color:rgba(255,255,255,.1);color:var(--on);box-shadow:var(--sh-btn)}
 @media(hover:hover){.btn.pri:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 12px 40px -8px var(--a80)}.btn:not(.pri):not(.blue):hover{border-color:var(--ln3)}}
 .btn.ghost{background:transparent;border-color:var(--ln)}
-.btn.blue{background:linear-gradient(180deg,#6BB8C9,#4E9AAB);color:#fff;border-color:rgba(255,255,255,.1);box-shadow:0 10px 30px -12px var(--rung)}
+.btn.blue{background:linear-gradient(180deg,#9CC9F2,#7DB2E3);color:#fff;border-color:rgba(255,255,255,.1);box-shadow:0 10px 30px -12px var(--rung)}
 .btn.wide{width:100%}
 .btn.xl{min-height:58px;font-size:16px;border-radius:16px}
 .btn.sm{min-height:36px;padding:7px 12px;font-size:13px;border-radius:10px}
@@ -361,7 +340,7 @@ button.tag{border:0;cursor:pointer}
 .ring-s{fill:var(--mu);font:600 10px var(--fb)}
 .bar{height:8px;border-radius:5px;background:var(--s3);overflow:hidden;margin-top:12px}
 .bar > i{display:block;height:100%;border-radius:5px;background:linear-gradient(90deg,var(--ac),var(--ac2));box-shadow:0 0 14px var(--acg);transform-origin:left;transition:width .4s var(--e1)}
-.bar.run > i{background:linear-gradient(90deg,#4E9AAB,#86C6D4);box-shadow:none}
+.bar.run > i{background:linear-gradient(90deg,#7DB2E3,#B7D8F6);box-shadow:none}
 .bar.ok > i{background:var(--ok);box-shadow:none}
 .delta{font-size:13px;font-weight:600;margin-top:6px}
 .delta.good{color:var(--ok)} .delta.bad{color:var(--warn)}
@@ -517,7 +496,7 @@ html[data-mode="light"] .swatch{background:var(--s1)}
 .dist-r{display:grid;grid-template-columns:76px 1fr 46px;align-items:center;gap:10px;font-size:12.5px;color:var(--mu)}
 .dist-r .b{height:10px;border-radius:5px;background:var(--s3);overflow:hidden}
 .dist-r .b i{display:block;height:100%;border-radius:5px;background:linear-gradient(90deg,var(--ac),var(--ac2))}
-.dist-r .b.run i{background:linear-gradient(90deg,#4E9AAB,#86C6D4)}
+.dist-r .b.run i{background:linear-gradient(90deg,#7DB2E3,#B7D8F6)}
 .dist-r > span:last-child{text-align:right;font-variant-numeric:tabular-nums;color:var(--tx);font-weight:600}
 
 /* =====================================================================
@@ -612,7 +591,7 @@ html[data-mode="light"] .bf{background:var(--s2)}
 .bf .s.good{color:var(--ok)} .bf .s.bad{color:var(--warn)}
 .bfb{display:block;height:4px;border-radius:3px;background:var(--s3);overflow:hidden;margin-top:8px}
 .bfb > i{display:block;height:100%;border-radius:3px;background:linear-gradient(90deg,var(--ac),var(--ac2));transform-origin:left;animation:barIn .6s var(--e1) both}
-.bfb.run > i{background:linear-gradient(90deg,#4E9AAB,#86C6D4)}
+.bfb.run > i{background:linear-gradient(90deg,#7DB2E3,#B7D8F6)}
 .brief .inrow{margin-top:10px}
 
 /* ---------- Plan ---------- */
@@ -751,7 +730,7 @@ html[data-mode="light"] .bc-d div{background:var(--s2)}
 .whtr{margin-top:12px;padding:12px;border-radius:14px;background:var(--bg);border:1px solid var(--ln)}
 html[data-mode="light"] .whtr{background:var(--s2)}
 .whtr .big.sm{font-size:28px;margin-top:2px}
-.wh-bar{position:relative;height:8px;border-radius:5px;margin-top:10px;background:linear-gradient(90deg,rgba(232,168,76,.35),rgba(143,191,160,.35) 12.5%,rgba(143,191,160,.35) 37.5%,rgba(232,168,76,.45) 37.5%,rgba(232,168,76,.45) 62.5%,rgba(201,131,117,.5) 62.5%)}
+.wh-bar{position:relative;height:8px;border-radius:5px;margin-top:10px;background:linear-gradient(90deg,rgba(229,192,123,.35),rgba(143,191,160,.35) 12.5%,rgba(143,191,160,.35) 37.5%,rgba(229,192,123,.45) 37.5%,rgba(229,192,123,.45) 62.5%,rgba(201,131,117,.5) 62.5%)}
 .wh-bar i{display:none}
 .wh-bar span{position:absolute;top:-5px;width:4px;height:18px;border-radius:2px;background:var(--tx);box-shadow:0 0 10px rgba(var(--w),.8);transform:translateX(-50%)}
 .wh-l{position:relative;height:14px;font-size:10.5px;color:var(--mu2);margin-top:5px}
@@ -1049,8 +1028,8 @@ html[data-mode="light"] .tl-o{background:var(--s2)}
 /* ---------- cronometrul de intervale ---------- */
 .tm{position:fixed;inset:0;z-index:120;background:var(--bg);overflow-y:auto;animation:fxUp .28s var(--e1)}
 .tm::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(80% 50% at 50% 35%,var(--tc,var(--a25)),transparent 70%);transition:background .4s}
-.tm.rest{--tc:rgba(107,184,201,.22)}
-.tm.prep{--tc:rgba(232,168,76,.18)}
+.tm.rest{--tc:rgba(156,201,242,.22)}
+.tm.prep{--tc:rgba(229,192,123,.18)}
 .tm-in{position:relative;max-width:560px;margin:0 auto;padding:calc(12px + env(safe-area-inset-top)) 16px calc(28px + env(safe-area-inset-bottom));min-height:100vh;display:flex;flex-direction:column}
 .tm-ring{position:relative;width:min(78vw,300px);aspect-ratio:1;margin:18px auto 8px}
 .tm-ring svg{width:100%;height:100%}
@@ -1363,7 +1342,7 @@ html.rm .rc-bars i.cur b{animation:none;width:100%}
 .spl-r{display:grid;grid-template-columns:54px 1fr 50px 58px 34px;gap:8px;align-items:center;font-size:13px;font-variant-numeric:tabular-nums;padding:3px 0}
 .spl-r .n{color:var(--mu)}
 .spl-r .b{height:14px;border-radius:4px;background:var(--s3);overflow:hidden}
-.spl-r .b i{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,#4E9AAB,#86C6D4)}
+.spl-r .b i{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,#7DB2E3,#B7D8F6)}
 .spl-r.best .b i{background:linear-gradient(90deg,var(--ok),#B4D6C0)}
 .spl-r.best .t{color:var(--ok);font-weight:700}
 .spl-r .c{color:var(--mu2);font-size:12px;text-align:right}
@@ -1484,8 +1463,8 @@ html.rm .rc-bars i.cur b{animation:none;width:100%}
 .ob-fb.on .setup-c{background:var(--ac);border-color:transparent;color:var(--on)}
 
 /* =====================================================================
-   ZECE v9 · design „Oțel"
-   Antracit în loc de negru pur (Setări → Aspect → Fundal: negru readuce varianta veche), accent albastru-oțel,
+   v9 · Acasă pe ilustrație, bandă în capul paginilor, pătrățele cu cifre, scurtături rotunde
+   Fundal grafit (Setări → Aspect → Fundal: „Negru absolut" pentru ecrane OLED), accent de cer,
    Acasă cu antrenamentul zilei direct pe poză, bandă foto în capul paginilor, pătrățele cu cifre, scurtături rotunde.
    ===================================================================== */
 :root{
@@ -1501,10 +1480,6 @@ html.bg-black:not([data-mode="light"]){
   --tx:#F4F4F5; --mu:#A1A1AA; --mu2:#6E6E78; --glass:rgba(13,13,16,.84); --glass2:rgba(22,22,26,.94); --fade:5,5,6;
 }
 html[data-mode="light"]{--fade:14,16,19}
-/* cu Oțel, alergarea e turcoaz: altfel s-ar confunda cu accentul albastru */
-html.th-otel{--run:#7FB5AA;--run-t:#ADD3CB;--rung:rgba(60,203,187,.5);--run-bg:rgba(60,203,187,.13)}
-html.th-otel[data-mode="light"]{--run:#4E8A80;--run-t:#3E6E66;--rung:rgba(14,140,128,.35);--run-bg:rgba(14,140,128,.10)}
-html.th-otel .bfb.run > i{background:linear-gradient(90deg,#6FA79A,#A6CFC6)}
 .bfb.ok > i{background:linear-gradient(90deg,var(--ok),var(--ok-t))}
 body.ontop .top{background:linear-gradient(180deg,rgba(var(--fade),.62),rgba(var(--fade),0))}
 .cv-fd{background:linear-gradient(180deg,rgba(var(--fade),.5) 0,rgba(var(--fade),0) 26%,rgba(var(--fade),0) 46%,rgba(var(--fade),.72) 76%,var(--bg) 100%),linear-gradient(90deg,rgba(var(--fade),.5),rgba(var(--fade),0) 70%)}
@@ -1517,7 +1492,7 @@ body.ontop .top{background:linear-gradient(180deg,rgba(var(--fade),.62),rgba(var
 .cover .cv-t{width:100%}
 .cv-date{display:flex;justify-content:space-between;gap:12px;font:600 11px/1.2 var(--fb);letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.62);margin-bottom:16px}
 .cv-k{display:flex;align-items:center;gap:7px;font:700 12px/1.2 var(--fb);letter-spacing:.16em;text-transform:uppercase;color:#A9C6E4}
-html:not(.th-otel) .cv-k{color:rgba(255,255,255,.8)}
+.cv-k{color:rgba(255,255,255,.8)}
 .cv-k .i{width:15px;height:15px}
 .cv-k .dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 4px var(--ok-bg);animation:pulseS 1.6s ease-in-out infinite}
 .cv-h{font:700 50px/.95 var(--fd);text-transform:uppercase;letter-spacing:.01em;margin:8px 0 10px;color:#fff;
@@ -1529,7 +1504,6 @@ html:not(.th-otel) .cv-k{color:rgba(255,255,255,.8)}
 .cover .adjb{margin-top:10px}
 .cv-pb{height:3px;border-radius:3px;background:rgba(255,255,255,.14);margin-top:16px;overflow:hidden}
 .cv-pb > i{display:block;height:100%;border-radius:3px;background:linear-gradient(90deg,var(--lo),var(--ac2));box-shadow:0 0 12px var(--acg);transform-origin:left;animation:barIn .9s var(--e1) .2s both}
-html.th-onix .cv-pb > i{background:#fff}
 .cv-b{display:flex;gap:10px;margin-top:16px}
 .cv-b .btn.pri{flex:1}
 .btn.cv-alt{min-height:58px;padding:0 18px;border-radius:16px;font-size:15px;color:#fff;border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.08);
@@ -1629,7 +1603,6 @@ html[data-mode="light"] .cover.cv-hero .cv-fd{background:linear-gradient(180deg,
 .br-t b{font:700 24px/1 var(--fd);text-transform:uppercase;letter-spacing:.06em}
 .br-t span{font:700 44px/1.05 var(--fd);font-variant-numeric:tabular-nums;min-height:4px}
 .br-t small{font-size:11.5px;opacity:.8}
-html.th-onix .br-r{background:radial-gradient(circle at 34% 28%,#fff,#D9D9DE 50%,#9A9AA3)}
 
 /* ---------- Activități ---------- */
 .act-tg{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:14px}
@@ -1658,10 +1631,6 @@ html.th-onix .br-r{background:radial-gradient(circle at 34% 28%,#fff,#D9D9DE 50%
 @keyframes inCntOut{from{opacity:1}to{opacity:0;transform:scale(1.3);filter:blur(8px)}}
 @keyframes inLogoIn{0%{opacity:0;transform:scale(1.4);filter:blur(6px) brightness(2)}35%{opacity:1;filter:blur(0) brightness(1.7) drop-shadow(0 0 20px rgba(169,201,234,.95))}100%{opacity:1;transform:none;filter:drop-shadow(0 0 12px rgba(156,192,228,.4))}}
 
-/* albastrul scris direct în componentele vechi devine turcoazul alergării, cu Oțel */
-html.th-otel .btn.blue{background:linear-gradient(180deg,#86BDB3,#6FA79A);color:#04211E}
-html.th-otel .bar.run > i,html.th-otel .dist-r .b.run i,html.th-otel .spl-r .b i{background:linear-gradient(90deg,#6FA79A,#A6CFC6)}
-html.th-otel .tm.rest{--tc:rgba(60,203,187,.22)}
 
 /* ---------- modul bandă: viteza mare sub cronometru, pulsul față de țintă ---------- */
 .tm-spd{display:flex;align-items:baseline;justify-content:center;gap:8px;margin-top:10px;font-variant-numeric:tabular-nums}
@@ -1698,7 +1667,7 @@ html.th-otel .tm.rest{--tc:rgba(60,203,187,.22)}
 #view[data-tab="prog"] .band-ph{background-image:var(--band-prog,var(--cover));background-position:70% 20%}
 #view[data-tab="nutri"] .band-ph{background-image:var(--band-nutri,var(--cover));background-position:78% 55%}
 @media(min-width:1100px){ #view[data-tab="plan"] .band-ph{background-position:50% 42%} #view[data-tab="prog"] .band-ph{background-position:50% 30%} #view[data-tab="nutri"] .band-ph{background-position:50% 60%} }
-/* banda de sus a filei Kickboxing: operatorul în gardă, așezat în dreapta */
+/* banda de sus a filei Kickboxing: rândunica stă în dreapta */
 #view[data-tab="kb"] .band-ph{background-image:var(--kb-band,var(--cover));background-position:70% 0%}
 @media(min-width:1100px){ #view[data-tab="kb"] .band-ph{background-position:50% 32%} }
 
@@ -1814,7 +1783,7 @@ html[data-mode="light"] .kb-nums div{background:var(--s2)}
 .vox-set{margin-top:8px;padding-top:12px;border-top:1px solid var(--ln)}
 
 /* =====================================================================
-   v12 · insignele zilelor (operatorul SRI) și animația de deschidere
+   semnele zilelor (public/art/zi-*.svg)
    ===================================================================== */
 .dbg{--bs:46px;position:relative;flex:none;display:block;width:var(--bs);height:var(--bs);border-radius:50%;overflow:hidden;isolation:isolate;
   box-shadow:0 0 0 1px rgba(255,255,255,.08),0 8px 20px -10px rgba(0,0,0,.9);opacity:.6;filter:saturate(.6) brightness(.82);
@@ -1823,7 +1792,7 @@ html[data-mode="light"] .kb-nums div{background:var(--s2)}
 .dbg.next,.dbg.done,.day.open .dbg{opacity:1;filter:none}
 .dbg.next{box-shadow:0 0 0 1.5px var(--c,var(--ac)),0 0 20px -4px var(--c,var(--acg))}
 .dbg.done{box-shadow:0 0 0 1.5px rgba(232,238,245,.7),0 0 18px -6px rgba(232,238,245,.55)}
-/* luciul metalic: o bandă de lumină care trece din când în când peste insigna zilei următoare */
+/* o lumină discretă trece din când în când peste semnul zilei următoare */
 .dbg::after{content:'';position:absolute;inset:-25%;pointer-events:none;mix-blend-mode:screen;transform:translateX(-130%);
   background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.55) 50%,transparent 60%)}
 .dbg.next::after{animation:dbgSheen 5s ease-in-out 1.2s infinite}
@@ -1838,67 +1807,6 @@ html[data-mode="light"] .kb-nums div{background:var(--s2)}
 .wd image{opacity:.9}
 .wd.next image{opacity:1}
 
-/* animația de deschidere: portretul operatorului iese din întuneric, apoi insigna zilei se „coase" și primește luciul */
-@keyframes inPhS{0%{opacity:0;transform:scale(1.14);filter:brightness(.15) contrast(1.4)}45%{opacity:1;filter:brightness(1) contrast(1.06)}100%{opacity:1;transform:scale(1.02);filter:none}}
-@keyframes inStitch{to{stroke-dashoffset:0}}
-@keyframes inBadge{0%{opacity:0;transform:scale(1.35);filter:blur(8px) brightness(2.2)}
-  40%{opacity:1;filter:blur(0) brightness(1.6) drop-shadow(0 0 22px rgba(255,255,255,.6))}
-  100%{opacity:1;transform:none;filter:drop-shadow(0 0 14px rgba(255,255,255,.18))}}
-@keyframes inSheen{to{transform:translateX(130%)}}
-/* sub nume, o linie fină în culorile tricolorului */
-/* v13: numele VULTUR (6 litere) în animația de deschidere, ceva mai mic și cu ultimele litere la rând */
-
-/* =====================================================================
-   v14 · Night Ops — design premium brigada antitero + animație Silent Deploy
-   ===================================================================== */
-
-/* ---------- Night Ops: glow discret, linii HUD, texturi tactice ---------- */
-html.th-nightops .card,
-html.th-nightops .sh-card{box-shadow:inset 0 0 0 1px rgba(143,191,160,.08),0 24px 48px -30px #000}
-html.th-nightops .btn-p{border:1px solid rgba(143,191,160,.35);background:rgba(143,191,160,.06)}
-html.th-nightops .btn-p:active{background:rgba(143,191,160,.14)}
-html.th-nightops .top{border-bottom:1px solid rgba(143,191,160,.12)}
-html.th-nightops .nav .n-i.on svg{filter:drop-shadow(0 0 6px rgba(143,191,160,.45))}
-html.th-nightops .dbg.next{box-shadow:0 0 0 1.5px rgba(143,191,160,.6),0 0 18px -4px rgba(143,191,160,.35)}
-html.th-nightops .dbg.done{box-shadow:0 0 0 1.5px rgba(143,191,160,.4),0 0 14px -6px rgba(143,191,160,.25)}
-/* scanline subtil (doar la efecte maxime) */
-html.th-nightops.fx-max body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
-  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(143,191,160,.018) 2px,rgba(143,191,160,.018) 4px);
-  mix-blend-mode:screen}
-/* forțează dark mode când tema e nightops */
-html.th-nightops[data-mode="light"]{color-scheme:dark}
-html.th-nightops[data-mode="light"] *{color:var(--tx)!important}
-
-/* ---------- Animație Silent Deploy ---------- */
-/* portretul operatorului iese din negru total, cinematic */
-@keyframes sdFadeIn{0%{opacity:0;filter:brightness(.08)}100%{opacity:1;filter:brightness(1)}}
-
-/* undă verde laterală peste portret */
-@keyframes sdWave{0%{transform:translateX(-120%);opacity:0}30%{opacity:.35}70%{opacity:.35}100%{transform:translateX(120%);opacity:0}}
-
-/* cercul se desenează lent, linie continuă verde fosforescent */
-@keyframes sdStitch{to{stroke-dashoffset:0}}
-@keyframes sdCntIn{to{opacity:1}}
-
-/* insigna apare din blur, fără brightness spike */
-@keyframes sdBadge{0%{opacity:0;filter:blur(12px)}100%{opacity:1;filter:blur(0) drop-shadow(0 0 10px rgba(143,191,160,.2))}}
-
-/* wordmark U-M-B-R-A: typing militar, literele apar succesiv */
-@keyframes sdType{to{opacity:1;transform:none}}
-/* delays pentru 5 litere (U-M-B-R-A), increment 80ms × k */
-/* al 6-lea span nu mai există (UMBRA = 5 litere), dar păstrăm regula pentru compatibilitate */
-
-/* linia tricoloră fină sub nume */
-@keyframes sdBarIn{to{opacity:.8}}
-
-/* salut + ziua săptămânii fade-in */
-@keyframes sdSubIn{to{opacity:.7}}
-
-/* flash eliminat în Silent Deploy */
-/* luciu metalic eliminat */
-/* inele decorative: glow verde subtil */
-
-/* reduced motion: totul instant */
 /* =====================================================================
    Mișcare · intrarea în ecran, apariția la derulare, grafice care se desenează.
    Mișcare redusă: după setarea sistemului („Automat") sau aleasă explicit în Setări.

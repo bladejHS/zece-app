@@ -7,7 +7,7 @@ const AI={busy:false,stream:null,live:'',err:null,draft:'',usage:null,usageModel
 const loadSdk=COACH.sdk;
 /* contextul filtrului: sexul (pragul de calorii) și accidentările declarate */
 const aiCtx=()=>{ const P=prof(); return {sex:P.sex==='f'?'f':'m',injuries:(Array.isArray(P.inj)?P.inj:[]).filter(COACH.isInjury)}; };
-const AI_SYS=`Ești antrenorul personal din aplicația ZECE, care urmează programul hibrid Hybrid365 (forță + alergare).
+const AI_SYS=`Ești antrenorul personal din aplicația FALCO, care urmează programul hibrid Hybrid365 (forță + alergare).
 Programul are cicluri de 4 săptămâni cu aceeași săptămână-tip:
 - Luni: SESSION 1 Upper, apoi SESSION 2 Easy run Z2 la ~6 ore după (Upper: Bench Press, Pull Up / Lat Pulldown, Hammer Chest Press, Chest Supported Row, Lateral Raise, Tricep Pushdown, Bicep Curl)
 - Marți: Threshold run (încălzire, reprize la ritm de prag, răcire)
@@ -86,7 +86,7 @@ function toolInfo(name,inp){
 function snapshot(){
   const out=[], tk=todayKey(), P=prof();
   const sec=(t,f)=>{ try{ const v=f(); if(v) out.push('## '+t+'\n'+v); }catch(e){} };
-  sec('Numele aplicației',()=>'Aplicația se numește ZECE (a purtat o vreme numele VULTUR și UMBRA). Când o pomenești, spune-i ZECE.');
+  sec('Numele aplicației',()=>'Aplicația se numește FALCO (rândunica e simbolul ei: libertate, puritate, zbor). Când o pomenești, spune-i FALCO; nu folosi numele vechi ale aplicației.');
   sec('Data de azi',()=>tk+', '+DAYN[(parseKey(tk).getDay()+6)%7]);
   sec('Profil',()=>`${P.sex==='f'?'Femeie':'Bărbat'}, ${P.age} ani, ${P.h} cm. Greutate la start ${P.startW} kg, țintă ${P.goalW} kg.`);
   sec('Accidentări declarate (evită exercițiile care solicită aceste zone)',()=>aiCtx().injuries.map(i=>COACH.INJURIES[i]).join(', '));
@@ -131,7 +131,7 @@ Planul de mese de azi: ${D.name.toLowerCase()} (mesele din planul utilizatorului
   sec('Abdomen adăugat în plan (la cererea utilizatorului)',()=>'La finalul zilelor de upper: luni Hanging Leg Raise 3×8–12 și Plank 3 × 45–60 s; miercuri Dragon Flag 4×3–6 (negative lente până la repetări complete) și Pallof Press 3×10–12 pe parte; vineri Dragon Flag 3×3–6 și Ab Wheel Rollout 3×8–10. Sunt opționale: le face când vrea, iar o zi fără ele e tot completă (bifele numără doar exercițiile de dinainte). Nu trata sărirea lor ca pe o abatere de la plan.');
   sec('Kickboxing (în afara planului)',()=>kbAiCtx());
   sec('Alte antrenamente, importate din Strava (ex. Polar Beat) sau notate manual (ultimele 14 zile)',()=>(S.ext||[]).filter(x=>x.date>=dayShift(tk,-13)).sort((a,b)=>a.start-b.start)
-    .map(x=>`- ${x.date} ${stName(x.type)}${x.name?' „'+x.name+'”':''}: ${num(x.min,0)} min`+(x.km?`, ${num(x.km,1)} km`:'')+(x.hr?`, puls mediu ${x.hr}`+(x.hrMax?` (max ${x.hrMax})`:''):'')+(x.rpe?`, efort ${x.rpe}/10`:'')+(x.dup?' — același antrenament ca o sesiune ZECE, numărat o singură dată':'')).join('\n'));
+    .map(x=>`- ${x.date} ${stName(x.type)}${x.name?' „'+x.name+'”':''}: ${num(x.min,0)} min`+(x.km?`, ${num(x.km,1)} km`:'')+(x.hr?`, puls mediu ${x.hr}`+(x.hrMax?` (max ${x.hrMax})`:''):'')+(x.rpe?`, efort ${x.rpe}/10`:'')+(x.dup?' — același antrenament ca o sesiune FALCO, numărat o singură dată':'')).join('\n'));
   sec('Readiness și profilul atletului (indicatori de antrenament, nu medicali)',()=>{ const R=readiness(), tw=twinNow();
     let s=R.v!=null?`Readiness azi: ${R.v}/100 (recuperare ${R.rec.v}, echilibru încărcare ${R.ls!=null?R.ls:'—'}). Factori: `+R.f.map(([v,t])=>(v>0?'+':'')+v+' '+t).join('; ')+'.':'Fără check-in azi.';
     s+='\nAtribute (0–100): '+ATTR.concat([['cons','Consecvență']]).map(([id,l])=>{ const a=tw.now[id]; return l+' '+(a?a.v:'—'); }).join(', ')+'.';

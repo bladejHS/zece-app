@@ -1,4 +1,4 @@
-/* Iconițele aplicației din semnul ZECE (src/ui/brand.ts): icon.svg + PNG-urile pentru manifest și iOS.
+/* Iconițele aplicației din semnul FALCO (src/ui/brand.ts): icon.svg + PNG-urile pentru manifest și iOS.
    Rulează după o schimbare de logo: node scripts/build-icons.mjs */
 import { writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';

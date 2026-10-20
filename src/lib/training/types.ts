@@ -1,4 +1,4 @@
-/* Modelul de antrenament ZECE: o sesiune are 4 faze obligatorii, fiecare făcută din bucăți (WorkoutChunk). */
+/* Modelul de antrenament FALCO: o sesiune are 4 faze obligatorii, fiecare făcută din bucăți (WorkoutChunk). */
 import type { Injury } from '../coach/guardrails.ts';
 
 export type PhaseName = 'activation' | 'technique' | 'conditioning' | 'cooldown';

@@ -1,5 +1,5 @@
-/* Gamificare inversă: nu numărăm volumul, ci competența. Insignele vin din tehnică și recuperare făcute bine;
-   nivelul crește din insigne, iar ignorarea limitelor de siguranță scade puncte. */
+/* Gamificare inversă: nu numărăm volumul, ci competența. Distincțiile vin din tehnică și recuperare făcute bine;
+   nivelul crește din distincții, iar ignorarea limitelor de siguranță scade puncte. */
 
 export interface MasteryInput {
   /** Sesiunile de kickboxing structurate: feedback pe runde, complexitate medie, cognitiv, deload. */
@@ -26,7 +26,7 @@ export interface Penalty { id: string; name: string; points: number; why: string
 export interface Mastery { level: number; points: number; next: number | null; badges: Badge[]; penalties: Penalty[] }
 
 const LEVELS = [0, 40, 100, 180, 280, 400, 540, 700, 880, 1080];
-export const LEVEL_NAMES = ['Recrut', 'Novice', 'Ucenic', 'Luptător', 'Tehnician', 'Strateg', 'Veteran', 'Expert', 'Maestru', 'Zece'];
+export const LEVEL_NAMES = ['Începător', 'Novice', 'Ucenic', 'Luptător', 'Tehnician', 'Strateg', 'Avansat', 'Expert', 'Maestru', 'Falco'];
 
 const frac = (v: number, goal: number): number => Math.max(0, Math.min(1, v / goal));
 

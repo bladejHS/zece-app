@@ -72,6 +72,7 @@ export async function open(s: Sealed, pass: string): Promise<SquadCard> {
 }
 
 /* ---------- invitațiile ---------- */
+/* codurile vechi (ZECE1 / ZECEM1) rămân valabile */
 const toCode = (prefix: string, o: unknown): string => `${prefix}.${btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')}`;
 function fromCode<T>(prefix: string, code: string): T | null {
   const m = new RegExp(`^${prefix}\\.([A-Za-z0-9_-]+)$`).exec(code.trim());
@@ -91,20 +92,20 @@ export function createSquad(name: string, myName: string): Squad {
 
 /** Invitația squad-ului: numele, parola, ritualul și membrii cunoscuți (inclusiv tu). */
 export function inviteCode(s: Squad): string {
-  return toCode('ZECE1', { n: s.name, p: s.pass, r: s.ritual, m: [s.me, ...s.members].filter((x) => x.gist) });
+  return toCode('FALCO1', { n: s.name, p: s.pass, r: s.ritual, m: [s.me, ...s.members].filter((x) => x.gist) });
 }
 
 export function joinSquad(code: string, myName: string): Squad | null {
-  const o = fromCode<{ n: string; p: string; r?: RitualTime & { on: boolean }; m: SquadMember[] }>('ZECE1', code);
+  const o = fromCode<{ n: string; p: string; r?: RitualTime & { on: boolean }; m: SquadMember[] }>('(?:FALCO1|ZECE1)', code);
   if (!o || !o.p || !o.n) return null;
   return { name: o.n, pass: o.p, me: { name: myName.trim().slice(0, 24) || 'Eu', gist: '' }, members: (o.m || []).slice(0, MAX_MEMBERS - 1), ritual: o.r ?? { day: 6, hour: 10, minute: 0, on: false } };
 }
 
 /** Codul tău, pe care îl dai celorlalți ca să te vadă (după prima publicare). */
-export const memberCode = (s: Squad): string => toCode('ZECEM1', { n: s.name, m: s.me });
+export const memberCode = (s: Squad): string => toCode('FALCOM1', { n: s.name, m: s.me });
 
 export function addMember(s: Squad, code: string): { ok: true; squad: Squad } | { ok: false; reason: string } {
-  const o = fromCode<{ n: string; m: SquadMember }>('ZECEM1', code);
+  const o = fromCode<{ n: string; m: SquadMember }>('(?:FALCOM1|ZECEM1)', code);
   if (!o || !o.m?.gist) return { ok: false, reason: 'Codul nu e valid.' };
   if (o.n !== s.name) return { ok: false, reason: 'Codul e pentru alt squad.' };
   if (o.m.gist === s.me.gist || s.members.some((m) => m.gist === o.m.gist)) return { ok: false, reason: 'Membrul e deja în squad.' };
@@ -114,7 +115,7 @@ export function addMember(s: Squad, code: string): { ok: true; squad: Squad } | 
 
 /* ---------- GitHub (gist secret) ---------- */
 export async function publish(token: string, s: Squad, card: SquadCard): Promise<string> {
-  const body = JSON.stringify({ description: 'ZECE · squad (criptat)', public: false, files: { [FILE]: { content: JSON.stringify(await seal(card, s.pass)) } } });
+  const body = JSON.stringify({ description: 'FALCO · squad (criptat)', public: false, files: { [FILE]: { content: JSON.stringify(await seal(card, s.pass)) } } });
   const r = await fetch(s.me.gist ? `${GH}/gists/${s.me.gist}` : `${GH}/gists`, {
     method: s.me.gist ? 'PATCH' : 'POST', body,
     headers: { Accept: 'application/vnd.github+json', Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },

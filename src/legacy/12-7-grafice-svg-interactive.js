@@ -6,10 +6,10 @@
 let gid=0;
 const isLight=()=>document.documentElement.getAttribute('data-mode')==='light';
 /* culorile semantice ca valori (atributele SVG și canvas-ul nu înțeleg var()) */
-const COL=()=>{ const c=COL0(); if(!isLight()&&S.bg!=='black'){ c.bg='#0D0F12'; c.card='#15181D'; } return c; };
-/* paleta graficelor: aceleași culori desaturate ca interfața (src/styles/tokens.css) */
-const COL0=()=>isLight()?{run:'#3D8597',ok:'#4E8A63',warn:'#A8721F',bad:'#A55848',z1:'#7A818A',vio:'#6E6894',tx:'#121418',mu:'#4A5058',bg:'#E9EBEE',card:'#F7F8F9'}
-  :{run:'#6BB8C9',ok:'#8FBFA0',warn:'#E8A84C',bad:'#C98375',z1:'#9AA1AA',vio:'#9A94B8',tx:'#D5DAE0',mu:'#9AA1AA',bg:'#050607',card:'#0D0F12'};
+const COL=()=>{ const c=COL0(); if(!isLight()&&S.bg==='black'){ c.bg='#000000'; c.card='#0A0A0B'; } return c; };
+/* paleta graficelor: aceleași culori ca interfața FALCO (src/styles/tokens.css) */
+const COL0=()=>isLight()?{run:'#2C679C',ok:'#3E7F5C',warn:'#9A6B12',bad:'#B04A3E',z1:'#7C838C',vio:'#5E63A0',tx:'#0A0B0D',mu:'#4D545D',bg:'#F4F5F7',card:'#FFFFFF'}
+  :{run:'#9CC9F2',ok:'#8FCBAA',warn:'#E5C07B',bad:'#E59389',z1:'#8A929C',vio:'#B3B8E6',tx:'#F4F6F8',mu:'#A3AAB3',bg:'#050505',card:'#0D0E10'};
 function ring(f,o={}){
   const s=o.s||44, sw=o.sw||4, r=s/2-sw/2-1, C=2*Math.PI*r, ff=clamp(f||0,0,1), c=s/2;
   return `<svg class="ring" viewBox="0 0 ${s} ${s}" width="${s}" height="${s}" aria-hidden="true">

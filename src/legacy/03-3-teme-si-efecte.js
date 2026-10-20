@@ -1,23 +1,21 @@
 /* =====================================================================
    3 · TEME ȘI EFECTE
    ===================================================================== */
-/* fiecare culoare de accent are o variantă pentru tema luminoasă (L): mai închisă, ca textul și liniile să rămână lizibile pe alb */
-/* paletele ZECE (Industrial Tactical Premium): doar culori desaturate. Tactical: efort amber, repaus cyan */
+/* FALCO are un singur sistem vizual: negru adânc, alb curat, albastru de cer folosit cu măsură.
+   ac = accentul (cer), ac2 = al doilea ton (argint luminos); L = varianta pentru modul luminos, mai închisă, ca să rămână lizibilă pe alb */
 const THEMES={
-  tactical:{n:'Tactical',ac:'#E8A84C',ac2:'#6BB8C9',hi:'#EDB765',lo:'#C98D35',on:'#0B0C0E',L:{ac:'#A8721F',ac2:'#3D8597',hi:'#B57D27',lo:'#8F5F17',on:'#FFFFFF'}},
-  otel:{n:'Oțel',ac:'#8FAFC9',ac2:'#B9CCDC',hi:'#A0BCD3',lo:'#7095B5',on:'#0A1118',L:{ac:'#3F6788',ac2:'#5A80A0',hi:'#4A7394',lo:'#355A78',on:'#FFFFFF'}},
-  onix:{n:'Onix',ac:'#D5DAE0',ac2:'#9AA1AA',hi:'#E4E8EC',lo:'#B5BCC4',on:'#0B0C0E',L:{ac:'#121418',ac2:'#4A5058',hi:'#2A2E34',lo:'#121418',on:'#FFFFFF'}}
+  falco:{n:'FALCO',ac:'#9CC9F2',ac2:'#DCE4EC',hi:'#B7D8F6',lo:'#7DB2E3',on:'#06121D',L:{ac:'#2C679C',ac2:'#4F5A66',hi:'#3577B0',lo:'#235684',on:'#FFFFFF'}}
 };
 /* tema: întunecată (implicit), luminoasă sau automată (după sistem) */
 const MQ_LIGHT=matchMedia('(prefers-color-scheme: light)');
 const modeNow=()=>S.mode==='light'||(S.mode==='auto'&&MQ_LIGHT.matches)?'light':'dark';
-const TH=()=>{ const b=THEMES[S.theme]||THEMES.tactical; return modeNow()==='light'&&b.L?Object.assign({},b,b.L):b; };
+const TH=()=>{ const b=THEMES.falco; return modeNow()==='light'&&b.L?Object.assign({},b,b.L):b; };
 function applyTheme(){ const m=modeNow(), t=TH(), h=document.documentElement, r=h.style;
   if(m==='light') h.setAttribute('data-mode','light'); else h.removeAttribute('data-mode');
   r.setProperty('--ac',t.ac); r.setProperty('--ac2',t.ac2); r.setProperty('--hi',t.hi); r.setProperty('--lo',t.lo); r.setProperty('--on',t.on);
-  Object.keys(THEMES).forEach(k=>h.classList.toggle('th-'+k,k===(THEMES[S.theme]?S.theme:'tactical')));
+  Object.keys(THEMES).forEach(k=>h.classList.toggle('th-'+k,k==='falco'));
   h.classList.toggle('bg-black',S.bg==='black');
-  const mt=document.querySelector('meta[name="theme-color"]'); if(mt) mt.setAttribute('content',m==='light'?'#E9EBEE':'#050607'); }
+  const mt=document.querySelector('meta[name="theme-color"]'); if(mt) mt.setAttribute('content',m==='light'?'#F4F5F7':'#050505'); }
 try{ MQ_LIGHT.addEventListener('change',()=>{ if(S.mode==='auto'){ applyTheme(); render(); } }); }catch(e){}
 /* schimbarea temei, cu o tranziție scurtă doar pe culori */
 async function setMode(m){ if(['dark','light','auto'].indexOf(m)<0) return; const h=document.documentElement; h.classList.add('mode-tr');
@@ -25,11 +23,11 @@ async function setMode(m){ if(['dark','light','auto'].indexOf(m)<0) return; cons
 ACT.modeToggle=()=>setMode(modeNow()==='light'?'dark':'light');
 ACT.modeSet=(el,{k})=>setMode(k);
 ACT.bgSet=async(el,{k})=>{ if(['anthr','black'].indexOf(k)<0) return; await save('bg',k); applyTheme(); render(); };
-/* poza de copertă (ecranul de pornire și „Azi"): build.ps1 o pune aici ca data:, versiunea online o ia din cover.jpg */
-const COVER='cover.jpg';
+/* ilustrația de copertă (Acasă și ghidul de pornire): trei rândunici, generată de scripts/build-art.mjs */
+const COVER='art/cover.svg';
 /* url() într-o variabilă CSS se citește față de foaia de stil (în _astro/), nu față de pagină: adresa se face completă */
 const cssUrl=p=>`url("${new URL(p,document.baseURI).href}")`;
-if(COVER) document.documentElement.style.setProperty('--cover',cssUrl(COVER));
+if(COVER){ document.documentElement.style.setProperty('--cover',cssUrl(COVER)); document.documentElement.style.setProperty('--cover-wide',cssUrl('art/cover-wide.svg')); }
 /* „Automat" urmează setarea sistemului (Windows: Efecte de animație; iPhone: Reducere mișcare) */
 const MQ_RM=matchMedia('(prefers-reduced-motion: reduce)');
 const motionOff=()=>S.motion==='off'||(S.motion!=='on'&&MQ_RM.matches);

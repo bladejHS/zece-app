@@ -19,7 +19,7 @@ function walk(dir: string): string[] {
  */
 export default function serviceWorker(): AstroIntegration {
   return {
-    name: 'zece:service-worker',
+    name: 'falco:service-worker',
     hooks: {
       'astro:build:done': async ({ dir, logger }) => {
         const out = fileURLToPath(dir);

@@ -1,4 +1,4 @@
-/* Analizele specifice ZECE:
+/* Analizele specifice FALCO:
    - Technical Efficiency Score: cât de curate sunt rundele, la ce complexitate, câte din cele planificate se termină;
    - Recovery Debt Index: datoria de recuperare acumulată (încărcare peste capacitate, cu somnul și HRV-ul ca factori);
    - Skill Progression Map: nivelul pe fiecare abilitate de luptă;
