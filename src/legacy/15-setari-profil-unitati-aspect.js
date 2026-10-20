@@ -87,7 +87,7 @@ function viewSet(){
 
   <div class="set-h" id="sTrain">Antrenament</div>
   ${icsCard()}
-  <div class="card"><div class="set-row" style="margin-top:0"><span class="sp"><b>Deload automat în săptămâna 4</b><div class="sm mu">Volum −40% (serii, minute, reprize, runde). Oprit implicit: după Dr. Milo Wolf, deload-ul programat nu crește masa; îl faci doar când performanța scade o săptămână (antrenorul adaptiv ți-l propune atunci).</div></span><button class="sw ${S.deload!==false?'on':''}" data-a="deloadToggle" role="switch" aria-checked="${S.deload!==false}" aria-label="Deload automat"></button></div></div>
+  <div class="card"><div class="set-row" style="margin-top:0"><span class="sp"><b>Deload automat în săptămâna 4</b><div class="sm mu">Volum −40% (serii, minute, reprize). Oprit implicit: după Dr. Milo Wolf, deload-ul programat nu crește masa; îl faci doar când performanța scade o săptămână (antrenorul adaptiv ți-l propune atunci).</div></span><button class="sw ${S.deload!==false?'on':''}" data-a="deloadToggle" role="switch" aria-checked="${S.deload!==false}" aria-label="Deload automat"></button></div></div>
   ${healthCard()}
   <div class="card"><div class="eyebrow">${ic('run')} Progresia alergării</div>
     <div class="rp-grid"><span></span>${Array.from({length:WEEKS},(_,w)=>`<span class="h">S${w+1}</span>`).join('')}
@@ -95,7 +95,7 @@ function viewSet(){
     <div class="note">Reprizele de prag au ${p.thr.m} min, cu ${p.thr.rest}s jog între ele. Exercițiile și zilele planului rămân aceleași.</div>
     <button class="btn ghost sm" style="margin-top:10px" data-a="rpReset" data-confirm="Sigur? Apasă iar">${ic('refresh')} Valorile din program</button></div>
   <div class="card">${sw('sound',S.sound,'Sunet și vibrații','Pauze, cronometru, recorduri')}
-    ${sw('voiceCues',S.voice,'Voce','Anunță rundele, pauzele, combinațiile și recordurile și te încurajează')}
+    ${sw('voiceCues',S.voice,'Voce','Anunță seriile, pauzele, intervalele și recordurile și te încurajează')}
     ${voxSettingsHTML()}
     <div class="set-row"><span class="sp"><b>Ghidul de pornire</b><div class="sm mu">Reia pașii de la prima deschidere</div></span><button class="btn ghost sm" data-a="onbOpen">Deschide</button></div></div>
 

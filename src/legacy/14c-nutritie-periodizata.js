@@ -7,14 +7,14 @@
 const planType=b=>b.cat==='rest'?'rest':(b.run==='thr'||b.run==='lng'||/Conditioning|Power|Lower|picioare grele/.test(b.t))?'high':'moderate';
 /* media factorilor de carbohidrați pe săptămâna normală a planului: carbohidrații se mută între zile, totalul săptămânii rămâne baza */
 let NMEAN=null; const NUTRI_MEAN=()=>NMEAN||(NMEAN=NUTRI.weekCarbMean(PLAN.map(planType)));
-/* tipul zilei k din planul hibrid (aceeași săptămână a ciclului), plus activitățile notate în ziua k: kickboxingul (sau altă activitate) grea face ziua intensă, chiar dacă era de odihnă */
+/* tipul zilei k din planul hibrid (aceeași săptămână a ciclului), plus activitățile notate în ziua k: o activitate grea face ziua intensă, chiar dacă era de odihnă */
 function nutriDay(k){
   const wd=(parseKey(k).getDay()+6)%7, nx=nextDay(), w=nx?nx.w:0, day=dayFor(w,wd,true), ext=(S.ext||[]).filter(x=>x.date===k&&!x.dup);
   const dl=deloadOn(w)||(k===todayKey()&&hrvNow().force), kbHard=ext.some(x=>(+x.rpe||0)>=7), extMin=ext.reduce((a,x)=>a+(+x.min||0),0);
   let type=kbHard?'high':planType(day);
   if(dl&&type!=='rest'&&!kbHard) type='deload';
   return {type,label:NUTRI.DAY_LABEL[type],t:day.t,w,d:wd,extMin,minutes:day.cat==='rest'?0:(+day.min||60),intensity:type==='high'?'high':type==='rest'&&!extMin?'low':'moderate'}; }
-/* semnalele de azi pentru adaptare: energia din check-in-ul de kickboxing, readiness, RPE-ul ultimei sesiuni (2 zile) */
+/* semnalele de azi pentru adaptare: readiness, RPE-ul ultimei sesiuni (2 zile) */
 /* readiness() → recoveryAt() poate cere la rândul ei targets(): fără reintrare, altfel ar fi o buclă */
 let NCI_BUSY=false;
 function nutriCi(k){ const kc=(S.kb||{}).ci, o={};

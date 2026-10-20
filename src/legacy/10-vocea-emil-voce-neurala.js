@@ -116,13 +116,7 @@ const MOT={
   pr:['Record nou! Ești de neoprit!','Record nou! Bravo, asta e progres!','Record nou! Felicitări, muncă răsplătită!'],
   tg:['Țintă atinsă! Bravo, ai reușit!','Țintă atinsă! Felicitări, asta e muncă!'],
   on:['Vocea e pornită. Hai să ne antrenăm!'],
-  test:['Runda unu din trei. Gardă sus și dă-i!'],
-  /* kickboxing */
-  kbGo:['Gardă sus și dă-i!','Hai, la treabă!','Mâinile sus, hai!','Hai, arată ce poți!'],
-  kbLast:['Ultima rundă! Dă tot ce ai!','Ultima rundă! Termină puternic!','Ultima rundă, hai, totul acum!'],
-  kbRest:['Respiră adânc, ai avut o rundă bună.','Bravo! Bea apă și respiră.','Rundă bună! Relaxează umerii.','Excelent! Respiră pe nas, recuperează-te.'],
-  kbS10:['Zece secunde! Dă tot!','Ultimele zece secunde! Lovituri fără oprire!','Zece secunde! Accelerează!'],
-  kbEnc:['Bun! Mâinile sus!','Foarte bine! Respiră!','Așa! Continuă!','Bravo! Revino în gardă!','Bine! Mișcă-te din picioare!','Hai, ține ritmul!']
+  test:['Seria unu din trei. Hai, la treabă!']
 };
 const MOT_LAST={};
 function mot(k){ const a=MOT[k]||[]; if(!a.length) return ''; let i=Math.floor(Math.random()*a.length); if(a.length>1&&a[i]===MOT_LAST[k]) i=(i+1)%a.length; return MOT_LAST[k]=a[i]; }
@@ -134,14 +128,14 @@ const tmCalm=st=>!!st&&(/^(breath|stretch|mobility)$/.test(st.kind||'')||/foam r
 function voxPhase(p,st){
   if(!p) return '';
   if(p.k==='breath') return p.l;
-  const sp=p.sp?'. Viteza '+spSay(p.sp):'', calm=tmCalm(st)||!voxEnc(), kb=st&&st.kb;
+  const sp=p.sp?'. Viteza '+spSay(p.sp):'', calm=tmCalm(st)||!voxEnc();
   if(p.k==='rest'){ if(calm) return p.l+sp;
-    return p.l+'. '+((p.d||0)<15?mot('restS'):mot(kb?'kbRest':'rest'))+sp; }
+    return p.l+'. '+((p.d||0)<15?mot('restS'):mot('rest'))+sp; }
   /* eticheta + prima parte din descriere (fără numele activității repetat și fără „Ultima rundă — dă tot", spusă motivant mai jos) */
-  const s=p.s?p.s.split(' — ')[0]:'', base=p.l+(s&&!(kb&&s===(KB_A[kb.a]||{}).n)&&!/^Ultima rundă/.test(s)?'. '+s:'')+sp;
+  const s=p.s?p.s.split(' — ')[0]:'', base=p.l+(s&&!/^Ultima rundă/.test(s)?'. '+s:'')+sp;
   if(calm||p.k==='prep') return base;
   const works=st.ph.filter(x=>x.k==='work'||x.k==='manual'), wi=works.indexOf(p), last=works.length>1&&wi===works.length-1;
-  return base+'. '+(kb?(last?mot('kbLast'):mot('kbGo')):last?mot('last'):wi===0?mot('go'):mot('work'));
+  return base+'. '+(last?mot('last'):wi===0?mot('go'):mot('work'));
 }
 
 /* încurajările din mijlocul bucății (jumătate, ultimul minut, ultimele 10 secunde): o dată pe bucată, doar dacă vocea e liberă */
@@ -162,9 +156,9 @@ function voxSettingsHTML(){
     <div class="seg" style="margin-top:8px">${[['emil','Emil · antrenor'],['tel','Vocea telefonului']].map(([k,t])=>`<button class="${c.src===k?'on':''}" data-a="voxSrc" data-k="${k}">${t}</button>`).join('')}</div>
     <div class="sm mu" style="margin-top:6px">${c.src==='emil'?'Voce gravă, înregistrată în aplicație: sună la fel pe orice telefon, vorbește rar și clar.':VO.ok?(voRo().length?'Vocea românească instalată pe acest dispozitiv, mai rar și pe un ton mai jos.':'Nu găsesc o voce românească pe acest dispozitiv.'):'Browserul nu are sinteză vocală.'}</div>
     <div class="set-row"><span class="sp"><b>Semnale fără cuvinte</b><div class="sm mu">În sesiunile în 4 faze: ton la intrarea în fază, ritm discret la tehnică, tonuri de respirație la revenire</div></span><button class="sw ${S.cues!==false?'on':''}" data-a="cuesToggle" role="switch" aria-checked="${S.cues!==false}" aria-label="Semnale fără cuvinte"></button></div>
-    <div class="set-row"><span class="sp"><b>Încurajări</b><div class="sm mu">Vocea te motivează în runde, pauze, la final și la recorduri</div></span><button class="sw ${c.enc?'on':''}" data-a="voxEnc" role="switch" aria-checked="${!!c.enc}" aria-label="Încurajări"></button></div>
+    <div class="set-row"><span class="sp"><b>Încurajări</b><div class="sm mu">Vocea te motivează în intervale, pauze, la final și la recorduri</div></span><button class="sw ${c.enc?'on':''}" data-a="voxEnc" role="switch" aria-checked="${!!c.enc}" aria-label="Încurajări"></button></div>
     <button class="btn ghost sm" style="margin-top:4px" data-a="voxTest">${ic('sound')} Ascultă vocea</button></div>`;
 }
 ACT.voxSrc=async(el,{k})=>{ if(k!=='emil'&&k!=='tel') return; await voxSet({src:k}); render(); say(mot('go')); };
 ACT.voxEnc=async()=>{ await voxSet({enc:!voxCfg().enc}); render(); };
-ACT.voxTest=()=>{ actxGet(); if(!say(mot('test')+' '+kbFmtC('1-2-3, low kick').voice+'.')) toast('Vocea nu pornește','Verifică: Sunet și vibrații pornit, Voce pornită și volumul telefonului.','info'); };
+ACT.voxTest=()=>{ actxGet(); if(!say(mot('test'))) toast('Vocea nu pornește','Verifică: Sunet și vibrații pornit, Voce pornită și volumul telefonului.','info'); };

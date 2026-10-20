@@ -1647,7 +1647,7 @@ html[data-mode="light"] .cover.cv-hero .cv-fd{background:linear-gradient(180deg,
 .tm-spl b{color:var(--tx);font-size:14px}
 
 /* =====================================================================
-   v10 · abdomen opțional, fila Kickboxing (cardurile cu poze, foile, cronometrul de runde)
+   v10 · abdomen opțional
    ===================================================================== */
 /* abdomenul opțional din plan și din antrenamentul ghidat */
 .ex-opt-h{padding:14px 16px 4px;border-top:1px dashed var(--ln2)}
@@ -1667,119 +1667,10 @@ html[data-mode="light"] .cover.cv-hero .cv-fd{background:linear-gradient(180deg,
 #view[data-tab="prog"] .band-ph{background-image:var(--band-prog,var(--cover));background-position:70% 20%}
 #view[data-tab="nutri"] .band-ph{background-image:var(--band-nutri,var(--cover));background-position:78% 55%}
 @media(min-width:1100px){ #view[data-tab="plan"] .band-ph{background-position:50% 42%} #view[data-tab="prog"] .band-ph{background-position:50% 30%} #view[data-tab="nutri"] .band-ph{background-position:50% 60%} }
-/* banda de sus a filei Kickboxing: rândunica stă în dreapta */
-#view[data-tab="kb"] .band-ph{background-image:var(--kb-band,var(--cover));background-position:70% 0%}
-@media(min-width:1100px){ #view[data-tab="kb"] .band-ph{background-position:50% 32%} }
-
-/* cardurile activităților: poză, titlu mare, ultima sesiune, formatul pregătit */
-.kb-acts{display:grid;gap:12px;margin-top:12px}
-.kb-card{appearance:none;position:relative;isolation:isolate;overflow:hidden;display:flex;align-items:flex-end;width:100%;min-height:196px;padding:16px 18px;border-radius:var(--r-xl);
-  border:1px solid rgba(255,255,255,.08);background:#060607;color:#F4F4F5;text-align:left;cursor:pointer;box-shadow:var(--sh-card);transition:transform .18s var(--e1),border-color .2s}
-.kb-card:active{transform:scale(.985)}
-@media(hover:hover){.kb-card:hover{border-color:rgba(255,255,255,.2)} .kb-card:hover .kb-ph{transform:scale(1.06)}}
-.kb-ph{position:absolute;inset:0;z-index:-2;background:var(--ph) 50% 35%/cover no-repeat;transform:scale(1.02);transition:transform 1.2s var(--e1)}
-.kb-fd{position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(180deg,rgba(5,5,6,.15) 0,rgba(5,5,6,0) 35%,rgba(5,5,6,.82) 100%),linear-gradient(90deg,rgba(5,5,6,.78),rgba(5,5,6,0) 72%)}
-.kb-ct{display:flex;flex-direction:column;gap:3px;min-width:0;max-width:78%}
-.kb-card .eyebrow{color:rgba(255,255,255,.66)}
-.kb-t{font:700 40px/1 var(--fd);text-transform:uppercase;letter-spacing:.015em;background:linear-gradient(180deg,#fff 35%,#AEB9C7);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 3px 12px rgba(0,0,0,.7))}
-.kb-s{font-size:13px;color:rgba(255,255,255,.78);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.kb-go{display:inline-flex;align-items:center;gap:6px;margin-top:8px;align-self:flex-start;font-size:12px;font-weight:600;padding:5px 10px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-.kb-go .i{width:12px;height:12px}
-.kb-tgc{position:absolute;top:14px;right:14px;display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:5px 9px;border-radius:999px;color:rgba(255,255,255,.86);background:rgba(5,5,6,.55);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-.kb-tgc .i{width:13px;height:13px}
-#view.anim .kb-card{animation:cvUp .7s var(--e1) both} #view.anim .kb-card:nth-child(2){animation-delay:.07s} #view.anim .kb-card:nth-child(3){animation-delay:.14s}
-#view.anim .kb-card .kb-ph{animation:cvIn 1.6s cubic-bezier(.16,.7,.2,1) backwards}
-@media(min-width:760px){ .kb-acts{grid-template-columns:1fr 1fr} .kb-card:first-child{grid-column:1/-1;min-height:240px} }
-.kb-wk-n{font-size:14px;color:var(--mu);margin-top:6px} .kb-wk-n b{color:var(--tx);font-variant-numeric:tabular-nums}
-.ic-s.kb{background:rgba(var(--w),.08);color:var(--tx)}
-
-/* uneltele: grilă compactă, ca să nu încurce */
-.kb-tools{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
-.kb-tool{appearance:none;display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:12px 10px;border-radius:14px;border:1px solid var(--ln);background:var(--s2);color:var(--tx);text-align:left;cursor:pointer;min-width:0;transition:border-color .2s,transform .12s var(--sp)}
-.kb-tool:active{transform:scale(.96)}
-@media(hover:hover){.kb-tool:hover{border-color:var(--a40)}}
-.kb-tool .ic-s{width:30px;height:30px;border-radius:10px;margin-bottom:4px} .kb-tool .ic-s .i{width:15px;height:15px}
-.kb-tool b{font-size:12.5px;line-height:1.2} .kb-tool span:last-child{font-size:11px;color:var(--mu2);line-height:1.3}
-@media(min-width:760px){ .kb-tools{grid-template-columns:repeat(6,1fr)} }
-
-/* istoric */
-.kb-mix{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
-.kb-bars{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;align-items:end;height:96px;margin-top:14px}
-.kb-bar{position:relative;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px}
-.kb-bar i{display:block;width:100%;min-height:3px;border-radius:6px 6px 3px 3px;background:linear-gradient(180deg,rgba(var(--w),.32),rgba(var(--w),.1))}
-.kb-bar.cur i{background:linear-gradient(180deg,var(--ac),var(--a40));box-shadow:0 0 14px -4px var(--acg)}
-.kb-bar span{font-size:10.5px;color:var(--mu2);font-variant-numeric:tabular-nums;min-height:12px}
-
-/* foile: antetul cu poză */
-.kb-hd{position:relative;isolation:isolate;overflow:hidden;display:flex;align-items:flex-end;min-height:178px;margin:-4px 0 0;padding:16px;border-radius:18px;color:#F4F4F5;background:#060607}
-.kb-hd.sm{min-height:150px}
-.kb-hd .eyebrow{color:rgba(255,255,255,.66)}
-.kb-hd .h1{color:#fff;margin:6px 0 4px;font-size:40px}
-.kb-hd .sm{color:rgba(255,255,255,.8);max-width:420px}
-.kb-hd .kb-ct{max-width:100%}
-.kb-x{position:absolute;top:12px;right:12px;z-index:2;background:rgba(5,5,6,.5);border-color:rgba(255,255,255,.16);color:#fff;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-.kb-pick{grid-template-columns:repeat(4,1fr)!important}
-.kb-stps{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
-.kb-stp{display:flex;flex-direction:column;gap:6px;padding:10px;border-radius:14px;border:1px solid var(--ln);background:var(--bg);min-width:0;text-align:center}
-html[data-mode="light"] .kb-stp{background:var(--s2)}
-.kb-stp > span{font-size:11.5px;font-weight:600;color:var(--mu)}
-.kb-stp > b{font:700 26px/1 var(--fd);font-variant-numeric:tabular-nums;white-space:nowrap}
-.kb-stp .r{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.kb-stp button{appearance:none;height:34px;border-radius:10px;border:1px solid var(--ln2);background:var(--s2);color:var(--tx);font-size:18px;cursor:pointer;min-width:0}
-.kb-stp button:active{transform:scale(.9)}
-.kb-tgs{margin-top:16px;border:1px solid var(--ln);border-radius:16px;background:rgba(var(--w),.02);overflow:hidden}
-.kb-tgs summary{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;list-style:none}
-.kb-tgs summary::-webkit-details-marker{display:none}
-.kb-tgs summary b{display:flex;align-items:center;gap:6px;font-size:14px} .kb-tgs summary b .i{width:15px;height:15px;color:var(--ac)}
-.kb-tgs summary .xs{display:block;margin-top:2px}
-.kb-tgs summary > .i{transition:transform .2s;color:var(--mu)} .kb-tgs[open] summary > .i{transform:rotate(180deg)}
-.kb-tg{appearance:none;display:flex;align-items:center;gap:10px;width:100%;padding:11px 14px;border:0;border-top:1px solid var(--ln);background:none;color:var(--tx);text-align:left;cursor:pointer;font-size:14px}
-.kb-tg .xs{display:block;margin-top:2px}
-.kb-tg > .i{color:var(--mu2);width:16px;height:16px}
-.kb-tg.ok b{color:var(--mu)}
-@media(hover:hover){.kb-tg:hover{background:rgba(var(--w),.03)}}
-.kb-sug{appearance:none;display:flex;align-items:center;gap:10px;width:100%;margin-top:8px;padding:10px 14px;border-radius:14px;border:1px dashed var(--ln2);background:none;color:var(--mu);text-align:left;cursor:pointer;font-size:13px}
-.kb-sug b{color:var(--tx);font-weight:600} .kb-sug .i{width:15px;height:15px;flex:none}
-.kb-tg-st{margin-top:12px;padding:10px 12px;border-radius:12px;background:rgba(var(--w),.04);font-size:13px;color:var(--mu);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.kb-tg-st.ok{background:var(--ok-bg);color:var(--ok-t)} .kb-tg-st .i{width:15px;height:15px} .kb-tg-st b{color:var(--tx)}
-.kb-tg-q{margin-top:14px}
-
-/* cronometrul de runde: poza activității, discretă, în spate; combinația strigată, mare */
-.tm.kbt::after{content:'';position:fixed;inset:0 0 auto;height:72vh;z-index:-1;pointer-events:none;background:var(--ph) 50% 25%/cover no-repeat;opacity:.2;filter:grayscale(.3);
-  -webkit-mask-image:linear-gradient(180deg,#000 0,rgba(0,0,0,.6) 45%,transparent 100%);mask-image:linear-gradient(180deg,#000 0,rgba(0,0,0,.6) 45%,transparent 100%)}
-html[data-mode="light"] .tm.kbt::after{opacity:.1}
-.kb-call{margin:6px auto 0;min-height:84px;max-width:420px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:10px 14px;border-radius:18px;
-  border:1px solid var(--ln2);background:rgba(var(--w),.035);text-align:center}
-.kb-call b{font:800 40px/1 var(--fd);letter-spacing:.02em;text-transform:uppercase;animation:kbPop .32s var(--sp)}
-.kb-call span{font-size:13px;color:var(--mu)}
-@keyframes kbPop{from{opacity:.2;transform:scale(.88)}}
-.kb-start{display:flex;align-items:flex-start;gap:8px;justify-content:center;text-align:center;font-size:12.5px;color:var(--mu);margin-top:10px;line-height:1.5}
-.kb-start .i{width:15px;height:15px;flex:none;margin-top:2px}
-
-/* combinații, bandaje, geantă */
-.kb-nums{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
-.kb-nums div{display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:12px;border:1px solid var(--ln);background:var(--bg)}
-html[data-mode="light"] .kb-nums div{background:var(--s2)}
-.kb-nums b{font:800 24px/1 var(--fd);color:var(--ac)} .kb-nums span{font-size:12.5px;color:var(--mu)}
-.kb-lib{padding:11px 0;border-top:1px solid var(--ln)} .kb-lib b{font:700 20px/1.1 var(--fd);text-transform:uppercase;letter-spacing:.02em} .kb-lib .sm{margin-top:3px} .kb-lib .xs{margin-top:3px;line-height:1.45}
-.kb-steps{counter-reset:k;list-style:none;padding:0;margin:14px 0 0}
-.kb-steps li{counter-increment:k;position:relative;padding:10px 0 10px 44px;border-top:1px solid var(--ln)}
-.kb-steps li::before{content:counter(k);position:absolute;left:0;top:10px;width:30px;height:30px;border-radius:10px;display:grid;place-items:center;font:700 16px var(--fd);background:var(--a14);color:var(--ac)}
-.kb-steps b{display:block;font-size:14px} .kb-steps span{font-size:13px;color:var(--mu);line-height:1.45}
-.kb-gear{appearance:none;display:flex;align-items:center;gap:12px;width:100%;padding:9px 0;border:0;border-top:1px solid var(--ln);background:none;color:var(--tx);font-size:14px;text-align:left;cursor:pointer}
-.kb-gear .tick{pointer-events:none}
-.kb-gear.on span:last-child{color:var(--mu);text-decoration:line-through;text-decoration-color:rgba(var(--w),.3)}
-
 /* bara de jos cu 6 file: etichete mai strânse pe telefoanele înguste */
 @media(max-width:430px){ .nav-in[style*="--n:6"] .nb{font-size:9.5px;letter-spacing:-.01em} .nav-in[style*="--n:6"] .nb span{padding:0} }
 
 /* v11 · strigătorul: nivel + ritm, lista combinațiilor; setările vocii */
-.kb-cfg{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:8px 12px;margin-top:4px}
-.kb-cfg > span{font-size:12.5px;font-weight:600;color:var(--mu)}
-.kb-cfg .seg{margin-top:0}
-.kb-cmbs .kb-cmb{display:flex;align-items:baseline;gap:12px;padding:9px 14px;border-top:1px solid var(--ln)}
-.kb-cmb b{font:800 17px/1.2 var(--fd);letter-spacing:.02em;text-transform:uppercase;min-width:96px}
-.kb-cmb span{font-size:13px;color:var(--mu)}
 .vox-set{margin-top:8px;padding-top:12px;border-top:1px solid var(--ln)}
 
 /* =====================================================================

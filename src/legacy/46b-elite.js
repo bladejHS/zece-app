@@ -14,7 +14,7 @@ const hrvNow=()=>hrvAt(todayKey());
 function hrvDeloadDay(w,d){ const nx=nextDay(); return !!(nx&&nx.w===w&&nx.d===d&&hrvNow().force); }
 function hrvCard(){ const h=hrvNow(); if(!h.force) return '';
   return `<div class="card elite-hrv"><div class="eyebrow">${ic('heart')} HRV · deload forțat azi</div>
-    <div class="sm" style="margin-top:8px">HRV <b>${h.today} ms</b>, sub 90% din media ta pe 7 zile (<b>${h.avg7} ms</b>). Antrenamentul de azi are volum −40%; kickboxingul se construiește tot în deload.</div>
+    <div class="sm" style="margin-top:8px">HRV <b>${h.today} ms</b>, sub 90% din media ta pe 7 zile (<b>${h.avg7} ms</b>). Antrenamentul de azi are volum −40%.</div>
     ${UI.segments(Math.min(1,h.ratio||0),20,'rest','HRV față de medie')}</div>`; }
 
 /* ---------- importul de sănătate: CSV din Garmin Connect sau Apple Health (prin export) ---------- */
@@ -31,8 +31,6 @@ document.addEventListener('change',async e=>{ const t=e.target; if(!t||!t.datase
   }catch(err){ toast('Importul nu a mers','Verifică fișierul CSV.','info'); } t.value=''; });
 
 /* ---------- datele pentru mastery și analize ---------- */
-function kbStructured(){ return (S.ext||[]).filter(x=>!x.dup&&x.kb&&x.kb.plan).map(x=>({date:x.date,a:x.kb.a,feels:x.kb.plan.feels||[],cx:+x.kb.plan.cx||2,cog:+x.kb.plan.cog||0,
-  deload:!!x.kb.plan.deload,planned:+x.kb.plan.planned||0,done:+x.kb.r||0,kicks:x.kb.plan.kicks!==false})); }
 const dayIntense=k=>(S.hist||[]).some(h=>h.date===k&&(+h.rpe||0)>=7)||(S.ext||[]).some(x=>x.date===k&&!x.dup&&(+x.rpe||0)>=7)||(S.runs||[]).some(r=>r.date===k&&r.kind==='thr');
 function masteryNow(){
   const tk=todayKey(), last=n=>Array.from({length:n},(_,i)=>dayShift(tk,-i));
@@ -44,7 +42,7 @@ function masteryNow(){
   const maxEfforts=(S.hist||[]).concat(S.ext||[]).filter(x=>x.date>=dayShift(tk,-27)&&+x.rpe===10).length;
   const trained=k=>Array.from({length:6},(_,i)=>dayShift(k,-1-i)).some(d=>dayLoad(d)>0);
   const restDaysHonored=last(56).filter(k=>parseKey(k).getDay()===0&&k<tk&&!dayIntense(k)&&trained(k)).length;
-  return ELITE.mastery({sessions:kbStructured(),targetsHit:KB_TG.filter(t=>kbTgSt(t[0]).ok).length,sleep,deloadWeeks,ignoredHrv,longStreaks,maxEfforts,restDaysHonored}); }
+  return ELITE.mastery({sessions:[],targetsHit:0,sleep,deloadWeeks,ignoredHrv,longStreaks,maxEfforts,restDaysHonored}); }
 
 /* ---------- Performanță → Mastery ---------- */
 function eliteMastery(){ const m=masteryNow(), nm=ELITE.LEVEL_NAMES[m.level-1]||'', prev=[0,40,100,180,280,400,540,700,880,1080][m.level-1]||0;
@@ -52,43 +50,31 @@ function eliteMastery(){ const m=masteryNow(), nm=ELITE.LEVEL_NAMES[m.level-1]||
   return `<div class="card wide"><div class="eyebrow">${ic('award')} Nivel de competență</div>
     <div class="mx-l"><b>${m.level}</b><div class="sp"><div class="h2">${esc(nm)}</div><div class="sm mu">${m.points} puncte${m.next?' · următorul nivel la '+m.next:' · nivel maxim'}</div></div></div>
     ${UI.segments(m.next?(m.points-prev)/(m.next-prev):1,24,'effort','Progres spre nivelul următor')}
-    <div class="note">Nivelul vine din tehnică făcută bine și din recuperare, nu din volum. Ignorarea limitelor de siguranță scade puncte.</div></div>
-  <div class="card wide"><div class="eyebrow">${ic('target')} Tehnică</div>${m.badges.filter(b=>b.track==='tech').map(badge).join('')}</div>
+    <div class="note">Nivelul vine din recuperare și din disciplină, nu din volum. Ignorarea limitelor de siguranță scade puncte.</div></div>
   <div class="card wide"><div class="eyebrow">${ic('moon')} Recuperare</div>${m.badges.filter(b=>b.track==='rec').map(badge).join('')}</div>
   ${m.penalties.length?`<div class="card wide"><div class="eyebrow">${ic('alert')} Penalizări</div>${m.penalties.map(p=>`<div class="list-row"><span class="sp"><b>${esc(p.name)}</b><div class="xs mu">${esc(p.why)}</div></span><span class="v">−${p.points}</span></div>`).join('')}</div>`:''}`; }
 
 /* ---------- Performanță → Analiză ---------- */
 function eliteAnalytics(){
-  const tk=todayKey(), ks=kbStructured(), days=Array.from({length:28},(_,i)=>dayShift(tk,-27+i));
-  const tes=ELITE.technicalEfficiency(ks.map(s=>({feels:s.feels,cx:s.cx,planned:s.planned,done:s.done})));
+  const tk=todayKey(), days=Array.from({length:28},(_,i)=>dayShift(tk,-27+i));
   const rdi=ELITE.recoveryDebt(days.map(k=>{ const j=jOf(k), h=hrvAt(k); return {date:k,load:dayLoad(k),sleep:+j.sleep||undefined,hrvRatio:h.today&&h.avg7?h.today/h.avg7:undefined}; }));
-  const all=ks.flatMap(s=>s.feels), byA={}, tg={}; kbSessions().forEach(s=>{ if(s.a) byA[s.a]=(byA[s.a]||0)+1; });
-  KB_TG.forEach(t=>{ if(kbTgSt(t[0]).ok) tg[t[1]]=(tg[t[1]]||0)+1; });
-  const skills=ELITE.skillMap({byActivity:byA,cx:ks.length?ks.reduce((a,s)=>a+s.cx,0)/ks.length:1,cleanShare:all.length?all.filter(f=>f==='ok'||f==='easy').length/all.length:0,
-    cognitive:ks.reduce((a,s)=>a+s.cog,0),kicks:ks.filter(s=>s.kicks).length,targets:tg});
   const sync=nutriOk()?ELITE.nutritionSync(days.slice(-14).filter(k=>mlogDay(k).length).map(k=>{ const t=targets(k), d=dayTotals(k);
     return {dayType:t.day.type,kcal:d.k,kcalT:t.kcal,c:d.c,cT:t.c,p:d.p,pT:t.p,water:waterOf(k),waterT:t.water}; })):null;
   const tile=(t,v,unit,f,tone,txt)=>`<div class="an-t"><div class="k">${t}</div><div class="v">${v==null?'—':v}<small>${v==null?'':unit}</small></div>${UI.segments(v==null?0:f,16,tone)}<div class="s">${txt}</div></div>`;
   return `<div class="card wide"><div class="eyebrow">${ic('activity')} Analiză · ultimele 4 săptămâni</div>
     <div class="an-g">
-      ${tile('Eficiență tehnică',tes,'/100',(tes||0)/100,'effort',tes==null?'Apare după prima sesiune în 4 faze cu feedback pe runde.':'Runde curate, la ce complexitate, câte din cele planificate.')}
       ${tile('Datoria de recuperare',rdi.index,'/100',rdi.index/100,rdi.index>60?'bad':rdi.index>30?'warn':'ok',rdi.index>60?'Mare: o zi ușoară sau de odihnă ajută.':rdi.index>30?'Moderată: somnul contează azi.':'Mică: recuperarea ține pasul.')}
-      ${tile('Sincronizare nutriție',sync,'/100',(sync||0)/100,'rest',sync==null?'Apare după 3 zile cu mese notate.':'Mâncarea urmează tipul fiecărei zile de antrenament.')}
-      ${tile('Sesiuni în 4 faze',ks.length,'',Math.min(1,ks.length/12),'effort','Cu check-in, feedback și componentă cognitivă.')}</div></div>
-  <div class="card wide"><div class="eyebrow">${ic('target')} Harta abilităților</div>
-    ${skills.map(s=>`<div class="sk-r"><span>${esc(s.name)}</span>${UI.segments(s.level/100,20,'effort',s.name+' '+s.level+'%')}<b>${s.level}</b></div>`).join('')}
-    <div class="note">Crește din practică de calitate și din ținte atinse, nu doar din minute.</div></div>`; }
+      ${tile('Sincronizare nutriție',sync,'/100',(sync||0)/100,'rest',sync==null?'Apare după 3 zile cu mese notate.':'Mâncarea urmează tipul fiecărei zile de antrenament.')}</div></div>`; }
 
 /* ---------- Performanță → Squad (max 5, gist secret criptat) ---------- */
 const SQ={cards:{},at:0,busy:false,err:null};
 const sqTok=()=>(syCfg().tok||(S.squad&&S.squad.tok)||'');
 async function sqSave(s){ await save('squad',s); }
-function sqMyCard(){ const tk=todayKey(), m=mondayOf(tk), inW=d=>d>=m&&d<=tk, ks=kbStructured().filter(s=>inW(s.date));
-  const mins=kbDayLoads().filter(d=>inW(d.date)).reduce((a,d)=>a+d.minutes,0);
-  const rounds=(S.ext||[]).filter(x=>!x.dup&&x.kb&&inW(x.date)).reduce((a,x)=>a+(+x.kb.r||0),0);
+function sqMyCard(){ const tk=todayKey(), m=mondayOf(tk), inW=d=>d>=m&&d<=tk, ks=(S.hist||[]).filter(h=>inW(h.date));
+  const mins=ks.reduce((a,h)=>a+(+h.dur||0)/60,0);
   const sleepNights=Object.keys(S.journal||{}).filter(k=>inW(k)&&+S.journal[k].sleep>=7).length;
   const mobility=(S.tmlog||[]).filter(t=>inW(t.date)&&/^(mobility|stretch|breath)$/.test(t.kind||'')).length;
-  return {v:1,name:S.squad.me.name,week:m,sessions:ks.length,minutes:Math.round(mins),rounds,sleepNights,mobility,level:masteryNow().level,updated:new Date().toISOString()}; }
+  return {v:1,name:S.squad.me.name,week:m,sessions:ks.length,minutes:Math.round(mins),sleepNights,mobility,level:masteryNow().level,updated:new Date().toISOString()}; }
 async function sqRefresh(){ const s=S.squad; if(!s||SQ.busy) return; SQ.busy=true; SQ.err=null; render();
   try{ const rs=await Promise.all(s.members.map(m=>ELITE.squad.fetchCard(m.gist,s.pass).catch(()=>null))); s.members.forEach((m,i)=>{ if(rs[i]) SQ.cards[m.gist]=rs[i]; }); SQ.at=Date.now(); }
   catch(e){ SQ.err='Nu am putut citi squad-ul (internet sau limita GitHub).'; }
@@ -103,7 +89,7 @@ function eliteSquad(){ const s=S.squad;
     <button class="btn wide" style="margin-top:8px" data-a="sqJoin">${ic('check')} Intră în squad</button></div>`;
   const tk=todayKey(), m=mondayOf(tk), ch=ELITE.squad.weekChallenge(m), mine=sqMyCard(), cards=[mine].concat(s.members.map(x=>SQ.cards[x.gist]).filter(c=>c&&c.week===m));
   const pr=ELITE.squad.challengeProgress(ch,cards,s.members.length+1), rit=ELITE.ritualState(s.ritual);
-  const row=(c,name,me)=>`<div class="sq-r"><b>${esc(name)}${me?' (tu)':''}</b><span>${c?`${c.sessions} sesiuni · ${c.rounds} runde · ${c.minutes} min · nivel ${c.level}`:'încă nimic publicat săptămâna asta'}</span></div>`;
+  const row=(c,name,me)=>`<div class="sq-r"><b>${esc(name)}${me?' (tu)':''}</b><span>${c?`${c.sessions} sesiuni · ${c.minutes} min · nivel ${c.level}`:'încă nimic publicat săptămâna asta'}</span></div>`;
   return `<div class="card wide"><div class="row"><div class="eyebrow sp">${ic('user')} ${esc(s.name)} · ${s.members.length+1}/5</div>
       <button class="btn ghost sm" data-a="sqRefresh" ${SQ.busy?'disabled':''}>${ic('refresh')} ${SQ.busy?'Citesc…':'Actualizează'}</button></div>
     ${row(mine,mine.name,true)}${s.members.map(x=>{ const c=SQ.cards[x.gist]; return row(c&&c.week===m?c:null,x.name,false); }).join('')}

@@ -7,13 +7,13 @@ const AI={busy:false,stream:null,live:'',err:null,draft:'',usage:null,usageModel
 const loadSdk=COACH.sdk;
 /* contextul filtrului: sexul (pragul de calorii) și accidentările declarate */
 const aiCtx=()=>{ const P=prof(); return {sex:P.sex==='f'?'f':'m',injuries:(Array.isArray(P.inj)?P.inj:[]).filter(COACH.isInjury)}; };
-const AI_SYS=`Ești antrenorul personal din aplicația FALCO. Antrenamentul urmează Dr. Milo Wolf (toate videoclipurile lui), nutriția urmează Layne Norton (canalele lui de YouTube, Fat Loss Forever, The Complete Contest Prep Guide). Kickboxingul e separat, în fila lui.
+const AI_SYS=`Ești antrenorul personal din aplicația FALCO. Antrenamentul urmează Dr. Milo Wolf (toate videoclipurile lui), nutriția urmează Layne Norton (canalele lui de YouTube, Fat Loss Forever, The Complete Contest Prep Guide).
 Planul hibrid (cel mai bun după Wolf: FULL BODY de 4 ori pe săptămână; fiecare ședință are compusele unei jumătăți a corpului și izolarea celeilalte) are cicluri de 4 săptămâni cu aceeași săptămână-tip:
 - Luni: Full body A (Incline Dumbbell Press, Chest Supported Row, Lat Pulldown, Seated Overhead Press, Leg Extension, Hamstring Curl la șezut, Calf Raise), apoi Easy run Z2 la ~6 ore după; Cable Crunch opțional
 - Marți: Threshold run (încălzire, reprize la ritm de prag, răcire) — la peste 24 de ore de compusele de picioare
 - Miercuri: Full body B · picioare grele (Hack Squat, Romanian Deadlift, Hip Abduction Machine, Cable Lateral Raise, Tricep Overhead Extension, Preacher Curl); Hanging Leg Raise opțional
 - Joi: Full body C (Machine Chest Press, Pull Up / Lat Pulldown, T-Bar Row, Dumbbell Fly, Rear Delt Fly, Hamstring Curl, Calf Raise), apoi Easy run Z2 (flush) la ~6 ore după; Ab Wheel opțional
-- Vineri: recuperare și mobilitate (zi bună pentru kickboxing)
+- Vineri: recuperare și mobilitate
 - Sâmbătă: Full body D · picioare grele (Good Morning la Smith, Bulgarian Split Squat, Leg Press, Nordic Curl, Cable Lateral Raise, Skull Crusher, Incline Dumbbell Curl)
 - Duminică: odihnă, plimbare și mobilitate
 Deci 2 alergări ușoare în zona 2 și una la prag pe săptămână, fără long run. Alergările cresc până în săptămâna 3 (minute la easy, reprize la prag); fiecare ciclu nou pornește puțin mai sus (+2 min easy, +30 s pe repriza de prag, până la 7 min). Pauzele din plan: izolare 90 s, compuse pe partea de sus 120–150 s, compusele grele de picioare 180 s.
@@ -130,7 +130,6 @@ Planul de mese de azi: ${D.name.toLowerCase()} (mesele din planul utilizatorului
       `\nKm pe săptămână, ultimele 6 săptămâni (cea curentă la final): ${wk.join(', ')}.`; });
   sec('Antrenamente terminate',()=>(S.hist||[]).slice(-10).map(h=>`- ${h.date}: ${h.t} (ciclul ${h.cyc}, S${h.w+1}), ${Math.round(h.dur/60)} min, ${h.sets} serii`+(h.km?`, ${num(h.km,2)} km`:'')+(h.ready!=null?`, stare ${h.ready}/100`:'')+(h.rpe?`, RPE ${h.rpe}`:'')+(h.hr?`, puls mediu ${h.hr.avg} (max ${h.hr.max})`:'')).join('\n'));
   sec('Abdomen adăugat în plan (la cererea utilizatorului)',()=>'La finalul zilelor de upper: luni Hanging Leg Raise 3×8–12 și Plank 3 × 45–60 s; miercuri Dragon Flag 4×3–6 (negative lente până la repetări complete) și Pallof Press 3×10–12 pe parte; vineri Dragon Flag 3×3–6 și Ab Wheel Rollout 3×8–10. Sunt opționale: le face când vrea, iar o zi fără ele e tot completă (bifele numără doar exercițiile de dinainte). Nu trata sărirea lor ca pe o abatere de la plan.');
-  sec('Kickboxing (în afara planului)',()=>kbAiCtx());
   sec('Alte antrenamente, importate din Strava (ex. Polar Beat) sau notate manual (ultimele 14 zile)',()=>(S.ext||[]).filter(x=>x.date>=dayShift(tk,-13)).sort((a,b)=>a.start-b.start)
     .map(x=>`- ${x.date} ${stName(x.type)}${x.name?' „'+x.name+'”':''}: ${num(x.min,0)} min`+(x.km?`, ${num(x.km,1)} km`:'')+(x.hr?`, puls mediu ${x.hr}`+(x.hrMax?` (max ${x.hrMax})`:''):'')+(x.rpe?`, efort ${x.rpe}/10`:'')+(x.dup?' — același antrenament ca o sesiune FALCO, numărat o singură dată':'')).join('\n'));
   sec('Readiness și profilul atletului (indicatori de antrenament, nu medicali)',()=>{ const R=readiness(), tw=twinNow();
@@ -304,7 +303,7 @@ async function aiSyncQueue(){
       const FEEL={easy:'ușor',ok:'potrivit',hard:'greu',max:'la limită'};
       const qs=chats.map(x=>'- ('+hm(x.item.t)+') '+x.item.question+'\n  Răspunsul local, după reguli: '+x.item.localAnswer).join('\n');
       const fs=fbs.map(x=>{ const d=x.item.data||{}; return '- ('+hm(x.item.t)+') '+(d.round||'rundă')+': '+(FEEL[d.feel]||d.feel)+(d.pain?', durere: '+(COACH.INJURIES[d.pain]||d.pain):'')+' → '+(d.change||''); }).join('\n');
-      await aiSend(((qs?'Cât am fost offline am întrebat:\n'+qs+'\n':'')+(fs?'Cât am fost offline, sesiunea de kickboxing s-a adaptat după reguli:\n'+fs+'\n':'')+'Verifică răspunsurile și adaptările locale și corectează-le dacă e cazul.').slice(0,3900)); }
+      await aiSend(((qs?'Cât am fost offline am întrebat:\n'+qs+'\n':'')+(fs?'Cât am fost offline, sesiunea s-a adaptat după reguli:\n'+fs+'\n':'')+'Verifică răspunsurile și adaptările locale și corectează-le dacă e cazul.').slice(0,3900)); }
   }catch(e){ errLog('sincronizare antrenor: '+((e&&e.message)||e),'coach'); }
   aiSyncing=false;
 }

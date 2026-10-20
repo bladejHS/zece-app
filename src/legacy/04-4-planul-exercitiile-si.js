@@ -118,7 +118,7 @@ const NOTES=[
   ['Spatele','Tracțiunile cu atârnare completă jos; ramatul cu brațele complet întinse și omoplații depărtați. Fără pauză în contracție.'],
   ['Alergarea','Easy run-ul la ~6 ore după forță, ușor — e flush, nu antrenament.']]},
  {wk:'Recuperare — 30–45 min, intensitate mică',d:[
-  ['Coaching','Mișcare cu intenție, nu cu intensitate. Somn 7–9 ore, mâncare bună, apă. Dacă ai kickboxing, vinerea e o zi bună pentru el.'],
+  ['Coaching','Mișcare cu intenție, nu cu intensitate. Somn 7–9 ore, mâncare bună, apă.'],
   ['Progresie','Notezi cum te simți și cum recuperezi în fiecare săptămână.']]},
  {wk:'Full body D — picioarele grele, izolarea de sus',d:[
   ['Cum lucrezi','Good morning și fandarea bulgărească la Smith: stabile, poți merge aproape de eșec în siguranță. Ultimul set la presă până la eșec.'],

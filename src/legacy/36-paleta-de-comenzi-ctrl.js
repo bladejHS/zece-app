@@ -34,7 +34,6 @@ function palCmds(){
    ['prog','Recuperare','moon','rec'],['prog','Recorduri și realizări','trophy','pr'],['prog','Profilul atletului','user','twin'],['prog','Teste fizice','medal','t'],
    ['nutri','Nutriție','flame'],['coach','Antrenor AI','coach'],['act','Activitate · cronologie','history'],['tools','Unelte','tool'],['set','Setări','gear']]
    .forEach(([t,l,icn,s])=>C.push({g:'Navigare',t:l,k:'mergi deschide pagina '+t,icn,f:go(t,s)}));
-  if(typeof kbPalCmds==='function') kbPalCmds(C);
   return C;
 }
 /* scorul unei potriviri: toate cuvintele căutate trebuie să apară; titlul contează mai mult */

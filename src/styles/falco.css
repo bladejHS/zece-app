@@ -40,7 +40,6 @@ html[data-mode="light"] .card{background:var(--s1)}
 @media(hover:hover){ .card.link:hover{border-color:var(--ln2)} }
 .card.link:active{transform:scale(.995)}
 .kpi,.inp,.seg,.tm-pick,.sheet,.toast{border-radius:var(--r-md)}
-.kb-card{border-radius:var(--r2)}
 .sheet{border-radius:var(--r-xl) var(--r-xl) 0 0;background:var(--glass2);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
 .toast{background:var(--glass2);border:1px solid var(--ln2);box-shadow:var(--sh-pop);border-radius:var(--r-lg)}
 
@@ -168,29 +167,6 @@ html[data-mode="light"] .inp{background:#FFFFFF}
 .note{border-radius:var(--r-md)}
 
 /* ---------- sesiunea structurată (check-in, plan, feedback pe rundă) ---------- */
-.kbci-l{margin-top:14px;font:600 11.5px/1 var(--fd);letter-spacing:.18em;text-transform:uppercase;color:var(--mu)}
-.kbci-seg{margin-top:8px}
-.kbci-seg button{min-height:var(--touch);font:700 17px/1 var(--fd)}
-.kbp{margin-top:12px;border:1px solid var(--ln);border-radius:var(--r-md);overflow:hidden}
-.kbp-r{display:flex;justify-content:space-between;gap:12px;padding:12px 14px;border-top:1px solid var(--ln)}
-.kbp-r:first-child{border-top:0}
-.kbp-r b{font:600 14px/1.2 var(--fd);letter-spacing:.12em;text-transform:uppercase}
-.kbp-r span{color:var(--mu);font-size:13px;font-variant-numeric:tabular-nums}
-.kbp-n{margin-top:12px}
-.kbp-n p{display:flex;gap:8px;align-items:flex-start;margin:6px 0;font-size:13px;color:var(--mu)}
-.kbp-n .i{width:15px;height:15px;flex:none;margin-top:2px;color:var(--ac2)}
-.kb-ratio{margin-top:8px;display:flex;gap:6px;align-items:center;font-size:12.5px;color:var(--warn-t)}
-.kb-ratio.ok{color:var(--ok-t)}
-.kb-ratio .i{width:14px;height:14px}
-.kbfb{margin-top:14px}
-.kbfb-q{text-align:center;font:600 12px/1 var(--fd);letter-spacing:.2em;text-transform:uppercase;color:var(--c-rest)}
-.kbfb-b{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
-.kbfb-b .btn{min-height:var(--touch);padding:6px 4px;font:700 14px/1.1 var(--fd);letter-spacing:.04em}
-.kbfb-p{margin-top:8px}
-.kbfb-p summary{cursor:pointer;color:var(--mu);font-size:13px;text-align:center;list-style:none;padding:8px}
-.kbfb-p .chips{justify-content:center}
-.kbfb.done{display:flex;gap:8px;align-items:center;justify-content:center;color:var(--mu);font-size:13px;text-align:center}
-.kbfb.done .i{width:15px;height:15px;color:var(--ok)}
 
 /* ---------- nutriția periodizată ---------- */
 .nday-g{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}
@@ -396,9 +372,7 @@ html[data-mode="light"] .inp{background:#FFFFFF}
 .h1{font-size:30px;line-height:1.08;text-transform:none;letter-spacing:-.028em;font-weight:650}
 .cv-h{font-size:clamp(34px,10vw,44px);line-height:1;text-transform:none;letter-spacing:-.035em;font-weight:650;
   background:none;-webkit-text-fill-color:#F4F6F8;color:#F4F6F8;filter:drop-shadow(0 2px 14px rgba(0,0,0,.6))}
-.kb-t{font-size:32px;text-transform:none;letter-spacing:-.03em;font-weight:650;background:none;-webkit-text-fill-color:#F4F6F8;color:#F4F6F8}
 .fx-n,.rc-t{font-size:32px;text-transform:none;letter-spacing:-.028em;font-weight:650}
-.kb-call b{font-weight:650;text-transform:none;letter-spacing:-.02em}
 .big,.rd-ring b,.hr-big b,.hr-mt,.restbox .t,.rays .core b,.rc-c b,.k1-4 b,.pr-m .pr-v,.lv-set b,.sw-big,.br-t span,.tm-spd b,.stp input{font-weight:600;letter-spacing:-.03em}
 .onb-big{font-size:clamp(40px,12vw,58px);font-weight:300;background:none;-webkit-text-fill-color:currentColor;color:var(--tx)}
 .cv-k{color:rgba(244,246,248,.78);letter-spacing:.14em}
@@ -410,7 +384,6 @@ html[data-mode="light"] .inp{background:#FFFFFF}
 .day-t{font-size:19px}
 .mcard .meal-t{font-size:19px}
 .toast b{font-size:15.5px;letter-spacing:-.01em}
-.kb-cmb b{letter-spacing:-.01em}
 /* navigarea de jos: sticlă aproape opacă, ca textul de dedesubt să nu se amestece cu etichetele */
 .nav{background:rgba(var(--bg-rgb),.88)}
 html[data-mode="light"] .nav{background:rgba(255,255,255,.92)}

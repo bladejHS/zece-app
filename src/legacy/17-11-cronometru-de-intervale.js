@@ -50,7 +50,6 @@ const spSay=v=>{ const r=Math.round(v*10)/10, i=Math.floor(r), d=Math.round((r-i
 /* ce spune vocea la fiecare bucată: voxPhase (085-voice.js), cu încurajări unde nu e un cronometru calm */
 const tmSay=p=>say(voxPhase(p,TM.st));
 function tmSched(){
-  if(TM.st&&TM.st.kb){ kbSched(); return; }
   cancelSched('tm'); const st=TM.st; if(!st||!st.started||st.done||st.pAt) return;
   const list=[]; let j=st.i, cur=st.ph[j]; if(cur.d==null) return;
   let t=cur.d-tmEl();
@@ -77,7 +76,7 @@ function tmAdvance(over,auto){
 function tmTick(){
   const st=TM.st; if(!st||!st.started||st.done||st.pAt) return;
   let g=0; while(!st.done&&tmPh().d!=null&&tmEl()>=tmPh().d&&g++<500) tmAdvance(tmEl()-tmPh().d,true);
-  if(st.kb&&!st.done) kbTick(st); else voxTick(st);
+  voxTick(st);
   tmPaint();
 }
 function tmFinish(auto){
@@ -114,7 +113,7 @@ function tmRender(){
       <div class="tm-ring">${UI.gauge()}
         <div class="c"><div><div class="tm-lbl">Gata?</div><div class="tm-time">${totalD?fmtClock(totalD):'∞'}</div><div class="tm-sub">${st.kb?works.length+(works.length===1?' rundă':' runde')+' × '+fmtClock(st.kb.rs):works.length+' '+(works.length===1?'bloc':'blocuri')+' de lucru'}${st.ph.some(p=>p.k==='manual')?' · rundele se termină când apeși tu':''}</div></div></div></div>
       ${st.ph.some(p=>p.sp)?`<div class="tm-spl">${st.ph.filter(p=>p.sp&&p.k!=='prep').filter((p,i,a)=>i===0||p.l.replace(/\d+\/\d+/,'')!==a[i-1].l.replace(/\d+\/\d+/,'')).slice(0,6).map(p=>`<span><b>${num(p.sp,1)}</b> km/h · ${esc(p.l.replace(/ \d+\/\d+/,''))}</span>`).join('')}</div>`:''}
-      ${st.kb?kbStartNote(st):''}<div class="note" style="text-align:center">Sunetele te anunță la fiecare schimbare, inclusiv cu telefonul blocat (lasă volumul pornit).${st.ph.some(p=>p.sp)?' Vocea îți spune viteza la fiecare bucată.':''}</div>
+      <div class="note" style="text-align:center">Sunetele te anunță la fiecare schimbare, inclusiv cu telefonul blocat (lasă volumul pornit).${st.ph.some(p=>p.sp)?' Vocea îți spune viteza la fiecare bucată.':''}</div>
       <div class="tm-ctl" style="grid-template-columns:1fr"><button class="btn pri xl glow" data-a="tmGo">${ic('play')} Start</button></div></div></div>`; return; }
   if(st.done){
     r.innerHTML=`<div class="tm"><div class="tm-in">${top(st.title)}
@@ -123,16 +122,16 @@ function tmRender(){
         ${st.amrap?`<div class="kpi"><div class="k">Runde</div><div class="v">${st.rounds}</div></div>`:''}
         ${st.laps.length?`<div class="kpi"><div class="k">Runda medie</div><div class="v">${fmtClock(st.laps.reduce((a,b)=>a+b,0)/st.laps.length)}</div></div>`:''}</div>
       ${st.laps.length>1?`<div class="card">${st.laps.map((l,i)=>`<div class="list-row"><span>Runda ${i+1}</span><span class="v">${fmtClock(l)}</span></div>`).join('')}</div>`:''}
-      ${st.kb?kbDoneHTML(st):st.kind==='lt30'?lt30Form(st):st.kind==='tread'&&st.from==null?treadDone(st):''}
+      ${st.kind==='lt30'?lt30Form(st):st.kind==='tread'&&st.from==null?treadDone(st):''}
       <div class="tm-ctl" style="grid-template-columns:1fr">${st.from!=null&&S.sess?`<button class="btn pri xl" data-a="tmApply">${ic('check')} ${st.run?'Folosește timpul: '+num(st.total/60,1)+' min':'Marchează exercițiul ca făcut'}</button>`:''}
         <button class="btn ghost" data-a="tmClose" ${st.kb?'data-confirm="Închizi fără să notezi?"':''}>Închide</button></div></div></div>`; return; }
   const next=st.ph[st.i+1], cls=ph.k==='rest'?'rest':ph.k==='prep'?'prep':'';
   const dots=st.ph.length<=40?`<div class="tm-dots">${st.ph.filter(p=>p.k!=='prep').map((p,i)=>{ const idx=st.ph.indexOf(p); return `<i class="${idx<st.i?'ok':idx===st.i?'cur':''}"></i>`; }).join('')}</div>`:'';
-  r.innerHTML=`<div class="tm ${cls} ${st.kb?'kbt':''}" ${st.kb?`style="--ph:${kbPh((KB_A[st.kb.a]||KB_A.bag).ph)}"`:''}><div class="tm-in">${top(st.title)}
+  r.innerHTML=`<div class="tm ${cls}"><div class="tm-in">${top(st.title)}
     <div class="tm-flash" id="tmFlash" aria-hidden="true"></div>
     <div class="tm-ring">${UI.gauge()}
       <div class="c"><div><div class="tm-lbl">${esc(ph.l)}</div><div class="tm-time" id="tmTime">0:00</div><div class="tm-sub">${esc(ph.s||'')}</div></div></div></div>
-    ${st.kb?kbLive(st,ph)+kbFbHTML(st,ph):''}${ph.sp?`<div class="tm-spd"><b>${num(ph.sp,1)}</b><small>km/h</small><span>${mmss(60/ph.sp)} /km</span></div>`:''}${ph.hr?`<div class="tm-hrz" id="tmHrz">țintă puls ${ph.hr[0]}–${ph.hr[1]}</div>`:''}
+    ${ph.sp?`<div class="tm-spd"><b>${num(ph.sp,1)}</b><small>km/h</small><span>${mmss(60/ph.sp)} /km</span></div>`:''}${ph.hr?`<div class="tm-hrz" id="tmHrz">țintă puls ${ph.hr[0]}–${ph.hr[1]}</div>`:''}
     ${st.amrap&&ph.k==='work'?`<div class="tm-next">Runde: <b id="tmRounds">${st.rounds}</b></div>`:''}
     ${next?`<div class="tm-next">Urmează: <b>${esc(next.l)}</b>${next.d?' · '+fmtClock(next.d):''}${next.sp?' · <b>'+num(next.sp,1)+' km/h</b>':''}</div>`:`<div class="tm-next">Ultimul bloc</div>`}
     ${dots}
@@ -140,6 +139,6 @@ function tmRender(){
       ${ph.k==='manual'?`<button class="btn pri xl glow" style="grid-column:1/-1" data-a="tmLap">${ic('check')} ${st.ph.length===1?'Gata':'Gata runda'}</button>`:''}
       ${st.amrap&&ph.k==='work'?`<button class="btn pri xl" style="grid-column:1/-1" data-a="tmRound">${ic('plus')} Rundă terminată</button>`:''}
       <button class="btn xl" data-a="tmPause">${st.pAt?ic('play')+' Continuă':ic('pause')+' Pauză'}</button>
-      <button class="btn xl ghost" data-a="tmSkip">${ic('skip')} Sari</button>${st.kb?kbCtl(st):''}</div></div></div>`;
+      <button class="btn xl ghost" data-a="tmSkip">${ic('skip')} Sari</button></div></div></div>`;
   tmPaint();
 }
