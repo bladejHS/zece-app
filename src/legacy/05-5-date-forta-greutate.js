@@ -26,7 +26,7 @@ async function removeSet(n,w,r){
 function otherRanges(n,lo,hi){ const out=[]; PLAN.forEach(p=>p.ex.forEach(([nm,pr])=>{ if(nm!==n) return; const m=/^(\d+)×(\d+)(?:–(\d+))?/.exec(pr);
   if(m){ const a=+m[2], b=+(m[3]||m[2]); if(a!==lo||b!==hi) out.push([a,b]); } })); return out; }
 function incFor(n){ return /Leg Press|Hack Squat|Hip Thrust|Romanian Deadlift/.test(n)?5
-  :/Dumbbell|Lateral Raise|Curl|Extension|Pushdown|Face Pull|Calf|Hamstring|Lunge|Fly|Crusher|Shrug|Abduction|Crunch|Split Squat/.test(n)?2:2.5; }
+  :/Dumbbell|Lateral Raise|Curl|Extension|Pushdown|Face Pull|Calf|Hamstring|Lunge|Fly|Deck|Crusher|Shrug|Abduction|Crunch|Split Squat/.test(n)?2:2.5; }
 /* dublă progresie, cu starea de azi luată în calcul */
 /* recomandarea, cu ajustarea acceptată azi aplicată peste ea (fără creșteri / procent din greutate) */
 function suggest(e){
@@ -226,7 +226,7 @@ const EXM={'Bench Press':{piept:1,triceps:.5,umeri:.5},'Pull Up / Lat Pulldown':
   'Dragon Flag':{abdomen:1},'Hanging Leg Raise':{abdomen:1},'Ab Wheel Rollout':{abdomen:1},'Pallof Press':{abdomen:1},'Plank':{abdomen:1},
   /* v19: exercițiile din planul după Milo Wolf */
   'Lat Pulldown':{spate:1,biceps:.5},'Pull Up':{spate:1,biceps:.5},'T-Bar Row':{spate:1,biceps:.5,umeri:.5},'Machine Chest Press':{piept:1,triceps:.5,umeri:.5},'Dumbbell Fly':{piept:1},
-  'Cable Lateral Raise':{umeri:1},'Rear Delt Fly':{umeri:1},'Skull Crusher':{triceps:1},'Preacher Curl':{biceps:1},'Incline Dumbbell Curl':{biceps:1},'Cable Curl':{biceps:1},'Shrug':{spate:.5},
+  'Cable Lateral Raise':{umeri:1},'Rear Delt Fly':{umeri:1},'Skull Crusher':{triceps:1},'Preacher Curl':{biceps:1},'Incline Dumbbell Curl':{biceps:1},'Cable Curl':{biceps:1},'Pec Deck':{piept:1},'Cable Fly':{piept:1},'Hammer Curl':{biceps:1},'Shrug':{spate:.5},
   'Leg Extension':{cvadriceps:1},'Good Morning':{femurali:1,fesieri:.5},'Bulgarian Split Squat':{cvadriceps:1,fesieri:1},'Nordic Curl':{femurali:1},'Hip Abduction Machine':{fesieri:1},'Cable Crunch':{abdomen:1}};
 /* exerciții cu greutatea corpului: progresia e varianta mai grea, nu kilogramele */
 const BW_PROG={'Nordic Curl':'coboară mai lent sau mai jos înainte să te prinzi cu mâinile','Dragon Flag':'coboară mai lent (5–6 s) sau treci de la negative la repetări complete','Hanging Leg Raise':'treci de la genunchi la picioarele întinse','Ab Wheel Rollout':'rulează mai departe sau mai lent, cu spatele drept'};
