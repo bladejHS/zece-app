@@ -229,7 +229,6 @@ document.addEventListener('click',async ev=>{
     case 'shotN': S.shotN=I; render(); return;
     case 'shotDrink': { const s=shotOf(k); if(!s) return; floatText(el,'+'+s.m.k+' kcal'); await addMeal({n:'Shot · '+s.n,k:s.m.k,p:s.m.p,c:s.m.c,g:s.m.g,shot:s.id}); buzz(20); render(); toast('Shot notat',s.n+' · '+s.m.k+' kcal','info'); return; }
     case 'planDay': S.planDay=I; render(); return;
-    case 'mfOrig': await save('mf',Object.assign({},S.mf,{orig:k==='orig'})); render(); buzz(10); return;
     case 'goalSet': if(GOALS[k]){ await save('prof',Object.assign({},S.prof||{},{goalMode:k})); STC=null; render(); buzz(15); toast('Obiectiv: '+GOALS[k].l,'Țintele și planul de mese s-au recalculat.','info'); } return;
     case 'mealEat': { const D=dayPlan(tk), m=D.meals[I]; if(!m) return; floatText(el,'+'+m.k+' kcal');
       await addMeal({n:D.name+' · '+m.n,k:m.k,p:m.p,c:m.c,g:m.g,pl:D.kind+I}); buzz(20); render(); toast('Masă notată',m.n+' · '+m.k+' kcal','info'); return; }

@@ -866,22 +866,17 @@ function nutriToday(){
 function nutriPlan(){
   const tk=todayKey(), off=S.planDay||0, k=dayShift(tk,off), tg=targets(k), D=dayPlan(k,tg), eaten=mlogDay(k);
   const days=Array.from({length:daysBetween(tk,dayShift(mondayOf(tk),13))+1},(_,i)=>{ const dk=dayShift(tk,i); return `<button class="chip ${i===off?'on':''}" data-a="planDay" data-i="${i}">${i===0?'Azi':i===1?'Mâine':DAYS[(parseKey(dk).getDay()+6)%7]+' '+(+dk.slice(8))}</button>`; }).join('');
-  const pct=v=>(v>=1?'+':'−')+Math.abs(Math.round((v-1)*100))+'%';
-  const cards=D.meals.map((m,si)=>{ const done=eaten.some(x=>x.pl===D.kind+si), cr=m.it.find(x=>x.f==='creatina');
+  const cards=D.meals.map((m,si)=>{ const done=eaten.some(x=>x.pl===D.kind+si);
     return `<div class="card mcard ${done?'eaten':''}"><div class="row"><div class="eyebrow sp">${ic(m.icn)} ${esc(m.n)}</div>${done?`<span class="tag rest">${ic('check')} mâncat</span>`:''}</div>
       ${m.note?`<div class="xs mu" style="margin-top:4px">${esc(m.note)}</div>`:''}
       <div class="tags" style="margin-top:8px"><span class="tag lift">${m.k} kcal</span><span class="tag run">P ${m.p} g</span><span class="tag">C ${m.c} g</span><span class="tag">G ${m.g} g</span></div>
-      <div class="ingr">${m.it.map(x=>`<span><b>${mfQty(x.f,x.q)}</b> ${esc(MFD[x.f][0])}${x.opt?' · opțional':''}${!D.orig&&x.q!==x.q0?` <small class="mu2">(plan: ${mfQty(x.f,x.q0)})</small>`:''}</span>`).join('')}</div>
-      ${cr?`<div class="xs mu2" style="margin-top:6px">Creatina: 3–5 g pe zi ajung pentru efect (vezi fila Știință); în plan scrie ${mfQty('creatina',cr.q)}.</div>`:''}
+      <div class="ingr">${m.it.map(x=>`<span><b>${mfQty(x.f,x.q)}</b> ${esc(MFD[x.f][0])}${x.opt?' · opțional':''}</span>`).join('')}</div>
       ${off===0?`<div class="inrow"><button class="btn ${done?'ghost':'pri'} sm" data-a="mealEat" data-i="${si}" ${done?'disabled':''}>${ic('check')} ${done?'Notat':'Am mâncat'}</button></div>`:''}</div>`; }).join('');
   const bar=(l,v,t,c)=>`<div class="kpi"><div class="k">${l}</div><div class="v" style="font-size:20px">${Math.round(v)}<small>/${t}</small></div><div class="bar" style="margin-top:6px;height:5px"><i style="width:${(clamp(t?v/t:0,0,1.2)/1.2*100).toFixed(0)}%;background:${c}"></i></div></div>`;
-  const dK=D.tot.k-tg.kcal;
   return `<div class="card"><div class="row"><div class="eyebrow sp">${ic('bowl')} ${esc(D.name)}</div><span class="tag ${tg.phase.cut?'lift':'rest'}">${esc(tg.phase.label)}</span></div>
     <div class="scrollx" style="margin-top:12px">${days}</div>
-    <div class="seg" role="tablist" style="margin-top:10px"><button class="${D.orig?'':'on'}" data-a="mfOrig" data-k="tinta" role="tab" aria-selected="${!D.orig}">Ajustat la țintă</button><button class="${D.orig?'on':''}" data-a="mfOrig" data-k="orig" role="tab" aria-selected="${D.orig}">Gramaje originale</button></div>
-    <div class="kpis" style="grid-template-columns:repeat(4,1fr)">${bar('kcal',D.tot.k,tg.kcal,TH().ac)}${bar('Proteină',D.tot.p,tg.p,COL().run)}<div class="kpi"><div class="k">Carbo</div><div class="v" style="font-size:20px">${D.tot.c}<small>g</small></div></div><div class="kpi"><div class="k">Grăsimi</div><div class="v" style="font-size:20px">${D.tot.g}<small>g</small></div></div></div>
-    ${D.orig?`<div class="${Math.abs(dK)>150?'easy':'note'}" style="margin-top:12px">${ic('info')} Planul original are <b>${D.tot.k} kcal</b>, ${dK>0?'cu '+dK+' peste':'cu '+(-dK)+' sub'} ținta zilei (${tg.kcal} kcal, ${esc(GOALS[tg.goal].l.toLowerCase())}). Pe „Ajustat la țintă” aceleași mese se potrivesc singure.</div>`
-      :`<div class="note">Aceleași mese și alimente ca în planul tău (${D.base.k} kcal pe foaie). Pentru ținta zilei: carbohidrați <b>${pct(D.sc)}</b>, grăsimi <b>${pct(D.sf)}</b>, proteină <b>${pct(D.sp)}</b>; legumele și suplimentele rămân, iar împărțirea dintre carbohidrați și grăsimi e cea din planul tău. Lângă fiecare aliment schimbat vezi cât scrie în plan.</div>`}
+    <div class="kpis" style="grid-template-columns:repeat(4,1fr)">${bar('kcal',D.tot.k,tg.kcal,TH().ac)}${bar('Proteină',D.tot.p,tg.p,COL().run)}${bar('Carbo',D.tot.c,tg.c,COL().warn)}${bar('Grăsimi',D.tot.g,tg.f,'#B3AECB')}</div>
+    <div class="note">Mesele și alimentele sunt cele din planul tău; cantitățile le calculez din ținta zilei (${esc(GOALS[tg.goal].l.toLowerCase())}): proteina împărțită egal pe mese, ${D.kind==='t'?'carbohidrații strânși în jurul antrenamentului (pre, intra, post), grăsimile departe de el':'carbohidrații mai mulți la prânz și seara'}. Se recalculează singure când se schimbă ținta.</div>
     <div class="xs mu" style="margin-top:8px">${D.kind==='r'?'Zi de odihnă în planul hibrid → planul de odihnă.':'Zi cu antrenament în planul hibrid → planul de antrenament (pre, intra și post-workout).'} Orezul și cartofii se cântăresc fierți, carnea crudă.</div></div>
     ${cards}`;
 }
@@ -922,7 +917,7 @@ function nutriShop(){
         <span class="sl-t">${ic('check')}</span>
         <span class="sp"><span class="sl-n">${esc(it.nm)}</span><span class="sl-s">${it.n===1?'o masă':'în '+it.n+' mese'}${shopHint(it)}</span></span>
         <span class="sl-q">${shopQty(it)}</span></button>`).join('')}</div>`; }).join('');
-  return hero+cats+`<div class="card sl-note"><p class="sm">${ic('info')} Cantitățile vin din planul tău de mese, ${mfOrig()?'cu gramajele originale':'ajustate la ținta fiecărei zile'}: zilele de antrenament iau planul de antrenament, cele de odihnă planul de odihnă. Orezul și cartofii sunt cântăriți fierți (lângă orez vezi cât iei crud), carnea crudă. Rotunjește la ambalaje.</p></div>`+mealPrepCard(); }
+  return hero+cats+`<div class="card sl-note"><p class="sm">${ic('info')} Cantitățile vin din planul de mese, calculate din ținta fiecărei zile: zilele de antrenament iau planul de antrenament, cele de odihnă planul de odihnă. Orezul și cartofii sunt cântăriți fierți (lângă orez vezi cât iei crud), carnea crudă. Rotunjește la ambalaje.</p></div>`+mealPrepCard(); }
 ACT.shopCopy=async()=>{ const D=shopData(), L=D.order.map(c=>{ const a=D.groups[c].filter(x=>!x.on); return a.length?c+'\n'+a.map(x=>'- '+x.nm+': '+shopQty(x)).join('\n'):''; }).filter(Boolean);
   const t='Lista de cumpărături · '+SHOP_RANGE.find(x=>x[0]===D.n)[1].toLowerCase()+'\n\n'+L.join('\n\n');
   try{ await navigator.clipboard.writeText(t); toast('Lista copiată',(D.all-D.got)+' alimente','info'); }catch(e){ toast('Nu pot copia aici','Browserul nu permite copierea.','info'); } };
