@@ -13,7 +13,7 @@ const SWAPS={'Bench Press':['Flat Dumbbell Press','Incline Dumbbell Press'],'Fla
   'Lat Pulldown':['Pull Up / Lat Pulldown','Pull Up'],'Pull Up':['Lat Pulldown','Pull Up / Lat Pulldown'],'T-Bar Row':['Chest Supported Row','Dumbbell Row'],'Machine Chest Press':['Hammer Chest Press','Flat Dumbbell Press'],
   'Dumbbell Fly':['Cable Fly','Pec Deck'],'Pec Deck':['Cable Fly','Dumbbell Fly'],'Cable Fly':['Pec Deck','Dumbbell Fly'],'Hammer Curl':['Cable Curl','Preacher Curl'],'Cable Lateral Raise':['Dumbbell Lateral Raise','Lateral Raise'],'Rear Delt Fly':['Cable Face Pull'],'Skull Crusher':['Tricep Overhead Extension','Tricep Rope Pushdown'],
   'Preacher Curl':['Cable Curl','Incline Dumbbell Curl'],'Incline Dumbbell Curl':['Cable Curl','Preacher Curl'],'Cable Curl':['Incline Dumbbell Curl','Preacher Curl'],'Shrug':['Chest Supported Row'],
-  'Leg Extension':['Leg Press','Bulgarian Split Squat'],'Good Morning':['Romanian Deadlift'],'Bulgarian Split Squat':['Walking Lunge','Leg Press'],'Nordic Curl':['Hamstring Curl'],'Hip Abduction Machine':['Hip Thrust'],'Cable Crunch':['Ab Wheel Rollout','Hanging Leg Raise']};
+  'Leg Extension':['Leg Press','Bulgarian Split Squat'],'Good Morning':['Romanian Deadlift'],'Back Extension':['Romanian Deadlift','Hip Thrust'],'Bulgarian Split Squat':['Walking Lunge','Leg Press'],'Nordic Curl':['Hamstring Curl'],'Hip Abduction Machine':['Hip Thrust'],'Cable Crunch':['Ab Wheel Rollout','Hanging Leg Raise']};
 const LOWER=['cvadriceps','femurali','fesieri','gambe'];
 const regionOf=n=>{ const m=EXM[n]; if(!m) return null; return Object.keys(m).some(k=>m[k]===1&&LOWER.indexOf(k)>=0)?'jos':'sus'; };
 const thrReps=e=>+((/^(\d+) ×/.exec(e.p)||[])[1])||0;

@@ -227,7 +227,7 @@ const EXM={'Bench Press':{piept:1,triceps:.5,umeri:.5},'Pull Up / Lat Pulldown':
   /* v19: exercițiile din planul după Milo Wolf */
   'Lat Pulldown':{spate:1,biceps:.5},'Pull Up':{spate:1,biceps:.5},'T-Bar Row':{spate:1,biceps:.5,umeri:.5},'Machine Chest Press':{piept:1,triceps:.5,umeri:.5},'Dumbbell Fly':{piept:1},
   'Cable Lateral Raise':{umeri:1},'Rear Delt Fly':{umeri:1},'Skull Crusher':{triceps:1},'Preacher Curl':{biceps:1},'Incline Dumbbell Curl':{biceps:1},'Cable Curl':{biceps:1},'Pec Deck':{piept:1},'Cable Fly':{piept:1},'Hammer Curl':{biceps:1},'Shrug':{spate:.5},
-  'Leg Extension':{cvadriceps:1},'Good Morning':{femurali:1,fesieri:.5},'Bulgarian Split Squat':{cvadriceps:1,fesieri:1},'Nordic Curl':{femurali:1},'Hip Abduction Machine':{fesieri:1},'Cable Crunch':{abdomen:1}};
+  'Leg Extension':{cvadriceps:1},'Good Morning':{femurali:1,fesieri:.5},'Back Extension':{femurali:1,fesieri:1},'Cable Crunch':{abdomen:1},'Bulgarian Split Squat':{cvadriceps:1,fesieri:1},'Nordic Curl':{femurali:1},'Hip Abduction Machine':{fesieri:1},'Cable Crunch':{abdomen:1}};
 /* exerciții cu greutatea corpului: progresia e varianta mai grea, nu kilogramele */
 const BW_PROG={'Nordic Curl':'coboară mai lent sau mai jos înainte să te prinzi cu mâinile','Dragon Flag':'coboară mai lent (5–6 s) sau treci de la negative la repetări complete','Hanging Leg Raise':'treci de la genunchi la picioarele întinse','Ab Wheel Rollout':'rulează mai departe sau mai lent, cu spatele drept'};
 function muscleSets(from,to){ const m={}, by={}; MUSC.forEach(([k])=>{ m[k]=0; by[k]={}; });

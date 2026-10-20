@@ -53,6 +53,7 @@ const MILO_CUE={
   'Calf Raise':'Genunchii întinși (gastrocnemianul crește mai mult decât la șezut), pauză de 1–2 s jos, în stretch maxim. După eșec, jumătăți de repetare jos.',
   'Seated Calf Raise':'Pauză de 1–2 s jos; la gambe, varianta cu genunchii întinși crește mai mult — folosește-o pe aceea când poți.',
   'Hanging Leg Raise':'Fără balans; rotunjește bazinul spre piept (flexia coloanei lucrează abdomenul), până la eșec tehnic.',
+  'Back Extension':'La 45°: cobori cât poți de jos cu spatele neutru (femuralii și fesierii întinși), urci din șold. Când trec 12 repetări, ții o ganteră sau un disc la piept.',
   'Cable Crunch':'Rotunjește coloana (de la cutia toracică spre bazin), nu te îndoi din șold. Sus, abdomenul se întinde complet.',
   'Dragon Flag':'Până la eșec tehnic, cu negative lente.',
   'Ab Wheel Rollout':'Cât mai întins în față (stretch în abdomen), până la eșec tehnic.',

@@ -9,75 +9,71 @@ const WEEKS=4;
    iar ședințele rămân scurte), fiecare mușchi de 2–3 ori pe săptămână, ~10–15 seturi directe pe săptămână, cel mult ~11 pe ședință,
    repetări 5–15 la compuse și 10–20 la izolare, exerciții cu tensiune în poziția întinsă.
    Alergarea: 2 × Easy Z2 ca a doua sesiune, la ~6 ore după forță, în zilele fără compuse de picioare; pragul marți, la ≥24 h de orice zi de picioare.
-   v21: specializare pe piept și brațe (sunt rămase în urmă): ~16 seturi directe de piept, ~12 de biceps și ~12 de triceps pe săptămână, fiecare de 4 ori,
-   puse la începutul ședinței; spatele, umerii din față și gambele scad la volum de întreținere (Wolf: ~1/3 din volum menține masa).
+   v22: înapoi la planul full body inițial, cu Skull Crusher, Good Morning și Nordic Curl înlocuite (extensie deasupra capului la cablu,
+   Back Extension la 45°, Hamstring Curl la șezut) și abdomenul obligatoriu în 4 ședințe: ~12 seturi pe săptămână, cu stretch și greutate.
    Pauze: izolare 90 s, compuse sus 150 s, compuse grele de picioare 180 s. Vineri recuperare, duminică odihnă. Easy-urile luni și joi. */
 const PLAN=[
  {t:'Full body A + Easy run',cat:'mix',min:100,run:'ez1',lift:[['cal',65]],ex:[
-  ['Incline Dumbbell Press','4×6–10 · pauză 150s — primul, cât ești proaspăt; banca la 30–45°, ganterele coboară adânc'],
+  ['Incline Dumbbell Press','3×6–10 · pauză 150s — banca la 30–45°, ganterele coboară adânc'],
   ['Chest Supported Row','3×6–10 · pauză 150s — brațele complet întinse jos'],
-  ['Tricep Overhead Extension','3×8–12 · pauză 90s — cotul sus, tricepsul întins jos'],
-  ['Cable Curl','3×10–15 · pauză 90s — Bayesian: cablul în spatele corpului, bicepsul întins jos'],
-  ['Lat Pulldown','2×8–12 · pauză 120s — priză îngustă sau supinată'],
+  ['Lat Pulldown','3×8–12 · pauză 120s — priză îngustă sau supinată'],
+  ['Seated Overhead Press','2×8–12 · pauză 120s'],
   ['Leg Extension','3×10–15 · pauză 90s — spătarul lăsat pe spate'],
   ['Hamstring Curl','3×10–15 · pauză 90s — la șezut, aplecat în față'],
-  ['Calf Raise','2×8–12 · pauză 90s — genunchii întinși, 1–2 s jos'],
-  ['Easy run Z2','30 min · ritm conversațional, zona 2'],
-  ['Cable Crunch','3×10–15 · pauză 60s — rotunjește coloana, nu îndoi din șold']]},
+  ['Calf Raise','3×8–12 · pauză 90s — genunchii întinși, 1–2 s jos'],
+  ['Cable Crunch','3×10–15 · pauză 60s — sus lași abdomenul să se întindă complet, apoi rotunjești coloana; nu îndoi din șold'],
+  ['Easy run Z2','30 min · ritm conversațional, zona 2']]},
  {t:'Threshold run',cat:'run',min:50,run:'thr',lift:[],ex:[
   ['Warm up','10–15 min alergare ușoară + drills'],
   ['Threshold','4 × 6:00 @ ritm de prag · pauză 90s jog ușor'],
   ['Cool down','10 min alergare ușoară']]},
- {t:'Full body B · piept, brațe + picioare grele',cat:'lift',min:85,lift:[['cal',70]],ex:[
-  ['Dumbbell Fly','3×10–15 · pauză 90s — întâi pieptul și brațele (prioritate); stretch adânc, coatele ușor îndoite'],
-  ['Skull Crusher','3×8–12 · pauză 90s — bara coboară în spatele capului'],
-  ['Preacher Curl','3×8–12 · pauză 90s — brațul complet întins jos'],
+ {t:'Full body B · picioare grele',cat:'lift',min:80,lift:[['cal',70]],ex:[
   ['Hack Squat','3×5–8 · pauză 180s — cât mai jos, pauză scurtă jos'],
   ['Romanian Deadlift','3×6–10 · pauză 180s — până puțin sub genunchi, fără eșec'],
   ['Hip Abduction Machine','2×12–20 · pauză 60s — aplecat în față'],
   ['Cable Lateral Raise','3×10–15 · pauză 90s — cablul la nivelul mâinii, din spatele corpului'],
-  ['Hanging Leg Raise','3×8–15 · pauză 60s — genunchii la piept, apoi picioarele întinse']]},
+  ['Tricep Overhead Extension','3×8–12 · pauză 90s — cotul sus, tricepsul întins jos'],
+  ['Preacher Curl','3×8–12 · pauză 90s'],
+  ['Hanging Leg Raise','3×8–15 · pauză 60s — ridici bazinul spre piept (rotunjești spatele jos), nu doar picioarele']]},
  {t:'Full body C + Easy run',cat:'mix',min:100,run:'ez2',lift:[['cal',65]],ex:[
-  ['Machine Chest Press','3×8–12 · pauză 150s — primul; coborâre adâncă, pieptul întins'],
-  ['Pec Deck','3×10–15 · pauză 90s — brațele larg în spate, stretch, apoi jumătăți de repetare la final'],
+  ['Machine Chest Press','3×8–12 · pauză 150s'],
   ['Pull Up / Lat Pulldown','3×6–12 · pauză 150s — atârnare completă la fiecare repetare'],
-  ['Tricep Overhead Extension','3×10–15 · pauză 90s — la cablu sau gantera'],
-  ['Incline Dumbbell Curl','3×10–15 · pauză 90s — bancă la ~45°, brațele atârnă în spate'],
-  ['T-Bar Row','2×8–12 · pauză 120s — cu sprijin la piept, dacă ai'],
+  ['T-Bar Row','3×8–12 · pauză 120s — cu sprijin la piept, dacă ai'],
+  ['Dumbbell Fly','3×10–15 · pauză 90s — stretch adânc, coatele ușor îndoite'],
   ['Rear Delt Fly','2×12–20 · pauză 90s — la cablu, cruce în fața corpului'],
-  ['Hamstring Curl','2×10–15 · pauză 90s — la șezut, aplecat în față'],
-  ['Calf Raise','2×10–15 · pauză 90s — genunchii întinși, 1–2 s jos'],
-  ['Easy run Z2','30 min · ușor — e flush, nu antrenament'],
-  ['Ab Wheel Rollout','3×6–12 · pauză 60s']]},
+  ['Hamstring Curl','3×10–15 · pauză 90s — la șezut, aplecat în față'],
+  ['Calf Raise','3×10–15 · pauză 90s — genunchii întinși, 1–2 s jos'],
+  ['Ab Wheel Rollout','3×6–12 · pauză 60s — cât mai departe cu spatele neutru; din genunchi la început'],
+  ['Easy run Z2','30 min · ușor — e flush, nu antrenament']]},
  {t:'Recovery & Mobility',cat:'rest',min:40,lift:[],ex:[
   ['Light walk / easy bike','5–10 min'],
   ['Mobility flow','10–15 min · full body'],
   ['Stretching','10–15 min · ține fiecare întindere 45–60s'],
   ['Foam roll / trigger point','după nevoie'],
   ['Deep breathing / mindset reset','5 min']]},
- {t:'Full body D · piept, brațe + picioare grele',cat:'lift',min:85,lift:[['cal',70]],ex:[
-  ['Cable Fly','3×12–15 · pauză 90s — întâi pieptul și brațele; cablurile de jos în sus sau la nivelul umerilor, stretch larg'],
-  ['Skull Crusher','3×8–12 · pauză 90s — cu gantere sau bară EZ'],
-  ['Hammer Curl','3×8–12 · pauză 90s — brahialul îngroașă brațul văzut din față'],
-  ['Good Morning','3×6–10 · pauză 180s — la Smith, genunchii aproape întinși'],
-  ['Bulgarian Split Squat','3×6–10 pe picior · pauză 120s — la Smith, genunchiul din spate aproape de sol'],
+ {t:'Full body D · picioare grele',cat:'lift',min:80,lift:[['cal',70]],ex:[
+  ['Bulgarian Split Squat','3×6–10 pe picior · pauză 150s — la Smith, genunchiul din spate aproape de sol'],
+  ['Back Extension','3×8–12 · pauză 120s — la 45°, cobori adânc cu spatele neutru, urci din șold; greutate la piept când devine ușor'],
   ['Leg Press','2×10–15 · pauză 120s — cât mai jos fără să se rotunjească spatele'],
-  ['Nordic Curl','2×3–6 · pauză 120s — coborâre lentă; protejează femuralii la alergare'],
-  ['Cable Lateral Raise','3×12–20 · pauză 90s']]},
+  ['Hamstring Curl','3×10–15 · pauză 90s — la șezut, aplecat în față (cel mai bun exercițiu pentru femurali)'],
+  ['Cable Lateral Raise','3×12–20 · pauză 90s'],
+  ['Tricep Overhead Extension','3×10–15 · pauză 90s — la cablu, cu frânghia, cu spatele la aparat'],
+  ['Incline Dumbbell Curl','3×10–15 · pauză 90s'],
+  ['Cable Crunch','3×10–15 · pauză 60s — greutate mai mare decât luni, 8–12 repetări']]},
  {t:'Odihnă & mobilitate',cat:'rest',min:30,lift:[],ex:[
   ['Light walk / easy bike','20–30 min ușor, sau doar plimbare'],
   ['Mobility flow','10 min · full body'],
   ['Deep breathing / mindset reset','5 min']]}
 ];
 /* v19: versiunea planului; la prima pornire cu planul nou începe un ciclu nou (bifele vechi rămân în ciclul lor) */
-const PLAN_V='milo3';
+const PLAN_V='milo4';
 async function planMigrate(){ const P=prof(); if(P.planV===PLAN_V) return;
   const c=cyc(), any=Object.keys(S.wlog||{}).some(k=>k.indexOf('hc'+c+'w')===0&&Object.keys(S.wlog[k]||{}).some(e=>e!==SPLIT_MK));
   if(any) await save('cyc',Object.assign({},S.cyc||{},{h:c+1,t:Date.now()}));
   if(S.sess){ S.sess=null; await store.set(K.sess,null); }
   await save('prof',Object.assign({},S.prof||{},{planV:PLAN_V,exSwap:{}})); STC=null; }
-/* abdomenul de la final e opțional; [zi, câte exerciții obligatorii are ziua înainte] */
-const PLAN_ABS=[[0,9],[2,7],[3,10]];
+/* v22: abdomenul face parte din plan (Wolf: îl antrenezi ca pe orice mușchi), deci nu mai e nicio zi cu exerciții opționale; [zi, câte exerciții obligatorii] */
+const PLAN_ABS=[];
 /* v10: abdomenul e opțional — o zi e completă când sunt bifate exercițiile de dinaintea lui */
 const absFrom=d=>{ const pa=PLAN_ABS.find(a=>a[0]===d); return pa?pa[1]:PLAN[d].ex.length; };
 const optX=(d,x)=>x>=absFrom(d);
@@ -107,31 +103,30 @@ async function migSplit(){
     s.cur=splitX(s.cur); s[SPLIT_MK]=1; await store.set(K.sess,s); }
   try{ localStorage.setItem('zece3:m16','1'); }catch(e){} }
 const NOTES=[
- {wk:'Full body A — piept întâi, brațe, spate, izolare picioare + alergare ușoară',d:[
+ {wk:'Full body A — compusele de sus, izolarea picioarelor, abdomen + alergare ușoară',d:[
   ['De ce full body','Wolf își face singur antrenamentele full body: fiecare mușchi de 2–3 ori pe săptămână, seturile împărțite pe mai multe zile (primele seturi dintr-o ședință cresc cel mai mult), ședințe mai scurte. Azi compusele pentru partea de sus și izolarea pentru picioare, ca să poți alerga diseară.'],
   ['Cum lucrezi','Primul set al fiecărui exercițiu la 2–3 repetări în rezervă, ultimul la 0–1. Coborâre controlată 2–3 s, pauză scurtă în poziția întinsă, urcare explozivă, fără pauză sus.'],
-  ['Piept și brațe','Sunt prioritatea ta: apar în toate cele 4 ședințe, mereu la început, cât ești proaspăt (Wolf: mușchiul rămas în urmă îl lucrezi primul și mai des). Ultimul set la eșec, apoi 3–5 jumătăți de repetare în stretch.'],
-  ['Superseturi','Dacă ai puțin timp: tricepsul cu bicepsul, împinsul cu ramatul, extensiile cu flexiile, alternativ, cu 60–90 s între ele (aceeași creștere în ~jumătate din timp).'],
+  ['Superseturi','Dacă ai puțin timp: împinsul cu ramatul, extensiile cu flexiile, alternativ, cu 60–90 s între ele (aceeași creștere în ~jumătate din timp).'],
+  ['Abdomenul (Wolf)','Îl antrenezi ca pe orice mușchi: de 4 ori pe săptămână, ~12 seturi, aproape de eșec, cu amplitudine completă și stretch (coloana se întinde sus la cable crunch, corpul se lungește la ab wheel), și cu greutate care crește. Ridicările de picioare lucrează abdomenul doar dacă rotunjești bazinul. Pătrățelele se văd când scade grăsimea: abdomenul nu „arde” grăsimea de pe burtă.'],
   ['Alergarea','Easy run-ul e a doua sesiune, la ~6 ore după forță. Zona 2, poți vorbi în propoziții întregi.']]},
  {wk:'Pragul lactic — sesiunea-cheie de alergare',d:[
   ['Coaching','Ritm controlat și puternic, reprize egale, relaxat. Calitate peste cantitate.'],
   ['Progresie','Săptămânile 1–3: 4, 5, apoi 6 reprize. La fiecare ciclu nou repriza crește cu 30 s, până la 7 min; apoi progresezi prin ritm (refaci testul de prag).'],
   ['De ce marți','Ieri picioarele au făcut doar izolare, iar compusele grele vin abia mâine: pragul e la peste 24 de ore de ele (Norton: interferența dispare la ≥24 h).']]},
- {wk:'Full body B — piept și brațe întâi, apoi picioarele grele',d:[
+ {wk:'Full body B — picioarele grele, izolarea de sus, abdomen',d:[
   ['Cum lucrezi','Hack squat și RDL la 1–2 repetări în rezervă, fără eșec (eșecul la compusele grele de picioare costă mult și aduce puțin). Izolările de sus: ultimul set la eșec, apoi 3–5 jumătăți de repetare în partea întinsă.'],
-  ['Ordinea','Pieptul și brațele întâi (prioritatea ta), apoi picioarele. Izolarea de sus nu obosește picioarele: hack squat-ul rămâne greu.'],
+  ['Ordinea','Compusele întâi, cât ești proaspăt; brațele și umerii nu suferă după picioare.'],
   ['Mâine','Joi doar izolare la picioare (flexii, gambe), cu greutăți moderate: frecvența mare ajută, iar easy run-ul de seară e ușor.']]},
- {wk:'Full body C — piept întâi, brațe, spate + alergare ușoară',d:[
+ {wk:'Full body C — compusele de sus, izolarea picioarelor, abdomen + alergare ușoară',d:[
   ['Cum lucrezi','Repetări ceva mai multe decât luni (8–15). Aparatele și cablurile sunt sigure până la eșec: acolo mergi la 0 pe ultimul set și continui cu jumătăți de repetare în stretch.'],
   ['Spatele','Tracțiunile cu atârnare completă jos; ramatul cu brațele complet întinse și omoplații depărtați. Fără pauză în contracție.'],
   ['Alergarea','Easy run-ul la ~6 ore după forță, ușor — e flush, nu antrenament.']]},
  {wk:'Recuperare — 30–45 min, intensitate mică',d:[
   ['Coaching','Mișcare cu intenție, nu cu intensitate. Somn 7–9 ore, mâncare bună, apă.'],
   ['Progresie','Notezi cum te simți și cum recuperezi în fiecare săptămână.']]},
- {wk:'Full body D — piept și brațe întâi, apoi picioarele grele',d:[
-  ['Ordinea','Pieptul și brațele întâi, apoi picioarele. Hammer curl lucrează brahialul: brațul arată mai gros din față.'],
-  ['Cum lucrezi','Good morning și fandarea bulgărească la Smith: stabile, poți merge aproape de eșec în siguranță. Ultimul set la presă până la eșec.'],
-  ['Nordic Curl','Pentru alergare: reduce accidentările femuralilor. Coborâre cât mai lentă, te prinzi cu mâinile jos, urci ajutându-te.'],
+ {wk:'Full body D — picioarele, izolarea de sus, abdomen',d:[
+  ['Cum lucrezi','Fandarea bulgărească la Smith întâi, la 1–2 repetări în rezervă. Back extension la 45°: hinge ca la RDL, dar cu încărcare mică pe spate, după alergare e mai blând. Ultimul set la presă până la eșec.'],
+  ['Femuralii','Flexiile la șezut sunt exercițiul preferat al lui Wolf pentru femurali: îi lucrează întinși (aplecat în față). Partea excentrică lentă ajută și la protecția lor la alergare.'],
   ['Weekend','Mâine e odihnă, apoi luni doar izolare la picioare: ajung odihnite la pragul de marți.']]},
  {wk:'Odihnă — plimbare și mobilitate',d:[
   ['Coaching','Zi liberă de antrenament. O plimbare de 20–30 min ajută la pași și la recuperare.'],
