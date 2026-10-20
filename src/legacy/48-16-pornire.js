@@ -27,7 +27,7 @@ async function loadAll(){
   else S.aiChat=o.aiChat&&Array.isArray(o.aiChat.msgs)?Object.assign({tools:{}},o.aiChat):null;
   await migrate(); await cfAchFix(); await planAbsMigrate(+o.planV||0);
   STC=null; S.loaded=true;
-  await migSplit(); await mealsMigrate(); try{ await nAdaptRun(); }catch(e){} try{ aiWeekAuto(); }catch(e){}
+  await migSplit(); await mealsMigrate(); await miloMigrate(); try{ await nAdaptRun(); }catch(e){} try{ aiWeekAuto(); }catch(e){}
 }
 /* migrări de date, la fiecare încărcare (și după import sau sincronizare):
    v8 scoate „câte repetări mai puteai" (RIR) din serii: o serie rămâne [kg, repetări] (+ tipul, ca text, la drop set / rest-pause) */

@@ -39,7 +39,7 @@ function sciProto(){ const w=Math.round(+curW()||+prof().startW||80), tg=targets
     ['moon','Somn','8–9 h în pat','oră fixă de trezire; fără sesiuni grele devreme după o noapte scurtă'],
     ['drop','Apă',num(tg.water/1000,1)+' L','+ sare sau electroliți după antrenamentele cu transpirație mare'],
     ['bowl','Între 2 sesiuni grele','~'+Math.round(w*.8)+' g carbo + '+Math.round(w*.3)+' g proteină/oră','2–3 ore, doar dacă ambele sesiuni sunt grele; după forță + Z2 ușor ajunge o masă normală'],
-    ['scale','Ritm de slăbire','~'+num(w*.007,2)+' kg/săpt.','0,7% din greutate; între 0,5 și 1%']]; }
+    ['scale','Ritm de slăbire','~'+num(w*.005,2)+' kg/săpt.','0,5% din greutate (Milo Wolf, Murphy); Norton: 0,4–0,8%, maxim 1%']]; }
 
 function viewSci(){ const sec=S.sciSec||'all', D=sciDiag(), ok=D.filter(x=>x.ok===true).length, known=D.filter(x=>x.ok!=null).length;
   const L=SCI.filter(x=>sec==='all'||x.s===sec);

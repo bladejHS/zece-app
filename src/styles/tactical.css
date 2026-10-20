@@ -362,3 +362,10 @@ html[data-mode="light"] .card{background:var(--glass)}
 .tac-bk{display:flex;flex-direction:column;gap:2px;padding:10px 0;border-top:1px solid var(--ln)}
 .tac-bk:first-of-type{border-top:0}
 .tac-bk span{font-size:13px;color:var(--mu);line-height:1.45}
+
+/* v18 · Dr. Milo Wolf: indicația de execuție la fiecare exercițiu și cardul cu regulile seriilor din Plan */
+.ex-mw{color:var(--mu);line-height:1.4}
+.ex-mw .i{width:12px;height:12px;color:var(--ac);vertical-align:-1px}
+.mw-card summary{display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;list-style:none}
+.mw-card summary::-webkit-details-marker{display:none}
+.mw-card[open] summary{margin-bottom:6px}

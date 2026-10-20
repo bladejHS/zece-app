@@ -181,6 +181,7 @@ function techHTML(){
   const t=S.tech[n], cue=(c,i)=>`<div class="cue"><b>${i+1}</b><span>${esc(c)}</span></div>`, bad=c=>`<div class="cue"><span class="xi">${ic('x')}</span><span>${esc(c)}</span></div>`;
   return `<div class="eyebrow">${ic('info')} Ghidul exercițiului</div><div class="h2" style="margin-top:6px">${esc(n)}</div>
     <div class="chips" style="margin-top:12px">${g.m.map(m=>`<span class="tag lift">${esc(m)}</span>`).join('')}</div>
+    ${miloCue(n)?`<div class="easy" style="margin-top:12px">${ic('bolt')} <b>Dr. Milo Wolf:</b> ${esc(miloCue(n))}</div>`:''}
     <div class="dsec"><h4>Execuție</h4>${g.c.map(cue).join('')}</div>
     <div class="dsec"><h4>Greșeli frecvente</h4>${g.x.map(bad).join('')}</div>
     <div class="easy" style="margin-top:12px">${ic('alert')} ${esc(g.s)}</div>

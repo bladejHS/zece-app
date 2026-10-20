@@ -10,6 +10,6 @@ function planExHTML(w,d,day){
       :sp&&e.kind==='run'?`<div class="ses-h"><b>SESSION 2</b><span>Easy Run Z2 · la ~6 ore după forță</span></div>`:'';
     return `${hd}${e.opt&&!prev.opt?`<div class="ex-opt-h"><b>${ic('plus')} Abdomen · opțional</b><span>Nu contează la ziua completă: îl faci când ai chef.</span></div>`:''}<div class="ex ${on?'done':''} ${e.opt?'opt':''}">
       <button class="tick ${on?'on':''}" data-a="tick" data-w="${w}" data-d="${d}" data-x="${e.x}" aria-label="${on?'Debifează':'Bifează'} ${esc(e.n)}">${ic('check')}</button>
-      <div class="sp"><div class="ex-n">${esc(e.n)}</div><div class="ex-p">${esc(e.p)}</div>${lastLine(e)}${exNote(e.n)?`<div class="ex-l ex-nt">${ic('edit')} ${esc(exNote(e.n))}</div>`:''}</div>
+      <div class="sp"><div class="ex-n">${esc(e.n)}</div><div class="ex-p">${esc(e.p)}</div>${e.kind==='lift'&&miloCue(e.n)?`<div class="ex-l ex-mw">${ic('bolt')} ${esc(miloCue(e.n))}</div>`:''}${lastLine(e)}${exNote(e.n)?`<div class="ex-l ex-nt">${ic('edit')} ${esc(exNote(e.n))}</div>`:''}</div>
       ${e.kind==='lift'?`<button class="xb" data-a="tech" data-k="${esc(e.n)}" aria-label="Tehnică pentru ${esc(e.n)}">${ic('info')}</button>`:''}</div>`; }).join('');
 }

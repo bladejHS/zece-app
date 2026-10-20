@@ -108,11 +108,13 @@ function bfOf(w){ const P=prof(); if(+P.bf) return clamp(+P.bf,3,60);
 function bmrAll(w){ const P=prof(), f=P.sex==='f', F=w*(1-bfOf(w)/100);
   return {ffm:F,mifflin:Math.round(10*w+6.25*P.h-5*P.age+(f?-161:5)),harris:Math.round(f?447.593+9.247*w+3.098*P.h-4.33*P.age:88.362+13.397*w+4.799*P.h-5.677*P.age),
     cunningham:Math.round(500+22*F),katch:Math.round(370+21.6*F)}; }
-/* v18: obiectivul, după cărțile tale (Fat Loss Forever și The Complete Contest Prep Guide — Norton & Baker, ghidul de nutriție Y3T, Chris Aceto):
-   cut 0,6% din greutate pe săptămână (intervalul 0,4–0,8%, maxim 1%) și 2,4 g proteină/kg masă slabă;
-   recompoziție −0,25% pe săptămână și 2,6 g/kg masă slabă; lean bulk +0,25% pe săptămână și 2,0 g/kg masă slabă.
-   Proteina nu coboară sub 1,6 g/kg corp. Deficitul (sau surplusul) implicit vine din ritm, la 7700 kcal/kg. */
-const GOALS={cut:{l:'Cut',rate:-.006,pk:2.4},recomp:{l:'Recompoziție',rate:-.0025,pk:2.6},bulk:{l:'Lean bulk',rate:.0025,pk:2}};
+/* v18: obiectivul, după Layne Norton (Fat Loss Forever, The Complete Contest Prep Guide) și Dr. Milo Wolf (canalul lui de YouTube):
+   cut 0,5% din greutate pe săptămână (Murphy: ~500 kcal deficit păstrează masa; Norton: 0,4–0,8%, maxim 1%);
+   recompoziție −0,25% pe săptămână (menținere sau deficit mic); lean bulk 0,75% pe LUNĂ (Wolf: 0,5–1%/lună).
+   Proteina (Wolf: ≥2,35 g/kg, mai mult în cut) se socotește pe „greutatea de referință” — masa slabă la ~15% grăsime, ca la o greutate mare
+   să nu iasă absurd de mult. Deficitul (sau surplusul) implicit vine din ritm, la 7700 kcal/kg. */
+const GOALS={cut:{l:'Cut',rate:-.005,pk:2.6},recomp:{l:'Recompoziție',rate:-.0025,pk:2.5},bulk:{l:'Lean bulk',rate:.00175,pk:2.35}};
+const refKg=(w,ffm)=>Math.min(w,ffm/.85);
 const goalMode=()=>GOALS[prof().goalMode]?prof().goalMode:'cut';
 const autoDef=w=>Math.round(-w*GOALS[goalMode()].rate*7700/7/50)*50;
 /* energia cheltuită la antrenamentul zilei d din săptămâna w, kcal (MET net × 3,5 × kg / 200 pe minut) + activitățile notate în ziua k */
@@ -180,16 +182,16 @@ function targets(day){
   const sc=clamp(tdee/est,.5,1), m0=mondayOf(k);
   const exWk=Math.round(Array.from({length:7},(_,i)=>{ const kk=dayShift(m0,i), x=kk===k?dt:nutriDay(kk); return exKcalOf(x.w,x.d,kk,w); }).reduce((a,x)=>a+x,0)/7*metabF()*sc);
   const def=ph.goal==='cut'?(ph.cut?(+P.def||autoDef(w)):0):autoDef(w), goal=Math.max(Math.round(bmrR*1.1/50)*50,Math.round((tdee-def)/50)*50);
-  const wkFloor=def>0?Math.ceil(Math.max(COACH.KCAL_FLOOR[sex],Math.round(tdee*(1-NUTRI.MAX_DEFICIT)),Math.round(NUTRI.EA_MIN[sex]*ffm+exWk))/50)*50:0;
+  const wkFloor=def>0?Math.ceil(Math.max(COACH.KCAL_FLOOR[sex],Math.round(tdee*(1-NUTRI.MAX_DEFICIT)),Math.round(NUTRI.EA_MIN[sex]*ffm+exWk),Math.round(30*ffm))/50)*50:0;
   const auto=Math.max(goal,wkFloor), kcal=+P.kcalT||auto;
-  /* proteina pe masa slabă, după obiectiv (Fat Loss Forever, tabelul 1), cel puțin 1,6 g/kg corp */
-  const p=+P.protT||Math.max(Math.round(GOALS[ph.goal].pk*ffm),Math.round(1.6*w)); /* v18: dietă cu puține grăsimi, la cererea utilizatorului: ~20% din calorii, cel puțin 0,6 g/kg masă slabă; restul, carbohidrați */
-  let f=Math.max(Math.round(kcal*.2/9),Math.round(.6*ffm)), c=Math.round((kcal-p*4-f*9)/4);
+  /* proteina: g/kg din greutatea de referință, după obiectiv (Wolf: 2,35 minim, spre 3 în cut); pragul de jos al caloriilor: 30 kcal/kg masă slabă (Wolf, RED-S) */
+  const rk=refKg(w,ffm), p=+P.protT||Math.round(GOALS[ph.goal].pk*rk); /* v18: dietă cu puține grăsimi, la cererea utilizatorului: ~20% din calorii, cel puțin 0,6 g/kg masă slabă; restul, carbohidrați */
+  let f=Math.max(Math.round(kcal*.2/9),Math.round(.5*rk)), c=Math.round((kcal-p*4-f*9)/4);
   if(c<80){ f=Math.max(Math.round(.5*ffm),Math.round((kcal-p*4-320)/9)); c=Math.max(0,Math.round((kcal-p*4-f*9)/4)); }
   const exKcal=Math.round(exKcalOf(dt.w,dt.d,k,w)*metabF()*sc);
-  const per=NUTRI.periodize(Object.assign({base:{kcal,p,c,f},dayType:dt.type,sex,weightKg:w,fatMinG:Math.round(.6*ffm),tdee,cut:def>0,weekMean:NUTRI_MEAN(),ffmKg:ffm,exerciseKcal:exKcal,weekly:true},ci));
+  const per=NUTRI.periodize(Object.assign({base:{kcal,p,c,f},dayType:dt.type,sex,weightKg:w,fatMinG:Math.round(.5*rk),tdee,cut:def>0,weekMean:NUTRI_MEAN(),ffmKg:ffm,exerciseKcal:exKcal,weekly:true},ci));
   const hyd=NUTRI.hydration({weightKg:w,minutes:dt.minutes+dt.extMin,intensity:dt.intensity});
-  return {kcal:per.kcal,p:per.p,f:per.f,c:per.c,water:+P.waterT||hyd.totalMl,hyd,day:dt,per,base:{kcal,p,c,f},bmr,tdee,est,measured:useM,ms,auto,manual:!!P.kcalT,phase:ph,eq,def,A,autoDef:autoDef(w),exKcal,ffm:Math.round(ffm),adj,metab:metabF(),bmrR,exWk,wkFloor,raised:!P.kcalT&&wkFloor>goal,bf:Math.round(bfOf(w)),goal:ph.goal,rateT:Math.round(-(P.kcalT?0:def)*7/7700*100)/100,w};
+  return {kcal:per.kcal,p:per.p,f:per.f,c:per.c,water:+P.waterT||hyd.totalMl,hyd,day:dt,per,base:{kcal,p,c,f},bmr,tdee,est,measured:useM,ms,auto,manual:!!P.kcalT,phase:ph,eq,def,A,autoDef:autoDef(w),exKcal,ffm:Math.round(ffm),adj,metab:metabF(),bmrR,exWk,wkFloor,raised:!P.kcalT&&wkFloor>goal,bf:Math.round(bfOf(w)),goal:ph.goal,ref:Math.round(rk),rateT:Math.round(-(P.kcalT?0:def)*7/7700*100)/100,w};
 }
 /* v17: ținta medie a săptămânii (luni–duminică): zilele intense primesc mai mult, cele de odihnă mai puțin, media rămâne baza */
 function weekTargets(k){ const m0=mondayOf(k||todayKey()), a=Array.from({length:7},(_,i)=>{ const kk=dayShift(m0,i), t=targets(kk); return {k:kk,kcal:t.kcal,type:t.day.type}; });
