@@ -1,6 +1,7 @@
 /* =====================================================================
-   v18 · MESELE — zilele din planul tău (antrenament: 6 mese + intra; odihnă: 6 mese), doar alimentele, fără gramajele de pe foaie.
-   Ziua de odihnă din planul hibrid ia planul de odihnă, orice altă zi pe cel de antrenament.
+   v18 · MESELE — zilele din planul tău, doar alimentele, fără gramajele de pe foaie.
+   v20: cel mult 4 mese pe zi (antrenament: 4 mese + băutura intra; odihnă: 4 mese), cu aceleași alimente; Norton: 3–5 mese cu proteină.
+   Ziua de odihnă din plan ia planul de odihnă, orice altă zi pe cel de antrenament.
    Cantitățile le calculează aplicația din ținta zilei (obiectivul din Tactică: cut, recompoziție, lean bulk).
    Aliment: [nume, kcal, proteină, carbohidrați, grăsimi (la 100 g sau 100 ml), rol, categorie, unitate, grame pe unitate]
    Rol: p proteină, c carbohidrați, f grăsimi, v legume, x suplimente (nu se scalează).
@@ -37,20 +38,16 @@ const MFD={
 const MFIX={ou:1,legume:100,creatina:5,eaa:10};
 const MPLANS={
   t:{name:'Zi de antrenament',meals:[
-    ['Masa 1','sun','',[1/6,.13,.22],[['ovaz',.75],['fruct',.25],['whey',1],['arahide',1]]],
-    ['Masa 2','flame','',[1/6,.13,.2],[['orez',1],['pui',1],['ulei',1],['legume']]],
-    ['Masa 3','flame','',[1/6,.13,.2],[['orez',1],['pui',1],['ulei',1],['legume']]],
-    ['Masa 4 · pre-workout','bolt','cu 60–90 de minute înainte de antrenament',[1/6,.19,.1],[['crema',.6],['whey',1],['fruct',.15],['rondea',.1],['arahide',1],['miere',.15]]],
-    ['Intra-workout','drop','în timpul antrenamentului, în apă',[0,.08,0],[['creatina'],['eaa'],['dextrina',1]]],
-    ['Masa 5 · post-workout','star','după antrenament',[1/6,.22,0],[['corn',.7],['whey',1],['ananas',.3]]],
-    ['Masa 6','moon','',[1/6,.12,.28],[['albus',1],['ou'],['rondea',1],['arahide',1]]]]},
+    ['Masa 1','sun','dimineața',[1/4,.2,.35],[['ovaz',.75],['fruct',.25],['whey',1],['arahide',1]]],
+    ['Masa 2','flame','prânzul',[1/4,.2,.35],[['orez',1],['pui',1],['ulei',1],['legume']]],
+    ['Masa 3 · pre-workout','bolt','cu 60–90 de minute înainte de antrenament',[1/4,.27,.1],[['crema',.6],['whey',1],['fruct',.15],['rondea',.1],['arahide',1],['miere',.15]]],
+    ['Intra-workout','drop','băutură în timpul antrenamentului, în apă (nu e masă)',[0,.08,0],[['creatina'],['eaa'],['dextrina',1]]],
+    ['Masa 4 · post-workout','star','după antrenament, ca cină',[1/4,.25,.2],[['orez',.6],['ananas',.4],['pui',.6],['albus',.4],['ou'],['ulei',1],['legume']]]]},
   r:{name:'Zi de odihnă',meals:[
-    ['Masa 1','sun','',[1/6,.12,.28],[['albus',1],['ou'],['avocado',1],['toast',1]]],
-    ['Masa 2','flame','',[1/6,.22,.2],[['orez',1],['pui',1],['ulei',1],['legume']]],
-    ['Masa 3','flame','',[1/6,.22,.08],[['cartof',1],['vita',1],['legume']]],
-    ['Masa 4','leaf','',[1/6,.2,.2],[['ovaz',.75],['whey',1],['mar',.25],['arahide',1]]],
-    ['Masa 5','star','',[1/6,.16,0],[['corn',1],['whey',1]]],
-    ['Masa 6','moon','',[1/6,.08,.24],[['iaurt',.45],['whey',.55],['arahide',1],['fruct',1]]]]}};
+    ['Masa 1','sun','dimineața',[1/4,.2,.35],[['albus',1],['ou'],['avocado',1],['toast',1]]],
+    ['Masa 2','flame','prânzul',[1/4,.3,.25],[['orez',1],['pui',1],['ulei',1],['legume']]],
+    ['Masa 3','flame','după-amiaza',[1/4,.3,.1],[['cartof',1],['vita',1],['legume']]],
+    ['Masa 4','moon','seara',[1/4,.2,.3],[['ovaz',.6],['mar',.2],['fruct',.2],['whey',.7],['iaurt',.3],['arahide',1]]]]}};
 const planKind=k=>nutriDay(k).type==='rest'?'r':'t';
 /* grame reale ale unei cantități (ml și bucăți convertite) */
 const mfG=(f,q)=>{ const F=MFD[f]; return F[7]?q*(F[8]||1):q; };

@@ -113,7 +113,7 @@ function viewSet(){
   ${ioCard()}
   ${syncCard()}
   ${errCard()}
-  <div class="xs mu2" style="text-align:center;margin-top:18px">FALCO · planul Hybrid365</div>`;
+  <div class="xs mu2" style="text-align:center;margin-top:18px">FALCO · planul hibrid după Dr. Milo Wolf</div>`;
 }
 ACT.barSet=async(el,{I})=>{ await save('prof',Object.assign({},S.prof||{},{bar:I})); render(); };
 ACT.notifT=async(el,{k})=>{ const c=notifCfg(); c[k]=!c[k]; await save('notifCfg',c); render(); };

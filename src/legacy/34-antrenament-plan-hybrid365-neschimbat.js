@@ -1,5 +1,5 @@
 /* =====================================================================
-   v8 · ANTRENAMENT — Plan Hybrid365 (neschimbat) · Istoric.
+   v8 · ANTRENAMENT — Planul · Istoric.
    ===================================================================== */
 const TR_TABS=[['plan','Plan','plan'],['acts','Activități','activity'],['hist','Istoric','history']];
 function viewTrain(){

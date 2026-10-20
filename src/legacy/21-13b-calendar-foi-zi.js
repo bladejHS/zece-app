@@ -325,7 +325,7 @@ async function shareImg(o){
     g.fillStyle='#fff'; g.font='700 92px '+fd; g.fillText(String(s[0]),x+30,yy+120); g.fillStyle='rgba(255,255,255,.7)'; g.font='600 30px '+fb; g.fillText(String(s[1]),x+32,yy+172); });
   y+=2*(bh+30)+30; g.font='600 32px '+fb;
   (o.lines||[]).slice(0,3).forEach(l=>{ g.fillStyle=t.ac; rr(g,80,y-30,14,36,6); g.fill(); g.fillStyle='#fff'; g.fillText(String(l).slice(0,48),112,y); y+=56; });
-  g.fillStyle='rgba(255,255,255,.55)'; g.font='600 28px '+fb; g.fillText('FALCO · Hybrid365',80,H-80); g.textAlign='right'; g.fillText(fmtDay(todayKey()),W-80,H-80); g.textAlign='left';
+  g.fillStyle='rgba(255,255,255,.55)'; g.font='600 28px '+fb; g.fillText('FALCO',80,H-80); g.textAlign='right'; g.fillText(fmtDay(todayKey()),W-80,H-80); g.textAlign='left';
   const blob=await new Promise(res=>c.toBlob(res,'image/png')); if(!blob){ toast('Nu am putut crea imaginea','','info'); return; }
   const file=new File([blob],'falco-'+todayKey()+'.png',{type:'image/png'});
   try{ if(navigator.canShare&&navigator.canShare({files:[file]})){ await navigator.share({files:[file],title:'FALCO'}); return; } }catch(e){ if(e&&e.name==='AbortError') return; }

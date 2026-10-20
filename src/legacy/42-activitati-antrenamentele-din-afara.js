@@ -71,7 +71,7 @@ ACT.afSave=async()=>{
   await save('ext',ext);
   if(!A.id&&A.st&&stOn()&&stCanWrite()){
     await stQueue({key:x.sid,start:x.start,end:x.start+min*60000,dur:Math.round(min*60),km,sport:ACT_UP[x.type]||x.type,name:x.name||actT(x.type)[1],
-      desc:(actT(x.type)[1]+' · '+num(min,0)+' min'+(km?' · '+num(km,2)+' km':'')+(hr?' · puls mediu '+hr:'')+'\n\nNotat în FALCO · Hybrid365'),hr:null,pts:[]});
+      desc:(actT(x.type)[1]+' · '+num(min,0)+' min'+(km?' · '+num(km,2)+' km':'')+(hr?' · puls mediu '+hr:'')+'\n\nNotat în FALCO'),hr:null,pts:[]});
     setTimeout(stFlush,50); }
   AF=null; SH=null; shRender(); render();
   toast(A.id?'Activitate salvată':'Activitate adăugată',actName(x)+' · '+num(min,0)+' min'+(km?' · '+num(km,1)+' km':''),'info');

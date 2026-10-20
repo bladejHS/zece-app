@@ -151,7 +151,7 @@ function kbTrain(){
   <div class="card kb-wk"><div class="row"><div class="sp"><div class="eyebrow">${ic('glove')} Săptămâna asta</div>
       <div class="kb-wk-n">${wk.n?`<b>${wk.n}</b> ${wk.n===1?'sesiune':'sesiuni'}${wk.r?` · <b>${wk.r}</b> runde`:''} · <b>${num(wk.min,0)}</b> min`:'Nimic încă. Alege o activitate de mai sus.'}</div></div>
     <button class="btn ghost sm" data-a="kbLog" data-k="">${ic('edit')} Notează</button></div>
-    <div class="xs mu2" style="margin-top:8px">Kickboxing-ul e în afara planului Hybrid365: intră în încărcarea zilei, dar nu schimbă antrenamentele planului.</div></div>
+    <div class="xs mu2" style="margin-top:8px">Kickboxing-ul e în afara planului: intră în încărcarea zilei, dar nu schimbă antrenamentele planului.</div></div>
   <div class="card"><div class="eyebrow">${ic('tool')} Unelte</div><div class="kb-tools">${KB_TOOLS.map(([k,icn,t,s])=>`<button class="kb-tool" data-a="${k}"><span class="ic-s">${ic(icn)}</span><b>${esc(t)}</b><span>${esc(s)}</span></button>`).join('')}</div></div>`;
 }
 /* istoric: rezumat pe 4 săptămâni, runde pe săptămână (8 săptămâni), țintele atinse și sesiunile pe luni */
@@ -383,7 +383,7 @@ ACT.kfSave=async()=>{
   if(!F.id&&F.st&&stOn()&&stCanWrite()){
     const sp=F.a==='spar'?[kb.ok?'Ce a mers: '+kb.ok:'',kb.fix?'De lucrat: '+kb.fix:''].filter(Boolean).join('\n'):x.note||'';
     await stQueue({key:x.sid,start:x.start,end:x.start+min*60000,dur:Math.round(min*60),km:0,sport:'Workout',name:x.name,
-      desc:(A.n+(r?' · '+r+(r===1?' rundă':' runde')+' × '+fmtClock(kb.rs)+(kb.rest&&r>1?' · pauză '+fmtClock(kb.rest):''):'')+' · '+num(min,0)+' min'+(hr?' · puls mediu '+hr:'')+(sp?'\n\n'+sp:'')+'\n\nNotat în FALCO · Hybrid365'),hr:null,pts:[]});
+      desc:(A.n+(r?' · '+r+(r===1?' rundă':' runde')+' × '+fmtClock(kb.rs)+(kb.rest&&r>1?' · pauză '+fmtClock(kb.rest):''):'')+' · '+num(min,0)+' min'+(hr?' · puls mediu '+hr:'')+(sp?'\n\n'+sp:'')+'\n\nNotat în FALCO'),hr:null,pts:[]});
     setTimeout(stFlush,50); }
   KF=null; SH=null; shRender(); render();
   if(tr&&tr.first) kbTgCelebrate(tr); else toast(F.id?'Sesiune salvată':'Sesiune notată',A.n+(r?' · '+r+(r===1?' rundă':' runde'):'')+' · '+num(min,0)+' min','info');

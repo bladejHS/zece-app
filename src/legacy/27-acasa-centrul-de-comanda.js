@@ -205,7 +205,7 @@ function setupSteps(){
     ['w','Prima cântărire','Media pe 7 zile e baza graficelor de corp',wList().length>0,'goBody'],
     ['ci','Primul check-in de dimineață','Somn, energie, febră: din ele vine readiness',Object.keys(S.journal||{}).some(k=>{ const j=S.journal[k]; return j&&(j.energy||j.sleep); }),'ciOpen'],
     ['goal','Un obiectiv','1 km, un 1RM sau o greutate țintă',(S.goals||[]).length>0||!!(P.goalW&&P.startW&&P.goalW!==P.startW),'goalAdd'],
-    ['first','Primul antrenament','O zi din planul Hybrid365',trainDays().length>0,'tab|plan'],
+    ['first','Primul antrenament','O zi din plan',trainDays().length>0,'tab|plan'],
     ['bk','O copie a datelor','Sau sincronizarea PC ↔ telefon',!!((S.bk||{}).last||(S.sync||{}).gist),'tab|set']
   ];
 }

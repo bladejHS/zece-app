@@ -139,7 +139,7 @@ SCI.push(
 /* ---------- v19: hibrid, pauze, încălzire, deload ---------- */
 {s:'milo',ev:'B',t:'Forță și alergare în aceeași săptămână',n:'separate ~6 ore sau forța întâi',
  sum:'Cardio-ul făcut imediat înainte de forță îi scade performanța; separat cu 6–8 ore sau după forță, interferența e mică. Cardio-ul cu impact și excentrică puțină (bicicletă, mers în pantă, ramat) obosește cel mai puțin. Forța reduce accidentările la alergare; Nordic Curl protejează femuralii, pliometria ligamentele genunchiului.',
- do:['Easy-urile tale sunt a doua sesiune a zilei, la ~6 ore după forță.','Pragul e marți, departe de zilele de picioare.','Nordic Curl vineri, 2 seturi, coborâre lentă.'],
+ do:['Easy-urile tale sunt a doua sesiune a zilei, la ~6 ore după forță.','Pragul e marți, departe de zilele de picioare.','Nordic Curl sâmbătă, 2 seturi, coborâre lentă.'],
  src:'Wolf · Wilson · van der Horst'},
 {s:'milo',ev:'B',t:'Cât pauză între seturi',n:'90 s izolare, 2–3 min compuse',
  sum:'Sub un minut creșterea scade, pentru că pierzi din volumul ridicat; efectul pauzei trece prin performanță. Practic: 1–3 minute la izolare, 2–4 la compusele de sus, 3 sau mai mult la compusele grele de picioare — repornești când poți repeta aproximativ setul de dinainte și nu mai gâfâi. Pauza aleasă singur dă cam același rezultat ca cea cronometrată.',

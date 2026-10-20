@@ -82,7 +82,7 @@ function attrAt(id,d){
       return mix(P,f,'AMRAP și Engine Builder din cronometru, plus ritmul de prag'); }
     case 'grip':{ const h=testsOf('hang',f180,d); if(!h.length) return null; const v=Math.max(...h.map(t=>t.value)); f.push('dead hang: '+v+' s');
       return mix([['dh',lin(v,10,120),1]],f,'testul de dead hang: 10 s → 0, 120 s → 100'); }
-    case 'mob':{ const sr=testsOf('reach',f180,d), ses=(S.hist||[]).filter(h=>h.d===6&&h.date<=d&&h.date>=f28).length;
+    case 'mob':{ const sr=testsOf('reach',f180,d), ses=(S.hist||[]).filter(h=>PLAN[h.d]&&PLAN[h.d].cat==='rest'&&h.date<=d&&h.date>=f28).length;
       if(sr.length){ const v=sr[sr.length-1].value; P.push(['sr',lin(v,-20,20),.7]); f.push('sit and reach: '+(v>0?'+':'')+v+' cm'); }
       if(ses||sr.length){ P.push(['ses',lin(ses,0,4),.3]); if(ses) f.push(ses+' sesiuni de recuperare și mobilitate în 4 săpt.'); }
       return mix(P,f,sr.length?'testul sit and reach (70%) și sesiunile de mobilitate (30%)':'sesiunile de recuperare și mobilitate (4 pe lună = 100)'); }

@@ -209,7 +209,7 @@ function achAll(){
     ['t10','10 tone ridicate','Tonaj cumulat (kg × repetări)',(X._t||{})[10000]||null,[ton/1000,10]],
     ['t100','100 de tone ridicate','Tonaj cumulat (kg × repetări)',(X._t||{})[100000]||null,[ton/1000,100]],
     ['st4','4 săptămâni la rând','4 săptămâni consecutive cu cel puțin 3 zile active',streakWeeks()>=4?todayKey():null,[streakWeeks(),4]],
-    ['cyc','Primul ciclu complet','Toate cele 28 de zile ale unui ciclu Hybrid365',cycDoneAny()?(S.hist||[]).map(h=>h.date).sort().pop()||null:null,null]
+    ['cyc','Primul ciclu complet','Toate cele 28 de zile ale unui ciclu',cycDoneAny()?(S.hist||[]).map(h=>h.date).sort().pop()||null:null,null]
   ].map(([id,t,d,date,pr])=>({id,t,d,date,done:!!date,prog:pr&&!date?clamp(pr[0]/pr[1],0,1):null,pv:pr}));
   /* data păstrată la prima deblocare (seria de săptămâni poate scădea, realizarea rămâne) */
   const seen=S.ach||{}; A.forEach(a=>{ if(seen[a.id]&&!a.done&&a.id!=='cyc'){ a.done=true; a.date=seen[a.id]; a.prog=null; } else if(seen[a.id]&&a.done&&seen[a.id]<a.date) a.date=seen[a.id]; });

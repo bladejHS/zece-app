@@ -29,7 +29,7 @@ function palCmds(){
     ['Pacer 1 km','pacer pista 1km ritm tinta','stopwatch',()=>{ if(k1Goal()) ACT.k1Pace(); else go('prog','k1')(); }]
   ].filter(Boolean).map(([t,k,icn,f])=>({g:'Comenzi',t,k,icn,f}));
   TOOLS.forEach(([id,icn,t,d])=>C.push({g:'Unelte',t,k:'calculator unealta '+d,icn,f:()=>{ if(id==='tm') return TM.open=true,TM.list=true,TM.choose=null,TM.st=null,tmRender(); if(id==='food'){ FD.err=null; SH={kind:'food'}; return shRender(); } toolDefaults(id); SH={kind:'tool',k:id}; shRender(); },s:d}));
-  [['azi','Acasă','home'],['plan','Antrenament · Plan Hybrid365','plan','plan'],['plan','Istoric antrenamente','history','hist'],
+  [['azi','Acasă','home'],['plan','Antrenament · Planul','plan','plan'],['plan','Istoric antrenamente','history','hist'],
    ['prog','Performanță · Prezentare','grid','ov'],['prog','Forță','dumbbell','s'],['prog','Running Lab · Alergare','run','r'],['prog','1 KM Lab','stopwatch','k1'],['prog','Corp','ruler','b'],
    ['prog','Recuperare','moon','rec'],['prog','Recorduri și realizări','trophy','pr'],['prog','Profilul atletului','user','twin'],['prog','Teste fizice','medal','t'],
    ['nutri','Nutriție','flame'],['coach','Antrenor AI','coach'],['act','Activitate · cronologie','history'],['tools','Unelte','tool'],['set','Setări','gear']]

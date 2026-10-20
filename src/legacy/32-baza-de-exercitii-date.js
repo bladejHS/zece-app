@@ -2,7 +2,7 @@
    v8 · BAZA DE EXERCIȚII — date. Numele rămân cele folosite în sală (engleză), cu numele românesc pentru căutare.
    [nume, nume RO, grupă, mușchi principal, {mușchi: 1 principal / .5 secundar}, echipament, dificultate 1–3,
     instrucțiuni[], greșeli[], variante[], alternative[]]
-   Exercițiile din planul Hybrid365 au ghidul detaliat în GUIDE; aici primesc doar datele de catalog.
+   Exercițiile din planul vechi au ghidul detaliat în GUIDE; aici primesc doar datele de catalog.
    ===================================================================== */
 const EX_GROUPS=['Piept','Spate','Umeri','Brațe','Picioare','Fesieri','Abdomen','Corp întreg','Cardio'];
 const EX_EQ=['Bară','Gantere','Cablu','Aparat','Greutatea corpului','Kettlebell','Bară fixă','Minge medicinală','Ergometru','Bandă elastică','Sanie','Coardă'];

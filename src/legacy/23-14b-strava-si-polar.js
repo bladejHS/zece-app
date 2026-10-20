@@ -149,7 +149,7 @@ function stItem(rec,s,day,hs){
   const sport=rec.km>0&&!rec.sets?'Run':rec.km>0?'Workout':'WeightTraining';
   const head=`S${rec.w+1} · ${DAYN[rec.d]} · ciclul ${rec.cyc}\n${rec.sets} serii · ${Math.round(rec.vol)} kg volum`+(rec.km?` · ${num(rec.km,2)} km`:'')+(rec.prs?` · ${rec.prs} ${rec.prs===1?'record':'recorduri'}`:'');
   return {key:String(rec.end),start:s.start,end:rec.end,dur:rec.dur,km:rec.km||0,sport,name:'FALCO · '+rec.t,
-    desc:(head+(lines.length?'\n\n'+lines.join('\n'):'')+'\n\nÎnregistrat cu FALCO · Hybrid365').slice(0,3000),
+    desc:(head+(lines.length?'\n\n'+lines.join('\n'):'')+'\n\nÎnregistrat cu FALCO').slice(0,3000),
     hr:hs?{avg:hs.avg,max:hs.max}:null,pts:hs&&hs.pts?hs.pts.slice():[],t0:(s.hr&&s.hr.t0)||s.start};
 }
 async function stQueue(it){ await save('stq',(S.stq||[]).filter(x=>x.key!==it.key).concat([it]).slice(-20)); }

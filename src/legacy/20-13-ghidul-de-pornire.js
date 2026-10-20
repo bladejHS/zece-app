@@ -2,7 +2,7 @@
    13 · GHIDUL DE PORNIRE — scurt și opțional: ce urmărești, câteva cifre (le poți sări), aspectul.
    Restul se configurează treptat, din lista de pe Acasă (profil, check-in, obiectiv, copie…).
    ===================================================================== */
-const OB_FOCUS=[['str','Forță','dumbbell','Serii, 1RM, recorduri'],['run','Alergare','run','Ritm, km, despărțiri'],['k1','1 km','stopwatch','Ținta și pacerul'],['body','Corp','scale','Greutate, talie, poze'],['plan','Planul Hybrid365','plan','4 săptămâni, 7 zile']];
+const OB_FOCUS=[['str','Forță','dumbbell','Serii, 1RM, recorduri'],['run','Alergare','run','Ritm, km, despărțiri'],['k1','1 km','stopwatch','Ținta și pacerul'],['body','Corp','scale','Greutate, talie, poze'],['plan','Planul hibrid','plan','4 săptămâni, 7 zile']];
 let OB=null;
 function onbOpen(){ const P=prof(); OB={step:0,sex:P.sex,focus:(P.focus||['str','run','plan']).slice(),mode:S.mode||'dark'}; onbRender(); }
 function onbRender(){

@@ -1,6 +1,6 @@
 /* =====================================================================
    10 · ANTRENAMENTUL LIVE — minimalist și rapid: exercițiul curent, seria, kg, repetări,
-   pauza și următorul exercițiu. Merge pe zilele planului Hybrid365.
+   pauza și următorul exercițiu. Merge pe zilele planului.
    ===================================================================== */
 const sessSec=()=>S.sess?Math.max(0,Math.floor((Date.now()-S.sess.start)/1000)):0;
 /* ziua sesiunii: din plan (săptămână + zi) */
