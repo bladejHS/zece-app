@@ -19,7 +19,7 @@ const PLAN=[
   ['Lat Pulldown','3×8–12 · pauză 120s — priză îngustă sau supinată'],
   ['Seated Overhead Press','2×8–12 · pauză 120s'],
   ['Leg Extension','3×10–15 · pauză 90s — spătarul lăsat pe spate'],
-  ['Hamstring Curl','3×10–15 · pauză 90s — la șezut, aplecat în față'],
+  ['Hamstring Curl','2×10–15 · pauză 90s — la șezut, aplecat în față'],
   ['Calf Raise','3×8–12 · pauză 90s — genunchii întinși, 1–2 s jos'],
   ['Cable Crunch','3×10–15 · pauză 60s — sus lași abdomenul să se întindă complet, apoi rotunjești coloana; nu îndoi din șold'],
   ['Easy run Z2','30 min · ritm conversațional, zona 2']]},
@@ -56,6 +56,7 @@ const PLAN=[
   ['Back Extension','3×8–12 · pauză 120s — la 45°, cobori adânc cu spatele neutru, urci din șold; greutate la piept când devine ușor'],
   ['Leg Press','2×10–15 · pauză 120s — cât mai jos fără să se rotunjească spatele'],
   ['Hamstring Curl','3×10–15 · pauză 90s — la șezut, aplecat în față (cel mai bun exercițiu pentru femurali)'],
+  ['Pec Deck','3×10–15 · pauză 90s — brațele larg în spate (stretch), fără pauză în față; a treia zi de piept pe săptămână'],
   ['Cable Lateral Raise','3×12–20 · pauză 90s'],
   ['Tricep Overhead Extension','3×10–15 · pauză 90s — la cablu, cu frânghia, cu spatele la aparat'],
   ['Incline Dumbbell Curl','3×10–15 · pauză 90s'],
@@ -67,6 +68,7 @@ const PLAN=[
 ];
 /* v19: versiunea planului; la prima pornire cu planul nou începe un ciclu nou (bifele vechi rămân în ciclul lor) */
 const PLAN_V='milo4';
+/* v25: piept de 3 ori pe săptămână (Pec Deck sâmbătă, ~12 seturi), flexiile de luni 2 serii (femuralii ~14 seturi, plus alergarea) */
 async function planMigrate(){ const P=prof(); if(P.planV===PLAN_V) return;
   const c=cyc(), any=Object.keys(S.wlog||{}).some(k=>k.indexOf('hc'+c+'w')===0&&Object.keys(S.wlog[k]||{}).some(e=>e!==SPLIT_MK));
   if(any) await save('cyc',Object.assign({},S.cyc||{},{h:c+1,t:Date.now()}));

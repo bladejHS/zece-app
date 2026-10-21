@@ -767,18 +767,19 @@ function nutriToday(){
     <div class="note">Cum se calculează țintele vezi în <b>Necesar</b>. Contează media pe săptămână și trendul greutății, nu o zi anume.</div></div>`;
 }
 function nutriPlan(){
-  const tk=todayKey(), off=S.planDay||0, k=dayShift(tk,off), tg=targets(k), D=dayPlan(k,tg), eaten=mlogDay(k);
+  const tk=todayKey(), off=S.planDay||0, k=dayShift(tk,off), tg=targets(k), D=dayPlan(k,tg), eaten=mlogDay(k), fibT=Math.round(tg.kcal/1000*15);
   const days=Array.from({length:daysBetween(tk,dayShift(mondayOf(tk),13))+1},(_,i)=>{ const dk=dayShift(tk,i); return `<button class="chip ${i===off?'on':''}" data-a="planDay" data-i="${i}">${i===0?'Azi':i===1?'Mâine':DAYS[(parseKey(dk).getDay()+6)%7]+' '+(+dk.slice(8))}</button>`; }).join('');
   const cards=D.meals.map((m,si)=>{ const done=eaten.some(x=>x.pl===D.kind+si);
     return `<div class="card mcard ${done?'eaten':''}"><div class="row"><div class="eyebrow sp">${ic(m.icn)} ${esc(m.n)}</div>${done?`<span class="tag rest">${ic('check')} mâncat</span>`:''}</div>
       ${m.note?`<div class="xs mu" style="margin-top:4px">${esc(m.note)}</div>`:''}
-      <div class="tags" style="margin-top:8px"><span class="tag lift">${m.k} kcal</span><span class="tag run">P ${m.p} g</span><span class="tag">C ${m.c} g</span><span class="tag">G ${m.g} g</span></div>
+      <div class="tags" style="margin-top:8px"><span class="tag lift">${m.k} kcal</span><span class="tag run">P ${m.p} g</span><span class="tag">C ${m.c} g</span><span class="tag">G ${m.g} g</span><span class="tag">Fibre ${m.fb} g</span></div>
       <div class="ingr">${m.it.map(x=>MFIX[x.of]==null&&MFD[x.of][5]!=='x'&&x.of!=='dextrina'?`<button class="mf-sw ${x.sw?'on':''}" data-a="mfSwap" data-k="${D.kind}${si}:${x.of}" aria-label="Înlocuiește ${esc(MFD[x.f][0])}"><b>${mfQty(x.f,x.q)}</b> ${esc(MFD[x.f][0])} ${ic('refresh')}</button>`:`<span><b>${mfQty(x.f,x.q)}</b> ${esc(MFD[x.f][0])}${x.opt?' · opțional':''}</span>`).join('')}</div>
       ${off===0?`<div class="inrow"><button class="btn ${done?'ghost':'pri'} sm" data-a="mealEat" data-i="${si}" ${done?'disabled':''}>${ic('check')} ${done?'Notat':'Am mâncat'}</button></div>`:''}</div>`; }).join('');
   const bar=(l,v,t,c)=>`<div class="kpi"><div class="k">${l}</div><div class="v" style="font-size:20px">${Math.round(v)}<small>/${t}</small></div><div class="bar" style="margin-top:6px;height:5px"><i style="width:${(clamp(t?v/t:0,0,1.2)/1.2*100).toFixed(0)}%;background:${c}"></i></div></div>`;
   return `<div class="card"><div class="row"><div class="eyebrow sp">${ic('bowl')} ${esc(D.name)}</div><span class="tag ${tg.phase.cut?'lift':'rest'}">${esc(tg.phase.label)}</span></div>
     <div class="scrollx" style="margin-top:12px">${days}</div>
     <div class="kpis" style="grid-template-columns:repeat(4,1fr)">${bar('kcal',D.tot.k,tg.kcal,TH().ac)}${bar('Proteină',D.tot.p,tg.p,COL().run)}${bar('Carbo',D.tot.c,tg.c,COL().warn)}${bar('Grăsimi',D.tot.g,tg.f,'#B3AECB')}</div>
+    ${D.tot.fb<fibT?`<div class="note">${ic('leaf')} Fibre: ${D.tot.fb} din ${fibT} g (Norton: cel puțin 15 g la 1000 kcal). Ca să ajungi: legumele la fiecare masă (sunt ~2,5 g la 100 g; poți dubla porția, au puține calorii), un fruct în plus sau cartof dulce în loc de orez (apasă pe aliment ca să-l înlocuiești). Legumele sunt cea mai ușoară cale, pentru că au foarte puține calorii.</div>`:`<div class="note">${ic('check')} Fibre: ${D.tot.fb} g, peste minimul lui Norton (${fibT} g).</div>`}
     <div class="note">Mesele și alimentele sunt cele din planul tău; cantitățile le calculez din ținta zilei (${esc(GOALS[tg.goal].l.toLowerCase())}): proteina împărțită egal pe mese, ${D.kind==='t'?'carbohidrații strânși în jurul antrenamentului (pre, intra, post), grăsimile departe de el':'carbohidrații mai mulți la prânz și seara'}. Se recalculează singure când se schimbă ținta.</div>
     <div class="xs mu" style="margin-top:8px">${D.kind==='r'?'Zi de odihnă în planul hibrid → planul de odihnă.':'Zi cu antrenament în planul hibrid → planul de antrenament (pre, intra și post-workout).'} Orezul și cartofii se cântăresc fierți, carnea crudă. Apasă pe un aliment ca să-l înlocuiești cu altul echivalent (Norton: dieta flexibilă).</div></div>
     ${cards}`;

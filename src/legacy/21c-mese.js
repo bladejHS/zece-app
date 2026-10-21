@@ -47,6 +47,9 @@ const MFD={
    Proteina e împărțită egal pe mesele cu proteină (Contest Prep Guide: 3–5+ mese, fiecare cu proteină); în ziua de antrenament
    carbohidrații se strâng în jurul antrenamentului (pre, intra, post), iar grăsimile stau departe de el. */
 const MFIX={ou:1,legume:100,creatina:5,eaa:10};
+/* v25: fibrele la 100 g (Norton: cel puțin 15 g la 1000 kcal) */
+const MFIB={ovaz:10.6,fruct:3,arahide:6,orez:.4,legume:2.5,crema:1,rondea:3.4,corn:3,ananas:1.4,avocado:6.7,toast:2.5,cartof:1.8,mar:2.4,paste:1.8,cartdulce:3,banana:2.6,migdale:12.5,nuci:6.7};
+const mfFib=(f,q)=>(MFIB[f]||0)*mfG(f,q)/100;
 const MPLANS={
   t:{name:'Zi de antrenament',meals:[
     ['Masa 1','sun','dimineața',[1/4,.2,.35],[['ovaz',.75],['fruct',.25],['whey',1],['arahide',1]]],
@@ -89,8 +92,8 @@ function dayPlan(k,tg){ tg=tg||targets(k); const kind=planKind(k), P=MPLANS[kind
   for(let it=0;it<4;it++){ ['p','c','f'].forEach(r=>{ const own=rows.filter(x=>x.r===r), oth=rows.filter(x=>x.r!==r);
     const from=a=>a.reduce((s,x)=>s+mfMac(x.f,x.q)[MI[r]-1],0), o=from(own); if(o>0){ const s=Math.max(.2,(T[r]-from(oth))/o); own.forEach(x=>{ x.q*=s; }); } }); }
   const meals=P.meals.map(([n,icn,note],mi)=>{ const it=rows.filter(x=>x.mi===mi).map(x=>({f:x.f,of:x.of,sw:x.f!==x.of,q:x.r==='x'?x.q:mfRound(x.f,x.q),opt:x.f==='legume'}));
-    const t=mfSum(it.map(x=>[x.f,x.q])); return {n,icn,note,it,k:Math.round(t.k),p:Math.round(t.p),c:Math.round(t.c),g:Math.round(t.g)}; });
-  const tot=meals.reduce((a,m)=>({k:a.k+m.k,p:a.p+m.p,c:a.c+m.c,g:a.g+m.g}),{k:0,p:0,c:0,g:0});
+    const t=mfSum(it.map(x=>[x.f,x.q])), fb=it.reduce((a,x)=>a+mfFib(x.f,x.q),0); return {n,icn,note,it,k:Math.round(t.k),p:Math.round(t.p),c:Math.round(t.c),g:Math.round(t.g),fb:Math.round(fb)}; });
+  const tot=meals.reduce((a,m)=>({k:a.k+m.k,p:a.p+m.p,c:a.c+m.c,g:a.g+m.g,fb:a.fb+m.fb}),{k:0,p:0,c:0,g:0,fb:0});
   return MPC[key]={kind,name:P.name,meals,tot}; }
 /* textul unei cantități: „250 ml”, „3 buc”, „1 felie”, „80 g” */
 const mfQty=(f,q)=>{ const u=MFD[f][7]; return u==='buc'?q+' buc':u==='felie'?q+(q===1?' felie':' felii'):u==='ml'?q+' ml':q+' g'; };

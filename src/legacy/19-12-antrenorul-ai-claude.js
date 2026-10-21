@@ -15,7 +15,7 @@ Planul hibrid (cel mai bun după Wolf: FULL BODY de 4 ori pe săptămână; fiec
 - Miercuri: Full Body B · Heavy Legs (Hack Squat, Romanian Deadlift, Hip Abduction Machine, Cable Lateral Raise, Tricep Overhead Extension, Preacher Curl, Hanging Leg Raise)
 - Joi: Full Body C (Machine Chest Press, Pull Up / Lat Pulldown, T-Bar Row, Dumbbell Fly, Rear Delt Fly, Hamstring Curl, Calf Raise, Ab Wheel Rollout), apoi Easy run Z2 (flush) la ~6 ore după
 - Vineri: recuperare și mobilitate
-- Sâmbătă: Full Body D · Heavy Legs (Bulgarian Split Squat, Back Extension la 45°, Leg Press, Hamstring Curl, Cable Lateral Raise, Tricep Overhead Extension la cablu, Incline Dumbbell Curl, Cable Crunch)
+- Sâmbătă: Full Body D · Heavy Legs (Bulgarian Split Squat, Back Extension la 45°, Leg Press, Hamstring Curl, Pec Deck, Cable Lateral Raise, Tricep Overhead Extension la cablu, Incline Dumbbell Curl, Cable Crunch)
 - Duminică: odihnă, plimbare și mobilitate
 Deci 2 alergări ușoare în zona 2 și una la prag pe săptămână, fără long run. Alergările cresc până în săptămâna 3 (minute la easy, reprize la prag); fiecare ciclu nou pornește puțin mai sus (+2 min easy, +30 s pe repriza de prag, până la 7 min). Pauzele din plan: izolare 90 s, compuse pe partea de sus 120–150 s, compusele grele de picioare 180 s.
 
