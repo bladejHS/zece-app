@@ -291,7 +291,7 @@ html[data-mode="light"] .inp{background:#FFFFFF}
 .sl-note .i{flex:none;width:16px;height:16px;margin-top:2px}
 @media (max-width:380px){ .sl-ttl{font-size:21px} .sl-ring,.sl-ring svg{width:72px;height:72px} .sl-kpis div{padding:9px 8px} .sl-kpis b{font-size:15px} }
 
-/* ---------- Știință ---------- */
+/* ---------- Huberman (clasele sci-*) ---------- */
 .sci-hero{background:linear-gradient(160deg,rgba(var(--w),.06),transparent 60%),var(--glass)}
 .sci-ttl{margin:8px 0 6px;font:700 24px/1.1 var(--fd)}
 .sci-d{display:grid;grid-template-columns:96px 1fr;gap:2px 12px;padding:10px 0;border-top:1px solid var(--ln)}

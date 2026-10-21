@@ -78,8 +78,8 @@ function viewPlan(){
         <div class="day-act inrow"><button class="btn pri" style="flex:1" data-a="start" data-w="${w}" data-d="${d}">${ic('play')} ${!tot?(od?'Continuă ziua':'Începe ziua'):dn&&dn<tot?'Continuă ziua':dn===tot?(optN&&od<optN?'Fă și abdomenul':'Reia ziua'):'Începe ziua'}</button></div>
       </div></div></div>`; }).join('');
   return `
-  <div class="card plan-hd"><div class="h3">Planul de 4 săptămâni</div>
-    <div class="sm mu">3 alergări · 3 upper · 1 lower · 1 conditioning · 1 zi de recuperare</div>
+  <div class="card plan-hd"><div class="h3">Full Body · cicluri de 4 săptămâni</div>
+    <div class="sm mu">4 Full Body (2 Heavy Legs) · 2 Easy Run Z2 · 1 Threshold run · 2 zile de recuperare</div>
     ${COVER?'':`<div class="bar"><i style="width:${(full/(WEEKS*7)*100).toFixed(1)}%"></i></div>
     <div class="cyc-bar"><span>${full} din ${WEEKS*7} zile complete</span><span>${nx?'următorul: S'+(nx.w+1)+' · '+DAYN[nx.d]:'ciclu complet'}</span></div>`}
     ${cycList().length||cyc()>1?`<div class="inrow" style="margin-top:12px">${cycList().length?`<button class="btn ghost sm" style="flex:1" data-a="cycOpen">${ic('star')} Raportul ciclului</button>`:''}${cyc()>1?`<button class="btn ghost sm" style="flex:1" data-a="cfOpen">${ic('refresh')} Corectează ciclul</button>`:''}</div>`:''}</div>
