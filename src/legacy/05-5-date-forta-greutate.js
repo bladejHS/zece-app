@@ -4,7 +4,7 @@
 const e1rm=(w,r)=>w>0&&r>0?Math.round(w*(1+r/30)):0;
 const liftHist=n=>(S.lifts||{})[n]||[];
 /* o serie = [kg, repetări] sau [kg, repetări, tip]; tipul e text: 'd' = drop set, 'rp' = rest-pause, 'a' = AMRAP */
-const SET_TAG={d:'drop',rp:'rest-pause',a:'AMRAP',ma:'myo · activare',mm:'myo'};
+const SET_TAG={d:'drop',rp:'rest-pause',a:'AMRAP'};
 const fmtSet=s=>num(s[0])+'×'+s[1]+(typeof s[2]==='string'&&SET_TAG[s[2]]?' '+SET_TAG[s[2]]:'');
 function bestE1(n,before){ let b=0; liftHist(n).forEach(e=>{ if(before&&e.d>=before) return; e.s.forEach(([w,r])=>{ const v=e1rm(w,r); if(v>b) b=v; }); }); return b; }
 function lastSession(n,before){ const h=liftHist(n); for(let i=h.length-1;i>=0;i--) if(!before||h[i].d<before) return h[i]; return null; }

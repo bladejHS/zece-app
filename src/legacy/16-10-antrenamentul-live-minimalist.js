@@ -13,16 +13,6 @@ const fxEnd=(day,x)=>x===day.ex.length-1||x===lastReq(S.sess);
 const absOffer=(day,x)=>x===lastReq(S.sess)&&x<day.ex.length-1?`<button class="btn ghost wide fx-abs" data-a="fxNext">${ic('plus')} Fac și abdomenul · opțional ${ic('right')}</button>`:'';
 const optBadge=e=>e.opt?`<span class="tag opt">opțional</span> `:'';
 async function markDone(s,x,on){ await setDone(s.w,s.d,x,on); }
-/* v24 · MYO-REPS (opțional, doar la izolare): o rundă = un set de activare de 12–20 de repetări aproape de eșec, apoi mini-seturi de 3–5
-   cu 20 s pauză, până nu mai faci 3 repetări (sau după 4 mini-seturi). Wolf: dovezi mai slabe decât superseturile și drop set-urile,
-   deci faci cu ~50% mai mult: 2 runde în loc de seriile obișnuite. Seriile se notează cu eticheta ma (activare) și mm (mini-set). */
-const MYO_OK=/^(Cable Lateral Raise|Dumbbell Lateral Raise|Lateral Raise|Calf Raise|Preacher Curl|Incline Dumbbell Curl|Cable Curl|Hammer Curl|Bicep Curl|Tricep Overhead Extension|Tricep Rope Pushdown|Tricep Pushdown|Leg Extension|Hamstring Curl|Rear Delt Fly|Dumbbell Fly|Pec Deck|Cable Fly|Cable Crunch|Hip Abduction Machine)$/;
-const MYO_RUNDE=2, MYO_MINI=4, MYO_PAUZA=20;
-const myoOn=(s,x)=>!!(s&&s.myo&&s.myo[x]);
-function myoSt(sets){ let r=0, mini=0, open=false;
-  (sets||[]).forEach(st=>{ if(st[2]==='ma'){ r++; mini=0; open=true; } else if(st[2]==='mm'){ mini++; if(+st[1]<3||mini>=MYO_MINI) open=false; } });
-  return {r,mini,open,done:r>=MYO_RUNDE&&!open,next:open?'mm':'ma'}; }
-const exComplete=(s,x,e)=>myoOn(s,x)?myoSt(s.sets[x]).done:(s.sets[x]||[]).length>=e.sets;
 async function persistSess(){ await store.set(K.sess,S.sess); }
 /* întrebarea de dinainte: cum te simți (somn, energie, febră) — se poate sări */
 let RD=null;
@@ -89,20 +79,18 @@ const lvDone=()=>S.lvOk&&Date.now()-S.lvOk.t<1600?`<div class="lv-done">${ic('ch
 function fxLift(e,x){
   const s=S.sess, day=sessDay(s), sets=s.sets[x]||[], sg=suggest(e), inc=incFor(e.n), isLast=fxEnd(day,x);
   let kg=s.kg[x]!=null?s.kg[x]:sets.length?sets[sets.length-1][0]:sg.kg!=null?sg.kg:'';
-  const my=myoOn(s,x), M=myoSt(sets), rp=s.rp[x]!=null?s.rp[x]:sets.length?sets[sets.length-1][1]:my?15:sg.reps, complete=exComplete(s,x,e), setNo=Math.min(sets.length+1,e.sets);
-  const ctaTxt=my?(M.next==='mm'?'Mini-setul '+(M.mini+1)+' terminat':'Activarea '+(M.r+1)+' terminată'):'Seria '+setNo+' terminată';
+  const rp=s.rp[x]!=null?s.rp[x]:sets.length?sets[sets.length-1][1]:sg.reps, complete=sets.length>=e.sets, setNo=Math.min(sets.length+1,e.sets);
   return `
-    <div class="eyebrow">${optBadge(e)}Exercițiul curent · ${my?'myo-reps · '+MYO_RUNDE+' runde (activare 12–20 + mini-seturi de 3–5, pauză '+MYO_PAUZA+' s)':e.sets+' serii × '+e.lo+(e.hi!==e.lo?'–'+e.hi:'')+' · pauză '+e.rest+' s'}</div>
+    <div class="eyebrow">${optBadge(e)}Exercițiul curent · ${e.sets} serii × ${e.lo}${e.hi!==e.lo?'–'+e.hi:''} · pauză ${e.rest} s</div>
     <div class="fx-n">${esc(e.n)}</div>
     <div class="lv-chips">${e.adj?`<span class="adjb">${ic('coach')} Ajustat azi: ${esc(e.adj.join(' · '))}</span>`:''}
-      <button class="chip" data-a="tech" data-k="${esc(e.n)}">${ic('info')} Cum se execută?</button>
-      ${MYO_OK.test(e.n)&&!sets.length?`<button class="chip ${my?'on':''}" data-a="myoT" aria-pressed="${my}">${ic('bolt')} Myo-reps${my?' · pornit':''}</button>`:''}</div>
+      <button class="chip" data-a="tech" data-k="${esc(e.n)}">${ic('info')} Cum se execută?</button></div>
     ${exNote(e.n)?`<button class="exnote" data-a="tech" data-k="${esc(e.n)}">${ic('edit')}<span>${esc(exNote(e.n))}</span></button>`:''}
     ${!sets.length&&x===day.ex.findIndex(q=>q.kind==='lift')&&!Object.keys(s.sets).length?`<button class="btn ghost sm wide" style="margin-top:10px" data-a="tmPick" data-k="wup">${ic('flame')} Încălzire generală · 5 min</button>`:''}
     ${s.ready&&s.ready.score<45?`<div class="easy">${ic('alert')} Zi grea (${s.ready.score}) — fără creșteri azi</div>`:''}
-    <div class="lv-set">${complete?`<b>${ic('check')}</b><span>${my?'Ambele runde myo sunt notate':'Toate cele '+e.sets+' serii sunt notate'}</span>`:my?`<span>${M.next==='mm'?'Mini-set':'Runda'}</span><b>${M.next==='mm'?M.mini+1:M.r+1}</b><span>${M.next==='mm'?'runda '+M.r+' din '+MYO_RUNDE:'din '+MYO_RUNDE+' · activare'}</span>`:`<span>Seria</span><b>${setNo}</b><span>din ${e.sets}</span>`}</div>
-    <div class="sets">${Array.from({length:my?sets.length+(complete?0:1):Math.max(e.sets,sets.length)},(_,i)=>{ const st=sets[i], pr=st&&(s.prs||[]).some(p=>p.n===e.n&&p.i===i);
-      return `<div class="sd ${st?'ok':i===sets.length?'cur':''}">${st?`<b>${num(st[0])}</b> × <b>${st[1]}</b>${pr?'<span class="tag pr">PR</span>':''}${typeof st[2]==='string'&&SET_TAG[st[2]]?`<small>${SET_TAG[st[2]]}</small>`:''}`:my?(M.next==='mm'?'Mini-set':'Activare'):'Seria '+(i+1)}</div>`; }).join('')}</div>
+    <div class="lv-set">${complete?`<b>${ic('check')}</b><span>Toate cele ${e.sets} serii sunt notate</span>`:`<span>Seria</span><b>${setNo}</b><span>din ${e.sets}</span>`}</div>
+    <div class="sets">${Array.from({length:Math.max(e.sets,sets.length)},(_,i)=>{ const st=sets[i], pr=st&&(s.prs||[]).some(p=>p.n===e.n&&p.i===i);
+      return `<div class="sd ${st?'ok':i===sets.length?'cur':''}">${st?`<b>${num(st[0])}</b> × <b>${st[1]}</b>${pr?'<span class="tag pr">PR</span>':''}${typeof st[2]==='string'&&SET_TAG[st[2]]?`<small>${SET_TAG[st[2]]}</small>`:''}`:'Seria '+(i+1)}</div>`; }).join('')}</div>
     ${lvDone()}
     ${restBlock(complete?nextTxt(day,x):'')}
     ${miloLive(e,x)}
@@ -114,7 +102,7 @@ function fxLift(e,x){
     ${complete
       ?`<button class="btn pri xl wide glow fx-cta" data-a="${isLast?'fxFinish':'fxNext'}">${isLast?ic('trophy')+' Termină antrenamentul':'Următorul exercițiu '+ic('right')}</button>
         ${absOffer(day,x)}<div class="fx-sub"><button class="btn ghost" data-a="logSet">${ic('plus')} Încă o serie</button>${sets.length?`<button class="btn ghost" data-a="undoSet">Șterge ultima</button>`:''}</div>`
-      :`<button class="btn pri xl wide ${S.rest?'':'glow'} fx-cta lv-cta" data-a="logSet">${ic('check')} ${ctaTxt}</button>
+      :`<button class="btn pri xl wide ${S.rest?'':'glow'} fx-cta lv-cta" data-a="logSet">${ic('check')} Seria ${setNo} terminată</button>
         ${sets.length?`<div class="fx-sub"><button class="btn ghost" data-a="undoSet">Șterge ultima serie</button><button class="btn ghost" data-a="exDone">Gata cu exercițiul</button></div>`:''}`}
     <div class="sugg ${sg.kind}">${ic(sg.kind==='up'?'trophy':'bolt')}<span>${sg.txt}</span></div>
     ${sg.last?`<div class="last">Data trecută (${relDay(sg.d)}): <b>${esc(sg.last)}</b></div>`:''}
@@ -244,15 +232,12 @@ async function logSet(btn){
   if(!(rp>0)){ shake('#inRp'); return; }
   const w=isFinite(kg)&&kg>=0?Math.round(kg*100)/100:0;
   if(!setSane(e.n,w,rp,btn)) return;
-  const sets=s.sets[x]||[], my=myoOn(s,x), tag=my?myoSt(sets).next:null;
-  await recordSet(e.n,w,rp,tag,sets.length);
-  s.sets[x]=sets.concat([tag?[w,rp,tag]:[w,rp]]); s.kg[x]=w; s.rp[x]=rp;
-  S.lvOk={t:Date.now(),txt:(tag==='ma'?'Activare notată':tag==='mm'?'Mini-set notat':'Seria '+s.sets[x].length+' notată')+' · '+num(w)+' kg × '+rp};
-  if(exComplete(s,x,e)&&!sessIsDone(s,x)) await markDone(s,x,true);
-  if(my){ const M=myoSt(s.sets[x]);
-    if(M.open){ s.rp[x]=tag==='ma'?5:Math.min(5,Math.max(3,rp)); startRest(MYO_PAUZA,'Myo · '+MYO_PAUZA+' s'); }
-    else { s.rp[x]=(s.sets[x].filter(q=>q[2]==='ma').pop()||[0,15])[1]; startRest(e.rest,M.done?'Pauză':'Pauză până la runda următoare'); } }
-  else startRest(mwRestFor(e,s.sets[x]));
+  const sets=s.sets[x]||[];
+  await recordSet(e.n,w,rp,null,sets.length);
+  s.sets[x]=sets.concat([[w,rp]]); s.kg[x]=w; s.rp[x]=rp;
+  S.lvOk={t:Date.now(),txt:'Seria '+s.sets[x].length+' notată · '+num(w)+' kg × '+rp};
+  if(s.sets[x].length>=e.sets&&!sessIsDone(s,x)) await markDone(s,x,true);
+  startRest(mwRestFor(e,s.sets[x]));
   await persistSess(); renderFocus();
 }
 async function undoSet(){
@@ -260,7 +245,7 @@ async function undoSet(){
   const a=(s.sets[x]||[]).slice(); if(!a.length) return;
   const [w,r]=a.pop(); s.sets[x]=a; await removeSet(e.n,w,r);
   s.prs=s.prs.filter(p=>!(p.n===e.n&&p.i===a.length)); s.best[e.n]=Math.max(0,...s.prs.filter(p=>p.n===e.n).map(p=>p.v));
-  if(!exComplete(s,x,e)&&sessIsDone(s,x)) await markDone(s,x,false);
+  if(a.length<e.sets&&sessIsDone(s,x)) await markDone(s,x,false);
   stopRest(); await persistSess(); renderFocus();
 }
 async function logRun(){
@@ -272,10 +257,6 @@ async function logRun(){
   await save('runs',(S.runs||[]).concat([run])); s.runs[x]=run;
   await markDone(s,x,true); buzz(40); await persistSess(); renderFocus();
 }
-/* myo-reps pornit/oprit pentru exercițiul curent (doar înainte de primul set) */
-async function myoToggle(){ const s=S.sess; if(!s) return; const x=s.cur, e=sessDay(s).ex[x]; if(!e||!MYO_OK.test(e.n)||(s.sets[x]||[]).length) return;
-  s.myo=Object.assign({},s.myo,{[x]:!myoOn(s,x)}); s.rp[x]=myoOn(s,x)?15:null; buzz(10); await persistSess(); renderFocus(); }
-ACT.myoT=()=>myoToggle();
 async function exDone(){ const s=S.sess; s.tasks[s.cur]=1; await markDone(s,s.cur,true); buzz(25);
   const day=sessDay(s); if(s.cur<day.ex.length-1&&s.cur!==lastReq(s)&&day.ex[s.cur].kind!=='task'){ s.cur++; S.fxDir='r'; }
   await persistSess(); renderFocus(); }

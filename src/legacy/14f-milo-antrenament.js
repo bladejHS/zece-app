@@ -113,17 +113,7 @@ function mwNext(e,sets){ const N=e.sets, i=Math.min(sets.length,N-1), r=mwRir(e.
   const part=lastSet&&MW_SAFE.test(e.n)&&!MW_HEAVY.test(e.n)?' Apoi, după eșec, 3–5 jumătăți de repetare în partea întinsă.':'';
   return `Seria ${Math.min(sets.length+1,N)}: <b>${mwRirTxt(r)}</b>. Coborâre 2–3 s, pauză scurtă jos, urcare explozivă.${part}`; }
 const mwRestCat=e=>MW_HEAVY.test(e.n)&&regionOf(e.n)==='jos'?'compus greu, picioare':COMPOUND.test(e.n)?(regionOf(e.n)==='jos'?'compus, picioare':'compus, partea de sus'):'izolare';
-function myoLive(e,x){ const s=S.sess, sets=s.sets[x]||[], M=myoSt(sets), last=sets[sets.length-1], cue=miloCue(e.n), L=[];
-  if(M.done) L.push(['ok','Ambele runde sunt gata. Data viitoare: aceeași greutate până faci 20 de repetări la activare, apoi crești.']);
-  else if(M.next==='ma') L.push(['info',`Runda ${M.r+1}: <b>12–20 de repetări, la 1–2 de eșec</b>, cu greutatea de la seriile obișnuite sau ceva mai ușoară. Coborâre controlată, stretch jos.`]);
-  else L.push(['info',`Mini-setul ${M.mini+1}: <b>3–5 repetări</b> cu aceeași greutate, după ${MYO_PAUZA} s. Te oprești când nu mai faci 3 (sau după ${MYO_MINI} mini-seturi).`]);
-  if(last&&last[2]==='ma'&&+last[1]<12) L.push(['warn','Sub 12 repetări la activare: greutatea e prea mare pentru myo-reps. Scade ~10–15% la runda următoare.']);
-  if(last&&last[2]==='ma'&&+last[1]>20) L.push(['warn','Peste 20 de repetări: crește greutatea la runda următoare.']);
-  return `<div class="mw-live" aria-live="polite"><div class="eyebrow">${ic('coach')} Antrenorul local · Wolf <span class="xs mu">· myo-reps · fără AI</span></div>
-    ${L.map(([c,t])=>`<div class="tac-st ${c}">${ic(c==='ok'?'check':c==='info'?'target':'alert')}<span>${t}</span></div>`).join('')}
-    ${cue?`<p class="xs mu" style="margin-top:8px">${ic('bolt')} ${esc(cue)}</p>`:''}
-    <p class="xs mu2" style="margin-top:6px">Wolf: myo-reps au dovezi mai slabe decât superseturile și drop set-urile; le folosești ca să câștigi timp, cu ~50% mai mult volum (2 runde). Între runde: ${e.rest} s.</p></div>`; }
-function miloLive(e,x){ if(myoOn(S.sess,x)) return myoLive(e,x); const s=S.sess, sets=s.sets[x]||[], adv=mwAdvice(e,sets), done=sets.length>=e.sets, cue=miloCue(e.n);
+function miloLive(e,x){ const s=S.sess, sets=s.sets[x]||[], adv=mwAdvice(e,sets), done=sets.length>=e.sets, cue=miloCue(e.n);
   return `<div class="mw-live" aria-live="polite"><div class="eyebrow">${ic('coach')} Antrenorul local · Wolf <span class="xs mu">· fără AI</span></div>
     ${done?'':`<div class="tac-st info">${ic('target')}<span>${mwNext(e,sets)}</span></div>`}
     ${adv.map(([c,t])=>`<div class="tac-st ${c}">${ic(c==='ok'?'check':c==='info'?'info':'alert')}<span>${esc(t)}</span></div>`).join('')}
