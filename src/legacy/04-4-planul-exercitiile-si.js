@@ -13,7 +13,7 @@ const WEEKS=4;
    Back Extension la 45°, Hamstring Curl la șezut) și abdomenul obligatoriu în 4 ședințe: ~12 seturi pe săptămână, cu stretch și greutate.
    Pauze: izolare 90 s, compuse sus 150 s, compuse grele de picioare 180 s. Vineri recuperare, duminică odihnă. Easy-urile luni și joi. */
 const PLAN=[
- {t:'Full body A + Easy run',cat:'mix',min:100,run:'ez1',lift:[['cal',65]],ex:[
+ {t:'Full Body A + Easy Run',cat:'mix',min:100,run:'ez1',lift:[['cal',65]],ex:[
   ['Incline Dumbbell Press','3×6–10 · pauză 150s — banca la 30–45°, ganterele coboară adânc'],
   ['Chest Supported Row','3×6–10 · pauză 150s — brațele complet întinse jos'],
   ['Lat Pulldown','3×8–12 · pauză 120s — priză îngustă sau supinată'],
@@ -27,7 +27,7 @@ const PLAN=[
   ['Warm up','10–15 min alergare ușoară + drills'],
   ['Threshold','4 × 6:00 @ ritm de prag · pauză 90s jog ușor'],
   ['Cool down','10 min alergare ușoară']]},
- {t:'Full body B · picioare grele',cat:'lift',min:80,lift:[['cal',70]],ex:[
+ {t:'Full Body B · Heavy Legs',cat:'lift',min:80,lift:[['cal',70]],ex:[
   ['Hack Squat','3×5–8 · pauză 180s — cât mai jos, pauză scurtă jos'],
   ['Romanian Deadlift','3×6–10 · pauză 180s — până puțin sub genunchi, fără eșec'],
   ['Hip Abduction Machine','2×12–20 · pauză 60s — aplecat în față'],
@@ -35,7 +35,7 @@ const PLAN=[
   ['Tricep Overhead Extension','3×8–12 · pauză 90s — cotul sus, tricepsul întins jos'],
   ['Preacher Curl','3×8–12 · pauză 90s'],
   ['Hanging Leg Raise','3×8–15 · pauză 60s — ridici bazinul spre piept (rotunjești spatele jos), nu doar picioarele']]},
- {t:'Full body C + Easy run',cat:'mix',min:100,run:'ez2',lift:[['cal',65]],ex:[
+ {t:'Full Body C + Easy Run',cat:'mix',min:100,run:'ez2',lift:[['cal',65]],ex:[
   ['Machine Chest Press','3×8–12 · pauză 150s'],
   ['Pull Up / Lat Pulldown','3×6–12 · pauză 150s — atârnare completă la fiecare repetare'],
   ['T-Bar Row','3×8–12 · pauză 120s — cu sprijin la piept, dacă ai'],
@@ -51,7 +51,7 @@ const PLAN=[
   ['Stretching','10–15 min · ține fiecare întindere 45–60s'],
   ['Foam roll / trigger point','după nevoie'],
   ['Deep breathing / mindset reset','5 min']]},
- {t:'Full body D · picioare grele',cat:'lift',min:80,lift:[['cal',70]],ex:[
+ {t:'Full Body D · Heavy Legs',cat:'lift',min:80,lift:[['cal',70]],ex:[
   ['Bulgarian Split Squat','3×6–10 pe picior · pauză 150s — la Smith, genunchiul din spate aproape de sol'],
   ['Back Extension','3×8–12 · pauză 120s — la 45°, cobori adânc cu spatele neutru, urci din șold; greutate la piept când devine ușor'],
   ['Leg Press','2×10–15 · pauză 120s — cât mai jos fără să se rotunjească spatele'],
@@ -103,7 +103,7 @@ async function migSplit(){
     s.cur=splitX(s.cur); s[SPLIT_MK]=1; await store.set(K.sess,s); }
   try{ localStorage.setItem('zece3:m16','1'); }catch(e){} }
 const NOTES=[
- {wk:'Full body A — compusele de sus, izolarea picioarelor, abdomen + alergare ușoară',d:[
+ {wk:'Full Body A — compusele de sus, izolarea picioarelor, abdomen + alergare ușoară',d:[
   ['De ce full body','Wolf își face singur antrenamentele full body: fiecare mușchi de 2–3 ori pe săptămână, seturile împărțite pe mai multe zile (primele seturi dintr-o ședință cresc cel mai mult), ședințe mai scurte. Azi compusele pentru partea de sus și izolarea pentru picioare, ca să poți alerga diseară.'],
   ['Cum lucrezi','Primul set al fiecărui exercițiu la 2–3 repetări în rezervă, ultimul la 0–1. Coborâre controlată 2–3 s, pauză scurtă în poziția întinsă, urcare explozivă, fără pauză sus.'],
   ['Superseturi','Dacă ai puțin timp: împinsul cu ramatul, extensiile cu flexiile, alternativ, cu 60–90 s între ele (aceeași creștere în ~jumătate din timp).'],
@@ -113,18 +113,18 @@ const NOTES=[
   ['Coaching','Ritm controlat și puternic, reprize egale, relaxat. Calitate peste cantitate.'],
   ['Progresie','Săptămânile 1–3: 4, 5, apoi 6 reprize. La fiecare ciclu nou repriza crește cu 30 s, până la 7 min; apoi progresezi prin ritm (refaci testul de prag).'],
   ['De ce marți','Ieri picioarele au făcut doar izolare, iar compusele grele vin abia mâine: pragul e la peste 24 de ore de ele (Norton: interferența dispare la ≥24 h).']]},
- {wk:'Full body B — picioarele grele, izolarea de sus, abdomen',d:[
+ {wk:'Full Body B — Heavy Legs, izolare pentru partea de sus, abdomen',d:[
   ['Cum lucrezi','Hack squat și RDL la 1–2 repetări în rezervă, fără eșec (eșecul la compusele grele de picioare costă mult și aduce puțin). Izolările de sus: ultimul set la eșec, apoi 3–5 jumătăți de repetare în partea întinsă.'],
   ['Ordinea','Compusele întâi, cât ești proaspăt; brațele și umerii nu suferă după picioare.'],
   ['Mâine','Joi doar izolare la picioare (flexii, gambe), cu greutăți moderate: frecvența mare ajută, iar easy run-ul de seară e ușor.']]},
- {wk:'Full body C — compusele de sus, izolarea picioarelor, abdomen + alergare ușoară',d:[
+ {wk:'Full Body C — compusele de sus, izolarea picioarelor, abdomen + alergare ușoară',d:[
   ['Cum lucrezi','Repetări ceva mai multe decât luni (8–15). Aparatele și cablurile sunt sigure până la eșec: acolo mergi la 0 pe ultimul set și continui cu jumătăți de repetare în stretch.'],
   ['Spatele','Tracțiunile cu atârnare completă jos; ramatul cu brațele complet întinse și omoplații depărtați. Fără pauză în contracție.'],
   ['Alergarea','Easy run-ul la ~6 ore după forță, ușor — e flush, nu antrenament.']]},
  {wk:'Recuperare — 30–45 min, intensitate mică',d:[
   ['Coaching','Mișcare cu intenție, nu cu intensitate. Somn 7–9 ore, mâncare bună, apă.'],
   ['Progresie','Notezi cum te simți și cum recuperezi în fiecare săptămână.']]},
- {wk:'Full body D — picioarele, izolarea de sus, abdomen',d:[
+ {wk:'Full Body D — Heavy Legs, izolare pentru partea de sus, abdomen',d:[
   ['Cum lucrezi','Fandarea bulgărească la Smith întâi, la 1–2 repetări în rezervă. Back extension la 45°: hinge ca la RDL, dar cu încărcare mică pe spate, după alergare e mai blând. Ultimul set la presă până la eșec.'],
   ['Femuralii','Flexiile la șezut sunt exercițiul preferat al lui Wolf pentru femurali: îi lucrează întinși (aplecat în față). Partea excentrică lentă ajută și la protecția lor la alergare.'],
   ['Weekend','Mâine e odihnă, apoi luni doar izolare la picioare: ajung odihnite la pragul de marți.']]},
