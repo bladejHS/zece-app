@@ -34,12 +34,12 @@ const PLAN=[
   ['Cable Lateral Raise','3×10–15 · pauză 90s — cablul la nivelul mâinii, din spatele corpului'],
   ['Tricep Overhead Extension','3×8–12 · pauză 90s — cotul sus, tricepsul întins jos'],
   ['Preacher Curl','3×8–12 · pauză 90s'],
-  ['Hanging Leg Raise','3×8–15 · pauză 60s — ridici bazinul spre piept (rotunjești spatele jos), nu doar picioarele']]},
+  ['Roman Chair Leg Raise','3×8–15 · pauză 60s — sprijinit pe antebrațe, ridici bazinul spre piept (rotunjești spatele jos), nu doar picioarele']]},
  {t:'Full Body C + Easy Run',cat:'mix',min:100,run:'ez2',lift:[['cal',65]],ex:[
   ['Machine Chest Press','3×8–12 · pauză 150s'],
   ['Pull Up / Lat Pulldown','3×6–12 · pauză 150s — atârnare completă la fiecare repetare'],
-  ['T-Bar Row','3×8–12 · pauză 120s — cu sprijin la piept, dacă ai'],
-  ['Dumbbell Fly','3×10–15 · pauză 90s — stretch adânc, coatele ușor îndoite'],
+  ['Seated Cable Row','3×8–12 · pauză 120s — priză neutră sau largă, brațele complet întinse și omoplații depărtați în față'],
+  ['Cable Fly','3×10–15 · pauză 90s — cable crossover: brațele larg în spate (stretch), mâinile se încrucișează în față'],
   ['Rear Delt Fly','2×12–20 · pauză 90s — la cablu, cruce în fața corpului'],
   ['Hamstring Curl','3×10–15 · pauză 90s — la șezut, aplecat în față'],
   ['Calf Raise','3×10–15 · pauză 90s — genunchii întinși, 1–2 s jos'],
@@ -143,7 +143,7 @@ const RUN_WU={thr:22.5,lng:20};
 const RUNK={ez:'Easy Z2',thr:'Prag',lng:'Long run',int:'Intervale',tmp:'Tempo'};
 const RUN_EX=/^(Easy run|Threshold$|Long run)/;
 const BARBELL=/^(Bench Press|Push Press|Close Grip Bench Press|Romanian Deadlift|Barbell Curl|Good Morning)$/;
-const COMPOUND=/^(Bench Press|Hack Squat|Romanian Deadlift|Push Press|Seated Overhead Press|Leg Press|Close Grip Bench Press|Flat Dumbbell Press|Incline Dumbbell Press|Hammer Chest Press|Hip Thrust|Machine Chest Press|Chest Supported Row|T-Bar Row|Lat Pulldown|Pull Up \/ Lat Pulldown|Weighted Pull Up|Good Morning|Bulgarian Split Squat)$/;
+const COMPOUND=/^(Bench Press|Hack Squat|Romanian Deadlift|Push Press|Seated Overhead Press|Leg Press|Close Grip Bench Press|Flat Dumbbell Press|Incline Dumbbell Press|Hammer Chest Press|Hip Thrust|Machine Chest Press|Chest Supported Row|T-Bar Row|Seated Cable Row|Lat Pulldown|Pull Up \/ Lat Pulldown|Weighted Pull Up|Good Morning|Bulgarian Split Squat)$/;
 
 function runPlan(){
   const d=JSON.parse(JSON.stringify(RUN_DEFAULT)), sv=(S.runPlan||{}).h||{}, n=Math.max(0,Math.min(RUN_CYC.max,cyc()-1));
@@ -186,7 +186,9 @@ function dayBase(w,d){
   return {w,d,t:base.t,cat:base.cat,run:base.run,min,ex,notes:NOTES[d],deload:dl};
 }
 /* deload automat (src/lib/training): săptămâna a 4-a din ciclu are volum −40%, aceleași zile; se poate opri din Setări */
-const deloadOn=w=>S.deload!==false&&TRAINING.isDeloadWeek(w+1);
+/* v26 (Wolf, articolul despre pauzele de dietă): în cut, deload-ul vine în săptămâna la menținere (prof.dbDl, setat la pornire de dbDeloadSync) */
+const dbDl=w=>{ const x=prof().dbDl; return !!(x&&x.c===cyc()&&x.w===w); };
+const deloadOn=w=>(S.deload!==false&&TRAINING.isDeloadWeek(w+1))||dbDl(w);
 function deloadEx(e){
   if(e.kind==='lift'&&e.sets){ const n=TRAINING.deloadCount(e.sets); e.p=e.p.replace(/^\d+×/,n+'×')+' · deload'; e.sets=n; }
   else if(e.n==='Threshold'){ const r=+((/^(\d+) ×/.exec(e.p)||[])[1])||0; if(r){ const n=TRAINING.deloadCount(r); e.iv=n; e.p=e.p.replace(/^\d+ ×/,n+' ×')+' · deload'; e.planMin=TRAINING.deloadMinutes(e.planMin||0); } }

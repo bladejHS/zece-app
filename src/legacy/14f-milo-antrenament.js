@@ -13,7 +13,8 @@ const MILO_CUE={
   'Hammer Chest Press':'Mânerele cât mai în spate (stretch în piept), pauză scurtă, exploziv. Ultimul set până la eșec, apoi jumătăți de repetare în stretch.',
   'Machine Chest Press':'Mânerele cât mai în spate (stretch în piept), pauză scurtă, exploziv. Aparatul e sigur: ultimul set la eșec, apoi jumătăți de repetare în stretch.',
   'Chest Supported Row':'Brațele complet întinse jos, omoplații depărtați. Fără pauză sus. După eșec, jumătăți de repetare în poziția întinsă.',
-  'T-Bar Row':'Cu sprijin la piept dacă ai: brațele complet întinse jos, omoplații depărtați, fără pauză sus. E cel mai greu jos — exact unde trebuie.',
+  'T-Bar Row':'Wolf îl consideră mai slab (priză îngustă, discurile ating pieptul înainte de amplitudinea completă): preferă ramatul la cablu sau cu pieptul sprijinit. Dacă îl faci: brațele complet întinse jos, omoplații depărtați.',
+  'Seated Cable Row':'Priză neutră sau largă: brațele complet întinse în față și omoplații depărtați (stretch), tragi spre abdomen, fără pauză în spate. Poți lăsa trunchiul să vină puțin în față la revenire. După eșec, jumătăți de repetare în partea întinsă.',
   'Lateral Raise':'Cablul la nivelul mâinii, din spatele corpului, ca tensiunea să înceapă de jos. După eșec, jumătăți de repetare în partea de jos.',
   'Cable Lateral Raise':'Cablul la nivelul mâinii, brațul trece prin spatele corpului jos (stretch). Urci până la umăr, nu mai sus. După eșec, jumătăți de repetare jos.',
   'Dumbbell Lateral Raise':'Aplecat puțin în lateral, ca tensiunea să înceapă de jos. După eșec, jumătăți de repetare în partea de jos.',
@@ -26,21 +27,21 @@ const MILO_CUE={
   'Preacher Curl':'Cel mai greu jos, cu brațul aproape întins: exact poziția care crește cel mai mult. Nu bloca brusc jos; după eșec, jumătăți de repetare jos.',
   'Incline Dumbbell Curl':'Umărul rămâne în spate, brațul complet întins jos. Sus e ușor: ultimele repetări fă-le ca jumătăți de jos.',
   'Pec Deck':'Brațele pornesc larg, în spatele corpului: pieptul întins sub sarcină. Fără pauză în față, unde nu mai e tensiune; jumătăți de repetare în stretch la final.',
-  'Cable Fly':'Un pas în față, brațele larg în spate până simți stretch-ul, coatele ușor îndoite și fixe. Tensiunea rămâne și jos, de aceea e bun după gantere.',
+  'Cable Fly':'Cel mai bun exercițiu de izolare pentru piept după Wolf: un pas în față, brațele larg în spate până simți stretch-ul, coatele ușor îndoite și fixe, mâinile se încrucișează în față. Tensiunea rămâne pe toată mișcarea, nu doar jos.',
   'Hammer Curl':'Priza neutră lucrează brahialul și brahioradialul: brațul arată mai gros. Brațul complet întins jos, fără balans.',
   'Cable Curl':'Pe bancă, cu cablul în spatele tău la nivelul mâinii (Bayesian): bicepsul e întins și încărcat jos. Fără pauză sus.',
   'Alternating Dumbbell Curl':'Brațul complet întins jos; ideal cu brațul puțin în spatele corpului (curl înclinat). Ultimul set până la eșec.',
   'Barbell Curl':'Brațele complet întinse jos, fără pauză sus. Puțin balans la final e ok.',
   'Flat Dumbbell Press':'Ganterele coboară sub nivelul pieptului (stretch adânc), pauză scurtă, exploziv.',
   'Incline Dumbbell Press':'Banca la 30–45°: crește mai mult partea de sus a pieptului decât împinsul plat. Ganterele coboară adânc, înclinate spre interior, pauză scurtă, exploziv.',
-  'Dumbbell Fly':'Cel mai bun „întinzător" al pieptului: coatele ușor îndoite și fixe, cobori până simți stretch-ul, urci doar până la ~jumătate (sus nu e tensiune).',
+  'Dumbbell Fly':'Stretch bun jos, dar sus nu mai e tensiune (Wolf preferă fluturările la cablu): coatele ușor îndoite și fixe, cobori până simți stretch-ul, urci doar până la ~jumătate.',
   'Seated Overhead Press':'Cobori până la claviculă, fără să te sprijini jos. Primele seturi la 2 repetări în rezervă, ultimul la 0–1.',
   'Cable Face Pull':'Brațele complet întinse în față la revenire. După eșec, jumătăți de repetare.',
   'Close Grip Bench Press':'Coatele aproape de corp, atingi pieptul; 1–2 repetări în rezervă.',
   'Push Press':'Mișcare de putere: viteză maximă la fiecare repetare, fără eșec.',
   'Shrug':'Șezând, cu gantere: umerii coboară complet jos (stretch), urci exploziv, fără pauză sus. Poți face ultimul set ca drop set.',
   'Hack Squat':'Cât de jos poți cu spatele lipit (stretch în cvadriceps), pauză scurtă jos, urci exploziv. Seturile grele la 1–2 repetări în rezervă.',
-  'Romanian Deadlift':'Genunchii rămân pe loc, șoldurile pleacă în spate până puțin sub genunchi. Partea de jos e cea care crește: poți lucra doar jumătatea de jos. 1–2 repetări în rezervă.',
+  'Romanian Deadlift':'Genunchii rămân pe loc, șoldurile pleacă în spate până puțin sub genunchi. Nu bloca sus: urci până puțin deasupra genunchilor și cobori din nou (jumătățile de jos au crescut fesierii și femuralii de ~2 ori mai mult, Maeo). 1–2 repetări în rezervă.',
   'Good Morning':'La Smith: genunchii aproape întinși, împingi șoldurile în spate (nu în jos) până la stretch-ul maxim în femurali. Jumătăți de repetare din partea de jos (2× mai multă creștere în studiul multi-hip).',
   'Bulgarian Split Squat':'La Smith: piciorul din față departe, genunchiul din spate aproape de sol (stretch în fesieri și cvadriceps). Stabil: poți merge aproape de eșec în siguranță.',
   'Walking Lunge':'Pas lung, genunchiul din spate aproape de sol (stretch în fesieri). 1–2 repetări în rezervă.',
@@ -52,7 +53,8 @@ const MILO_CUE={
   'Hip Abduction Machine':'Aplecat în față (întinde și fesierul mare). Ultimul set la eșec, apoi jumătăți de repetare cu genunchii apropiați.',
   'Calf Raise':'Genunchii întinși (gastrocnemianul crește mai mult decât la șezut), pauză de 1–2 s jos, în stretch maxim. După eșec, jumătăți de repetare jos.',
   'Seated Calf Raise':'Pauză de 1–2 s jos; la gambe, varianta cu genunchii întinși crește mai mult — folosește-o pe aceea când poți.',
-  'Hanging Leg Raise':'Fără balans; rotunjește bazinul spre piept (flexia coloanei lucrează abdomenul), până la eșec tehnic.',
+  'Hanging Leg Raise':'Fără balans; rotunjește bazinul spre piept (flexia coloanei lucrează abdomenul), până la eșec tehnic. Wolf preferă varianta la scaunul roman: atârnatul obosește dorsalii și antebrațele.',
+  'Roman Chair Leg Raise':'Sprijinit pe antebrațe, fără balans: ridici genunchii și rulezi bazinul spre piept (spatele de jos se desprinde de spătar), cobori controlat până la picioarele întinse. Până la eșec tehnic; când devine ușor, picioarele întinse sau o ganteră între tălpi.',
   'Back Extension':'La 45°: cobori cât poți de jos cu spatele neutru (femuralii și fesierii întinși), urci din șold. Când trec 12 repetări, ții o ganteră sau un disc la piept.',
   'Cable Crunch':'Rotunjește coloana (de la cutia toracică spre bazin), nu te îndoi din șold. Sus, abdomenul se întinde complet.',
   'Dragon Flag':'Până la eșec tehnic, cu negative lente.',
@@ -62,12 +64,12 @@ const MILO_CUE={
 const miloCue=n=>MILO_CUE[n]||'';
 /* principiile pentru seturi, pe scurt (cardul din Plan) */
 const MILO_RULES=[
-  ['target','Cât de greu','Primul set al unui exercițiu la 2–3 repetări în rezervă, apoi te apropii set cu set; ultimul set la 0–1. Eșecul îl lași pentru aparate, cabluri, izolare și finalul ședinței; la compusele grele de picioare rămâi la 1–2. De la 5 repetări în rezervă la eșec, creșterea pe set aproape se dublează (Robinson).'],
+  ['target','Cât de greu','Primul set al unui exercițiu la 2–3 repetări în rezervă, apoi te apropii set cu set; ultimul set la 0–1. Eșecul îl lași pentru aparate, cabluri, izolare și finalul ședinței; la compusele grele de picioare rămâi la 1–2. De la 5 repetări în rezervă la eșec, creșterea pe set aproape se dublează (Robinson). Sub 12 repetări te subestimezi cu ~1 repetare; peste 12, cu până la ~5: la seriile lungi mai împinge 2–3 repetări după ce crezi că ai terminat.'],
   ['clock','Pauzele','Izolare 90 s, compuse pe partea de sus ~2,5 min, compusele grele de picioare 3 min. Sub 60 s creșterea scade; repornești când poți repeta aproximativ setul de dinainte și nu mai gâfâi. Cronometrul din antrenament le pornește singur.'],
-  ['bolt','Stretch-ul','Amplitudine completă, frânezi în poziția întinsă, pauză scurtă jos, urci exploziv; fără pauză sus. Unde e sigur, după eșec continui cu jumătăți de repetare în partea întinsă (~+10% creștere; la gambe +50% în studiul lui).'],
+  ['bolt','Stretch-ul','Amplitudine completă, frânezi în poziția întinsă, pauză scurtă jos, urci exploziv; fără pauză sus. Unde e sigur, după eșec continui cu jumătăți de repetare în partea întinsă (la gambe +40% în studiul Larsen la care a lucrat, iar doar jumătățile de jos ~+100%).'],
   ['chart','Progresia','Dubla progresie, judecată pe primul set: urci repetările până la capătul intervalului, apoi greutatea. La exercițiile cu pași mari de greutate (cabluri, gantere mici), progresezi prin repetări. Păstrezi aceleași exerciții luni de zile.'],
   ['dumbbell','Volumul','10–20 de seturi directe pe mușchi pe săptămână; mai mult doar pentru 1–3 mușchi pe care îi specializezi. Cel mult ~11 seturi pe mușchi într-o ședință. Recuperarea o judeci după performanță, nu după febra musculară.'],
-  ['refresh','Deload','Programat nu ajută (o săptămână de pauză la 4 a dat mai puțină forță). Îl faci doar când performanța scade 1–2 săptămâni la rând sau viața o cere (stres, boală, călătorie): mai puține seturi și 2–3 repetări în plus în rezervă. Antrenorul din antrenament îți spune când.'],
+  ['refresh','Deload','Programat nu ajută (o săptămână de pauză la 4 a dat mai puțină forță). Îl faci când performanța scade 1–2 săptămâni la rând sau viața o cere (stres, boală, călătorie): mai puține seturi și 2–3 repetări în plus în rezervă. În cut, aplicația ți-l pune singură în prima săptămână a pauzei de dietă, când mănânci la menținere (Wolf: deload la 6–12 săptămâni, la menținere).'],
   ['run','Încălzirea','Scurtă și specifică, doar la primul exercițiu compus: ~40% × 8, ~70% × 3–4, ~90% × 1. La următoarele, un set ușor sau deloc. Fără stretching static înainte: nu previne accidentările și scade forța.'],
   ['heart','Hibrid','Alergarea separat de forță (~6 ore) sau după ea; pragul la ≥24 de ore de picioare. Forța reduce accidentările la alergare; flexiile la șezut, cu coborâre lentă, protejează femuralii. Cardio-ul cu impact mic (bicicletă, mers în pantă) interferează cel mai puțin.'],
   ['stopwatch','Când ai puțin timp','Superseturi între exerciții fără mușchi comuni (aceeași creștere, ~jumătate din timp) și drop seturi la ultimul set (−20% greutate, 2–3 coborâri, doar la gantere și aparate).']];
@@ -109,7 +111,7 @@ function mwAdvice(e,sets){ const out=[], N=e.sets, i=sets.length, inc=incFor(e.n
   }
   return out; }
 /* ce face seria următoare: ținta de repetări în rezervă, tempo, partialele, pauza */
-function mwNext(e,sets){ const N=e.sets, i=Math.min(sets.length,N-1), r=mwRir(e.n,i,N), lastSet=sets.length>=N-1;
+function mwNext(e,sets){ const N=e.sets, i=Math.min(sets.length,N-1), dl=/· deload/.test(e.p||''), r=mwRir(e.n,i,N)+(dl?2:0), lastSet=!dl&&sets.length>=N-1;
   const part=lastSet&&MW_SAFE.test(e.n)&&!MW_HEAVY.test(e.n)?' Apoi, după eșec, 3–5 jumătăți de repetare în partea întinsă.':'';
   return `Seria ${Math.min(sets.length+1,N)}: <b>${mwRirTxt(r)}</b>. Coborâre 2–3 s, pauză scurtă jos, urcare explozivă.${part}`; }
 const mwRestCat=e=>MW_HEAVY.test(e.n)&&regionOf(e.n)==='jos'?'compus greu, picioare':COMPOUND.test(e.n)?(regionOf(e.n)==='jos'?'compus, picioare':'compus, partea de sus'):'izolare';

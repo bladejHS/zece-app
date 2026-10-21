@@ -142,6 +142,14 @@ function dietBreakPlan(){ const ws=wStats(), w=ws?ws.a7:+prof().startW||80, bf=b
   if(bf>=(f?35:25)) return {c:6,b:2,k:'high',l:'6 săptămâni deficit, 2 la menținere (multă grăsime de pierdut: 1–2 săptămâni la 1–2 luni)'};
   return {c:4,b:2,k:'mid',l:'4 săptămâni deficit, 2 la menținere (raport 2:1)'}; }
 const dietCutWeeks=()=>dietBreakPlan().c;
+/* v26 (Milo Wolf, „Should you be using diet breaks”): deload la 6–12 săptămâni, în săptămâna în care mănânci la menținere.
+   Deci prima săptămână a fiecărei pauze de dietă; la planul slab (2 + 2) doar o pauză din două, ca să rămână ~8 săptămâni între ele. */
+function dbDeloadId(){ if(goalMode()!=='cut'||prof().dietBreak===false) return null;
+  const D=dietBreakPlan(), L=D.c+D.b, st=prof().dbStart||mondayOf(todayKey()), gw=Math.max(0,Math.floor(daysBetween(st,mondayOf(todayKey()))/7)), n=Math.floor(gw/L);
+  if(gw%L!==D.c||(L<6&&n%2===0)) return null; return st+'#'+n; }
+/* la pornire: săptămâna din plan care e acum în curs primește deload-ul pauzei (o singură dată pe pauză) */
+async function dbDeloadSync(){ const id=dbDeloadId(), P=prof(), nx=nextDay(); if(!id||!nx||(P.dbDl&&P.dbDl.id===id)) return;
+  await save('prof',Object.assign({},S.prof||{},{dbDl:{id,c:cyc(),w:nx.w}})); STC=null; }
 /* începutul numărătorii pentru pauze: o singură dată, lunea curentă */
 async function dbMigrate(){ if(prof().dbStart) return; await save('prof',Object.assign({},S.prof||{},{dbStart:mondayOf(todayKey())})); STC=null; }
 /* v16: metabolismul declarat (unii oameni ard mai puțin decât spun formulele) */
@@ -232,13 +240,13 @@ const EXM={'Bench Press':{piept:1,triceps:.5,umeri:.5},'Pull Up / Lat Pulldown':
   'Flat Dumbbell Press':{piept:1,triceps:.5,umeri:.5},'Seated Overhead Press':{umeri:1,triceps:.5},'Cable Face Pull':{umeri:1,spate:.5},'Hack Squat':{cvadriceps:1,fesieri:.5},
   'Romanian Deadlift':{femurali:1,fesieri:.5},'Walking Lunge':{cvadriceps:1,fesieri:1},'Hip Thrust':{fesieri:1,femurali:.5},'Leg Press':{cvadriceps:1,fesieri:.5},
   'Hamstring Curl':{femurali:1},'Calf Raise':{gambe:1},'Push Press':{umeri:1,triceps:.5},'Close Grip Bench Press':{triceps:1,piept:.5},
-  'Dragon Flag':{abdomen:1},'Hanging Leg Raise':{abdomen:1},'Ab Wheel Rollout':{abdomen:1},'Pallof Press':{abdomen:1},'Plank':{abdomen:1},
+  'Dragon Flag':{abdomen:1},'Hanging Leg Raise':{abdomen:1},'Roman Chair Leg Raise':{abdomen:1},'Ab Wheel Rollout':{abdomen:1},'Pallof Press':{abdomen:1},'Plank':{abdomen:1},
   /* v19: exercițiile din planul după Milo Wolf */
-  'Lat Pulldown':{spate:1,biceps:.5},'Pull Up':{spate:1,biceps:.5},'T-Bar Row':{spate:1,biceps:.5,umeri:.5},'Machine Chest Press':{piept:1,triceps:.5,umeri:.5},'Dumbbell Fly':{piept:1},
+  'Lat Pulldown':{spate:1,biceps:.5},'Pull Up':{spate:1,biceps:.5},'T-Bar Row':{spate:1,biceps:.5,umeri:.5},'Seated Cable Row':{spate:1,biceps:.5},'Machine Chest Press':{piept:1,triceps:.5,umeri:.5},'Dumbbell Fly':{piept:1},
   'Cable Lateral Raise':{umeri:1},'Rear Delt Fly':{umeri:1},'Skull Crusher':{triceps:1},'Preacher Curl':{biceps:1},'Incline Dumbbell Curl':{biceps:1},'Cable Curl':{biceps:1},'Pec Deck':{piept:1},'Cable Fly':{piept:1},'Hammer Curl':{biceps:1},'Shrug':{spate:.5},
   'Leg Extension':{cvadriceps:1},'Good Morning':{femurali:1,fesieri:.5},'Back Extension':{femurali:1,fesieri:1},'Cable Crunch':{abdomen:1},'Bulgarian Split Squat':{cvadriceps:1,fesieri:1},'Nordic Curl':{femurali:1},'Hip Abduction Machine':{fesieri:1},'Cable Crunch':{abdomen:1}};
 /* exerciții cu greutatea corpului: progresia e varianta mai grea, nu kilogramele */
-const BW_PROG={'Nordic Curl':'coboară mai lent sau mai jos înainte să te prinzi cu mâinile','Dragon Flag':'coboară mai lent (5–6 s) sau treci de la negative la repetări complete','Hanging Leg Raise':'treci de la genunchi la picioarele întinse','Ab Wheel Rollout':'rulează mai departe sau mai lent, cu spatele drept'};
+const BW_PROG={'Nordic Curl':'coboară mai lent sau mai jos înainte să te prinzi cu mâinile','Dragon Flag':'coboară mai lent (5–6 s) sau treci de la negative la repetări complete','Hanging Leg Raise':'treci de la genunchi la picioarele întinse','Roman Chair Leg Raise':'treci de la genunchi la picioarele întinse, apoi cu o ganteră între tălpi','Ab Wheel Rollout':'rulează mai departe sau mai lent, cu spatele drept'};
 function muscleSets(from,to){ const m={}, by={}; MUSC.forEach(([k])=>{ m[k]=0; by[k]={}; });
   Object.keys(S.lifts||{}).forEach(n=>{ const map=EXM[n]; if(!map) return; (S.lifts[n]||[]).forEach(e=>{ if(e.d<from||e.d>to) return; const c=e.s.length;
     Object.keys(map).forEach(k=>{ m[k]+=c*map[k]; by[k][n]=(by[k][n]||0)+c; }); }); });
