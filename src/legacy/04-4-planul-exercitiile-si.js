@@ -129,7 +129,7 @@ const NOTES=[
   ['Coaching','Mișcare cu intenție, nu cu intensitate. Somn 7–9 ore, mâncare bună, apă.'],
   ['Progresie','Notezi cum te simți și cum recuperezi în fiecare săptămână.']]},
  {wk:'Full Body D — Heavy Legs, izolare pentru partea de sus, abdomen',d:[
-  ['Cum lucrezi','Fandarea bulgărească la Smith întâi, la 1–2 repetări în rezervă. Back extension la 45°: hinge ca la RDL, dar cu încărcare mică pe spate, după alergare e mai blând. Ultimul set la presă până la eșec.'],
+  ['Cum lucrezi','Fandarea bulgărească la Smith întâi, la 1–2 repetări în rezervă. Back extension la 45°: hinge ca la RDL, dar cu încărcare mică pe spate, deci mai blând. Ultimul set la presă până la eșec.'],
   ['Femuralii','Flexiile la șezut sunt exercițiul preferat al lui Wolf pentru femurali: îi lucrează întinși (aplecat în față).'],
   ['Weekend','Mâine e odihnă, apoi luni doar izolare la picioare: ajung odihnite la intervalele de marți.']]},
  {wk:'Odihnă — plimbare și mobilitate',d:[
