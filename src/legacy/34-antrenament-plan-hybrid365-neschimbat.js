@@ -1,10 +1,10 @@
 /* =====================================================================
-   v8 · ANTRENAMENT — Planul · Istoric.
+   v8 · ANTRENAMENT — Planul · HYBRID (v27, Alex Viada, în 34b) · Activități · Istoric.
    ===================================================================== */
-const TR_TABS=[['plan','Plan','plan'],['acts','Activități','activity'],['hist','Istoric','history']];
+const TR_TABS=[['plan','Plan','plan'],['hyb','HYBRID','bolt'],['acts','Activități','activity'],['hist','Istoric','history']];
 function viewTrain(){
   const T=TR_TABS.some(t=>t[0]===S.trTab)?S.trTab:'plan';
-  const body=T==='hist'?trainHist():T==='acts'?viewActs():viewPlan();
+  const body=T==='hist'?trainHist():T==='acts'?viewActs():T==='hyb'?viewHybrid():viewPlan();
   return `<div class="seg scr" style="margin-top:6px">${TR_TABS.map(t=>`<button class="${T===t[0]?'on':''}" data-a="trTab" data-k="${t[0]}">${ic(t[2])} ${t[1]}</button>`).join('')}</div>${body}`;
 }
 ACT.trTab=(el,{k})=>{ S.trTab=k; render(); window.scrollTo({top:0}); };

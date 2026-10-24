@@ -4,7 +4,7 @@
 async function loadAll(){
   const keys=Object.keys(K), vals=await Promise.all(keys.map(k=>store.get(K[k]))), o=Object.fromEntries(keys.map((k,i)=>[k,vals[i]]));
   const obj=v=>v&&typeof v==='object'&&!Array.isArray(v)?v:{};
-  ['lifts','weights','wlog','cyc','runPlan','prof','mlog','water','body','journal','tech','mplan','shop','adj','strava','exNote','dash','notifCfg','kb','vox','std','nlog'].forEach(k=>{ S[k]=obj(o[k]); });
+  ['lifts','weights','wlog','cyc','runPlan','prof','mlog','water','body','journal','tech','mplan','shop','adj','strava','exNote','dash','notifCfg','kb','vox','std','nlog','hyb'].forEach(k=>{ S[k]=obj(o[k]); });
   S.ach=o.ach&&typeof o.ach==='object'&&!Array.isArray(o.ach)?o.ach:null; S.notif=Array.isArray(o.notif)?o.notif:undefined;
   S.exFav=Array.isArray(o.exFav)?o.exFav:[]; S.exCustom=Array.isArray(o.exCustom)?o.exCustom:[];
   try{ const r=JSON.parse(localStorage.getItem('zece3:rng')||'"m"'); if(RANGES.some(x=>x[0]===r)) S.rng=r; }catch(e){}

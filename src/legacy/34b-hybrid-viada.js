@@ -1,0 +1,286 @@
+/* =====================================================================
+   v27 · HYBRID — a doua filă de plan din Antrenament, după Alex Viada („The Ultimate Hybrid Athlete”, 2025,
+   și interviurile lui de la Rox Lyfe, Jordan Syatt și Coach 'Em Up). Planul full body Wolf rămâne neatins în fila Plan.
+   Programul e „Hypertrophy + 5K”, cel pe care Viada îl recomandă ca primul din carte: 4 zile de forță (sus/jos de câte 2 ori),
+   sprint + MLSS luni, sesiunea de lângă prag miercuri (sesiunea-cheie), VT1 joi, alergarea lungă sâmbătă, duminică liber.
+   Notația lui: ME (efort maxim), DE (efort dinamic, viteză), SKILL (tehnică), HYP (hipertrofie), RIR (repetări în rezervă).
+   Ritmurile sunt în % din viteza de prag (100% = prag/VT2), ca în carte; forța merge pe „cercul repetărilor” (3 săptămâni) în jurul
+   maximului de antrenament (96% din 1RM), care urcă cu 1% la fiecare cerc. Totul e calculat local, fără antrenorul AI.
+   ===================================================================== */
+K.hyb='zece3:hyb'; S.hyb={};
+const hyb=()=>Object.assign({wk:0,lvl:0,tm:{},log:{},bj:[]},S.hyb||{});
+async function hybSave(o){ await save('hyb',Object.assign({},S.hyb||{},o)); }
+/* cercul repetărilor: [serii, repetări, % din maximul de antrenament] pe săptămânile 1–3 ale cercului */
+const HYB_CIRC={me:[[2,4,90],[2,3,93],[2,2,96]],de:[[6,3,70],[5,3,75],[5,2,80]],sk:[[4,5,75],[4,4,80],[3,3,85]]};
+const HYB_TYPE={me:'ME · efort maxim',de:'DE · efort dinamic',sk:'SKILL · tehnică',hyp:'HYP · hipertrofie',core:'Core',plyo:'Pliometrie',run:'Alergare'};
+/* ridicările care merg pe procente (au maxim de antrenament) */
+const HYB_TM=['Incline Bench Press','Trap Bar Deadlift','T-Bar Row','Box Squat'];
+/* exercițiile: [nume, tip, categoria lui Viada, serii×repetări (pentru HYP/core), indicație] — sesiunea s: 0 prima, 1 a doua */
+const HYB_DAYS=[
+ {t:'Upper Push + Speed Run',cat:'mix',ses:['Alergare · dimineața (sprint + MLSS, ~45–50 min)','Forță · la 4–6 ore după'],run:'mon',ex:[
+  ['Incline Bench Press','me','Secondary push','','Prima ridicare a zilei, compusă, proaspăt. Oprești setul înainte să se strice tehnica.',1],
+  ['Machine Chest Press','hyp','Braced push','3×6–12 · 1–2 RIR · pauză 120s','Tempo constant: coborâre controlată, urcare puternică, fără excentrice foarte lente.',1],
+  ['Chest Supported Row','hyp','Braced pull','3×6–12 · 1–2 RIR · pauză 120s','',1],
+  ['Roman Chair Leg Raise','core','Core','3×8–15 · pauză 60s','Core-ul după lucrul principal și înaintea izolării (regula 4 a lui Viada).',1],
+  ['Tricep Pushdown','hyp','Focused push (arms) · superset','3×8–12 · 0–2 RIR · alternativ cu curl-ul, 60–90s','',1],
+  ['Preacher Curl','hyp','Focused pull (arms) · superset','3×8–12 · 0–2 RIR','',1],
+  ['Cable Lateral Raise','hyp','Focused push','3×8–12 · 0–2 RIR · pauză 90s','',1]]},
+ {t:'Lower Hinge',cat:'lift',ses:['Forță'],ex:[
+  ['Trap Bar Deadlift','de','Hinge · viteză','','Fiecare repetare cât mai rapidă, ca și cum bara ar fi grea; 3–4 RIR. Viteza contează, nu oboseala.',0],
+  ['Romanian Deadlift','hyp','Secondary hinge','3×6–10 · 1–2 RIR · pauză 150s','',0],
+  ['Back Extension','hyp','Braced hinge · superset','3×8–12 · 1–2 RIR · alternativ cu presa','La 45°, din șold, spatele neutru.',0],
+  ['Leg Press','hyp','Braced lower push · superset','3×8–12 · 1–2 RIR','',0],
+  ['Ab Wheel Rollout','core','Core','3×6–12 · pauză 60s','',0],
+  ['Hamstring Curl','hyp','Focused hamstring','3×8–12 · 0–2 RIR · pauză 90s','La șezut.',0],
+  ['Bulgarian Split Squat','de','Braced push asimetric · viteză','4×4 pe picior · exploziv, 3–4 RIR · pauză 90s','La Smith sau cu gantere ușoare: urcare explozivă, coborâre controlată.',0]]},
+ {t:'Upper Pull + Near-Threshold Run',cat:'mix',key:1,ses:['Pliometrie + alergarea de lângă prag · dimineața (sesiunea-cheie)','Forță · la 6–8 ore după, cu o masă completă între'],run:'wed',ex:[
+  ['Pliometrie','plyo','Încălzire pliometrică','2–3 exerciții · 2–3 serii · pauză completă','A-skips, pogo hops și sărituri în lungime pe un picior (bounding). Calitate, nu oboseală: te oprești când scade calitatea.',0],
+  ['T-Bar Row','me','Secondary pull','','Spatele neutru, tragi exploziv.',1],
+  ['Lat Pulldown','hyp','Braced pull','3×6–12 · 1–2 RIR · pauză 120s','',1],
+  ['Hammer Chest Press','hyp','Braced push','3×6–12 · 1–2 RIR · pauză 120s','',1],
+  ['Cable Crunch','core','Core','3×8–12 · pauză 60s','',1],
+  ['Tricep Overhead Extension','hyp','Focused push (arms) · superset','3×8–12 · 0–2 RIR · alternativ cu curl-ul','',1],
+  ['Incline Dumbbell Curl','hyp','Focused pull (arms) · superset','3×8–12 · 0–2 RIR','',1],
+  ['Rear Delt Fly','hyp','Focused pull','3×8–12 · 0–2 RIR · pauză 90s','',1]]},
+ {t:'VT1 Easy',cat:'run',ses:['Alergare ușoară (sau bicicletă, vâslit, eliptică)'],run:'thu',ex:[]},
+ {t:'Lower Push (Quads)',cat:'lift',ses:['Forță'],ex:[
+  ['Box Squat','de','Lower push · viteză','','Te așezi controlat pe ladă, urci exploziv. Merge și genuflexiunea obișnuită sau cu bara safety.',0],
+  ['Romanian Deadlift','hyp','Secondary hinge','3×8–12 · 2 RIR · pauză 150s','Mai ușor decât marți: mâine e alergarea lungă.',0],
+  ['Back Extension','hyp','Braced hinge · superset','3×8–12 · 1–2 RIR · alternativ cu hack squat-ul','',0],
+  ['Hack Squat','hyp','Braced lower push · superset','3×8–12 · 1–2 RIR','',0],
+  ['Roman Chair Leg Raise','core','Core','3×8–15 · pauză 60s','Cu greutate când devine ușor.',0],
+  ['Leg Extension','hyp','Focused quadriceps','3×8–12 · 0–2 RIR · pauză 90s','',0],
+  ['Bulgarian Split Squat','sk','Braced push asimetric · tehnică','3×4 pe picior · coborâre controlată, urcare rapidă, 3–4 RIR','',0]]},
+ {t:'Long Slow Distance',cat:'run',ses:['Alergare lungă · ideal pe teren variat'],run:'sat',ex:[]},
+ {t:'Odihnă',cat:'rest',ses:['Liber'],ex:[
+  ['Plimbare ușoară','task','','20–40 min, opțional','Viada: ziua liberă nu e obligatorie, dar aici o păstrăm înaintea sprinturilor de luni.',0]]}
+];
+/* ---------- alergarea: antrenamentele din carte, pe niveluri (1–3); {130} = ritmul la 130% din viteza de prag, {VO2} = vVO2max, {VT1} ---------- */
+const HYB_RUN={
+ spr:[[ '3 runde × 4×50 m mai repede de {VO2}, din start de pe loc · 1′ mers între repetări, 1′ între runde',
+        '2 runde × 4×200 m mai repede de {VO2}, cu start lansat · 2′ între repetări, 3′ între runde',
+        '2 runde × 3×300 m @ 130–140% ({130}–{140}), din start de pe loc · pauză completă',
+        '8 × 25/25 m: din patru labe sau culcat, 25 m accelerare maximă, 25 m mai repede de {VO2} · pauză completă'],
+      [ '2 runde × 4×50 m mai repede de {VO2} din start de pe loc (1′ mers) + 2 runde × 2×75 m (2′ mers)',
+        '2 runde × 2×200 m mai repede de {VO2}, lansat (2′, 3′ între runde) + 4×50 m lansat la viteză maximă, pauză completă',
+        '2 runde × 2×200 m @ 140%+ ({140}) + 2 runde × 2×400 m @ 130–140% ({130}–{140}), din start de pe loc · pauză completă',
+        '6 × 25/25 m din culcat + 4 × 25/25 m din start în doi timpi, cu oprire bruscă · pauză completă'],
+      [ '4×25 m maxim din start de pe loc + 2 runde × 5×50 m mai repede de {VO2} (1′ mers) + 3×100 m (2′ mers)',
+        '2 runde × 2×200 m mai repede de {VO2}, lansat + 2 runde × 3×50 m lansat la viteză maximă (2′ între runde)',
+        '2×(2×200 m @ 140%+) + 2×(2×400 m @ 130–140%) + 2×200 m maxim, lansat · pauză completă',
+        '6 × 25/25 m din bloc sau culcat + 2 runde × 3×25/25 m din start în trei puncte · pauză completă']],
+ mlss:[[ '6 runde: 15 s @ 130% ({130}) · 45 s @ 105% ({105}) · 1′ @ VT1',
+         'Piramidă: 3′ @ 120% · 2′ @ 60% · 2′ @ 120% · 1:20 @ 60% · 1′ @ 120% · 40 s @ 60% · 45 s @ 120% · 30 s @ 60% · 30 s @ 120% · 20 s @ 60% (120% = {120}, 60% = mers/jog)',
+         '2 seturi × 3 runde: 45 s @ 125% ({125}) · 45 s @ 115% ({115}) · 30 s @ 100% ({100}) · 1:30 @ VT1 · 2′ mers/jog între seturi'],
+       [ '2 seturi × 4 runde: 15 s @ 130% ({130}) · 45 s @ 105% ({105}) · 1′ @ VT1 · 2′ între seturi',
+         'Piramida o dată (3′ … 20 s, 120% = {120}), 2′ mers/jog, apoi încă o dată de la 2′ @ 120%',
+         '2 seturi × 3 runde: 10 s @ 100% · 10 s maxim · 50 s @ 115% ({115}) · 1′ @ 95% ({95}) · 1′ @ 90% ({90}) · 2′ @ VT1'],
+       [ '3 seturi × 4 runde: 15 s @ 130% ({130}) · 45 s @ 105% ({105}) · 1′ @ VT1 · 2′ între seturi',
+         'Piramida de 3 ori (120% = {120}), cu 1:30–2′ mers/jog între',
+         '3 seturi × 4 runde: 45 s @ 125% ({125}) · 1′ @ 115% ({115}) · 1′ @ 100% ({100}) · 1:30 @ VT1 · 2′ între seturi']],
+ nt:[[ '5 runde: 20 s @ 140% ({140}) · 4:40 @ 92% ({92}) · 1′ jog ușor',
+       '5 runde: 3:30 @ 90% ({90}) · 1′ @ VT1, apoi 3 runde: 6′ @ 88% ({88}) · 1′ @ VT1',
+       '4×1200 m @ 90% ({90}) · pauza = jumătate din timpul repetării'],
+     [ '6 runde: 20 s @ 140% ({140}) · 4:40 @ 92% ({92}) · 1′ jog ușor',
+       '6 runde: 4′ @ 90% ({90}) · 1′ @ VT1, apoi 5 runde: 6′ @ 88% ({88}) · 1′ @ VT1',
+       '6×1200 m @ 90% ({90}) · pauza = jumătate din timpul repetării'],
+     [ '2 seturi × 4 runde: 20 s @ 140% ({140}) · 4:40 @ 92% ({92}) · 1′ jog · 5′ @ VT1 între seturi',
+       '8 runde: 5′ @ 90% ({90}) · 1:30 @ VT1, apoi 6 runde: 6′ @ 88% ({88}) · 1′ @ VT1',
+       '10×1200 m @ 90% ({90}) · pauza = jumătate din timpul repetării']],
+ /* sesiunile specifice de 5 km (în ultimele 6 săptămâni dinaintea cursei) */
+ race:['2 × 5′ @ 105% ({105}) · 3–5′ mers/jog între','4 × 4′ @ 105% ({105}) · 3–5′ mers/jog între','4 × 5′ @ 105% ({105}) · 3–5′ mers/jog între'],
+ vt1:['25–30 min @ VT1','45–60 min @ VT1','80–90 min @ VT1'],
+ lsd:[[ '45 min @ VT1 cu 2 seturi oriunde: 2 runde × (30 s @ 100% ({100}) · 30 s @ 90% ({90}))',
+        '30 min @ VT1 + 5 min în ritm de cursă la final',
+        '1–1,5 h drumeție sau jog ușor pe teren variat'],
+      [ '1 h @ VT1 cu 2 seturi oriunde: 2 runde × (1:30 @ 115% ({115}) · 30 s @ VT1)',
+        '60 min @ VT1 cu un singur interval de 5 min @ 95% ({95}) la mijloc',
+        '1,5 h fartlek la VT1, cu 6×3 min @ 85% ({85}) pe parcurs',
+        '1,5–2,5 h drumeție sau jog ușor pe teren variat'],
+      [ '1,5 h @ VT1 cu 3 seturi: 3 runde × (1′ @ 115% ({115}) · 30 s VT1) sau 2 runde × (4′ @ 95% ({95}) · 1′ VT1)',
+        '90–120 min @ VT1 cu 10 min @ 95% ({95}) la mijloc',
+        '2–2,5 h fartlek la VT1, cu 6×4 min @ 85% ({85})']]
+};
+/* nivelurile din carte pentru acest program: sprint 1, MLSS 1, lângă prag 3, VT1 1, lunga 2; „Începător” coboară un nivel, „Avansat” urcă unul */
+const HYB_BASE={spr:1,mlss:1,nt:3,vt1:1,lsd:2};
+const HYB_LVL=[[-1,'Începător'],[0,'Standard (carte)'],[1,'Avansat']];
+const hybL=k=>Math.max(1,Math.min(3,HYB_BASE[k]+hyb().lvl));
+const hybPick=(a,i)=>a[((i%a.length)+a.length)%a.length];
+/* ritmurile: pragul din testul Viada, altfel cel din aplicație (setat sau din alergările de prag) */
+function hybThr(){ const H=hyb(); if(+H.thr>0) return {v:+H.thr,src:'testul vVO2max din HYBRID'}; const t=thrPace(); return t?{v:t.v,src:t.src}:null; }
+function hybVt1(){ const H=hyb(), t=hybThr(); if(+H.vt1p>0) return {v:+H.vt1p,src:'testul vorbirii'}; return t?{v:t.v/.8,src:'estimat (~80% din viteza de prag), fă testul vorbirii'}:null; }
+const hybPace=p=>{ const t=hybThr(); return t?mmss(t.v/(p/100))+'/km':''; };
+function hybFill(s){ const t=hybThr(), v1=hybVt1();
+  if(!t) s=s.replace(/ \(\{\d+\}(–\{\d+\})?\)/g,'');
+  return s.replace(/\{(\d+)\}/g,(_,p)=>t?hybPace(+p):p+'% din prag').replace(/\{VO2\}/g,t?'vVO2max ('+mmss(t.v*.88)+'/km)':'vVO2max').replace(/VT1(?![\d(])/g,v1?'VT1 (~'+mmss(v1.v)+'/km'+(hyb().vt1h?', ≤'+hyb().vt1h+' bpm':'')+')':'VT1'); }
+const HYB_WU={spr:'5′ jog ușor, 3×20 m fandări din mers, 2×30 s călcâie la fese, 3 runde × (10 s pompat cu brațele așezat · 10 s în picioare · 10 s „coate sus”)',
+  thr:'10′ jog ușor, 3×20 m fandări din mers, 2×10 genuflexiuni Cossack pe parte · la final 8′ jog ușor'};
+/* sesiunea de alergare a zilei, pentru săptămâna wk (rotim antrenamentele: Viada recomandă să le încerci pe toate) */
+function hybRunLines(kind,wk,dl){ const H=hyb(), L=[];
+  if(kind==='mon'){ L.push(['Încălzire',HYB_WU.spr]); L.push(['Sprint / putere · nivel '+(dl?1:hybL('spr')),hybFill(hybPick(HYB_RUN.spr[(dl?1:hybL('spr'))-1],wk))+' · fără revenire, treci direct la MLSS']);
+    if(!dl) L.push(['MLSS+ · nivel '+hybL('mlss'),hybFill(hybPick(HYB_RUN.mlss[hybL('mlss')-1],wk))+' · fără încălzire (o ai de la sprint); poți scoate câteva intervale ca totalul să fie ~45–50 min']);
+    L.push(['Revenire','5′ jog ușor sau bicicletă']); }
+  else if(kind==='wed'){ L.push(['Încălzire',HYB_WU.thr]);
+    if(dl) L.push(['Tempo de cursă · nivel 1',hybFill(HYB_RUN.race[0])+' · deload']);
+    else if(H.race) L.push(['Specific 5 km · nivel '+hybL('nt'),hybFill(HYB_RUN.race[hybL('nt')-1])+' · în ultimele 6 săptămâni: ritm de cursă și pauze cu 25% mai lungi']);
+    else L.push(['Lângă prag (NT) · nivel '+hybL('nt'),hybFill(hybPick(HYB_RUN.nt[hybL('nt')-1],wk))]); }
+  else if(kind==='thu') L.push(['VT1 · nivel '+(dl?1:hybL('vt1')),hybFill(HYB_RUN.vt1[(dl?1:hybL('vt1'))-1])+' · testul vorbirii după 5 și după 20 de minute; merge și pe bicicletă, vâslit sau eliptică']);
+  else if(kind==='sat'){ const l=dl?1:hybL('lsd'); L.push(['Long slow distance · nivel '+l,hybFill(hybPick(HYB_RUN.lsd[l-1],wk))+(dl?' · deload':'')]); }
+  return L; }
+/* ---------- forța: greutatea din maximul de antrenament, după cercul repetărilor ---------- */
+const hybR25=v=>Math.round(v/2.5)*2.5;
+/* +1% la fiecare cerc început după ce ai setat maximul */
+function hybTmOf(n){ const H=hyb(), t=(H.tm||{})[n]; if(!t||!(+t.kg>0)) return 0; return +t.kg*(1+.01*Math.max(0,Math.floor((+H.wk||0)/3)-Math.floor((+t.wk||0)/3))); }
+/* 1RM estimat din istoricul exercițiului (ultimele 8 săptămâni), pentru a propune maximul de antrenament */
+function hybHistTm(n){ const h=(S.lifts||{})[n]||[], from=dayShift(todayKey(),-56); let b=0;
+  h.forEach(e=>{ if(e.d>=from) (e.s||[]).forEach(([w,r])=>{ if(r>0&&r<=10) b=Math.max(b,e1rm(w,r)); }); }); return b?hybR25(b*.96):0; }
+function hybEx(e,x,wk,dl){ const [n,ty,cat,pr,cue,ses]=e, c=wk%3;
+  let t=ty, txt=pr;
+  if(dl&&ty==='me') t='de';
+  if(HYB_CIRC[t]&&HYB_TM.indexOf(n)>=0){ const [s,r,p]=HYB_CIRC[t][c], tm=hybTmOf(n), kg=tm?hybR25(tm*p/100):0;
+    txt=(dl&&ty!=='me'?Math.max(2,s-2):s)+'×'+r+' @ '+p+'%'+(kg?' → '+num(kg)+' kg':' din maximul de antrenament')+(t==='me'?' · fără eșec · pauză 180s':t==='de'?' · viteză maximă, 3–4 RIR · pauză 120s':' · 3–4 RIR · pauză 120s')+(dl?' · deload':''); }
+  else if(dl&&ty==='hyp') txt=txt.replace(/^3×/,'2×')+' · deload';
+  return {x,n,ty:t,cat,p:txt,cue,ses,kind:ty==='hyp'||ty==='core'||HYB_CIRC[ty]?'lift':'task'}; }
+function hybDay(d,wk){ const H=hyb(), dl=!!H.dl, b=HYB_DAYS[d]; wk=+wk||0;
+  let ex=b.ex.map((e,x)=>hybEx(e,x,wk,dl));
+  if(dl) ex=ex.filter((e,i)=>!(e.ty==='hyp'&&/^Focused (push|pull)$/.test(e.cat)));
+  return {d,t:b.t,cat:b.cat,key:b.key,ses:b.ses,ex,run:b.run?hybRunLines(b.run,wk,dl):[]}; }
+const hybKey=(wk,d)=>'w'+wk+'d'+d;
+const hybDone=(wk,d,x)=>!!(((hyb().log||{})[hybKey(wk,d)]||{})[x]);
+/* un antrenament de alergare se bifează ca un singur element, cu cheia 'r' */
+function hybItems(day){ return day.ex.map(e=>String(e.x)).concat(day.run.length?['r']:[]); }
+const hybDayFull=(wk,d)=>{ const it=hybItems(hybDay(d,wk)); return it.length>0&&it.every(x=>hybDone(wk,d,x)); };
+/* ---------- testul de prospețime (Viada): 7 sărituri în lungime luni, fără cea mai lungă și cea mai scurtă, media celorlalte 5 ---------- */
+function hybBj(){ const a=(hyb().bj||[]).slice(-8); if(!a.length) return null; const last=a[a.length-1], prev=a.slice(0,-1).slice(-4);
+  const ref=prev.length?prev.reduce((s,x)=>s+x.v,0)/prev.length:null; return {last,ref,drop:ref!=null?ref-last.v:0}; }
+function hybBjHTML(){ const b=hybBj();
+  return `<div class="ex"><span class="tick" style="visibility:hidden"></span><div class="sp"><div class="ex-n">Testul de prospețime</div>
+    <div class="ex-p">7 sărituri în lungime de pe loc · scoți cea mai lungă și cea mai scurtă · media celorlalte 5, în cm</div>
+    ${b?`<div class="ex-l">Ultima: ${num(b.last.v)} cm (${relDay(b.last.d)})${b.ref!=null?' · media dinainte '+num(b.ref)+' cm':''}</div>`:''}
+    ${b&&b.drop>=6?`<div class="ex-l ex-mw">${ic('alert')} Cu ${num(b.drop)} cm sub medie: oboseală centrală. Azi fără sprinturi și pliometrie; fă doar partea MLSS mai ușor sau o alergare VT1.</div>`:b&&b.ref!=null?`<div class="ex-l ex-mw">${ic('check')} Ești proaspăt: sprinturile de azi merg la calitate maximă.</div>`:''}
+    <div class="inrow" style="margin-top:8px"><input class="inp" id="hybBj" type="number" inputmode="decimal" step="1" placeholder="Media în cm" aria-label="Media săriturilor în cm"><button class="btn ghost sm" data-a="hybBjSave">${ic('check')} Salvează</button></div></div></div>`; }
+/* sesiunea 1: exercițiile ei (pliometria), apoi alergarea; sesiunea 2: forța */
+function hybExHTML(wk,day){
+  const hd=s=>day.ses.length>1?`<div class="ses-h"><b>SESSION ${s+1}</b><span>${esc(day.ses[s])}</span></div>`:'';
+  const exRow=e=>{ const on=hybDone(wk,day.d,String(e.x));
+    return `<div class="ex ${on?'done':''}"><button class="tick ${on?'on':''}" data-a="hybTick" data-d="${day.d}" data-k="${e.x}" aria-label="${on?'Debifează':'Bifează'} ${esc(e.n)}">${ic('check')}</button>
+      <div class="sp"><div class="ex-n">${esc(e.n)}</div><div class="ex-p">${esc([e.kind==='lift'?HYB_TYPE[e.ty]:'',e.cat,e.p].filter(Boolean).join(' · '))}</div>${e.cue?`<div class="ex-l ex-mw">${ic('bolt')} ${esc(e.cue)}</div>`:''}${lastLine(e)}</div>
+      ${e.kind==='lift'?`<button class="xb" data-a="tech" data-k="${esc(e.n)}" aria-label="Tehnică pentru ${esc(e.n)}">${ic('info')}</button>`:''}</div>`; };
+  const runRow=()=>{ const on=hybDone(wk,day.d,'r');
+    return `<div class="ex ${on?'done':''}"><button class="tick ${on?'on':''}" data-a="hybTick" data-d="${day.d}" data-k="r" aria-label="${on?'Debifează':'Bifează'} alergarea">${ic('check')}</button>
+      <div class="sp"><div class="ex-n">Alergarea</div>${day.run.map(([h,x])=>`<div class="ex-p"><b>${esc(h)}:</b> ${esc(x)}</div>`).join('')}</div></div>`; };
+  const s0=day.ex.filter(e=>!e.ses), s1=day.ex.filter(e=>e.ses);
+  return hd(0)+(day.d===0?hybBjHTML():'')+s0.map(exRow).join('')+(day.run.length?runRow():'')+(s1.length?hd(1)+s1.map(exRow).join(''):''); }
+/* ---------- notele zilelor: de ce e construită așa săptămâna ---------- */
+const HYB_NOTES=[
+ ['Viteza întâi, apoi forța pentru partea de sus',[
+  ['Ordinea','Regula „tehnica întâi”: sprinturile au nevoie de prospețime, deci alergarea e dimineața. Partea de sus a corpului nu obosește picioarele, așa că forța merge după 4–6 ore.'],
+  ['Sprint + MLSS','O singură alergare: sprinturi scurte, apoi direct MLSS (timp aproape de prag, cu oboseala ținută sub control). Sprinturile nu sunt antrenament de anduranță, ci de putere: pauză completă între ele.'],
+  ['Testul de prospețime','După weekend, oboseala centrală nu se vede în HRV. Viada măsoară săriturile în lungime: dacă media scade cu 6–7 cm, azi nu faci sprinturi.']]],
+ ['Ziua de hinge',[
+  ['Deadliftul pentru viteză','Prima ridicare e DE: încărcare de 70–80%, puține repetări, viteză maximă. Pregătește sistemul nervos și antrenează forța explozivă, fără să adune oboseală.'],
+  ['De ce nu alergi azi','Mâine e sesiunea-cheie. Hinge-ul distribuie oboseala pe spate și femurali, deci picioarele rămân bune pentru intervalele de mâine.'],
+  ['Hipertrofia','Seturi de 6–12, 1–2 repetări în rezervă. Viada: mai bine un set în plus cu câteva repetări în rezervă decât unul mai puțin până la eșec.']]],
+ ['Sesiunea-cheie a săptămânii',[
+  ['De ce e „keystone”','Alergarea de lângă prag e cea mai grea și cea mai importantă. Cere prospețime, de aceea are loc după o zi fără picioare grele și înaintea oricărei alte sesiuni a zilei.'],
+  ['Pliometria','Câteva exerciții bune înaintea alergării îmbunătățesc calitatea vitezei (potențare). Forța + pliometria + alergarea dau cea mai bună economie de alergare.'],
+  ['Forța după','La 6–8 ore după alergarea de prag, cu o masă completă între. Partea de sus nu concurează cu picioarele.'],
+  ['Cursă de 5 km','În ultimele 6 săptămâni dinaintea cursei, activează „Cursă de 5 km” din antet: aici intră ritmul de cursă, cu pauze cu 25% mai lungi.']]],
+ ['VT1 ușor',[
+  ['Intensitatea','Sub primul prag ventilator: poți spune fără efort o propoziție de 20 de cuvinte. Fă testul vorbirii după 5 și după 20 de minute.'],
+  ['Zona 2 după Viada','Pentru cine are 3–4 ore de anduranță pe săptămână, zona 2 nu trebuie să fie 80%. Prioritatea e munca de calitate; zona 2 se adaugă când nu mai poți adăuga intensitate. Primele ~10 minute de alergare ușoară aproape nu contează, deci mai bine o sesiune de 30–40 de minute decât mai multe de 10.'],
+  ['Cross-training','Merge bicicleta, vâslitul sau eliptica, dacă ești deja bun la ele. Cross-trainingul e pentru munca ușoară, nu pentru prag sau sprint.']]],
+ ['Ziua de cvadricepși',[
+  ['Ordinea','Ghemuirea pentru viteză întâi, apoi hipertrofia; core-ul înaintea izolării, iar exercițiul asimetric la final, pentru tehnică.'],
+  ['Înainte de alergarea lungă','Puțină oboseală în picioare înaintea alergării lungi e acceptată: Viada o vede ca un plus pentru economie și ritm, iar munca VT1 beneficiază de pre-oboseală.']]],
+ ['Alergarea lungă',[
+  ['Cum o faci','Ideal pe teren variat. Alergătorii mai buni ajung la 90–100 de minute cu intervale la prag; ceilalți aleg variantele fartlek mai scurte.'],
+  ['Durata','Peste ~2 ore stimulul aproape nu mai crește. Calitatea contează mai mult decât lungimea.']]],
+ ['Odihnă',[
+  ['Recuperarea','Somn, mâncare și o plimbare. Programul nu are deload programat: îl iei când trebuie (vezi antetul).']]]
+];
+/* principiile lui Viada, pe scurt */
+const HYB_PRIN=[
+ ['Doza minimă eficientă + 1','Nu contează cât poți antrena, ci din cât îți poți reveni și cât te adaptezi. Fiecare serie și fiecare kilometru au un scop; fără volum „de umplutură”.'],
+ ['Consolidarea factorilor de stres','Pentru fiecare sesiune te întrebi: de ce am nevoie azi și ce fel de oboseală m-ar împiedica să ating stimulul? Sesiunile-cheie (aici, alergarea de miercuri) se pun acolo unde ești cel mai odihnit.'],
+ ['Ordinea dintr-o zi','Tehnica întâi, apoi lucrul exploziv, apoi forța și hipertrofia, iar la final munca ușoară care consumă energie (VT1). Dacă faci întâi o alergare ușoară, lasă 6–8 ore până la forță (4–6 ore după o alergare VT1 de sub o oră).'],
+ ['Hipertrofia','8–12 seturi pe mușchi pe săptămână, la 0–2 repetări în rezervă, 6–12 repetări, tempo controlat. Compusele grele rămân pentru forță; hipertrofia se face mai ales la aparate și cabluri.'],
+ ['Progresia','Cercul repetărilor: aceleași procente se rotesc 3 săptămâni (de ex. 90%, 93%, 96% la ME), apoi maximul de antrenament urcă cu 1%. Pragul se ajustează cu câteva secunde pe km după ~6 săptămâni în care sesiunile ies ușor. Fără retestări frecvente.'],
+ ['Deload la nevoie','Nu programat. Când ridicările ME ies mai slab două săptămâni la rând, faci o săptămână de deload.'],
+ ['Pliometria','Alergare + forță + pliometrie dau cea mai bună economie de alergare. Cel mult 3–4 exerciții pe zi, cu pauză completă și fără oboseală.'],
+ ['Evoluezi, nu sari','Schimbi volumul fiecărui tip de efort (minute sub VT1, minute lângă prag, seturi grele) cu cel mult 5–10% pe săptămână. Creșterile prea rapide sunt cea mai des întâlnită cauză de eșec.']
+];
+/* ---------- fila HYBRID ---------- */
+function viewHybrid(){
+  const H=hyb(), wk=+H.wk||0, c=wk%3, t=hybThr(), v1=hybVt1(), dl=!!H.dl;
+  const done=HYB_DAYS.filter((_,d)=>hybDayFull(wk,d)).length;
+  const missTm=HYB_TM.filter(n=>!hybTmOf(n));
+  const days=HYB_DAYS.map((_,d)=>{ const day=hybDay(d,wk), it=hybItems(day), dn=it.filter(x=>hybDone(wk,d,x)).length, open=S.hybOpen===d, col=catCol(day.cat), cc=CAT[day.cat];
+    return `<div class="card day ${open?'open':''}" id="hday${d}" style="--c:${col}">
+      <button class="day-h" data-a="hybDayT" data-d="${d}" aria-expanded="${open}">
+        <span class="day-bar"></span>${dayBadge(d,it.length&&dn===it.length?'done':'')}
+        <span class="sp"><span class="day-k">${DAYN[d]}${day.key?' · sesiunea-cheie':''}</span><span class="day-t" style="display:block">${esc(day.t)}</span>
+          <span class="day-m" style="display:block">${cc[0]} · ${dn}/${it.length} bifate${dl?' · deload':''}</span></span>
+        ${it.length&&dn===it.length?`<span class="tag pr">${ic('check')}</span>`:ring(it.length?dn/it.length:0,{s:34,sw:3,c:col})}
+        <span class="chev">${ic('down')}</span></button>
+      <div class="day-b"><div>${hybExHTML(wk,day)}
+        <details class="notes"><summary>${ic('info')} ${esc(HYB_NOTES[d][0])}</summary>${HYB_NOTES[d][1].map(([a,x])=>`<p><b>${esc(a)}.</b> ${esc(x)}</p>`).join('')}</details></div></div></div>`; }).join('');
+  const tmRows=HYB_TM.map(n=>{ const v=hybTmOf(n), h=hybHistTm(n);
+    return `<div class="list-row"><span class="sp"><b>${esc(n)}</b><span class="xs mu" style="display:block">${v?'maxim de antrenament '+num(hybR25(v))+' kg':'nesetat'}${!v&&h?' · din istoric: '+num(h)+' kg':''}</span></span>
+      ${!v&&h?`<button class="btn ghost sm" data-a="hybTmHist" data-k="${esc(n)}">Folosește</button>`:''}</div>`; }).join('');
+  return `
+  <div class="card plan-hd"><div class="eyebrow">${ic('activity')} HYBRID · Alex Viada</div><div class="h3" style="margin-top:4px">Hypertrophy + 5K</div>
+    <div class="sm mu">4 zile de forță (sus și jos de câte 2 ori) · sprint + MLSS · lângă prag · VT1 · alergarea lungă · 1 zi liberă</div>
+    <div class="bar"><i style="width:${(done/7*100).toFixed(1)}%"></i></div>
+    <div class="cyc-bar"><span>Săptămâna ${wk+1} · cercul repetărilor ${c+1}/3</span><span>${done} din 7 zile complete</span></div>
+    <div class="inrow" style="margin-top:12px"><button class="btn ghost sm" data-a="hybWk" data-i="-1" ${wk?'':'disabled'} aria-label="Săptămâna anterioară">${ic('left')}</button>
+      <button class="btn ${done===7?'pri':'ghost'} sm" style="flex:1" data-a="hybWk" data-i="1">${ic('right')} Săptămâna ${wk+2}</button>
+      <button class="btn ${dl?'pri':'ghost'} sm" data-a="hybDl">${ic('leaf')} Deload</button></div>
+    <div class="chips" style="margin-top:12px">${HYB_LVL.map(([v,l])=>`<button class="chip ${(+H.lvl||0)===v?'on':''}" data-a="hybLvl" data-i="${v}">${l}</button>`).join('')}
+      <button class="chip ${H.race?'on':''}" data-a="hybRace">${ic('flag')} Cursă de 5 km în ≤6 săpt.</button></div>
+    ${dl?`<div class="note">Săptămână de deload: ME devine DE, seriile de hipertrofie scad la 2, izolările de la final ies, alergările coboară la nivelul 1. O iei când ridicările ME ies mai slab două săptămâni la rând.</div>`:''}</div>
+  <div class="card"><details ${(!t||missTm.length)?'open':''}><summary class="h3" style="cursor:pointer">${ic('target')} Pretestare · ritmuri și maxime</summary>
+    <div class="dsec"><h4>Ritmurile</h4>
+      <div class="list-row"><span class="sp">Prag (VT2)</span><span class="v">${t?mmss(t.v)+' /km':'—'}</span></div>
+      <div class="list-row"><span class="sp">vVO2max</span><span class="v">${t?mmss(t.v*.88)+' /km':'—'}</span></div>
+      <div class="list-row"><span class="sp">VT1</span><span class="v">${v1?'~'+mmss(v1.v)+' /km':'—'}${H.vt1h?' · ≤'+H.vt1h+' bpm':''}</span></div>
+      <div class="xs mu" style="margin:6px 0">${t?'Sursa pragului: '+esc(t.src)+'.':'Fără ritmuri, alergările arată procentele din prag.'}${v1?' VT1: '+esc(v1.src)+'.':''}</div>
+      <p class="sm mu"><b>Testul vVO2max (Viada).</b> 6–8′ jog, 2 accelerări de 100 m, 3×30 s rapid cu 1′ mers, 1′ pauză, apoi cât de departe poți: 12 min (sub 2 ani de alergare), 10 min (2–4 ani) sau 8 min (peste 4 ani). Pragul = 88% din viteza medie.</p>
+      <div class="chips">${[[12,'12 min'],[10,'10 min'],[8,'8 min']].map(([m,l])=>`<button class="chip ${(+H.tMin||10)===m?'on':''}" data-a="hybTMin" data-i="${m}">${l}</button>`).join('')}</div>
+      <div class="inrow" style="margin-top:8px"><input class="inp" id="hybKm" type="number" inputmode="decimal" step="0.01" placeholder="Distanța în km (ex. 2,45)" aria-label="Distanța din test în km"><button class="btn ghost sm" data-a="hybTestSave">${ic('check')}</button></div>
+      <p class="sm mu" style="margin-top:12px"><b>Testul vorbirii (VT1).</b> Pornești foarte ușor și crești viteza la fiecare 30 s, recitând o propoziție de ~20 de cuvinte. Notezi ultimul ritm și pulsul la care o mai spui fără să tragi aer.</p>
+      <div class="inrow"><input class="inp" id="hybVt1p" placeholder="Ritm (ex. 6:45)" aria-label="Ritmul VT1 în minute pe km"><input class="inp" id="hybVt1h" type="number" inputmode="numeric" placeholder="Puls" aria-label="Pulsul la VT1"><button class="btn ghost sm" data-a="hybVt1Save">${ic('check')}</button></div></div>
+    <div class="dsec"><h4>Maximul de antrenament</h4>
+      <p class="sm mu">Testul de 5 repetări: încălzire până la ~75% din maximul estimat (A) pentru 6 repetări; apoi 5 repetări cu A + 10%; apoi cât poți cu încă +5% (greutatea E, repetările F). Maximul de antrenament = media Epley și Brzycki × 0,96.</p>
+      ${tmRows}
+      <div class="inrow" style="margin-top:8px"><select class="inp" id="hybTmEx" aria-label="Exercițiul">${HYB_TM.map(n=>`<option>${esc(n)}</option>`).join('')}</select></div>
+      <div class="inrow" style="margin-top:8px"><input class="inp" id="hybTmKg" type="number" inputmode="decimal" step="0.5" placeholder="Greutatea E (kg)" aria-label="Greutatea E"><input class="inp" id="hybTmR" type="number" inputmode="numeric" placeholder="Repetări F" aria-label="Repetările F"><button class="btn ghost sm" data-a="hybTmSave">${ic('check')}</button></div></div>
+  </details></div>
+  ${days}
+  <div class="card"><details><summary class="h3" style="cursor:pointer">${ic('bulb')} Principiile lui Viada</summary>
+    ${HYB_PRIN.map(([a,x])=>`<p class="sm"><b>${esc(a)}.</b> ${esc(x)}</p>`).join('')}
+    <div class="note">Surse: Alex Viada, The Ultimate Hybrid Athlete (Victory Belt, 2025): programul Hypertrophy + 5K, pretestarea, ghidul de exerciții și alergări. Interviuri: Rox Lyfe (2026), Jordan Syatt (2025), Coach 'Em Up ep. 93. Fila Plan (Dr. Milo Wolf) rămâne neschimbată.</div></details></div>`;
+}
+ACT.hybDayT=(el,{D})=>{ S.hybOpen=S.hybOpen===D?-1:D; const c=$('#hday'+D); if(c){ document.querySelectorAll('[id^="hday"].open').forEach(o=>{ if(o!==c) o.classList.remove('open'); });
+  c.classList.toggle('open',S.hybOpen===D); c.querySelector('.day-h').setAttribute('aria-expanded',S.hybOpen===D); } };
+ACT.hybTick=async(el,{D,k})=>{ const H=hyb(), wk=+H.wk||0, log=Object.assign({},H.log||{}), key=hybKey(wk,D), day=Object.assign({},log[key]||{}), on=!day[k];
+  if(on) day[k]=1; else delete day[k]; log[key]=day; await hybSave({log}); render(); if(on) buzz(15); };
+ACT.hybWk=async(el,{I})=>{ const H=hyb(), wk=Math.max(0,(+H.wk||0)+I); await hybSave({wk,dl:false}); S.hybOpen=-1; render(); window.scrollTo({top:0});
+  if(I>0&&wk%3===0) toast('Cerc nou','Maximele de antrenament au urcat cu 1%.','info'); };
+ACT.hybDl=async()=>{ await hybSave({dl:!hyb().dl}); render(); };
+ACT.hybLvl=async(el,{I})=>{ await hybSave({lvl:Math.max(-1,Math.min(1,I))}); render(); };
+ACT.hybRace=async()=>{ await hybSave({race:!hyb().race}); render(); };
+ACT.hybTMin=async(el,{I})=>{ await hybSave({tMin:I}); render(); };
+ACT.hybTestSave=async()=>{ const km=parseFloat(String(($('#hybKm')||{}).value||'').replace(',','.')), m=+hyb().tMin||10;
+  if(!(km>.5&&km<8)) return toast('Distanța lipsește','Scrie câți km ai parcurs în test.','info');
+  const v=km*60/m, thr=60/(v*.88); await hybSave({thr,thrAt:todayKey()}); toast('Pragul salvat',mmss(thr)+' /km · vVO2max '+mmss(60/v)+' /km','info'); render(); };
+ACT.hybVt1Save=async()=>{ const raw=String(($('#hybVt1p')||{}).value||'').trim(), mt=/^(\d{1,2}):(\d{2})$/.exec(raw), h=parseInt(($('#hybVt1h')||{}).value,10), o={};
+  if(raw&&!mt) return toast('Format greșit','Scrie ritmul ca 6:45 (minute:secunde pe km).','info');
+  if(mt) o.vt1p=+mt[1]+(+mt[2])/60; if(h>=80&&h<=200) o.vt1h=h; if(!Object.keys(o).length) return; await hybSave(o); toast('VT1 salvat','','info'); render(); };
+ACT.hybTmSave=async()=>{ const n=($('#hybTmEx')||{}).value, E=parseFloat(String(($('#hybTmKg')||{}).value||'').replace(',','.')), F=parseInt(($('#hybTmR')||{}).value,10);
+  if(HYB_TM.indexOf(n)<0||!(E>0)||!(F>=1&&F<=12)) return toast('Date incomplete','Greutatea E și repetările F (1–12).','info');
+  const g=(E*(1+.0333*F)+E*36/(37-F))/2, tm=hybR25(g*.96), H=hyb(), o=Object.assign({},H.tm||{});
+  o[n]={kg:tm,wk:+H.wk||0}; await hybSave({tm:o}); toast(n,'1RM estimat '+num(Math.round(g))+' kg · maxim de antrenament '+num(tm)+' kg','info'); render(); };
+ACT.hybTmHist=async(el,{k})=>{ const v=hybHistTm(k); if(!v) return; const H=hyb(), o=Object.assign({},H.tm||{}); o[k]={kg:v,wk:+H.wk||0}; await hybSave({tm:o}); render(); };
+ACT.hybBjSave=async()=>{ const v=parseFloat(String(($('#hybBj')||{}).value||'').replace(',','.')); if(!(v>50&&v<400)) return toast('Media lipsește','Scrie media săriturilor în cm.','info');
+  const bj=(hyb().bj||[]).filter(x=>x.d!==todayKey()).concat([{d:todayKey(),v}]).slice(-20); await hybSave({bj}); render(); };

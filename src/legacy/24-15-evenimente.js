@@ -347,7 +347,7 @@ document.addEventListener('touchend',e=>{
 
 /* copie de siguranță — cheia API nu intră în export */
 const EXPORT_KEYS=['zece:lifts','zece:weights','zece:runs','zece:wlog','zece:cyc','zece:runPlan','zece:nutri','zece:mlog','zece3:hist','zece3:aiChat','zece3:aiEffort','zece3:sound',
-  'zece3:water','zece3:body','zece3:theme','zece3:fx','zece3:aiUsed','zece3:seenAch','zece3:lvl','zece3:journal','zece3:tech','zece3:voice','zece3:recap','zece3:mplan','zece3:shop','zece3:mf','zece3:intro','zece3:motion','zece3:ptests','zece3:tmlog','zece3:adj','zece3:onb','zece3:motionAsked','zece3:ext','zece3:goals','zece3:supp','zece3:exnote','zece3:foods','zece3:shoes','zece3:mode','zece3:bg','zece3:planv','zece3:dash','zece3:ach','zece3:notif','zece3:notifCfg','zece3:exfav','zece3:excustom','zece3:kb','zece3:std','zece3:nlog','zece:tests','zece:shoes','zece:body','zece:gtg','zece:workouts','zece:counts','zece:curBlock'];
+  'zece3:water','zece3:body','zece3:theme','zece3:fx','zece3:aiUsed','zece3:seenAch','zece3:lvl','zece3:journal','zece3:tech','zece3:voice','zece3:recap','zece3:mplan','zece3:shop','zece3:mf','zece3:intro','zece3:motion','zece3:ptests','zece3:tmlog','zece3:adj','zece3:onb','zece3:motionAsked','zece3:ext','zece3:goals','zece3:supp','zece3:exnote','zece3:foods','zece3:shoes','zece3:mode','zece3:bg','zece3:planv','zece3:dash','zece3:ach','zece3:notif','zece3:notifCfg','zece3:exfav','zece3:excustom','zece3:kb','zece3:std','zece3:nlog','zece3:hyb','zece:tests','zece:shoes','zece:body','zece:gtg','zece:workouts','zece:counts','zece:curBlock'];
 async function doExport(withPh){
   const data={app:'ZECE',v:4,at:new Date().toISOString(),keys:{}};
   for(const k of EXPORT_KEYS){ const v=await store.get(k); if(v!=null) data.keys[k]=v; }
