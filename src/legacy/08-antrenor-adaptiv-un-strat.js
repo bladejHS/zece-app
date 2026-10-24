@@ -27,8 +27,8 @@ function applyAdj(day,a){
     else if(c.t==='load'&&L){ e.loadF=c.to; e.adj.push((c.to<1?'−':'+')+Math.round(Math.abs(1-c.to)*100)+'% greutate'); }
     else if(c.t==='hold'&&L){ e.noUp=true; e.adj.push('fără creșteri'); }
     else if(c.t==='rest'&&L){ e.rest=c.to; e.p=e.p.replace(/pauză \d+s/,'pauză '+c.to+'s'); e.adj.push('pauză '+c.to+' s'); }
-    else if(c.t==='run'&&e.planMin&&e.n!=='Threshold'){ e.planMin=c.to; e.p=e.p.replace(/^\d+ min/,c.to+' min'); e.adj.push(c.to+' min în loc de '+c.from); }
-    else if(c.t==='iv'&&e.n==='Threshold'){ e.iv=c.to; e.planMin=Math.round(c.to*p.thr.m+Math.max(0,c.to-1)*p.thr.rest/60); e.p=e.p.replace(/^\d+ ×/,c.to+' ×'); e.adj.push(c.to+' reprize în loc de '+c.from); }
+    else if(c.t==='run'&&e.planMin&&e.n!=='Threshold'&&!e.hiit){ e.planMin=c.to; e.p=e.p.replace(/^\d+ min/,c.to+' min'); e.adj.push(c.to+' min în loc de '+c.from); }
+    else if(c.t==='iv'&&(e.n==='Threshold'||e.hiit)){ e.iv=c.to; e.planMin=e.hiit?cdHiitMin(c.to):Math.round(c.to*p.thr.m+Math.max(0,c.to-1)*p.thr.rest/60); e.p=e.p.replace(/^\d+ ×/,c.to+' ×'); e.adj.push(c.to+' reprize în loc de '+c.from); }
     else if(c.t==='swap'&&L&&(SWAPS[e.n]||[]).indexOf(c.to)>=0){ e.orig=e.n; e.n=c.to; e.adj.push('în loc de '+e.orig); }
     else if(c.t==='note'&&c.to) e.adj.push(String(c.to));
   });
@@ -42,7 +42,7 @@ function adaptFor(w,d){
 }
 function adaptCalc(w,d){
   const day=dayFor(w,d,true), tk=todayKey(), R=readiness(), j=jOf(tk); if(R.v==null) return null;
-  const lifts=day.ex.filter(e=>e.kind==='lift'), runs=day.ex.filter(e=>e.planMin&&e.n!=='Threshold'), thr=day.ex.find(e=>e.n==='Threshold'), acwr=R.lr?R.lr.r:null;
+  const lifts=day.ex.filter(e=>e.kind==='lift'), runs=day.ex.filter(e=>e.planMin&&e.n!=='Threshold'&&!e.hiit), thr=day.ex.find(e=>e.n==='Threshold'||e.hiit), acwr=R.lr?R.lr.r:null;
   const G=[], cs={}, add=(why,items)=>{ items=items.filter(Boolean); if(items.length) G.push({why,items}); };
   const down=(e,n,min)=>{ const cur=cs[e.x]!=null?cs[e.x]:e.sets, to=Math.max(min||2,cur-n); if(to>=cur) return null; cs[e.x]=to; return {x:e.x,t:'sets',from:cur,to,n:e.n}; };
   const neg=R.rec.f.filter(f=>f[0]<0).map(f=>f[1].charAt(0).toLowerCase()+f[1].slice(1)), why0='Readiness '+R.v+(neg.length?' ('+neg.slice(0,2).join(', ')+')':'');
@@ -53,16 +53,16 @@ function adaptCalc(w,d){
   if((seen>=3&&low>=3)||(acwr!=null&&acwr>1.5&&R.v<60)){ kind='deload';
     add((low>=3?'În ultimele 7 zile ai avut '+low+' zile cu readiness sub 55 — oboseala se adună.':'Încărcarea ultimelor 7 zile e '+num(acwr,2)+'× media ta pe 4 săptămâni, iar readiness e '+R.v+'.')+' Propun un deload: −40% serii și −10% greutate.',
       lifts.map(e=>down(e,e.sets-Math.max(2,Math.round(e.sets*.6)))).concat(lifts.map(e=>({x:e.x,t:'load',from:1,to:.9,n:e.n}))));
-    add('Alergarea rămâne, dar mai scurtă (−30%), ca să se refacă sistemul.',cutRuns(.7).concat([cutThr(2)]));
+    add('Cardio-ul rămâne, dar mai scurt (−30%), ca să se refacă sistemul.',cutRuns(.7).concat([cutThr(2)]));
   } else if(R.v<45){ kind='recovery';
     add(why0+' → antrenament ușor: aproximativ −40% serii și −10% greutate. Mișcarea ajută recuperarea, efortul mare nu.',
       lifts.map(e=>down(e,e.sets-Math.max(2,Math.round(e.sets*.6)))).concat(lifts.map(e=>({x:e.x,t:'load',from:1,to:.9,n:e.n}))));
-    add('Alergare mai scurtă (−25%), strict în zona 2.',cutRuns(.75).concat([cutThr(2)]));
+    add('Cardio mai scurt (−25%), strict în zona 2.',cutRuns(.75).concat([cutThr(2)]));
   } else {
     if(R.v<60){ kind='easy';
       add(why0+' → fără creșteri de greutate azi și 30 s în plus la pauză la exercițiile compuse.',
         lifts.map(e=>({x:e.x,t:'hold',from:0,to:1,n:e.n})).concat(lifts.filter(e=>COMPOUND.test(e.n)).map(e=>({x:e.x,t:'rest',from:e.rest,to:Math.min(180,e.rest+30),n:e.n}))));
-      add('Pragul: o repriză mai puțin, calitatea contează mai mult decât numărul.',[cutThr(1)]); }
+      add('Intervalele: o repriză mai puțin, calitatea contează mai mult decât numărul.',[cutThr(1)]); }
     if(+j.sore>=3){ const reg=j.soreReg||'tot', hit=lifts.filter(e=>reg==='tot'||regionOf(e.n)===reg), tot=hit.reduce((a,e)=>a+e.sets,0);
       const items=hit.map(e=>down(e,1)).filter(Boolean), rm=items.reduce((a,c)=>a+c.from-c.to,0);
       if(items.length) add('Febră musculară '+j.sore+'/5'+(j.soreReg?' la '+REG[j.soreReg]:'')+' → am redus volumul pentru '+(reg==='jos'?'picioare':reg==='sus'?'partea de sus':'tot corpul')+' cu '+Math.round(rm/tot*100)+'%.',items); }
@@ -130,8 +130,8 @@ function adjValidate(w,d,res){
     else if(c.type==='load'&&L&&v>=.6&&v<=1.1&&v!==1) o={t:'load',from:1,to:Math.round(v*100)/100};
     else if(c.type==='hold'&&L) o={t:'hold',from:0,to:1};
     else if(c.type==='rest'&&L&&v>=30&&v<=240) o={t:'rest',from:e.rest,to:Math.round(v/15)*15};
-    else if(c.type==='run'&&e.planMin&&e.n!=='Threshold'&&v>=10&&v<=Math.round(e.planMin*1.25)&&Math.round(v)!==e.planMin) o={t:'run',from:e.planMin,to:Math.round(v)};
-    else if(c.type==='iv'&&e.n==='Threshold'&&Number.isInteger(v)&&v>=1&&v<=thrReps(e)+1&&v!==thrReps(e)) o={t:'iv',from:thrReps(e),to:v};
+    else if(c.type==='run'&&e.planMin&&e.n!=='Threshold'&&!e.hiit&&v>=10&&v<=Math.round(e.planMin*1.25)&&Math.round(v)!==e.planMin) o={t:'run',from:e.planMin,to:Math.round(v)};
+    else if(c.type==='iv'&&(e.n==='Threshold'||e.hiit)&&Number.isInteger(v)&&v>=1&&v<=thrReps(e)+1&&v!==thrReps(e)) o={t:'iv',from:thrReps(e),to:v};
     else if(c.type==='swap'&&L&&(SWAPS[e.n]||[]).indexOf(c.text)>=0&&names.indexOf(c.text)<0) o={t:'swap',from:e.n,to:c.text};
     else if(c.type==='note'&&String(c.text||'').trim()) o={t:'note',from:'',to:String(c.text).trim().slice(0,160)};
     if(!o||out.some(x=>x.x===c.x&&x.t===o.t)){ dropped++; return; }

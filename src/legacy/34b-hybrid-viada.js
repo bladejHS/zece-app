@@ -294,15 +294,15 @@ let HYB_TAB0=false;
 /* la prima încărcare, fila Antrenament se deschide pe planul principal */
 function hybTabInit(){ if(HYB_TAB0) return; HYB_TAB0=true; if(mainHyb()&&S.trTab==='plan') S.trTab='hyb'; }
 function mainPlanCard(){ const h=mainHyb();
-  return `<div class="card"><div class="eyebrow">${ic('star')} Planul principal</div>
-    <div class="sm mu" style="margin-top:4px">Apare pe Acasă și dă tipul zilei pentru nutriție. Celălalt plan rămâne aici, neschimbat.</div>
-    <div class="seg" style="margin-top:10px" role="radiogroup" aria-label="Planul principal">
+  return `<div class="card"><div class="eyebrow">${ic('plan')} Planul de antrenament</div>
+    <div class="sm mu" style="margin-top:4px">Doar planul ales apare în Antrenament și pe Acasă și dă tipul zilei pentru nutriție. Bifele și progresul celuilalt rămân salvate.</div>
+    <div class="seg" style="margin-top:10px" role="radiogroup" aria-label="Planul de antrenament">
       <button class="${h?'':'on'}" data-a="mainPlan" data-k="wolf" role="radio" aria-checked="${!h}">${ic('plan')} Full Body · Wolf</button>
       <button class="${h?'on':''}" data-a="mainPlan" data-k="hyb" role="radio" aria-checked="${h}">${ic('bolt')} HYBRID · Viada</button></div></div>`; }
 ACT.mainPlan=async(el,{k})=>{ const hy=k==='hyb'; if(hy===mainHyb()) return;
-  if(S.sess) return toast('Ai un antrenament pornit','Termină-l sau renunță la el înainte să schimbi planul principal.','info');
-  await save('prof',Object.assign({},S.prof||{},{mainPlan:hy?'hyb':'wolf'})); NMEAN=null; STC=null; S.trTab=hy?'hyb':'plan'; render(); window.scrollTo({top:0});
-  toast('Plan principal: '+(hy?'HYBRID':'Full Body'),hy?'Acasă și nutriția urmează acum săptămâna HYBRID.':'Acasă și nutriția urmează acum planul Wolf.','info'); };
+  if(S.sess) return toast('Ai un antrenament pornit','Termină-l sau renunță la el înainte să schimbi planul.','info');
+  await save('prof',Object.assign({},S.prof||{},{mainPlan:hy?'hyb':'wolf'})); NMEAN=null; STC=null; S.trTab=hy?'hyb':'plan'; render();
+  toast('Plan vizibil: '+(hy?'HYBRID · Viada':'Full Body · Wolf'),hy?'Antrenament, Acasă și nutriția urmează acum săptămâna HYBRID.':'Antrenament, Acasă și nutriția urmează acum planul Wolf, cu cardio adaptiv.','info'); };
 /* ziua următoare din săptămâna HYBRID: azi dacă nu e completă, altfel prima zi necompletă de după */
 function hybNext(){ const wk=+hyb().wk||0, wd=(new Date().getDay()+6)%7, order=[0,1,2,3,4,5,6].map(i=>(wd+i)%7);
   const d=order.find(x=>!hybDayFull(wk,x)); return d==null?null:{w:wk,d}; }

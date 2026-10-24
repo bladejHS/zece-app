@@ -5,7 +5,7 @@
 
 export const BRAND = {
   name: 'FALCO',
-  sub: 'Forță · alergare',
+  sub: 'Forță · anduranță',
   motto: 'Libertatea de a zbura',
   tagline: 'Antrenament de contact și hibrid, cu datele tale reale.',
 } as const;

@@ -131,6 +131,18 @@ function fxRun(e,x){
       <div class="fx-sub"><button class="btn ghost" data-a="exDone">Am făcut-o, fără date</button></div>`}
     <div class="lv-next">${nextTxt(day,x)}</div>`;
 }
+/* v29: cardio-ul din planul Wolf — pulsul țintă, cronometrul și „Gata” */
+function fxCardio(e,x){
+  const s=S.sess, day=sessDay(s), on=sessIsDone(s,x), isLast=fxEnd(day,x), pre=tmPresetFor(e,day,s.w), H=cdHr(), mn=s.tmMin[x];
+  return `
+    <div class="eyebrow">${ic('heart')} Cardio · ${e.hiit?'intervale':'zona 2'} · ${esc(CD_MOD[cdMod()][0])}</div>
+    <div class="fx-n">${esc(e.n)}</div><div class="fx-p">${esc(e.p)}</div>${e.adj?`<div class="adjb">${ic('coach')} Ajustat azi: ${esc(e.adj.join(' · '))}</div>`:''}
+    <div class="tag run" style="margin-top:8px">${ic('target')} ${e.hiit?'Reprize '+H.hi[0]+'–'+H.hi[1]+' bpm · pauze '+H.rec[0]+'–'+H.rec[1]+' bpm':'Zona 2: '+H.z2[0]+'–'+H.z2[1]+' bpm'}</div>
+    ${mn!=null?`<div class="done-box">${ic('clock')} ${num(mn,1)} min cronometrate</div>`:on?`<div class="done-box">${ic('check')} Făcut.</div>`:''}
+    ${pre&&!on?`<button class="btn blue wide xl" style="margin-top:16px" data-a="tmFor" data-x="${x}">${ic('clock')} Pornește cronometrul${e.hiit?' de intervale':''}</button>`:''}
+    <button class="btn pri xl wide ${on?'':'glow'} fx-cta" data-a="${on?(isLast?'fxFinish':'fxNext'):'exDone'}">${on?(isLast?'Termină antrenamentul':'Următorul '+ic('right')):ic('check')+' Gata'}</button>
+    ${on?absOffer(day,x):''}<div class="lv-next">${nextTxt(day,x)}</div>`;
+}
 function fxTask(e,x){
   const s=S.sess, day=sessDay(s), on=sessIsDone(s,x), isLast=fxEnd(day,x), pre=tmPresetFor(e,day,s.w);
   return `
@@ -162,7 +174,7 @@ function renderFocus(){
   const s=S.sess, day=sessDay(s), n=day.ex.length;
   const x=n?clamp(s.cur,0,n-1):0, e=day.ex[x];
   const prev=root.querySelector('.fx'), keepScroll=prev?prev.scrollTop:0;
-  const body=!e?'':e.kind==='lift'?fxLift(e,x):e.kind==='run'?fxRun(e,x):fxTask(e,x);
+  const body=!e?'':e.kind==='lift'?fxLift(e,x):e.kind==='run'?fxRun(e,x):e.kind==='cardio'?fxCardio(e,x):fxTask(e,x);
   root.innerHTML=`<div class="fx ${fxWasOpen?'':'enter'}" role="dialog" aria-label="Antrenament"><div class="fx-in">
     <div class="fx-top"><button class="ib" data-a="fxMin" aria-label="Minimizează">${ic('down')}</button>
       <div class="fx-tt"><div class="eyebrow">S${s.w+1} · ${DAYN[s.d]}${n?' · '+(x+1)+'/'+n:''}</div><div class="t">${esc(day.t)}</div></div>

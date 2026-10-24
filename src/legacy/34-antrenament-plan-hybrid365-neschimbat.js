@@ -3,12 +3,13 @@
    ===================================================================== */
 const TR_TABS=[['plan','Plan','plan'],['hyb','HYBRID','bolt'],['acts','Activități','activity'],['hist','Istoric','history']];
 function viewTrain(){
-  const T=TR_TABS.some(t=>t[0]===S.trTab)?S.trTab:'plan';
-  /* v28: planul principal e primul (cu ★); cardul de alegere stă deasupra ambelor planuri */
-  const tabs=mainHyb()?[TR_TABS[1],TR_TABS[0]].concat(TR_TABS.slice(2)):TR_TABS;
-  const body=T==='hist'?trainHist():T==='acts'?viewActs():T==='hyb'?mainPlanCard()+viewHybrid():mainPlanCard()+viewPlan();
-  return `<div class="seg scr" style="margin-top:6px">${tabs.map(t=>`<button class="${T===t[0]?'on':''}" data-a="trTab" data-k="${t[0]}">${ic(t[2])} ${t[1]}${t[0]===(mainHyb()?'hyb':'plan')?' ★':''}</button>`).join('')}</div>${body}`;
+  /* v29: se vede doar planul ales în Setări → Antrenament (Wolf sau HYBRID) */
+  const tabs=TR_TABS.filter(t=>t[0]!==(mainHyb()?'plan':'hyb')), T=trTabNow();
+  const body=T==='hist'?trainHist():T==='acts'?viewActs():T==='hyb'?viewHybrid():viewPlan();
+  return `<div class="seg scr" style="margin-top:6px">${tabs.map(t=>`<button class="${T===t[0]?'on':''}" data-a="trTab" data-k="${t[0]}">${ic(t[2])} ${t[1]}</button>`).join('')}</div>${body}`;
 }
+/* fila curentă; dacă era planul ascuns, se deschide planul vizibil */
+const trTabNow=()=>{ const own=mainHyb()?'hyb':'plan'; return S.trTab==='acts'||S.trTab==='hist'?S.trTab:own; };
 ACT.trTab=(el,{k})=>{ S.trTab=k; render(); window.scrollTo({top:0}); };
 /* ---------- istoric ---------- */
 function trainHist(){

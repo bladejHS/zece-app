@@ -74,7 +74,7 @@ function coverHero(){
       <div class="cv-m"><span>Ciclul următor reia același plan.</span></div>
       <div class="cv-b"><button class="btn pri xl glow" data-a="newCycle">${ic('refresh')} Începe ciclul ${cyc()+1}</button>${cycList().length?`<button class="btn cv-alt" data-a="cycOpen">${ic('star')} Raport</button>`:''}</div>`;
   const day=dayFor(nx.w,nx.d), dn=doneCount(nx.w,nx.d), tot=absFrom(nx.d), p=runPlan(), lifts=day.ex.filter(e=>e.kind==='lift'&&!e.opt).length;
-  const run=day.run==='thr'?(p.thr.r[nx.w]||0)+' × '+mmss(p.thr.m)+' la prag':day.run==='lng'?(p.lng.w[nx.w]||0)+' min long run':day.run?'Easy run '+((p[day.run]||{w:[]}).w[nx.w]||0)+' min':'';
+  const run=day.run==='thr'?(p.thr.r[nx.w]||0)+' × '+mmss(p.thr.m)+' la prag':day.run==='lng'?(p.lng.w[nx.w]||0)+' min long run':day.run?'Easy run '+((p[day.run]||{w:[]}).w[nx.w]||0)+' min':day.cardio==='hiit'?CD_IV[nx.w]+' × 4 min intervale':day.cardio?'cardio Z2 '+cdZ2Min()+' min':'';
   const what=[run,lifts?lifts+' exerciții de forță':'',!run&&!lifts?tot+' exerciții':''].filter(Boolean).join(' + ');
   const today=(new Date().getDay()+6)%7===nx.d;
   return `<span class="cv-bdg">${dayBadge(nx.d,'next',60)}</span><div class="cv-k">${today?'Azi':'Următorul'} · ${DAYN[nx.d]} · S${nx.w+1} · Ciclul ${cyc()}</div>

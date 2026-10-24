@@ -11,9 +11,11 @@ const WEEKS=4;
    Alergarea: 2 × Easy Z2 ca a doua sesiune, la ~6 ore după forță, în zilele fără compuse de picioare; pragul marți, la ≥24 h de orice zi de picioare.
    v22: înapoi la planul full body inițial, cu Skull Crusher, Good Morning și Nordic Curl înlocuite (extensie deasupra capului la cablu,
    Back Extension la 45°, Hamstring Curl la șezut) și abdomenul obligatoriu în 4 ședințe: ~12 seturi pe săptămână, cu stretch și greutate.
-   Pauze: izolare 90 s, compuse sus 150 s, compuse grele de picioare 180 s. Vineri recuperare, duminică odihnă. Easy-urile luni și joi. */
+   Pauze: izolare 90 s, compuse sus 150 s, compuse grele de picioare 180 s. Vineri recuperare, duminică odihnă. Easy-urile luni și joi.
+   v29: alergarea a ieșit din plan, la cererea ta: în locul ei, cardio adaptiv după studii (04b) — Z2 luni și joi, intervale 4 × 4 marți.
+   Pozițiile exercițiilor rămân aceleași, deci bifele vechi rămân la locul lor. Seriile și repetările de forță nu se schimbă. */
 const PLAN=[
- {t:'Full Body A + Easy Run',cat:'mix',min:100,run:'ez1',lift:[['cal',65]],ex:[
+ {t:'Full Body A + Cardio Z2',cat:'mix',min:100,cardio:'z2',lift:[['cal',65]],ex:[
   ['Incline Dumbbell Press','3×6–10 · pauză 150s — banca la 30–45°, ganterele coboară adânc'],
   ['Chest Supported Row','3×6–10 · pauză 150s — brațele complet întinse jos'],
   ['Lat Pulldown','3×8–12 · pauză 120s — priză îngustă sau supinată'],
@@ -22,11 +24,11 @@ const PLAN=[
   ['Hamstring Curl','2×10–15 · pauză 90s — la șezut, aplecat în față'],
   ['Calf Raise','3×8–12 · pauză 90s — genunchii întinși, 1–2 s jos'],
   ['Cable Crunch','3×10–15 · pauză 60s — sus lași abdomenul să se întindă complet, apoi rotunjești coloana; nu îndoi din șold'],
-  ['Easy run Z2','30 min · ritm conversațional, zona 2']]},
- {t:'Threshold run',cat:'run',min:50,run:'thr',lift:[],ex:[
-  ['Warm up','10–15 min alergare ușoară + drills'],
-  ['Threshold','4 × 6:00 @ ritm de prag · pauză 90s jog ușor'],
-  ['Cool down','10 min alergare ușoară']]},
+  ['Cardio Z2','30 min · zona 2']]},
+ {t:'Cardio · Intervale 4×4',cat:'cardio',min:45,cardio:'hiit',lift:[],ex:[
+  ['Încălzire','10 min ușor, crești treptat pulsul · același aparat'],
+  ['Intervale 4×4','4 × 4 min · 3 min ușor între ele'],
+  ['Revenire','5–10 min foarte ușor, apoi întinderi']]},
  {t:'Full Body B · Heavy Legs',cat:'lift',min:80,lift:[['cal',70]],ex:[
   ['Hack Squat','3×5–8 · pauză 180s — cât mai jos, pauză scurtă jos'],
   ['Romanian Deadlift','3×6–10 · pauză 180s — până puțin sub genunchi, fără eșec'],
@@ -35,7 +37,7 @@ const PLAN=[
   ['Tricep Overhead Extension','3×8–12 · pauză 90s — cotul sus, tricepsul întins jos'],
   ['Preacher Curl','3×8–12 · pauză 90s'],
   ['Roman Chair Leg Raise','3×8–15 · pauză 60s — sprijinit pe antebrațe, ridici bazinul spre piept (rotunjești spatele jos), nu doar picioarele']]},
- {t:'Full Body C + Easy Run',cat:'mix',min:100,run:'ez2',lift:[['cal',65]],ex:[
+ {t:'Full Body C + Cardio Z2',cat:'mix',min:100,cardio:'z2',lift:[['cal',65]],ex:[
   ['Machine Chest Press','3×8–12 · pauză 150s'],
   ['Pull Up / Lat Pulldown','3×6–12 · pauză 150s — atârnare completă la fiecare repetare'],
   ['Seated Cable Row','3×8–12 · pauză 120s — priză neutră sau largă, brațele complet întinse și omoplații depărtați în față'],
@@ -44,7 +46,7 @@ const PLAN=[
   ['Hamstring Curl','3×10–15 · pauză 90s — la șezut, aplecat în față'],
   ['Calf Raise','3×10–15 · pauză 90s — genunchii întinși, 1–2 s jos'],
   ['Ab Wheel Rollout','3×6–12 · pauză 60s — cât mai departe cu spatele neutru; din genunchi la început'],
-  ['Easy run Z2','30 min · ușor — e flush, nu antrenament']]},
+  ['Cardio Z2','30 min · zona 2']]},
  {t:'Recovery & Mobility',cat:'rest',min:40,lift:[],ex:[
   ['Light walk / easy bike','5–10 min'],
   ['Mobility flow','10–15 min · full body'],
@@ -105,31 +107,31 @@ async function migSplit(){
     s.cur=splitX(s.cur); s[SPLIT_MK]=1; await store.set(K.sess,s); }
   try{ localStorage.setItem('zece3:m16','1'); }catch(e){} }
 const NOTES=[
- {wk:'Full Body A — compusele de sus, izolarea picioarelor, abdomen + alergare ușoară',d:[
-  ['De ce full body','Wolf își face singur antrenamentele full body: fiecare mușchi de 2–3 ori pe săptămână, seturile împărțite pe mai multe zile (primele seturi dintr-o ședință cresc cel mai mult), ședințe mai scurte. Azi compusele pentru partea de sus și izolarea pentru picioare, ca să poți alerga diseară.'],
+ {wk:'Full Body A — compusele de sus, izolarea picioarelor, abdomen + cardio Z2',d:[
+  ['De ce full body','Wolf își face singur antrenamentele full body: fiecare mușchi de 2–3 ori pe săptămână, seturile împărțite pe mai multe zile (primele seturi dintr-o ședință cresc cel mai mult), ședințe mai scurte. Azi compusele pentru partea de sus și izolarea pentru picioare.'],
   ['Cum lucrezi','Primul set al fiecărui exercițiu la 2–3 repetări în rezervă, ultimul la 0–1. Coborâre controlată 2–3 s, pauză scurtă în poziția întinsă, urcare explozivă, fără pauză sus.'],
   ['Superseturi','Dacă ai puțin timp: împinsul cu ramatul, extensiile cu flexiile, alternativ, cu 60–90 s între ele (aceeași creștere în ~jumătate din timp).'],
   ['Abdomenul (Wolf)','Îl antrenezi ca pe orice mușchi: de 4 ori pe săptămână, ~12 seturi, aproape de eșec, cu amplitudine completă și stretch (coloana se întinde sus la cable crunch, corpul se lungește la ab wheel), și cu greutate care crește. Ridicările de picioare lucrează abdomenul doar dacă rotunjești bazinul. Pătrățelele se văd când scade grăsimea: abdomenul nu „arde” grăsimea de pe burtă.'],
-  ['Alergarea','Easy run-ul e a doua sesiune, la ~6 ore după forță. Zona 2, poți vorbi în propoziții întregi.']]},
- {wk:'Pragul lactic — sesiunea-cheie de alergare',d:[
-  ['Coaching','Ritm controlat și puternic, reprize egale, relaxat. Calitate peste cantitate.'],
-  ['Progresie','Săptămânile 1–3: 4, 5, apoi 6 reprize. La fiecare ciclu nou repriza crește cu 30 s, până la 7 min; apoi progresezi prin ritm (refaci testul de prag).'],
-  ['De ce marți','Ieri picioarele au făcut doar izolare, iar compusele grele vin abia mâine: pragul e la peste 24 de ore de ele (Norton: interferența dispare la ≥24 h).']]},
+  ['Cardio-ul','Z2 imediat după forță sau la ~6 ore (Schumann 2022: ordinea nu schimbă hipertrofia). Poți vorbi în propoziții întregi. Minutele se ajustează singure în fiecare luni, după trendul greutății.']]},
+ {wk:'Intervale 4 × 4 — sesiunea intensă de cardio',d:[
+  ['Cum lucrezi','Fiecare repriză de 4 min greu, dar egal: în ultimul minut ajungi în zona țintă, nu din primele secunde. Între reprize 3 min ușor, nu stai.'],
+  ['De ce','Helgerud (2007): 4 × 4 min la 90–95% din pulsul maxim cresc VO2max mai mult decât efortul continuu; Wewege (2017): scad grăsimea la fel ca Z2, în mai puțin timp.'],
+  ['De ce marți','Ieri picioarele au făcut doar izolare, iar compusele grele vin abia mâine: intervalele sunt la ~24 de ore de ele. Bicicleta interferează cel mai puțin cu forța picioarelor (Wilson 2012).']]},
  {wk:'Full Body B — Heavy Legs, izolare pentru partea de sus, abdomen',d:[
   ['Cum lucrezi','Hack squat și RDL la 1–2 repetări în rezervă, fără eșec (eșecul la compusele grele de picioare costă mult și aduce puțin). Izolările de sus: ultimul set la eșec, apoi 3–5 jumătăți de repetare în partea întinsă.'],
   ['Ordinea','Compusele întâi, cât ești proaspăt; brațele și umerii nu suferă după picioare.'],
-  ['Mâine','Joi doar izolare la picioare (flexii, gambe), cu greutăți moderate: frecvența mare ajută, iar easy run-ul de seară e ușor.']]},
- {wk:'Full Body C — compusele de sus, izolarea picioarelor, abdomen + alergare ușoară',d:[
+  ['Mâine','Joi doar izolare la picioare (flexii, gambe), cu greutăți moderate: frecvența mare ajută, iar cardio-ul Z2 e ușor.']]},
+ {wk:'Full Body C — compusele de sus, izolarea picioarelor, abdomen + cardio Z2',d:[
   ['Cum lucrezi','Repetări ceva mai multe decât luni (8–15). Aparatele și cablurile sunt sigure până la eșec: acolo mergi la 0 pe ultimul set și continui cu jumătăți de repetare în stretch.'],
   ['Spatele','Tracțiunile cu atârnare completă jos; ramatul cu brațele complet întinse și omoplații depărtați. Fără pauză în contracție.'],
-  ['Alergarea','Easy run-ul la ~6 ore după forță, ușor — e flush, nu antrenament.']]},
+  ['Cardio-ul','Z2 după forță, ușor: ajută la deficit fără să obosească picioarele pentru sâmbătă.']]},
  {wk:'Recuperare — 30–45 min, intensitate mică',d:[
   ['Coaching','Mișcare cu intenție, nu cu intensitate. Somn 7–9 ore, mâncare bună, apă.'],
   ['Progresie','Notezi cum te simți și cum recuperezi în fiecare săptămână.']]},
  {wk:'Full Body D — Heavy Legs, izolare pentru partea de sus, abdomen',d:[
   ['Cum lucrezi','Fandarea bulgărească la Smith întâi, la 1–2 repetări în rezervă. Back extension la 45°: hinge ca la RDL, dar cu încărcare mică pe spate, după alergare e mai blând. Ultimul set la presă până la eșec.'],
-  ['Femuralii','Flexiile la șezut sunt exercițiul preferat al lui Wolf pentru femurali: îi lucrează întinși (aplecat în față). Partea excentrică lentă ajută și la protecția lor la alergare.'],
-  ['Weekend','Mâine e odihnă, apoi luni doar izolare la picioare: ajung odihnite la pragul de marți.']]},
+  ['Femuralii','Flexiile la șezut sunt exercițiul preferat al lui Wolf pentru femurali: îi lucrează întinși (aplecat în față).'],
+  ['Weekend','Mâine e odihnă, apoi luni doar izolare la picioare: ajung odihnite la intervalele de marți.']]},
  {wk:'Odihnă — plimbare și mobilitate',d:[
   ['Coaching','Zi liberă de antrenament. O plimbare de 20–30 min ajută la pași și la recuperare.'],
   ['Wolf','Recuperarea o judeci după performanță, nu după febra musculară: dacă luni primele seturi sunt ca data trecută sau mai bune, ești refăcut.']]}
@@ -162,6 +164,7 @@ function runTotal(kind,w){ const p=runPlan(), wk=runWork(kind,w);
 const runKindOf=run=>run==='thr'?'thr':run==='lng'?'lng':'ez';
 function parseEx(n,p,base){
   if(base.run&&RUN_EX.test(n)) return {kind:'run'};
+  if(base.cardio&&/^(Cardio Z2|Intervale 4×4)$/.test(n)) return {kind:'cardio'};
   const m=/^(\d+)×(\d+)(?:–(\d+))?/.exec(p);
   if(m){ const r=/pauză (\d+)s/.exec(p); return {kind:'lift',sets:+m[1],lo:+m[2],hi:+(m[3]||m[2]),rest:r?+r[1]:90}; }
   return {kind:'task'};
@@ -177,13 +180,14 @@ function dayBase(w,d){
     if(base.run==='thr'&&n==='Threshold'){ const r=p.thr.r[w]||0; txt=r+' × '+mmss(p.thr.m)+' @ ritm de prag · pauză '+p.thr.rest+'s jog ușor'; planMin=Math.round(runWork('thr',w)); }
     else if(base.run==='lng'&&/^Long run/.test(n)){ planMin=p.lng.w[w]||0; txt=planMin+' min continuu · ritm conversațional, zona 2'; }
     else if((base.run==='ez1'||base.run==='ez2')&&/^Easy run/.test(n)){ planMin=p[base.run].w[w]||0; txt=planMin+' min · ritm conversațional, zona 2'+(base.run==='ez2'?' — flush, nu antrenament':'')+' · la ~6 h după forță'; }
-    return Object.assign({x,n,p:txt,planMin,opt:optX(d,x)},parseEx(n,txt,base));
+    let cx=null; if(base.cardio&&/^(Cardio Z2|Intervale 4×4)$/.test(n)){ cx=cdEx(n,w); txt=cx.txt; planMin=cx.planMin; }
+    return Object.assign({x,n,p:txt,planMin,opt:optX(d,x)},cx&&cx.hiit?{iv:cx.iv,hiit:true}:{},parseEx(n,txt,base));
   });
   const liftMin=(base.lift||[]).reduce((a,s)=>a+s[1],0);
-  let min=base.run?Math.round(runTotal(base.run,w)+liftMin):base.min;
+  let min=base.run?Math.round(runTotal(base.run,w)+liftMin):base.cardio?Math.round(cdDayMin(d,w)+liftMin):base.min;
   const dl=deloadOn(w)||hrvDeloadDay(w,d);
   if(dl){ ex.forEach(deloadEx); min=TRAINING.deloadMinutes(min); }
-  return {w,d,t:base.t,cat:base.cat,run:base.run,min,ex,notes:NOTES[d],deload:dl};
+  return {w,d,t:base.t,cat:base.cat,run:base.run,cardio:base.cardio,min,ex,notes:NOTES[d],deload:dl};
 }
 /* deload automat (src/lib/training): săptămâna a 4-a din ciclu are volum −40%, aceleași zile; se poate opri din Setări */
 /* v26 (Wolf, articolul despre pauzele de dietă): în cut, deload-ul vine în săptămâna la menținere (prof.dbDl, setat la pornire de dbDeloadSync) */
@@ -191,7 +195,7 @@ const dbDl=w=>{ const x=prof().dbDl; return !!(x&&x.c===cyc()&&x.w===w); };
 const deloadOn=w=>(S.deload!==false&&TRAINING.isDeloadWeek(w+1))||dbDl(w);
 function deloadEx(e){
   if(e.kind==='lift'&&e.sets){ const n=TRAINING.deloadCount(e.sets); e.p=e.p.replace(/^\d+×/,n+'×')+' · deload'; e.sets=n; }
-  else if(e.n==='Threshold'){ const r=+((/^(\d+) ×/.exec(e.p)||[])[1])||0; if(r){ const n=TRAINING.deloadCount(r); e.iv=n; e.p=e.p.replace(/^\d+ ×/,n+' ×')+' · deload'; e.planMin=TRAINING.deloadMinutes(e.planMin||0); } }
+  else if(e.n==='Threshold'||e.hiit){ const r=+((/^(\d+) ×/.exec(e.p)||[])[1])||0; if(r){ const n=TRAINING.deloadCount(r); e.iv=n; e.p=e.p.replace(/^\d+ ×/,n+' ×')+' · deload'; e.planMin=e.hiit?cdHiitMin(n):TRAINING.deloadMinutes(e.planMin||0); } }
   else if(e.planMin){ const m=TRAINING.deloadMinutes(e.planMin); e.p=e.p.replace(/^\d+ min/,m+' min')+' · deload'; e.planMin=m; }
 }
 const cyc=()=>((S.cyc||{}).h)||1;

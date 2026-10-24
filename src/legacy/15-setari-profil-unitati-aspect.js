@@ -3,8 +3,7 @@
    ===================================================================== */
 const SET_SEC=[['sProf','Profil'],['sUnits','Unități'],['sAsp','Aspect'],['sNotif','Notificări'],['sDash','Acasă'],['sConn','Conexiuni'],['sAi','Antrenor AI'],['sTrain','Antrenament'],['sData','Date și copii']];
 function viewSet(){
-  const P=prof(), p=runPlan(), key=S.aiKey, tg=targets(), nc=notifCfg(), md=S.mode||'dark';
-  const rpRow=(lbl,k,f)=>`<span class="n">${lbl}</span>${Array.from({length:WEEKS},(_,w)=>`<input class="inp" type="number" inputmode="numeric" data-rp="${k}|${f}|${w}" value="${p[k][f][w]}" aria-label="${lbl} săptămâna ${w+1}">`).join('')}`;
+  const P=prof(), key=S.aiKey, tg=targets(), nc=notifCfg(), md=S.mode||'dark';
   const sw=(a,on,lbl,sub,extra)=>`<div class="set-row"><span class="sp"><b>${lbl}</b>${sub?`<div class="sm mu">${sub}</div>`:''}</span><button class="sw ${on?'on':''}" data-a="${a}" ${extra||''} role="switch" aria-checked="${!!on}" aria-label="${esc(lbl)}"></button></div>`;
   const perm='Notification' in window?Notification.permission:'na';
   return `
@@ -86,14 +85,11 @@ function viewSet(){
   ${aiSafetyCard()}
 
   <div class="set-h" id="sTrain">Antrenament</div>
+  ${mainPlanCard()}
+  ${mainHyb()?'':cardioSetCard()}
   ${icsCard()}
   <div class="card"><div class="set-row" style="margin-top:0"><span class="sp"><b>Deload automat în săptămâna 4</b><div class="sm mu">Volum −40% (serii, minute, reprize). Oprit implicit: după Dr. Milo Wolf, deload-ul programat nu crește masa; îl faci când performanța scade o săptămână (antrenorul adaptiv ți-l propune atunci). În cut, deload-ul vine singur în prima săptămână a pauzei de dietă.</div></span><button class="sw ${S.deload!==false?'on':''}" data-a="deloadToggle" role="switch" aria-checked="${S.deload!==false}" aria-label="Deload automat"></button></div></div>
   ${healthCard()}
-  <div class="card"><div class="eyebrow">${ic('run')} Progresia alergării</div>
-    <div class="rp-grid"><span></span>${Array.from({length:WEEKS},(_,w)=>`<span class="h">S${w+1}</span>`).join('')}
-      ${rpRow('Easy luni (min)','ez1','w')}${rpRow('Prag (reprize)','thr','r')}${rpRow('Easy joi (min)','ez2','w')}</div>
-    <div class="note">Reprizele de prag au ${p.thr.m} min, cu ${p.thr.rest}s jog între ele. Exercițiile și zilele planului rămân aceleași.</div>
-    <button class="btn ghost sm" style="margin-top:10px" data-a="rpReset" data-confirm="Sigur? Apasă iar">${ic('refresh')} Valorile din program</button></div>
   <div class="card">${sw('sound',S.sound,'Sunet și vibrații','Pauze, cronometru, recorduri')}
     ${sw('voiceCues',S.voice,'Voce','Anunță seriile, pauzele, intervalele și recordurile și te încurajează')}
     ${voxSettingsHTML()}
@@ -113,7 +109,7 @@ function viewSet(){
   ${ioCard()}
   ${syncCard()}
   ${errCard()}
-  <div class="xs mu2" style="text-align:center;margin-top:18px">FALCO · planul hibrid după Dr. Milo Wolf</div>`;
+  <div class="xs mu2" style="text-align:center;margin-top:18px">FALCO · ${mainHyb()?'HYBRID după Alex Viada':'Full Body după Dr. Milo Wolf, cu cardio adaptiv'}</div>`;
 }
 ACT.barSet=async(el,{I})=>{ await save('prof',Object.assign({},S.prof||{},{bar:I})); render(); };
 ACT.notifT=async(el,{k})=>{ const c=notifCfg(); c[k]=!c[k]; await save('notifCfg',c); render(); };

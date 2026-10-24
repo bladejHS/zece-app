@@ -194,7 +194,7 @@ document.addEventListener('click',async ev=>{
     case 'tmSkip': if(TM.st&&!TM.st.pAt) tmAdvance(0,false); return;
     case 'tmLap': if(TM.st) tmAdvance(0,false); return;
     case 'tmRound': if(TM.st){ TM.st.rounds++; const r=$('#tmRounds'); if(r) r.textContent=TM.st.rounds; beep(990,.06); buzz(30); floatText(el,'+1'); } return;
-    case 'tmApply': { const st=TM.st; if(st&&s&&st.from!=null){ if(st.run){ s.tmMin[st.from]=Math.round(st.total/60*10)/10; s.cur=st.from; await persistSess(); } else { s.cur=st.from; await exDone(); } }
+    case 'tmApply': { const st=TM.st; if(st&&s&&st.from!=null){ if(st.run){ s.tmMin[st.from]=Math.round(st.total/60*10)/10; s.cur=st.from; await persistSess(); } else { if(st.cd) s.tmMin[st.from]=Math.round(st.total/60*10)/10; s.cur=st.from; await exDone(); } }
       TM.open=false; TM.st=null; cancelSched('tm'); tmRender(); renderFocus(); return; }
     case 'tmClose': TM.open=false; TM.st=null; TM.list=false; TM.choose=null; cancelSched('tm'); if(!S.sess){ keepAlive(false); keepAwake(false); } tmRender(); return;
     case 'ask': if(RC.open){ RC.open=false; rcRender(); } aiSend(QUICK[I]); return;

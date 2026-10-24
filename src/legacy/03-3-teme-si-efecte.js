@@ -37,8 +37,8 @@ function applyFx(){
   document.body.classList.remove('fx-min','fx-normal','fx-max'); document.body.classList.add('fx-'+S.fx);
   if(S.fx==='max'&&!motionOff()&&!document.hidden) ptStart(); else ptStop();
 }
-const catCol=c=>c==='lift'?TH().ac:c==='mix'?TH().ac2:c==='run'?COL().run:COL().ok;
-const CAT={mix:['Forță + alergare','mix'],run:['Alergare','run'],lift:['Forță','lift'],rest:['Recuperare','rest']};
+const catCol=c=>c==='lift'?TH().ac:c==='mix'?TH().ac2:c==='run'||c==='cardio'?COL().run:COL().ok;
+const CAT={mix:['Forță + cardio','mix'],cardio:['Cardio','run'],run:['Alergare','run'],lift:['Forță','lift'],rest:['Recuperare','rest']};
 /* particule (doar la efecte maxime) */
 const PT={on:false,raf:0,ps:[]};
 function ptStart(){

@@ -1,7 +1,7 @@
 /* =====================================================================
    9 · ECRANE
    ===================================================================== */
-const catTag=day=>{ const c=CAT[day.cat]; return `<span class="tag ${c[1]}">${ic(day.cat==='rest'?'leaf':day.cat==='run'?'run':day.cat==='lift'?'dumbbell':'bolt')} ${c[0]}</span>`; };
+const catTag=day=>{ const c=CAT[day.cat]; return `<span class="tag ${c[1]}">${ic(day.cat==='rest'?'leaf':day.cat==='run'?'run':day.cat==='cardio'?'heart':day.cat==='lift'?'dumbbell':'bolt')} ${c[0]}</span>`; };
 const short=e=>e.kind==='lift'?e.sets+'×'+e.lo+(e.hi!==e.lo?'–'+e.hi:''):e.planMin?e.planMin+' min':'';
 function lastLine(e){ if(e.kind!=='lift') return ''; const p=lastSession(e.n); return p?`<div class="ex-l">Ultima: ${p.s.map(fmtSet).join(' · ')} (${relDay(p.d)})</div>`:''; }
 const QUICK=['Fă-mi raportul săptămânii: ce am făcut față de plan, forța, alergarea, greutatea și mâncarea, plus 3 lucruri concrete pentru săptămâna viitoare.',
@@ -79,11 +79,12 @@ function viewPlan(){
       </div></div></div>`; }).join('');
   return `
   <div class="card plan-hd"><div class="h3">Full Body · cicluri de 4 săptămâni</div>
-    <div class="sm mu">4 Full Body (2 Heavy Legs) · 2 Easy Run Z2 · 1 Threshold run · 2 zile de recuperare</div>
+    <div class="sm mu">4 Full Body (2 Heavy Legs) · 2 × cardio Z2 · 1 × intervale 4×4 · 2 zile de recuperare</div>
     ${COVER?'':`<div class="bar"><i style="width:${(full/(WEEKS*7)*100).toFixed(1)}%"></i></div>
     <div class="cyc-bar"><span>${full} din ${WEEKS*7} zile complete</span><span>${nx?'următorul: S'+(nx.w+1)+' · '+DAYN[nx.d]:'ciclu complet'}</span></div>`}
     ${cycList().length||cyc()>1?`<div class="inrow" style="margin-top:12px">${cycList().length?`<button class="btn ghost sm" style="flex:1" data-a="cycOpen">${ic('star')} Raportul ciclului</button>`:''}${cyc()>1?`<button class="btn ghost sm" style="flex:1" data-a="cfOpen">${ic('refresh')} Corectează ciclul</button>`:''}</div>`:''}</div>
   ${miloCard()}
+  ${cardioCard()}
   <div class="seg" role="tablist">${Array.from({length:WEEKS},(_,a)=>`<button class="${a===w?'on':''}" data-a="planW" data-i="${a}" role="tab" aria-selected="${a===w}">S${a+1}${weekFull(a)?` <span class="ok">${ic('check')}</span>`:''}</button>`).join('')}</div>
   ${days}
   <div class="card"><div class="row"><div class="sp"><div class="h3">Ciclu nou</div><div class="sm mu">Reia planul de la săptămâna 1. Istoricul rămâne.</div></div>
@@ -654,7 +655,7 @@ function aeroCard(){
 const refW=()=>{ const P=prof(); return +P.goalW>0?Math.min(+P.goalW,curW()):curW(); };
 function fuelPlan(){
   const s=S.sess, nx=s?{w:s.w,d:s.d}:nextDay(); if(!s&&!nx) return null;
-  const day=s?sessDay(s):dayFor(nx.w,nx.d), cat=day.cat, min=+day.min||60, thr=day.ex.some(e=>e.n==='Threshold'), hard=thr||min>=90, long=min>=90;
+  const day=s?sessDay(s):dayFor(nx.w,nx.d), cat=day.cat, min=+day.min||60, thr=day.ex.some(e=>e.n==='Threshold'||e.hiit), hard=thr||min>=90, long=min>=90;
   const pm=clamp(Math.round(targets().p/4),30,55);
   const pre=cat==='rest'?null:`Cu câteva ore înainte: una din mesele tale proteice (~<b>${pm} g proteină</b>).${thr?' Pragul e sesiunea cheie de alergare: carbohidrați la masa dinainte (low-carb scade performanța la anduranță cu 2–3%).':' Carbohidrați simpli înainte, dacă te ajută: e o preferință, nu o regulă.'}`;
   const during=cat==='rest'?null:'Apă. Băutura din planul tău de mese (intra-workout) e opțională: o iei dacă te ajută.';

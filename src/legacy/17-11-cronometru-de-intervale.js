@@ -17,7 +17,13 @@ const P_FREE=()=>({title:'Cronometru liber',kind:'free',ph:[{k:'manual',l:'Crono
 function P_THR(w,rOv){ const p=runPlan(), r=rOv||p.thr.r[w]||4, m=p.thr.m, rs=p.thr.rest, ph=[{k:'prep',d:10,l:'Pregătește-te',s:'Prima repriză la ritm de prag'}];
   for(let i=1;i<=r;i++){ ph.push({k:'work',d:m*60,l:'Repriza '+i+'/'+r,s:'Ritm de prag — controlat, egal'}); if(i<r) ph.push({k:'rest',d:rs,l:'Jog ușor',s:'Urmează repriza '+(i+1)}); }
   return {title:'Threshold '+r+' × '+mmss(m),kind:'thr',ph}; }
+/* v29: intervalele 4 × 4 (Helgerud 2007) și Z2 continuu, cu pulsul țintă din zonele tale */
+function P_HIIT(r){ const H=cdHr(), ph=[{k:'prep',d:10,l:'Pregătește-te',s:'Prima repriză: '+H.hi[0]+'–'+H.hi[1]+' bpm'}];
+  for(let i=1;i<=r;i++){ ph.push({k:'work',d:240,l:'Repriza '+i+'/'+r,s:'Greu, dar egal · '+H.hi[0]+'–'+H.hi[1]+' bpm în ultimul minut'}); if(i<r) ph.push({k:'rest',d:180,l:'Ușor',s:'Nu te opri · urmează repriza '+(i+1)}); }
+  return {title:'Intervale '+r+' × 4 min',kind:'hiit',cd:true,ph}; }
 function tmPresetFor(e,day,w){
+  if(e.kind==='cardio'&&e.hiit) return P_HIIT(e.iv||4);
+  if(e.kind==='cardio'&&e.planMin){ const H=cdHr(); return {title:e.n,kind:'cardio',cd:true,ph:[{k:'prep',d:5,l:'Pornește',s:'Zona 2'},{k:'work',d:e.planMin*60,l:e.n,s:'Zona 2 · '+H.z2[0]+'–'+H.z2[1]+' bpm, poți vorbi în propoziții întregi',half:true}]}; }
   if(e.n==='Threshold') return P_THR(w,e.iv);
   if(/^(Easy run|Long run)/.test(e.n)&&e.planMin) return {title:e.n,kind:'run',run:true,ph:[{k:'prep',d:5,l:'Pornește',s:'Zona 2'},{k:'work',d:e.planMin*60,l:e.n,s:'Zona 2 — poți vorbi în propoziții întregi',half:true}]};
   if(/^Power finisher/.test(e.n)) return P_EMOM();
@@ -32,7 +38,7 @@ function tmPresetFor(e,day,w){
   return null;
 }
 const TM_LIST=()=>{ const nx=nextDay(), w=nx?nx.w:0; return [
-  ['thr','run','Threshold · săptămâna '+(w+1),'Reprizele de prag din planul tău',()=>P_THR(w)],
+  ['hiit','heart','Intervale 4 × 4 · săptămâna '+(w+1),'Cardio-ul de marți: 4 min greu, 3 min ușor',()=>P_HIIT(CD_IV[w]||4)],
   ['emom','bolt','EMOM 10 min','Power finisher de vineri',P_EMOM],['amrap','flame','AMRAP 10 min','Conditioning B de miercuri',P_AMRAP],
   ['engine','refresh','Engine Builder','Conditioning A: 8 runde × 250 m',P_ENGINE],['stretch','leaf','Stretching 45/15','10 întinderi',P_STRETCH],
   ['wup','flame','Încălzire pentru forță','5 minute înainte de greutăți',P_WARMUP],['warmrun','run','Încălzire de alergare','10 min ușor + drills + accelerări',P_WARMRUN],
