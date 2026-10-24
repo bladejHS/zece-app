@@ -123,7 +123,7 @@ const autoDef=w=>Math.round(-w*GOALS[goalMode()].rate*7700/7/50)*50;
 const NET_MET={ez1:6,ez2:6,thr:8.5,lng:6.5};
 function exKcalOf(w,d,k,kg){ const b=PLAN[d]; let m=0;
   if(b.run) m+=runTotal(b.run,w)*NET_MET[b.run];
-  if(b.cardio) m+=cdDayMin(d,w)*(b.cardio==='hiit'?7:5);
+  if(b.cardio) m+=cdDayMin(d)*5;
   (b.lift||[]).forEach(([t,x])=>{ m+=x*(t==='hard'?7:3.5); });
   if(b.cat==='rest') m+=b.min*2;
   if(deloadOn(w)) m*=.6;

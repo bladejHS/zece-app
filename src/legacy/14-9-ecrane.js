@@ -79,7 +79,7 @@ function viewPlan(){
       </div></div></div>`; }).join('');
   return `
   <div class="card plan-hd"><div class="h3">Full Body · cicluri de 4 săptămâni</div>
-    <div class="sm mu">4 Full Body (2 Heavy Legs) · 2 × cardio Z2 · 1 × intervale 4×4 · 2 zile de recuperare</div>
+    <div class="sm mu">4 Full Body (2 Heavy Legs) · 3 × cardio Z2 (LISS) · 2 zile de recuperare</div>
     ${COVER?'':`<div class="bar"><i style="width:${(full/(WEEKS*7)*100).toFixed(1)}%"></i></div>
     <div class="cyc-bar"><span>${full} din ${WEEKS*7} zile complete</span><span>${nx?'următorul: S'+(nx.w+1)+' · '+DAYN[nx.d]:'ciclu complet'}</span></div>`}
     ${cycList().length||cyc()>1?`<div class="inrow" style="margin-top:12px">${cycList().length?`<button class="btn ghost sm" style="flex:1" data-a="cycOpen">${ic('star')} Raportul ciclului</button>`:''}${cyc()>1?`<button class="btn ghost sm" style="flex:1" data-a="cfOpen">${ic('refresh')} Corectează ciclul</button>`:''}</div>`:''}</div>
@@ -655,7 +655,7 @@ function aeroCard(){
 const refW=()=>{ const P=prof(); return +P.goalW>0?Math.min(+P.goalW,curW()):curW(); };
 function fuelPlan(){
   const s=S.sess, nx=s?{w:s.w,d:s.d}:nextDay(); if(!s&&!nx) return null;
-  const day=s?sessDay(s):dayFor(nx.w,nx.d), cat=day.cat, min=+day.min||60, thr=day.ex.some(e=>e.n==='Threshold'||e.hiit), hard=thr||min>=90, long=min>=90;
+  const day=s?sessDay(s):dayFor(nx.w,nx.d), cat=day.cat, min=+day.min||60, thr=day.ex.some(e=>e.n==='Threshold'), hard=thr||min>=90, long=min>=90;
   const pm=clamp(Math.round(targets().p/4),30,55);
   const pre=cat==='rest'?null:`Cu câteva ore înainte: una din mesele tale proteice (~<b>${pm} g proteină</b>).${thr?' Pragul e sesiunea cheie de alergare: carbohidrați la masa dinainte (low-carb scade performanța la anduranță cu 2–3%).':' Carbohidrați simpli înainte, dacă te ajută: e o preferință, nu o regulă.'}`;
   const during=cat==='rest'?null:'Apă. Băutura din planul tău de mese (intra-workout) e opțională: o iei dacă te ajută.';
@@ -782,7 +782,7 @@ function nutriPlan(){
     <div class="kpis" style="grid-template-columns:repeat(4,1fr)">${bar('kcal',D.tot.k,tg.kcal,TH().ac)}${bar('Proteină',D.tot.p,tg.p,COL().run)}${bar('Carbo',D.tot.c,tg.c,COL().warn)}${bar('Grăsimi',D.tot.g,tg.f,'#B3AECB')}</div>
     ${D.tot.fb<fibT?`<div class="note">${ic('leaf')} Fibre: ${D.tot.fb} din ${fibT} g (Norton: cel puțin 15 g la 1000 kcal). Ca să ajungi: legumele la fiecare masă (sunt ~2,5 g la 100 g; poți dubla porția, au puține calorii), un fruct în plus sau cartof dulce în loc de orez (apasă pe aliment ca să-l înlocuiești). Legumele sunt cea mai ușoară cale, pentru că au foarte puține calorii.</div>`:`<div class="note">${ic('check')} Fibre: ${D.tot.fb} g, peste minimul lui Norton (${fibT} g).</div>`}
     <div class="note">Mesele și alimentele sunt cele din planul tău; cantitățile le calculez din ținta zilei (${esc(GOALS[tg.goal].l.toLowerCase())}): proteina împărțită egal pe mese, ${D.kind==='t'?'carbohidrații strânși în jurul antrenamentului (pre, intra, post), grăsimile departe de el':'carbohidrații mai mulți la prânz și seara'}. Se recalculează singure când se schimbă ținta.</div>
-    <div class="xs mu" style="margin-top:8px">${D.kind==='r'?'Zi de odihnă în planul hibrid → planul de odihnă.':'Zi cu antrenament în planul hibrid → planul de antrenament (pre, intra și post-workout).'} Orezul și cartofii se cântăresc fierți, carnea crudă. Apasă pe un aliment ca să-l înlocuiești cu altul echivalent (Norton: dieta flexibilă).</div></div>
+    <div class="xs mu" style="margin-top:8px">${D.kind==='r'?'Zi de odihnă în plan → planul de odihnă.':'Zi cu antrenament în plan → planul de antrenament (pre, intra și post-workout).'} Orezul și cartofii se cântăresc fierți, carnea crudă. Apasă pe un aliment ca să-l înlocuiești cu altul echivalent (Norton: dieta flexibilă).</div></div>
     ${cards}`;
 }
 /* lista de cumpărături: alimentele din cele două planuri, pe zilele perioadei alese (antrenament sau odihnă), cu cantitățile zilei */

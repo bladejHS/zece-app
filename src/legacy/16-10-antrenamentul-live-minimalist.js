@@ -135,11 +135,11 @@ function fxRun(e,x){
 function fxCardio(e,x){
   const s=S.sess, day=sessDay(s), on=sessIsDone(s,x), isLast=fxEnd(day,x), pre=tmPresetFor(e,day,s.w), H=cdHr(), mn=s.tmMin[x];
   return `
-    <div class="eyebrow">${ic('heart')} Cardio · ${e.hiit?'intervale':'zona 2'} · ${esc(CD_MOD[cdMod()][0])}</div>
+    <div class="eyebrow">${ic('heart')} Cardio · zona 2 · ${esc(CD_MOD[cdMod()][0])}</div>
     <div class="fx-n">${esc(e.n)}</div><div class="fx-p">${esc(e.p)}</div>${e.adj?`<div class="adjb">${ic('coach')} Ajustat azi: ${esc(e.adj.join(' · '))}</div>`:''}
-    <div class="tag run" style="margin-top:8px">${ic('target')} ${e.hiit?'Reprize '+H.hi[0]+'–'+H.hi[1]+' bpm · pauze '+H.rec[0]+'–'+H.rec[1]+' bpm':'Zona 2: '+H.z2[0]+'–'+H.z2[1]+' bpm'}</div>
+    <div class="tag run" style="margin-top:8px">${ic('target')} Zona 2: ${H.z2[0]}–${H.z2[1]} bpm</div>
     ${mn!=null?`<div class="done-box">${ic('clock')} ${num(mn,1)} min cronometrate</div>`:on?`<div class="done-box">${ic('check')} Făcut.</div>`:''}
-    ${pre&&!on?`<button class="btn blue wide xl" style="margin-top:16px" data-a="tmFor" data-x="${x}">${ic('clock')} Pornește cronometrul${e.hiit?' de intervale':''}</button>`:''}
+    ${pre&&!on?`<button class="btn blue wide xl" style="margin-top:16px" data-a="tmFor" data-x="${x}">${ic('clock')} Pornește cronometrul</button>`:''}
     <button class="btn pri xl wide ${on?'':'glow'} fx-cta" data-a="${on?(isLast?'fxFinish':'fxNext'):'exDone'}">${on?(isLast?'Termină antrenamentul':'Următorul '+ic('right')):ic('check')+' Gata'}</button>
     ${on?absOffer(day,x):''}<div class="lv-next">${nextTxt(day,x)}</div>`;
 }
