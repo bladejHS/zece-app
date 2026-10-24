@@ -48,7 +48,7 @@ function spdSegs(kind,w,c){ const p=runPlan(), lt=+prof().lthr>0?+prof().lthr:0,
 /* ziua implicită: azi, dacă e zi cu alergare, altfel următoarea zi cu alergare */
 function spdDefDay(){ const dow=(new Date().getDay()+6)%7; for(let i=0;i<7;i++){ const d=(dow+i)%7; if(SPD_DAYS.some(x=>x[0]===d)) return d; } return 1; }
 /* săptămâna din ciclu în care urmează ziua aleasă */
-function spdWeek(d){ if(S.sess&&S.sess.d===d) return S.sess.w; for(let w=0;w<WEEKS;w++) if(!dayFull(w,d)) return w; return WEEKS-1; }
+function spdWeek(d){ if(S.sess&&!S.sess.hy&&S.sess.d===d) return S.sess.w; for(let w=0;w<WEEKS;w++) if(!dayFull(w,d)) return w; return WEEKS-1; }
 const spdKind=d=>(SPD_DAYS.find(x=>x[0]===d)||[])[2]||null;
 function spdDefaults(){
   /* pulsul de repaus se completează oricând apare (din profil sau din check-in-uri) */

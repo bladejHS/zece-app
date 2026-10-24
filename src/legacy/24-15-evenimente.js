@@ -33,7 +33,7 @@ document.addEventListener('click',async ev=>{
     case 'start': if(S.sess){ await startSess(W,D); return; } rdOpen(W,D); return;
     case 'rd': RD[k]=I; buzz(8); rdRender(); return;
     case 'rdGo': { const r=RD, sc=rdScore(r), rd={sleep:r.sleep,energy:r.energy,sore:r.sore,score:sc}; RD=null; rdRender(); await jSet(tk,{sleepQ:r.sleep,energy:r.energy,sore:r.sore});
-      await startSess(r.w,r.d,rd); return; }
+      await startSess(r.w,r.d,rd,r.hy); return; }
     case 'ci': { const v=el.dataset.v, num_=+v; S.ciOpen=true; await jSet(tk,{[k]:k==='soreReg'?(jOf(tk).soreReg===v?null:v):num_}); buzz(8); render(); return; }
     case 'ciSave': { const g=id=>parseInt(($('#'+id)||{}).value,10), o={}, rh=g('ciRhr'), hv=g('ciHrv'), st=g('ciSteps');
       o.rhr=rh>=30&&rh<=120?rh:null; o.hrv=hv>=5&&hv<=300?hv:null; o.steps=st>0&&st<100000?st:null; await jSet(tk,o); S.ciOpen=false; render(); toast('Check-in salvat','','info'); return; }
@@ -103,7 +103,7 @@ document.addEventListener('click',async ev=>{
     case 'ptDel': await save('ptests',(S.ptests||[]).filter((_,j)=>j!==I)); render(); return;
     case 'sumRpe': { const m=S.summary; if(!m) return; m.rpe=I; const h=(S.hist||[]).slice(), j=h.length-1-[...h].reverse().findIndex(x=>x.date===m.date&&x.d===m.d&&x.w===m.w&&x.dur===m.dur);
       if(j>=0&&j<h.length){ h[j]=Object.assign({},h[j],{rpe:I}); await save('hist',h); } buzz(10); renderFocus(); return; }
-    case 'rdSkip': { const r=RD; RD=null; rdRender(); await startSess(r.w,r.d,null); return; }
+    case 'rdSkip': { const r=RD; RD=null; rdRender(); await startSess(r.w,r.d,null,r.hy); return; }
     case 'rdClose': RD=null; rdRender(); return;
     case 'newCycle': { const c=Object.assign({},S.cyc||{}); c.h=cyc()+1; c.t=Date.now(); await save('cyc',c); S.planW=0; S.openDay=-1; render(); toast('Ciclul '+cyc(),'Planul reîncepe de la săptămâna 1.'); return; }
     case 'resetCycle': { const log=Object.assign({},S.wlog), pre='hc'+cyc()+'w'; Object.keys(log).forEach(x=>{ if(x.indexOf(pre)===0) delete log[x]; }); await save('wlog',log); render(); toast('Bife șterse','Ciclul '+cyc()+' reîncepe de la zero.','info'); return; }

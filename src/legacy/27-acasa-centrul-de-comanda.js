@@ -51,7 +51,7 @@ function viewHome(){
   const wl=cfg.o.filter(id=>!(heroOn&&id==='next')).map(id=>{ let h=''; try{ h=WIDGETS[id].r()||''; }catch(e){ errLog((e&&e.message)||e,'widget '+id); h=`<div class="card"><div class="err">${ic('alert')}<span>Widgetul „${esc(WIDGETS[id].t)}" nu a putut fi afișat.</span></div></div>`; }
     return h?`<section class="wg wg-${WIDGETS[id].sz}" data-w="${id}">${h}</section>`:''; }).filter(Boolean);
   /* check-in-ul și ajustările antrenorului vin imediat sub poză, apoi mementourile, apoi widgeturile */
-  const under=heroOn&&!S.sess&&nextDay()?`<section class="wg wg-l cv-under">${rdRow()}</section>`:'';
+  const under=heroOn&&!S.sess&&(mainHyb()?hybNext():nextDay())?`<section class="wg wg-l cv-under">${rdRow()}</section>`:'';
   const ws=under+(sys.length?`<section class="wg wg-l dash-sys">${sys.join('')}</section>`:'')+wl.join('');
   let hero=''; if(heroOn){ try{ hero=coverHero(); }catch(e){ errLog((e&&e.message)||e,'widget next'); } }
   return `
@@ -64,8 +64,9 @@ function viewHome(){
 /* antrenamentul zilei, așezat direct pe poză: ziua, titlul, ce conține, progresul și butoanele */
 function coverHero(){
   const nx=nextDay();
-  if(S.sess){ const day=sessDay(S.sess), rq=absFrom(S.sess.d), dn=day.ex.filter((e,x)=>!e.opt&&sessIsDone(S.sess,x)).length;
-    return `<span class="cv-bdg">${dayBadge(S.sess.d,'next',60)}</span><div class="cv-k"><span class="dot"></span> În desfășurare · ${DAYN[S.sess.d]} · S${S.sess.w+1}</div><div class="cv-h">${esc(day.t)}</div>
+  if(!S.sess&&mainHyb()) return hybCover();
+  if(S.sess){ const day=sessDay(S.sess), rq=S.sess.hy?day.ex.length:absFrom(S.sess.d), dn=day.ex.filter((e,x)=>!e.opt&&sessIsDone(S.sess,x)).length;
+    return `<span class="cv-bdg">${dayBadge(S.sess.d,'next',60)}</span><div class="cv-k"><span class="dot"></span> În desfășurare · ${DAYN[S.sess.d]} · ${S.sess.hy?'HYBRID ':''}S${S.sess.w+1}</div><div class="cv-h">${esc(day.t)}</div>
       <div class="cv-m"><span class="big sm" id="heroClock">${fmtClock(sessSec())}</span><span>${dn}/${rq} exerciții</span></div>
       <div class="cv-pb"><i style="width:${(dn/rq*100).toFixed(1)}%"></i></div>
       <div class="cv-b"><button class="btn pri xl glow" data-a="fxOpen">${ic('play')} Continuă antrenamentul</button></div>`; }
@@ -87,7 +88,8 @@ function coverHero(){
 /* cardul antrenamentului: în desfășurare, ciclu terminat sau următoarea zi din plan */
 function heroHTML(){
   const nx=nextDay();
-  if(S.sess){ const day=sessDay(S.sess), rq=absFrom(S.sess.d), dn=day.ex.filter((e,x)=>!e.opt&&sessIsDone(S.sess,x)).length;
+  if(!S.sess&&mainHyb()) return hybHeroHTML();
+  if(S.sess){ const day=sessDay(S.sess), rq=S.sess.hy?day.ex.length:absFrom(S.sess.d), dn=day.ex.filter((e,x)=>!e.opt&&sessIsDone(S.sess,x)).length;
     return `<div class="card hero">
       <div class="eyebrow"><span class="dot"></span> În desfășurare · ${DAYN[S.sess.d]} · săptămâna ${S.sess.w+1}</div>
       <div class="h1">${esc(day.t)}</div>
@@ -112,7 +114,8 @@ function heroHTML(){
       <button class="btn pri xl wide glow" data-a="start" data-w="${nx.w}" data-d="${nx.d}">${ic('play')} ${dn?'Continuă':'Începe'} antrenamentul</button></div>`;
 }
 function weekHTML(){
-  const nx=nextDay(), w=S.sess?S.sess.w:nx?nx.w:WEEKS-1;
+  if(mainHyb()) return hybWeekHTML();
+  const nx=nextDay(), w=S.sess&&!S.sess.hy?S.sess.w:nx?nx.w:WEEKS-1;
   const week=PLAN.map((p,d)=>{ const dn=doneCount(w,d), tot=absFrom(d), full=dn===tot, isN=nx&&nx.w===w&&nx.d===d, col=catCol(p.cat);
     return `<button class="wd ${isN?'next':''}" data-a="openDay" data-w="${w}" data-d="${d}" aria-label="${DAYN[d]}: ${esc(p.t)}">
       ${ring(dn/tot,{s:40,sw:3.5,c:full?TH().ac:col,fill:full?TH().ac:'none',track:isN?TH().ac+'88':'var(--track)',

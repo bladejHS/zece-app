@@ -26,7 +26,7 @@ async function loadAll(){
   if(o.aiChat&&Array.isArray(o.aiChat.msgs)&&o.aiChat.msgs.length&&o.aiChat.ver!==4){ S.aiChat=null; AI.note='Conversația veche a fost închisă după actualizarea aplicației. Începe una nouă.'; await store.set(K.aiChat,null); }
   else S.aiChat=o.aiChat&&Array.isArray(o.aiChat.msgs)?Object.assign({tools:{}},o.aiChat):null;
   await migrate(); await cfAchFix(); await planAbsMigrate(+o.planV||0);
-  STC=null; S.loaded=true;
+  STC=null; S.loaded=true; hybTabInit();
   await migSplit(); await planMigrate(); await mealsMigrate(); await miloMigrate(); await dbMigrate(); try{ await dbDeloadSync(); }catch(e){} try{ await nAdaptRun(); }catch(e){} try{ aiWeekAuto(); }catch(e){}
 }
 /* migrări de date, la fiecare încărcare (și după import sau sincronizare):

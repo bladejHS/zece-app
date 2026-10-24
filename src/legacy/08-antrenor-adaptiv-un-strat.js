@@ -18,7 +18,7 @@ const LOWER=['cvadriceps','femurali','fesieri','gambe'];
 const regionOf=n=>{ const m=EXM[n]; if(!m) return null; return Object.keys(m).some(k=>m[k]===1&&LOWER.indexOf(k)>=0)?'jos':'sus'; };
 const thrReps=e=>+((/^(\d+) ×/.exec(e.p)||[])[1])||0;
 const ADJ={busy:null,err:null,ai:{}};
-function adjFor(w,d){ const s=S.sess; if(s&&s.w===w&&s.d===d) return s.adj||null;
+function adjFor(w,d){ const s=S.sess; if(s&&!s.hy&&s.w===w&&s.d===d) return s.adj||null;
   const a=(S.adj||{})[dKeyC(cyc(),w,d)]; return a&&a.on&&a.date===todayKey()?a:null; }
 function applyAdj(day,a){
   const p=runPlan();

@@ -224,7 +224,8 @@ function viewHybrid(){
         ${it.length&&dn===it.length?`<span class="tag pr">${ic('check')}</span>`:ring(it.length?dn/it.length:0,{s:34,sw:3,c:col})}
         <span class="chev">${ic('down')}</span></button>
       <div class="day-b"><div>${hybExHTML(wk,day)}
-        <details class="notes"><summary>${ic('info')} ${esc(HYB_NOTES[d][0])}</summary>${HYB_NOTES[d][1].map(([a,x])=>`<p><b>${esc(a)}.</b> ${esc(x)}</p>`).join('')}</details></div></div></div>`; }).join('');
+        <details class="notes"><summary>${ic('info')} ${esc(HYB_NOTES[d][0])}</summary>${HYB_NOTES[d][1].map(([a,x])=>`<p><b>${esc(a)}.</b> ${esc(x)}</p>`).join('')}</details>
+        <div class="day-act inrow"><button class="btn pri" style="flex:1" data-a="hybStart" data-d="${d}">${ic('play')} ${S.sess&&S.sess.hy&&S.sess.d===d?'Continuă ziua':dn&&dn<it.length?'Continuă ziua':dn===it.length&&it.length?'Reia ziua':'Începe ziua'}</button></div></div></div></div>`; }).join('');
   const tmRows=HYB_TM.map(n=>{ const v=hybTmOf(n), h=hybHistTm(n);
     return `<div class="list-row"><span class="sp"><b>${esc(n)}</b><span class="xs mu" style="display:block">${v?'maxim de antrenament '+num(hybR25(v))+' kg':'nesetat'}${!v&&h?' · din istoric: '+num(h)+' kg':''}</span></span>
       ${!v&&h?`<button class="btn ghost sm" data-a="hybTmHist" data-k="${esc(n)}">Folosește</button>`:''}</div>`; }).join('');
@@ -284,3 +285,81 @@ ACT.hybTmSave=async()=>{ const n=($('#hybTmEx')||{}).value, E=parseFloat(String(
 ACT.hybTmHist=async(el,{k})=>{ const v=hybHistTm(k); if(!v) return; const H=hyb(), o=Object.assign({},H.tm||{}); o[k]={kg:v,wk:+H.wk||0}; await hybSave({tm:o}); render(); };
 ACT.hybBjSave=async()=>{ const v=parseFloat(String(($('#hybBj')||{}).value||'').replace(',','.')); if(!(v>50&&v<400)) return toast('Media lipsește','Scrie media săriturilor în cm.','info');
   const bj=(hyb().bj||[]).filter(x=>x.d!==todayKey()).concat([{d:todayKey(),v}]).slice(-20); await hybSave({bj}); render(); };
+/* =====================================================================
+   v28 · PLANUL PRINCIPAL — alegi între Full Body (Wolf, fila Plan) și HYBRID (Viada). Planul principal apare pe Acasă,
+   e fila deschisă în Antrenament și dă tipul zilei pentru nutriție și planul de mese. Zilele HYBRID merg și în antrenamentul ghidat.
+   ===================================================================== */
+const mainHyb=()=>prof().mainPlan==='hyb';
+let HYB_TAB0=false;
+/* la prima încărcare, fila Antrenament se deschide pe planul principal */
+function hybTabInit(){ if(HYB_TAB0) return; HYB_TAB0=true; if(mainHyb()&&S.trTab==='plan') S.trTab='hyb'; }
+function mainPlanCard(){ const h=mainHyb();
+  return `<div class="card"><div class="eyebrow">${ic('star')} Planul principal</div>
+    <div class="sm mu" style="margin-top:4px">Apare pe Acasă și dă tipul zilei pentru nutriție. Celălalt plan rămâne aici, neschimbat.</div>
+    <div class="seg" style="margin-top:10px" role="radiogroup" aria-label="Planul principal">
+      <button class="${h?'':'on'}" data-a="mainPlan" data-k="wolf" role="radio" aria-checked="${!h}">${ic('plan')} Full Body · Wolf</button>
+      <button class="${h?'on':''}" data-a="mainPlan" data-k="hyb" role="radio" aria-checked="${h}">${ic('bolt')} HYBRID · Viada</button></div></div>`; }
+ACT.mainPlan=async(el,{k})=>{ const hy=k==='hyb'; if(hy===mainHyb()) return;
+  if(S.sess) return toast('Ai un antrenament pornit','Termină-l sau renunță la el înainte să schimbi planul principal.','info');
+  await save('prof',Object.assign({},S.prof||{},{mainPlan:hy?'hyb':'wolf'})); NMEAN=null; STC=null; S.trTab=hy?'hyb':'plan'; render(); window.scrollTo({top:0});
+  toast('Plan principal: '+(hy?'HYBRID':'Full Body'),hy?'Acasă și nutriția urmează acum săptămâna HYBRID.':'Acasă și nutriția urmează acum planul Wolf.','info'); };
+/* ziua următoare din săptămâna HYBRID: azi dacă nu e completă, altfel prima zi necompletă de după */
+function hybNext(){ const wk=+hyb().wk||0, wd=(new Date().getDay()+6)%7, order=[0,1,2,3,4,5,6].map(i=>(wd+i)%7);
+  const d=order.find(x=>!hybDayFull(wk,x)); return d==null?null:{w:wk,d}; }
+/* ziua HYBRID în formatul antrenamentului ghidat: sesiunea 1, alergarea, sesiunea 2; hk = cheia bifei din HYBRID */
+const HYB_RK={mon:'int',wed:'thr',thu:'ez',sat:'lng'};
+function hybLiveDay(wk,d){ const day=hybDay(d,+wk||0), b=HYB_DAYS[d], out=[];
+  const lift=e=>{ const m=/^(\d+)×(\d+)(?:–(\d+))?/.exec(e.p)||[], r=/pauză (\d+)s/.exec(e.p), o={n:e.n,p:e.p,kind:'lift',sets:+m[1]||3,lo:+m[2]||8,hi:+(m[3]||m[2])||12,rest:r?+r[1]:75,hk:String(e.x),cue:e.cue};
+    const p0=/@ (\d+)% din maximul/.exec(e.p); if(p0) o.sg={kg:null,reps:o.lo,kind:'new',txt:'Viada: '+o.sets+'×'+o.lo+' la '+p0[1]+'% din maximul de antrenament. Setează maximul în HYBRID → Pretestare și îți calculez greutatea.'};
+    const pc=/@ (\d+)% → ([\d.]+) kg/.exec(e.p); if(pc) o.sg={kg:+pc[2],reps:o.lo,kind:'same',txt:'Ținta Viada: <b>'+num(+pc[2])+' kg × '+o.lo+'</b> ('+pc[1]+'% din maximul de antrenament)'+(e.ty==='me'?', fără eșec.':e.ty==='de'?', fiecare repetare cât mai rapidă.':'.')};
+    return o; };
+  const one=e=>e.kind==='lift'?lift(e):{n:e.n,p:[e.cat,e.p].filter(Boolean).join(' · '),kind:'task',hk:String(e.x),cue:e.cue};
+  day.ex.filter(e=>!e.ses).forEach(e=>out.push(one(e)));
+  if(day.run.length){ const rk=HYB_RK[b.run], dl=!!hyb().dl, pm={mon:50,wed:50,thu:[27,52,85][(dl?1:hybL('vt1'))-1],sat:[45,60,100][(dl?1:hybL('lsd'))-1]}[b.run];
+    out.push({n:'Alergarea · '+RUNK[rk],p:day.run.map(([h,x])=>h+': '+x).join(' — '),kind:'run',rk,planMin:pm,hk:'r'}); }
+  day.ex.filter(e=>e.ses).forEach(e=>out.push(one(e)));
+  out.forEach((e,x)=>{ e.x=x; });
+  const lifts=out.filter(e=>e.kind==='lift').length, run=out.find(e=>e.kind==='run'), min=(run?run.planMin||45:0)+lifts*9;
+  return {w:+wk||0,d,t:b.t,cat:b.cat,run:{wed:'thr',sat:'lng'}[b.run]||(b.run?'ez1':null),min:min||30,ex:out,notes:{wk:HYB_NOTES[d][0],d:HYB_NOTES[d][1]},hy:true}; }
+async function hybSetDone(wk,d,k,on){ const H=hyb(), log=Object.assign({},H.log||{}), key=hybKey(wk,d), day=Object.assign({},log[key]||{});
+  if(on) day[k]=1; else delete day[k]; log[key]=day; await hybSave({log}); }
+ACT.hybStart=async(el,{D})=>{ const wk=+hyb().wk||0; if(S.sess){ await startSess(wk,D,null,true); return; } rdOpen(wk,D,true); };
+ACT.hybOpenDay=(el,{D})=>{ S.tab='plan'; S.trTab='hyb'; S.hybOpen=D; render(); requestAnimationFrame(()=>{ const c=$('#hday'+D); if(c) c.scrollIntoView({behavior:'smooth',block:'start'}); }); };
+/* ce conține ziua, pe scurt */
+function hybWhat(day){ const lifts=day.ex.filter(e=>e.kind==='lift').length, run=day.ex.find(e=>e.kind==='run');
+  return [run?run.n.replace(/^Alergarea · /,'')+(run.planMin?' ~'+run.planMin+' min':''):'',lifts?lifts+' exerciții de forță':'',!run&&!lifts?day.ex.length+' activități':''].filter(Boolean).join(' + '); }
+const hybProg=(wk,d)=>{ const it=hybItems(hybDay(d,wk)); return {dn:it.filter(x=>hybDone(wk,d,x)).length,tot:it.length}; };
+/* Acasă: antrenamentul zilei din HYBRID (pe poză și în cardul clasic) */
+function hybCover(){ const nx=hybNext(), wk=+hyb().wk||0;
+  if(!nx) return `<div class="cv-k">${ic('star')} HYBRID · săptămâna ${wk+1} · completă</div><div class="cv-h">Ai terminat săptămâna</div>
+      <div class="cv-m"><span>${(wk+1)%3===0?'Urmează un cerc nou: maximele urcă cu 1%.':'Săptămâna următoare continuă cercul repetărilor.'}</span></div>
+      <div class="cv-b"><button class="btn pri xl glow" data-a="hybWk" data-i="1">${ic('right')} Săptămâna ${wk+2}</button></div>`;
+  const day=hybLiveDay(nx.w,nx.d), p=hybProg(nx.w,nx.d), today=(new Date().getDay()+6)%7===nx.d;
+  return `<span class="cv-bdg">${dayBadge(nx.d,'next',60)}</span><div class="cv-k">${today?'Azi':'Următorul'} · ${DAYN[nx.d]} · HYBRID S${nx.w+1}${hyb().dl?' · deload':''}</div>
+    <div class="cv-h">${esc(day.t)}</div>
+    <div class="cv-m"><span>${esc(hybWhat(day))}</span><span>${ic('clock')} ~${day.min} min</span></div>
+    <div class="cv-pb" title="${p.dn} din ${p.tot}"><i style="width:${(p.tot?p.dn/p.tot*100:0).toFixed(1)}%"></i></div>
+    <div class="cv-b"><button class="btn pri xl glow" data-a="hybStart" data-d="${nx.d}">${ic('play')} ${p.dn?'Continuă':'Începe'}</button>
+      <button class="btn cv-alt" data-a="hybOpenDay" data-d="${nx.d}">${ic('list')} Exerciții</button></div>`; }
+function hybHeroHTML(){ const nx=hybNext(), wk=+hyb().wk||0;
+  if(!nx) return `<div class="card hero"><div class="eyebrow">${ic('star')} HYBRID · săptămâna ${wk+1} · completă</div><div class="h1">Ai terminat săptămâna</div>
+      <button class="btn pri xl wide glow" data-a="hybWk" data-i="1">${ic('right')} Săptămâna ${wk+2}</button></div>`;
+  const day=hybLiveDay(nx.w,nx.d), p=hybProg(nx.w,nx.d);
+  return `<div class="card hero"><span class="hero-wm" aria-hidden="true">${pad(nx.d+1)}</span>
+    <div class="hero-top"><div class="sp"><div class="eyebrow">Următorul · ${DAYN[nx.d]} · HYBRID S${nx.w+1}</div><div class="h1">${esc(day.t)}</div>
+      <div class="tags">${catTag(day)}<span class="tag">${ic('clock')} ~${day.min} min</span><span class="tag">${p.tot} activități</span></div></div>
+      ${ring(p.tot?p.dn/p.tot:0,{s:64,sw:5,inner:`<text x="32" y="37" text-anchor="middle" class="ring-t">${p.dn}/${p.tot}</text>`})}</div>
+    <ol class="peek">${day.ex.slice(0,5).map(e=>`<li><span>${esc(e.n)}</span><em>${esc(e.kind==='lift'?e.sets+'×'+e.lo+(e.hi!==e.lo?'–'+e.hi:''):e.planMin?'~'+e.planMin+' min':'')}</em></li>`).join('')}${day.ex.length>5?`<li class="more">+ încă ${day.ex.length-5}</li>`:''}</ol>
+    ${rdRow()}
+    <button class="btn pri xl wide glow" data-a="hybStart" data-d="${nx.d}">${ic('play')} ${p.dn?'Continuă':'Începe'} antrenamentul</button></div>`; }
+function hybWeekHTML(){ const wk=+hyb().wk||0, nx=hybNext();
+  const week=HYB_DAYS.map((b,d)=>{ const p=hybProg(wk,d), full=p.tot&&p.dn===p.tot, isN=nx&&nx.d===d, col=catCol(b.cat);
+    return `<button class="wd ${isN?'next':''}" data-a="hybOpenDay" data-d="${d}" aria-label="${DAYN[d]}: ${esc(b.t)}">
+      ${ring(p.tot?p.dn/p.tot:0,{s:40,sw:3.5,c:full?TH().ac:col,fill:full?TH().ac:'none',track:isN?TH().ac+'88':'var(--track)',
+        inner:full?`<path d="M13 20.5l4.5 4.5L27 15.5" fill="none" style="stroke:var(--on)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`
+          :(dayBadgeSvg(d,40)||`<circle cx="20" cy="20" r="3.5" style="fill:${col}"/>`)})}${DAYS[d]}</button>`; }).join('');
+  return `<div class="card"><div class="row"><div class="eyebrow sp">HYBRID · săptămâna ${wk+1} · cercul ${wk%3+1}/3</div>
+    <button class="btn ghost sm" data-a="tab" data-k="plan" data-s="hyb">Planul ${ic('right')}</button></div><div class="week">${week}</div></div>`; }
+/* nutriția: ziua din săptămâna HYBRID, în forma pe care o citește planType (sprintul + MLSS și pragul contează ca zile intense) */
+function hybNutriBase(wd){ const b=HYB_DAYS[wd], lifts=b.ex.filter(e=>e[1]!=='plyo'&&e[1]!=='task').length;
+  return {t:b.t,cat:b.cat,run:{mon:'thr',wed:'thr',sat:'lng'}[b.run]||(b.run?'ez1':null),min:b.cat==='rest'?0:(b.run?50:0)+lifts*9}; }

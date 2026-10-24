@@ -4,19 +4,21 @@
    ===================================================================== */
 const sessSec=()=>S.sess?Math.max(0,Math.floor((Date.now()-S.sess.start)/1000)):0;
 /* ziua sesiunii: din plan (săptămână + zi) */
-const sessDay=s=>dayFor(s.w,s.d);
-const sessIsDone=(s,x)=>isDone(s.w,s.d,x);
+/* v28: o sesiune HYBRID (s.hy) ia ziua și bifele din fila HYBRID */
+const sessDay=s=>s.hy?hybLiveDay(s.w,s.d):dayFor(s.w,s.d);
+const hybSessKey=(s,x)=>{ const e=sessDay(s).ex[x]; return e?e.hk:String(x); };
+const sessIsDone=(s,x)=>s.hy?hybDone(s.w,s.d,hybSessKey(s,x)):isDone(s.w,s.d,x);
 const sessKey=s=>s.cur;
 /* v10: abdomenul de la final e opțional — după ultimul exercițiu obligatoriu poți termina sau continua cu el */
-const lastReq=s=>absFrom(s.d)-1;
+const lastReq=s=>s.hy?sessDay(s).ex.length-1:absFrom(s.d)-1;
 const fxEnd=(day,x)=>x===day.ex.length-1||x===lastReq(S.sess);
 const absOffer=(day,x)=>x===lastReq(S.sess)&&x<day.ex.length-1?`<button class="btn ghost wide fx-abs" data-a="fxNext">${ic('plus')} Fac și abdomenul · opțional ${ic('right')}</button>`:'';
 const optBadge=e=>e.opt?`<span class="tag opt">opțional</span> `:'';
-async function markDone(s,x,on){ await setDone(s.w,s.d,x,on); }
+async function markDone(s,x,on){ if(s.hy) await hybSetDone(s.w,s.d,hybSessKey(s,x),on); else await setDone(s.w,s.d,x,on); }
 async function persistSess(){ await store.set(K.sess,S.sess); }
 /* întrebarea de dinainte: cum te simți (somn, energie, febră) — se poate sări */
 let RD=null;
-function rdOpen(w,d){ const j=jOf(todayKey()), h=+j.sleep, sl=!h?(j.sleepQ||3):h<5?1:h<6?2:h<7?3:h<8?4:5; RD={w,d,sleep:sl,energy:j.energy||3,sore:j.sore||2}; rdRender(); }
+function rdOpen(w,d,hy){ const j=jOf(todayKey()), h=+j.sleep, sl=!h?(j.sleepQ||3):h<5?1:h<6?2:h<7?3:h<8?4:5; RD={w,d,hy:!!hy,sleep:sl,energy:j.energy||3,sore:j.sore||2}; rdRender(); }
 const rdScore=r=>Math.round(((r.sleep-1)+(r.energy-1)+(5-r.sore))/12*100);
 function rdRender(){
   const r=$('#ovRoot'); if(!RD){ if(!r.querySelector('.pr-m')) r.innerHTML=''; return; }
@@ -24,19 +26,19 @@ function rdRender(){
   const q=(k,t,lo,hi)=>`<div class="rd-q"><b>${t}</b><div class="scale">${[1,2,3,4,5].map(i=>`<button class="${RD[k]===i?'on':''}" data-a="rd" data-k="${k}" data-i="${i}">${i}</button>`).join('')}</div>
     <div class="scale-l"><span>${lo}</span><span>${hi}</span></div></div>`;
   r.innerHTML=`<div class="ov" data-a="rdClose"><div class="sheet" role="dialog" aria-label="Cum te simți azi"><div class="grab"></div>
-    <div class="eyebrow">${DAYN[RD.d]} · ${esc(PLAN[RD.d].t)}</div><div class="h2" style="margin-top:6px">Cum te simți azi?</div>
+    <div class="eyebrow">${DAYN[RD.d]} · ${esc(RD.hy?HYB_DAYS[RD.d].t:PLAN[RD.d].t)}</div><div class="h2" style="margin-top:6px">Cum te simți azi?</div>
     ${q('sleep','Somnul de azi-noapte','foarte prost','excelent')}${q('energy','Energia','fără','maximă')}${q('sore','Febră musculară / dureri','deloc','mare')}
     <div class="rd-score"><div class="big" style="color:${v[2]==='good'?'var(--ok)':v[2]==='bad'?'var(--warn)':'var(--tx)'}">${sc}</div><div><b>${v[0]}</b><div class="sm mu">${v[1]}</div></div></div>
     <div class="inrow"><button class="btn ghost" data-a="rdSkip">Sari peste</button><button class="btn pri" style="flex:1" data-a="rdGo">${ic('play')} Începe</button></div></div></div>`;
 }
 const sessBase=()=>({start:Date.now(),h:new Date().getHours(),sets:{},runs:{},tasks:{},prs:[],best:{},kg:{},rp:{},tmMin:{},[SPLIT_MK]:1});
-async function startSess(w,d,ready){
+async function startSess(w,d,ready,hy){
   if(S.sess){
-    if(S.sess.w!==w||S.sess.d!==d) toast('Ai deja un antrenament pornit','Termină-l sau renunță la el înainte să începi altul.','info');
+    if(S.sess.w!==w||S.sess.d!==d||!!S.sess.hy!==!!hy) toast('Ai deja un antrenament pornit','Termină-l sau renunță la el înainte să începi altul.','info');
     S.fxOpen=true; render(); return;
   }
-  const adj=adjFor(w,d), day=dayFor(w,d); let cur=day.ex.findIndex((_,x)=>!isDone(w,d,x)); if(cur<0) cur=0;
-  S.sess=Object.assign(sessBase(),{w,d,cur,ready:ready||null,adj});
+  const adj=hy?null:adjFor(w,d), day=hy?hybLiveDay(w,d):dayFor(w,d); let cur=day.ex.findIndex((e,x)=>hy?!hybDone(w,d,e.hk):!isDone(w,d,x)); if(cur<0) cur=0;
+  S.sess=Object.assign(sessBase(),{w,d,cur,ready:ready||null,adj},hy?{hy:1}:{});
   S.fxOpen=true; S.fxDir=''; await persistSess(); keepAwake(true); keepAlive(true); render(); hydAlert();
 }
 /* pauza: inel mare, −15 / +15 secunde și „Sari", plus ce urmează */
@@ -77,7 +79,7 @@ function nextTxt(day,x){ const n=day.ex[x+1]; if(!n) return 'Ultimul exercițiu'
 /* confirmarea scurtă după o serie („SERIE TERMINATĂ") */
 const lvDone=()=>S.lvOk&&Date.now()-S.lvOk.t<1600?`<div class="lv-done">${ic('check')} ${esc(S.lvOk.txt)}</div>`:'';
 function fxLift(e,x){
-  const s=S.sess, day=sessDay(s), sets=s.sets[x]||[], sg=suggest(e), inc=incFor(e.n), isLast=fxEnd(day,x);
+  const s=S.sess, day=sessDay(s), sets=s.sets[x]||[], sg=e.sg||suggest(e), inc=incFor(e.n), isLast=fxEnd(day,x);
   let kg=s.kg[x]!=null?s.kg[x]:sets.length?sets[sets.length-1][0]:sg.kg!=null?sg.kg:'';
   const rp=s.rp[x]!=null?s.rp[x]:sets.length?sets[sets.length-1][1]:sg.reps, complete=sets.length>=e.sets, setNo=Math.min(sets.length+1,e.sets);
   return `
@@ -93,7 +95,7 @@ function fxLift(e,x){
       return `<div class="sd ${st?'ok':i===sets.length?'cur':''}">${st?`<b>${num(st[0])}</b> × <b>${st[1]}</b>${pr?'<span class="tag pr">PR</span>':''}${typeof st[2]==='string'&&SET_TAG[st[2]]?`<small>${SET_TAG[st[2]]}</small>`:''}`:'Seria '+(i+1)}</div>`; }).join('')}</div>
     ${lvDone()}
     ${restBlock(complete?nextTxt(day,x):'')}
-    ${miloLive(e,x)}
+    ${s.hy?(e.cue?`<div class="mw-live"><div class="eyebrow">${ic('coach')} Viada</div><p class="xs mu" style="margin-top:6px">${ic('bolt')} ${esc(e.cue)}</p></div>`:''):miloLive(e,x)}
     <div class="logger">
       <div class="stp"><label for="inKg">kg</label><div class="r"><button data-a="kg" data-v="${-inc}" aria-label="minus ${inc} kg">−</button>
         <input id="inKg" type="number" step="0.5" inputmode="decimal" value="${kg===''?'':num(kg,2)}" placeholder="0"><button data-a="kg" data-v="${inc}" aria-label="plus ${inc} kg">+</button></div></div>
@@ -113,9 +115,9 @@ function fxRun(e,x){
   const s=S.sess, done=s.runs[x], day=sessDay(s), isLast=fxEnd(day,x), pre=tmPresetFor(e,day,s.w);
   const mins=s.tmMin[x]!=null?s.tmMin[x]:e.planMin||'';
   return `
-    <div class="eyebrow">${ic('run')} Alergare · ${RUNK[runKindOf(day.run)]}</div>
+    <div class="eyebrow">${ic('run')} Alergare · ${RUNK[e.rk||runKindOf(day.run)]}</div>
     <div class="fx-n">${esc(e.n)}</div><div class="fx-p">${esc(e.p)}</div>${e.adj?`<div class="adjb">${ic('coach')} Ajustat azi: ${esc(e.adj.join(' · '))}</div>`:''}
-    ${(()=>{ const z=hrZones().z[e.n==='Threshold'?3:1]; return `<div class="tag run" style="margin-top:8px">${ic('target')} ${e.n==='Threshold'?'Zona 4 la reprize':'Zona 2'}: ${z.lo}–${z.hi} bpm</div>`; })()}
+    ${(()=>{ const q=e.n==='Threshold'||e.rk==='thr'||e.rk==='int', z=hrZones().z[q?3:1]; return `<div class="tag run" style="margin-top:8px">${ic('target')} ${q?'Zona 4 la reprize':'Zona 2'}: ${z.lo}–${z.hi} bpm</div>`; })()}
     ${done?`<div class="done-box">${ic('check')} ${num(done.km,2)} km în ${num(done.min)} min · ${fmtPace(paceOf(done))}</div>
       <button class="btn pri xl wide glow" data-a="${isLast?'fxFinish':'fxNext'}">${isLast?'Termină antrenamentul':'Următorul exercițiu '+ic('right')}</button>${absOffer(day,x)}`
     :`${pre?`<button class="btn blue wide" style="margin-top:14px" data-a="tmFor" data-x="${x}">${ic('clock')} Pornește cronometrul${e.n==='Threshold'?' de intervale':''}</button>`:''}
@@ -179,7 +181,7 @@ function renderFocus(){
 function summaryHTML(){
   const m=S.summary;
   return `<div class="fx ${fxWasOpen?'':'enter'}"><div class="fx-in">
-    <div class="sum-h"><div class="cc-ic">${ic('trophy')}</div><div class="eyebrow" style="justify-content:center">S${m.w+1} · ${DAYN[m.d]} · ciclul ${m.cyc}</div>
+    <div class="sum-h"><div class="cc-ic">${ic('trophy')}</div><div class="eyebrow" style="justify-content:center">${m.hy?'HYBRID · ':''}S${m.w+1} · ${DAYN[m.d]}${m.hy?'':' · ciclul '+m.cyc}</div>
       <div class="h1">${esc(m.t)}</div><div class="mu">Antrenament terminat. Bună treabă.</div></div>
     <div class="kpis">
       <div class="kpi"><div class="k">Durată</div><div class="v">${fmtClock(m.dur)}</div></div>
@@ -252,7 +254,7 @@ async function logRun(){
   const s=S.sess, day=sessDay(s), x=s.cur;
   const km=parseFloat($('#inKm').value)||0, mn=parseFloat($('#inMin').value)||0;
   if(!(km>0)&&!(mn>0)){ shake('#inKm'); return; }
-  const run={date:todayKey(),kind:runKindOf(day.run),km:Math.round(km*100)/100,min:Math.round(mn*10)/10};
+  const run={date:todayKey(),kind:day.ex[x].rk||runKindOf(day.run),km:Math.round(km*100)/100,min:Math.round(mn*10)/10};
   const hx=s.hr&&s.hr.ex[x]; if(hx&&hx.n>=10) run.hr=Math.round(hx.sum/hx.n);
   await save('runs',(S.runs||[]).concat([run])); s.runs[x]=run;
   await markDone(s,x,true); buzz(40); await persistSess(); renderFocus();
@@ -262,14 +264,15 @@ async function exDone(){ const s=S.sess; s.tasks[s.cur]=1; await markDone(s,s.cu
   await persistSess(); renderFocus(); }
 async function finishSess(){
   const s=S.sess; if(!s) return; const day=sessDay(s);
-  { const log=Object.assign({},S.wlog), k=dKey(s.w,s.d), dd=Object.assign({},log[k]||{});
+  if(s.hy){ const H=hyb(), log=Object.assign({},H.log||{}), k=hybKey(s.w,s.d), dd=Object.assign({},log[k]||{}); day.ex.forEach(e=>{ dd[e.hk]=1; }); log[k]=dd; await hybSave({log}); }
+  else { const log=Object.assign({},S.wlog), k=dKey(s.w,s.d), dd=Object.assign({},log[k]||{});
     day.ex.forEach((e,x)=>{ if(!e.opt) dd[eId(s.w,s.d,x)]=1; }); if(splitDay(s.d)) dd[SPLIT_MK]=1; log[k]=dd; await save('wlog',log); }
   let sets=0,vol=0; Object.values(s.sets).forEach(a=>a.forEach(([w,r])=>{ sets++; vol+=w*r; }));
   const km=Object.values(s.runs).reduce((a,r)=>a+(+r.km||0),0);
   const has=x=>{ const e=day.ex[x]; return e.kind==='lift'?(s.sets[x]||[]).length:e.kind==='run'?s.runs[x]||s.tasks[x]:s.tasks[x]; };
   const skipped=day.ex.filter((e,x)=>!e.opt&&!has(x)).map(e=>e.n), absN=day.ex.filter((e,x)=>e.opt&&(has(x)||isDone(s.w,s.d,x))).length;
   const rec={date:todayKey(),dur:sessSec(),end:Date.now(),h:s.h,t:day.t,sets,vol:Math.round(vol),km:Math.round(km*100)/100,prs:s.prs.length,ready:s.ready?s.ready.score:null};
-  Object.assign(rec,{cyc:cyc(),w:s.w,d:s.d});
+  Object.assign(rec,s.hy?{cyc:0,hy:1,w:s.w,d:s.d}:{cyc:cyc(),w:s.w,d:s.d});
   const hs=hrSum(s.hr); if(hs) rec.hr={avg:hs.avg,max:hs.max,z:hs.z}; if(s.adj) rec.adj=s.adj.src==='ai'?'ai':s.adj.kind;
   await save('hist',(S.hist||[]).concat([rec]));
   S.summary=Object.assign({},rec,{hrS:hs,prList:s.prs,skipped,absN,absT:day.ex.filter(e=>e.opt).length});

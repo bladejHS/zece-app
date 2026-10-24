@@ -61,7 +61,7 @@ function briefCard(){
       <button class="btn pri" data-a="wAdd" aria-label="Salvează greutatea">${ic('check')}</button></div></div>`;
 }
 function viewPlan(){
-  const nx=nextDay(), w=S.planW!=null?S.planW:(S.sess?S.sess.w:nx?nx.w:0), full=cycleDaysDone();
+  const nx=nextDay(), w=S.planW!=null?S.planW:(S.sess&&!S.sess.hy?S.sess.w:nx?nx.w:0), full=cycleDaysDone();
   const weekFull=a=>PLAN.every((_,d)=>dayFull(a,d));
   const days=PLAN.map((_,d)=>{ const day=dayFor(w,d), dn=doneCount(w,d), tot=absFrom(d), optN=PLAN[d].ex.length-tot, od=optDone(w,d), open=S.openDay===d, isN=nx&&nx.w===w&&nx.d===d, c=CAT[day.cat], col=catCol(day.cat);
     return `<div class="card day ${open?'open':''} ${isN?'next':''}" id="day${d}" style="--c:${col}">

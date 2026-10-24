@@ -6,11 +6,12 @@
 /* tipul zilei din plan, fără deload și fără activități notate */
 const planType=b=>b.cat==='rest'?'rest':(b.run==='thr'||b.run==='lng'||/Conditioning|Power|Lower|Heavy Legs/.test(b.t))?'high':'moderate';
 /* media factorilor de carbohidrați pe săptămâna normală a planului: carbohidrații se mută între zile, totalul săptămânii rămâne baza */
-let NMEAN=null; const NUTRI_MEAN=()=>NMEAN||(NMEAN=NUTRI.weekCarbMean(PLAN.map(planType)));
+let NMEAN=null; const NUTRI_MEAN=()=>NMEAN||(NMEAN=NUTRI.weekCarbMean(mainHyb()?HYB_DAYS.map((_,d)=>planType(hybNutriBase(d))):PLAN.map(planType)));
 /* tipul zilei k din planul hibrid (aceeași săptămână a ciclului), plus activitățile notate în ziua k: o activitate grea face ziua intensă, chiar dacă era de odihnă */
 function nutriDay(k){
-  const wd=(parseKey(k).getDay()+6)%7, nx=nextDay(), w=nx?nx.w:0, day=dayFor(w,wd,true), ext=(S.ext||[]).filter(x=>x.date===k&&!x.dup);
-  const dl=deloadOn(w)||(k===todayKey()&&hrvNow().force), kbHard=ext.some(x=>(+x.rpe||0)>=7), extMin=ext.reduce((a,x)=>a+(+x.min||0),0);
+  /* v28: cu HYBRID ca plan principal, ziua vine din săptămâna HYBRID */
+  const wd=(parseKey(k).getDay()+6)%7, hy=mainHyb(), nx=hy?null:nextDay(), w=hy?(+hyb().wk||0):nx?nx.w:0, day=hy?hybNutriBase(wd):dayFor(w,wd,true), ext=(S.ext||[]).filter(x=>x.date===k&&!x.dup);
+  const dl=(hy?!!hyb().dl:deloadOn(w))||(k===todayKey()&&hrvNow().force), kbHard=ext.some(x=>(+x.rpe||0)>=7), extMin=ext.reduce((a,x)=>a+(+x.min||0),0);
   let type=kbHard?'high':planType(day);
   if(dl&&type!=='rest'&&!kbHard) type='deload';
   return {type,label:NUTRI.DAY_LABEL[type],t:day.t,w,d:wd,extMin,minutes:day.cat==='rest'?0:(+day.min||60),intensity:type==='high'?'high':type==='rest'&&!extMin?'low':'moderate'}; }
@@ -34,7 +35,7 @@ ACT.nutriOk=async()=>{ await save('prof',Object.assign({},S.prof||{},{nutriOk:to
 
 /* ---------- ziua: tipul, ce s-a schimbat în ținte, hidratarea și alerta de dinainte de antrenament ---------- */
 function nutriDayCard(tg,wt){ const dt=tg.day, per=tg.per; if(!dt||!per) return '';
-  const nx=nextDay(), trainToday=dt.type!=='rest'&&!(nx&&dayFull(nx.w,(parseKey(todayKey()).getDay()+6)%7));
+  const nx=nextDay(), wdT=(parseKey(todayKey()).getDay()+6)%7, trainToday=dt.type!=='rest'&&!(mainHyb()?hybDayFull(+hyb().wk||0,wdT):nx&&dayFull(nx.w,wdT));
   const alert=trainToday?NUTRI.preWorkoutAlert(wt,tg.hyd):null;
   return `<div class="card nday nday-${dt.type}"><div class="row"><div class="eyebrow sp">${ic(dt.type==='rest'?'leaf':'flame')} ${esc(dt.label)}</div><span class="xs mu">${esc(dt.t)}</span></div>
     <div class="nday-g"><div><span>Calorii</span><b>${tg.kcal}</b><small>${tg.kcal===tg.base.kcal?'baza zilei':(tg.kcal>tg.base.kcal?'+':'')+(tg.kcal-tg.base.kcal)+' față de bază'}</small></div>

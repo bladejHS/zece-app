@@ -147,7 +147,7 @@ function stItem(rec,s,day,hs){
   const lines=day.ex.flatMap((e,x)=>{ const a=s.sets[x]||[]; if(a.length) return ['• '+e.n+': '+a.map(fmtSet).join(', ')];
     const r=s.runs[x]; return [r&&+r.km>0?'• '+e.n+': '+num(r.km,2)+' km în '+num(r.min)+' min':null]; }).filter(Boolean);
   const sport=rec.km>0&&!rec.sets?'Run':rec.km>0?'Workout':'WeightTraining';
-  const head=`S${rec.w+1} · ${DAYN[rec.d]} · ciclul ${rec.cyc}\n${rec.sets} serii · ${Math.round(rec.vol)} kg volum`+(rec.km?` · ${num(rec.km,2)} km`:'')+(rec.prs?` · ${rec.prs} ${rec.prs===1?'record':'recorduri'}`:'');
+  const head=`${rec.hy?'HYBRID · ':''}S${rec.w+1} · ${DAYN[rec.d]}${rec.hy?'':' · ciclul '+rec.cyc}\n${rec.sets} serii · ${Math.round(rec.vol)} kg volum`+(rec.km?` · ${num(rec.km,2)} km`:'')+(rec.prs?` · ${rec.prs} ${rec.prs===1?'record':'recorduri'}`:'');
   return {key:String(rec.end),start:s.start,end:rec.end,dur:rec.dur,km:rec.km||0,sport,name:'FALCO · '+rec.t,
     desc:(head+(lines.length?'\n\n'+lines.join('\n'):'')+'\n\nÎnregistrat cu FALCO').slice(0,3000),
     hr:hs?{avg:hs.avg,max:hs.max}:null,pts:hs&&hs.pts?hs.pts.slice():[],t0:(s.hr&&s.hr.t0)||s.start};
