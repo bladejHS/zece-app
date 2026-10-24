@@ -226,6 +226,12 @@ html[data-mode="light"] .inp{background:#FFFFFF}
 .ses-h{display:flex;align-items:baseline;gap:10px;padding:16px 16px 6px;border-top:1px solid var(--ln2)}
 .ses-h:first-child{border-top:0;padding-top:12px}
 .ses-h b{font:700 12px/1 var(--fd);letter-spacing:.16em;color:var(--ac);white-space:nowrap;flex:none}
+/* termenii din HYBRID care deschid explicația din dicționar */
+.term{appearance:none;background:none;border:0;padding:0;margin:0;font:inherit;color:inherit;cursor:pointer;text-decoration:underline dotted;text-decoration-color:var(--ac);text-decoration-thickness:1.5px;text-underline-offset:3px}
+.term:hover{color:var(--ac)}
+.term:focus-visible{outline:2px solid var(--ac);outline-offset:2px;border-radius:4px}
+.glos-l{margin:6px 0 0;padding-left:20px;font-size:13px;line-height:1.6;color:var(--mu)}
+.glos-l li+li{margin-top:2px}
 .ses-h span{font-size:12.5px;color:var(--mu)}
 
 /* ---------- Standard Top-Third ---------- */

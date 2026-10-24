@@ -39,7 +39,7 @@ async function startSess(w,d,ready,hy){
   }
   const adj=hy?null:adjFor(w,d), day=hy?hybLiveDay(w,d):dayFor(w,d); let cur=day.ex.findIndex((e,x)=>hy?!hybDone(w,d,e.hk):!isDone(w,d,x)); if(cur<0) cur=0;
   S.sess=Object.assign(sessBase(),{w,d,cur,ready:ready||null,adj},hy?{hy:1}:{});
-  S.fxOpen=true; S.fxDir=''; await persistSess(); keepAwake(true); keepAlive(true); render(); hydAlert();
+  S.fxOpen=true; S.fxDir=''; await persistSess(); keepAwake(true); keepAlive(true); render(); if(hy) hybHydStart(w,d); else hydAlert();
 }
 /* pauza: inel mare, −15 / +15 secunde și „Sari", plus ce urmează */
 function restBlock(nextTxt){
@@ -95,7 +95,7 @@ function fxLift(e,x){
       return `<div class="sd ${st?'ok':i===sets.length?'cur':''}">${st?`<b>${num(st[0])}</b> × <b>${st[1]}</b>${pr?'<span class="tag pr">PR</span>':''}${typeof st[2]==='string'&&SET_TAG[st[2]]?`<small>${SET_TAG[st[2]]}</small>`:''}`:'Seria '+(i+1)}</div>`; }).join('')}</div>
     ${lvDone()}
     ${restBlock(complete?nextTxt(day,x):'')}
-    ${s.hy?(e.cue?`<div class="mw-live"><div class="eyebrow">${ic('coach')} Viada</div><p class="xs mu" style="margin-top:6px">${ic('bolt')} ${esc(e.cue)}</p></div>`:''):miloLive(e,x)}
+    ${s.hy?(e.cue||e.hyd?`<div class="mw-live"><div class="eyebrow">${ic('coach')} Viada</div>${e.cue?`<p class="xs mu" style="margin-top:6px">${ic('bolt')} ${hybTermify(esc(e.cue))}</p>`:''}${e.hyd?`<p class="xs mu" style="margin-top:6px">${ic('drop')} Hidratare: ${hybTermify(esc(e.hyd))}</p>`:''}</div>`:''):miloLive(e,x)}
     <div class="logger">
       <div class="stp"><label for="inKg">kg</label><div class="r"><button data-a="kg" data-v="${-inc}" aria-label="minus ${inc} kg">−</button>
         <input id="inKg" type="number" step="0.5" inputmode="decimal" value="${kg===''?'':num(kg,2)}" placeholder="0"><button data-a="kg" data-v="${inc}" aria-label="plus ${inc} kg">+</button></div></div>
@@ -116,7 +116,7 @@ function fxRun(e,x){
   const mins=s.tmMin[x]!=null?s.tmMin[x]:e.planMin||'';
   return `
     <div class="eyebrow">${ic('run')} Alergare · ${RUNK[e.rk||runKindOf(day.run)]}</div>
-    <div class="fx-n">${esc(e.n)}</div><div class="fx-p">${esc(e.p)}</div>${e.adj?`<div class="adjb">${ic('coach')} Ajustat azi: ${esc(e.adj.join(' · '))}</div>`:''}
+    <div class="fx-n">${esc(e.n)}</div><div class="fx-p">${s.hy?hybTermify(esc(e.p)):esc(e.p)}</div>${e.adj?`<div class="adjb">${ic('coach')} Ajustat azi: ${esc(e.adj.join(' · '))}</div>`:''}
     ${(()=>{ const q=e.n==='Threshold'||e.rk==='thr'||e.rk==='int', z=hrZones().z[q?3:1]; return `<div class="tag run" style="margin-top:8px">${ic('target')} ${q?'Zona 4 la reprize':'Zona 2'}: ${z.lo}–${z.hi} bpm</div>`; })()}
     ${done?`<div class="done-box">${ic('check')} ${num(done.km,2)} km în ${num(done.min)} min · ${fmtPace(paceOf(done))}</div>
       <button class="btn pri xl wide glow" data-a="${isLast?'fxFinish':'fxNext'}">${isLast?'Termină antrenamentul':'Următorul exercițiu '+ic('right')}</button>${absOffer(day,x)}`
@@ -147,7 +147,7 @@ function fxTask(e,x){
   const s=S.sess, day=sessDay(s), on=sessIsDone(s,x), isLast=fxEnd(day,x), pre=tmPresetFor(e,day,s.w);
   return `
     <div class="eyebrow">${optBadge(e)}${ic(day.cat==='rest'?'leaf':'bolt')} ${day.cat==='rest'?'Recuperare':'Bloc'}</div>
-    <div class="fx-n">${esc(e.n)}</div><div class="fx-p" style="font-size:16px;line-height:1.6">${esc(e.p)}</div>
+    <div class="fx-n">${esc(e.n)}</div><div class="fx-p" style="font-size:16px;line-height:1.6">${s.hy?hybTermify(esc(e.p)):esc(e.p)}</div>
     ${movesHTML(e)}
     ${on?`<div class="done-box">${ic('check')} Făcut.</div>`:''}
     ${pre&&!on?`<button class="btn blue wide xl" style="margin-top:16px" data-a="tmFor" data-x="${x}">${ic('clock')} Pornește cronometrul</button>`:''}
